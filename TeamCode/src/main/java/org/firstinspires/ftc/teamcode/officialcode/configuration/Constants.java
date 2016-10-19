@@ -11,4 +11,23 @@ public class Constants {
     public enum Shade{
         WHITE,BLACK
     }
+
+    public enum Color{
+        RED(50.0,80.0),BLUE(50.0,80.0);
+        double lowThreshold;
+        double highThreshold;
+
+        Color(double lowThreshold, double highThreshold){
+            this.lowThreshold=lowThreshold;
+            this.highThreshold=highThreshold;
+        }
+
+        public double getLowThreshold(){
+            return lowThreshold;
+        }
+
+        public double getHighThreshold() {
+            return highThreshold;
+        }
+    }
 }
