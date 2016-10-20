@@ -5,7 +5,7 @@ package org.firstinspires.ftc.teamcode.officialcode.configuration;
  */
 public class Constants {
     public enum Turns{
-        lEFT_TURN, RIGHT_TURN
+        LEFT_TURN, RIGHT_TURN
     }
 
     public enum Shade{
