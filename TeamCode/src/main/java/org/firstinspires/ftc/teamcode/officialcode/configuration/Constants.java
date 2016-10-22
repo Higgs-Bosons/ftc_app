@@ -30,4 +30,11 @@ public class Constants {
             return highThreshold;
         }
     }
+
+    public enum DriveState{
+        STOP,DRIVING
+    }
+
+    public static final int ENCODER_CPR = 1120;
+
 }
