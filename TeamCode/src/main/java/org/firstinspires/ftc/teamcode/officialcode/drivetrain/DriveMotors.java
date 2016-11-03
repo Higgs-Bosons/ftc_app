@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.officialcode.drivetrain;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorController;
 
 import org.firstinspires.ftc.teamcode.officialcode.configuration.Constants;
 
@@ -30,5 +31,47 @@ public class DriveMotors {
 
     public int getCounts(double distance) {
         return (int)(Constants.ENCODER_CPR * this.getRotations(distance) * GEAR_RATIO);
+    }
+
+    public void  resetCoontrollers(){
+        this.getLeftFront().setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+    }
+
+    public void moveControllers(){
+        this.getLeftFront().setMode(DcMotor.RunMode.RUN_TO_POSITION);
+    }
+
+    public boolean isBusy(){
+        return this.getLeftFront().isBusy();
+    }
+
+    public void stopMotors() {
+        this.getLeftFront().setPower(0);
+        this.getLeftBack().setPower(0);
+        this.getRightFront().setPower(0);
+        this.getRightBack().setPower(0);
+    }
+
+    public void setPowerAll(double powerAll){
+        this.getLeftFront().setPower(powerAll);
+        this.getLeftBack().setPower(powerAll);
+        this.getRightFront().setPower(powerAll);
+        this.getRightBack().setPower(powerAll);
+    }
+
+    public DcMotor getLeftBack() {
+        return leftBack;
+    }
+
+    public DcMotor getLeftFront() {
+        return leftFront;
+    }
+
+    public DcMotor getRightFront() {
+        return rightFront;
+    }
+
+    public DcMotor getRightBack() {
+        return rightBack;
     }
 }
