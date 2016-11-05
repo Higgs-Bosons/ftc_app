@@ -1,12 +1,9 @@
 package org.firstinspires.ftc.teamcode.officialcode.autonomous;
 
-import org.firstinspires.ftc.robotcore.external.Const;
 import org.firstinspires.ftc.teamcode.officialcode.configuration.Constants;
 import org.firstinspires.ftc.teamcode.officialcode.drivetrain.IDrivetrain;
 import org.firstinspires.ftc.teamcode.officialcode.pusher.IPusher;
-import org.firstinspires.ftc.teamcode.officialcode.sensors.ISensors;
 
-import java.util.Arrays;
 import java.util.Stack;
 
 /**
@@ -25,17 +22,14 @@ public class BeaconAutonomous implements IAutonomous {
 
     private Stack<Constants.Turns> turns;
 
-    private ISensors dSense;
     private IDrivetrain dDrive;
     private IPusher dPusher;
 
     /**
      * Constructs a BeaconAutonomous
-     * @param dSense - An instance of a class implementing the ISensors interface
      * @param dDrive - An instance of a class implementing the IDrivetrain interface
      */
-    public BeaconAutonomous(ISensors dSense, IPusher dPusher,IDrivetrain dDrive, Constants.Color color){
-        this.dSense = dSense;
+    public BeaconAutonomous(IPusher dPusher, IDrivetrain dDrive, Constants.Color color){
         this.dDrive = dDrive;
         this.dPusher = dPusher;
         this.color = color;
@@ -70,18 +64,16 @@ public class BeaconAutonomous implements IAutonomous {
         //turn robot left again 90 degrees so it is facing the beacon wall
         dDrive.rightAngleTurn(turns.pop());
         //detects white line with sensors to align itself to the beacon
-        dSense.detectWhiteLine();
+
     }
 
 
     private void findBeacon() throws InterruptedException {
         dDrive.moveDistance((int) (PREP_BEACON_DIST), -POWER_ONE);
-        dSense.detectBeacon(this.color);
+
     }
 
-    private void findSecondBeacon(){
-        dSense.detectBeacon(this.color);
-    }
+    private void findSecondBeacon() {}
 
     private void pressButton(){
         dPusher.pressButton();

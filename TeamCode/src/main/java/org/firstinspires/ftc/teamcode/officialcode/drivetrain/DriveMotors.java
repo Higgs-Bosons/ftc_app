@@ -23,6 +23,9 @@ public class DriveMotors {
         this.leftBack = leftBack;
         this.rightFront = rightFront;
         this.rightBack = rightBack;
+
+        this.getLeftFront().setDirection(DcMotor.Direction.REVERSE);
+        this.getLeftBack().setDirection(DcMotor.Direction.REVERSE);
     }
 
     private double getRotations(double distance) {
@@ -33,12 +36,14 @@ public class DriveMotors {
         return (int)(Constants.ENCODER_CPR * this.getRotations(distance) * GEAR_RATIO);
     }
 
-    public void  resetCoontrollers(){
+    public void  resetControllers(){
         this.getLeftFront().setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        this.getRightFront().setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
     }
 
     public void moveControllers(){
         this.getLeftFront().setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        this.getRightFront().setMode(DcMotor.RunMode.RUN_TO_POSITION);
     }
 
     public boolean isBusy(){
@@ -57,6 +62,13 @@ public class DriveMotors {
         this.getLeftBack().setPower(powerAll);
         this.getRightFront().setPower(powerAll);
         this.getRightBack().setPower(powerAll);
+    }
+
+    public void encodeInitialize(){
+        this.getLeftBack().setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        this.getRightBack().setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        this.getLeftFront().setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        this.getRightFront().setMode(DcMotor.RunMode.RUN_USING_ENCODER);
     }
 
     public DcMotor getLeftBack() {

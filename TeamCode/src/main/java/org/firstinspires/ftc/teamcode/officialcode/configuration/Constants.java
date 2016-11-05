@@ -36,5 +36,5 @@ public class Constants {
     }
 
     public static final int ENCODER_CPR = 1120;
-
+    public static final int THREAD_WAIT_TIME_MS = 20;
 }
