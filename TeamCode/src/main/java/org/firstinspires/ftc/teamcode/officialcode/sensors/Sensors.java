@@ -37,6 +37,10 @@ public class Sensors {
         return this.getGyro().getHeading();
     }
 
+    public void gyroCalibrate(){
+        this.getGyro().calibrate();
+    }
+
     public int getHue(){
         return this.getColoring().argb();
     }

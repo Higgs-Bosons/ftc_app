@@ -17,7 +17,6 @@ public class Drivetrain implements IDrivetrain, Runnable {
 
     @Override
     public void moveDistance(int distance, double power) throws InterruptedException {
-        int origHeading = this.dSense.getHeading();
         this.dMotors.resetControllers();
 
         this.dMotors.encodeInitialize();
@@ -39,35 +38,9 @@ public class Drivetrain implements IDrivetrain, Runnable {
 
         while (!doneL || !doneR) {
             Thread.sleep(Constants.THREAD_WAIT_TIME_MS);
-
-            int currentHeading = this.dSense.getHeading();
-            Constants.Turns direction = this.getDirection(origHeading, currentHeading);
-            int angle = this.getAngle(origHeading, currentHeading, direction);
-
-            if (angle > 1) {
-                double newPower;
-                switch (direction) {
-                    case LEFT_TURN:
-                        newPower = this.dMotors.getRightFront().getPower() + 0.1;
-                        break;
-                    case RIGHT_TURN:
-                        newPower = this.dMotors.getRightFront().getPower() - 0.1;
-                        break;
-                    default:
-                        throw new IllegalStateException("Unknown turn direction:" + direction);
-                }
-                if(newPower > 1.0d){
-                    newPower = 1.0d;
-                }else if(newPower < -1.0d){
-                    newPower = -1.0d;
-                }
-
-                this.setRightMotors(newPower);
-            } else {
-                this.setRightMotors(power);
-            }
             currentPositionL = this.dMotors.getLeftFront().getCurrentPosition();
             currentPositionR = this.dMotors.getRightFront().getCurrentPosition();
+
             if (!doneL && currentPositionL >= targetPositionL) {
                 this.setLeftMotors(0);
                 doneL = true;
@@ -76,14 +49,47 @@ public class Drivetrain implements IDrivetrain, Runnable {
                 this.setRightMotors(0);
                 doneR = true;
             }
-            System.out.println("*************Current Counts: " + currentPositionL);
-//            System.out.println("***********Heading While Moving: " + this.dSense.getHeading());
         }
     }
 
     @Override
-    public void rightAngleTurn(Constants.Turns direction) {
+    public void rightAngleTurn(Constants.Turns direction) throws InterruptedException {
+        this.dSense.gyroCalibrate();
 
+        while(this.dSense.getGyro().isCalibrating()){
+            Thread.sleep(Constants.THREAD_WAIT_TIME_MS);
+        }
+
+        int currentHeading = this.dSense.getHeading();
+        int finalHeading;
+
+        if(direction == Constants.Turns.LEFT_TURN){
+            finalHeading = (359 - (89 - (currentHeading - 0)));
+
+            this.setLeftMotors(-0.5);
+            this.setRightMotors(0.5);
+
+            while(currentHeading > finalHeading){
+                Thread.sleep(Constants.THREAD_WAIT_TIME_MS);
+            }
+        } else {
+            finalHeading =  currentHeading + 90;
+
+            this.setLeftMotors(0.5);
+            this.setRightMotors(-0.5);
+
+            while(currentHeading < finalHeading){
+                Thread.sleep(Constants.THREAD_WAIT_TIME_MS);
+            }
+        }
+
+        this.setAllPower(0.0);
+    }
+
+    @Override
+    public boolean stopAtLine(Constants.Shade shade) {
+        this.setAllPower(0.5);
+        return false;
     }
 
     @Override
@@ -106,41 +112,8 @@ public class Drivetrain implements IDrivetrain, Runnable {
         this.dMotors.getRightBack().setPower(power);
     }
 
-    private Constants.Turns getDirection(int finalHeading, int currentHeading) {
-//        return finalHeading-currentHeading > 0 || finalHeading-currentHeading <= -180 ?
-//                Constants.Turns.LEFT_TURN : Constants.Turns.RIGHT_TURN;
-        Constants.Turns direction;
-        int headingDiff = finalHeading - currentHeading;
-
-        if (headingDiff > 0) {
-            direction = headingDiff <= 180 ? Constants.Turns.LEFT_TURN : Constants.Turns.RIGHT_TURN;
-        } else {
-            direction = headingDiff <= -180 ? Constants.Turns.LEFT_TURN : Constants.Turns.RIGHT_TURN;
-        }
-
-        return direction;
-    }
-
-    private int getAngle(int finalHeading, int currentHeading, Constants.Turns direction) {
-        int returnValue = 0;
-        switch (direction) {
-            case LEFT_TURN:
-                if (finalHeading < currentHeading) {
-                    returnValue = (360 - currentHeading) + finalHeading;
-                } else {
-                    returnValue = finalHeading - currentHeading;
-                }
-                break;
-            case RIGHT_TURN:
-                if (currentHeading < finalHeading) {
-                    returnValue = (360 - finalHeading) + currentHeading;
-                } else {
-                    returnValue = currentHeading - finalHeading;
-                }
-                break;
-            default:
-                //returnValue = 0;
-        }
-        return returnValue;
+    private void setAllPower(double power){
+        this.setLeftMotors(power);
+        this.setRightMotors(power);
     }
 }

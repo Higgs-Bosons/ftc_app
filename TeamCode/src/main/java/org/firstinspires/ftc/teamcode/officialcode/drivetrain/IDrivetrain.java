@@ -18,9 +18,9 @@ public interface IDrivetrain {
      * makes the robot turn a 90 degree angle in either the left or right direction
      * @param direction
      */
-    void rightAngleTurn(Constants.Turns direction );
+    void rightAngleTurn(Constants.Turns direction ) throws InterruptedException;
 
-
+    boolean stopAtLine(Constants.Shade shade);
 
     void joystickDrive();
 }
