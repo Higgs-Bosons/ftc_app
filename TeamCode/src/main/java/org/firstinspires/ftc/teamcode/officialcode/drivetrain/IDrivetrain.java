@@ -20,7 +20,9 @@ public interface IDrivetrain {
      */
     void rightAngleTurn(Constants.Turns direction ) throws InterruptedException;
 
-    boolean stopAtLine(Constants.Shade shade);
+    boolean stopAtWhiteLine(long finalWaitTime) throws InterruptedException;
+
+    void stopAtBeacon(Constants.Color color, long finalWaitTime) throws InterruptedException;
 
     void joystickDrive();
 }

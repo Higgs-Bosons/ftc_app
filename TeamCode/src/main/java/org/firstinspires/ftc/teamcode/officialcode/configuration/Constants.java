@@ -8,18 +8,14 @@ public class Constants {
         LEFT_TURN, RIGHT_TURN
     }
 
-    public enum Shade{
-        WHITE,BLACK
-    }
-
     public enum Color{
         RED(50.0,80.0),BLUE(50.0,80.0);
         double lowThreshold;
         double highThreshold;
 
         Color(double lowThreshold, double highThreshold){
-            this.lowThreshold=lowThreshold;
-            this.highThreshold=highThreshold;
+            this.lowThreshold = lowThreshold;
+            this.highThreshold = highThreshold;
         }
 
         public double getLowThreshold(){
@@ -41,4 +37,5 @@ public class Constants {
 
     public static final int ENCODER_CPR = 1120;
     public static final int THREAD_WAIT_TIME_MS = 20;
+    public static final byte EOPD_WHITE_THRESHOLD_RAW_LOW = 39;
 }

@@ -2,22 +2,21 @@ package org.firstinspires.ftc.teamcode.officialcode.sensors;
 
 import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.GyroSensor;
-import com.qualcomm.robotcore.hardware.LightSensor;
 import com.qualcomm.robotcore.hardware.OpticalDistanceSensor;
-
-import org.firstinspires.ftc.teamcode.officialcode.configuration.Constants;
 
 /**
  * Created by Higgs Bosons on 11/5/2016.
  */
 public class Sensors {
-    private OpticalDistanceSensor EOPD;
+    private OpticalDistanceSensor leftEOPD;
+    private OpticalDistanceSensor rightEOPD;
     private ColorSensor coloring;
     private GyroSensor gyro;
 
-    public Sensors(ColorSensor coloring, OpticalDistanceSensor EOPD, GyroSensor gyro){
+    public Sensors(OpticalDistanceSensor leftEOPD, OpticalDistanceSensor rightEOPD, ColorSensor coloring, GyroSensor gyro){
+        this.leftEOPD = leftEOPD;
+        this.rightEOPD = rightEOPD;
         this.coloring = coloring;
-        this.EOPD = EOPD;
         this.gyro = gyro;
     }
 
@@ -29,8 +28,12 @@ public class Sensors {
         return gyro;
     }
 
-    public OpticalDistanceSensor getEOPD(){
-        return EOPD;
+    public OpticalDistanceSensor getLeftEOPD(){
+        return leftEOPD;
+    }
+
+    public OpticalDistanceSensor getRightEOPD(){
+        return rightEOPD;
     }
 
     public int getHeading(){

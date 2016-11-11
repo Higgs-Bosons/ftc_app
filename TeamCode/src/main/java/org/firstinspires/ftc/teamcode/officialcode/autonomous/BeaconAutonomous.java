@@ -64,7 +64,7 @@ public class BeaconAutonomous implements IAutonomous {
         //turn robot left again 90 degrees so it is facing the beacon wall
         dDrive.rightAngleTurn(turns.pop());
         //detects white line with sensors to align itself to the beacon
-
+        dDrive.stopAtWhiteLine(5000);
     }
 
 
