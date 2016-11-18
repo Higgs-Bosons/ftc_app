@@ -1,6 +1,5 @@
 package org.firstinspires.ftc.teamcode.officialcode.drivetrain;
 
-import org.firstinspires.ftc.robotcore.external.Const;
 import org.firstinspires.ftc.teamcode.officialcode.configuration.Constants;
 import org.firstinspires.ftc.teamcode.officialcode.sensors.Sensors;
 
@@ -89,7 +88,6 @@ public class Drivetrain implements IDrivetrain, Runnable {
 
     @Override
     public boolean stopAtWhiteLine(long finalWaitTime) throws InterruptedException {
-        this.setAllPower(0.5f);
         long startTime = System.currentTimeMillis();
 
         long currentTime;
@@ -97,9 +95,9 @@ public class Drivetrain implements IDrivetrain, Runnable {
         boolean rightFound = false;
         boolean timeExhausted = false;
 
-        while (!(leftFound && rightFound) && !timeExhausted) {
-            Thread.sleep(Constants.THREAD_WAIT_TIME_MS);
+        this.setAllPower(0.5f);
 
+        while (!(leftFound && rightFound) && !timeExhausted) {
             currentTime = System.currentTimeMillis();
 
             if(this.dSense.getLeftEOPD().getRawLightDetected() > Constants.EOPD_WHITE_THRESHOLD_RAW_LOW){
@@ -111,6 +109,8 @@ public class Drivetrain implements IDrivetrain, Runnable {
             }
 
             timeExhausted = currentTime - startTime > finalWaitTime;
+
+            Thread.sleep(Constants.THREAD_WAIT_TIME_MS);
         }
 
         this.setAllPower(0.0f);
@@ -118,27 +118,26 @@ public class Drivetrain implements IDrivetrain, Runnable {
     }
 
     @Override
-    public void stopAtBeacon(Constants.Color color, long finalWaitTime) throws InterruptedException {
-        int highThresh;
-        int lowThresh;
+    public boolean stopAtBeacon(Constants.Color color, long finalWaitTime) throws InterruptedException {
         long currentTime;
 
         long startTime = System.currentTimeMillis();
-        boolean leftFound = false;
-        boolean rightFound = false;
         boolean timeExhausted = false;
+        boolean beaconFound = false;
 
         this.setAllPower(0.5f);
 
-        while(!(this.dSense.getHue() > color.getLowThreshold() &&
-                this.dSense.getHue() < color.getHighThreshold()) && !timeExhausted){
-            Thread.sleep(Constants.THREAD_WAIT_TIME_MS);
-
+        do{
+            beaconFound = (this.dSense.getHue() > color.getLowThreshold() &&
+                    this.dSense.getHue() < color.getHighThreshold());
             currentTime = System.currentTimeMillis();
             timeExhausted = currentTime - startTime > finalWaitTime;
-        }
+
+            Thread.sleep(Constants.THREAD_WAIT_TIME_MS);
+        }while(!beaconFound && !timeExhausted);
 
         this.setAllPower(0.0f);
+        return beaconFound;
     }
 
     @Override

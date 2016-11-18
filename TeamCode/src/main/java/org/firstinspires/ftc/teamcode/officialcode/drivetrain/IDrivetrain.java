@@ -22,7 +22,7 @@ public interface IDrivetrain {
 
     boolean stopAtWhiteLine(long finalWaitTime) throws InterruptedException;
 
-    void stopAtBeacon(Constants.Color color, long finalWaitTime) throws InterruptedException;
+    boolean stopAtBeacon(Constants.Color color, long finalWaitTime) throws InterruptedException;
 
     void joystickDrive();
 }
