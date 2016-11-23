@@ -1,8 +1,12 @@
 package org.firstinspires.ftc.teamcode.officialcode.autonomous;
 
 import org.firstinspires.ftc.teamcode.officialcode.configuration.Constants;
+import org.firstinspires.ftc.teamcode.officialcode.drivetrain.DriveTrainFactory;
 import org.firstinspires.ftc.teamcode.officialcode.drivetrain.IDrivetrain;
 import org.firstinspires.ftc.teamcode.officialcode.pusher.IPusher;
+import org.firstinspires.ftc.teamcode.officialcode.pusher.PusherFactory;
+import org.firstinspires.ftc.teamcode.officialcode.sensors.Sensors;
+import org.firstinspires.ftc.teamcode.officialcode.sensors.SensorsFactory;
 
 import java.util.Stack;
 
@@ -13,7 +17,7 @@ import java.util.Stack;
  * the beacon. Following the it parks in the center goal while pushing the cap ball away.
  * Created by Higgs Bosons on 10/5/2016.
  */
-public class BeaconAutonomous implements IAutonomous {
+public class BeaconAutonomous extends Autonomous {
     private static final byte OFF_WALL_DIST = 0;
     private static final byte TO_BEACON_DIST = 0;
     private static final double POWER_ONE = 0.5d;
@@ -23,14 +27,9 @@ public class BeaconAutonomous implements IAutonomous {
 
     private IDrivetrain dDrive;
     private IPusher dPusher;
+    private Sensors sensors;
 
-    /**
-     * Constructs a BeaconAutonomous
-     * @param dDrive - An instance of a class implementing the IDrivetrain interface
-     */
-    public BeaconAutonomous(IPusher dPusher, IDrivetrain dDrive, Constants.Color color){
-        this.dDrive = dDrive;
-        this.dPusher = dPusher;
+    public BeaconAutonomous(Constants.Color color){
         this.color = color;
         turns = new Stack<>();
 
@@ -83,6 +82,19 @@ public class BeaconAutonomous implements IAutonomous {
 
     private void pressButton(double power) throws InterruptedException {
         dPusher.pressButton(power);
+    }
+
+    @Override
+    public void initialize() throws InterruptedException {
+        this.dDrive = DriveTrainFactory.getInstance(this);
+        this.dPusher = PusherFactory.getInstance(this);
+        this.sensors = SensorsFactory.getInstance(this);
+
+        this.sensors.gyroCalibrate();
+
+        while(this.sensors.getGyro().isCalibrating()){
+            Thread.sleep(2000);
+        }
     }
 
     @Override

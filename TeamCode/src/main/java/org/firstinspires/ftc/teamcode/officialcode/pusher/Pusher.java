@@ -2,7 +2,6 @@ package org.firstinspires.ftc.teamcode.officialcode.pusher;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
 
-import org.firstinspires.ftc.teamcode.officialcode.configuration.Constants;
 
 /**
  * Created by Higgs Bosons on 11/17/2016.

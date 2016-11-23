@@ -38,4 +38,17 @@ public class Constants {
     public static final int ENCODER_CPR = 1120;
     public static final int THREAD_WAIT_TIME_MS = 20;
     public static final byte EOPD_WHITE_THRESHOLD_RAW_LOW = 39;
+
+    public static final String LF_MOTOR = "leftFront";
+    public static final String LR_MOTOR = "leftRear";
+    public static final String RF_MOTOR = "rightFront";
+    public static final String RR_MOTOR = "rightRear";
+    public static final String LAUNCHER_MOTOR = "launcher";
+    public static final String PUSHER_MOTOR = "pusher";
+    public static final String LIFT_MOTOR = "lift";
+
+    public static final String COLOR_SENSOR = "color";
+    public static final String GYRO_SENSOR = "gyro";
+    public static final String LEFT_EOPD = "lEOPD";
+    public static final String RIGHT_EOPD = "rEOPD";
 }
