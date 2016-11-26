@@ -13,14 +13,15 @@ public class PusherFactory {
 
     public static synchronized IPusher getInstance(OpMode opMode) throws InterruptedException{
         if(pusher == null){
-            pusher = getPusher(opMode);
+            PusherMotor pm = getPusherMotor(opMode);
+            pusher = new Pusher(pm);
         }
         return pusher;
     }
 
-    private static Pusher getPusher(OpMode opMode){
+    private static PusherMotor getPusherMotor(OpMode opMode){
         DcMotor pusher = opMode.hardwareMap.dcMotor.get(Constants.PUSHER_MOTOR);
 
-        return new Pusher(pusher);
+        return new PusherMotor(pusher);
     }
 }

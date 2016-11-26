@@ -24,5 +24,23 @@ public interface IDrivetrain {
 
     boolean stopAtBeacon(Constants.Color color, long finalWaitTime) throws InterruptedException;
 
+    float getPowerLF();
+
+    void setPowerLF(float powerLF);
+
+    float getPowerLR();
+
+    void setPowerLR(float powerLR);
+
+    float getPowerRF();
+
+    void setPowerRF(float powerRF);
+
+    float getPowerRR();
+
+    void setPowerRR(float powerRR);
+
+    void handleMessage() throws InterruptedException;
+
     void joystickDrive();
 }

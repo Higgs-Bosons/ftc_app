@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.officialcode.Lift;
+package org.firstinspires.ftc.teamcode.officialcode.lift;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
 
@@ -10,5 +10,9 @@ public class LiftMotor {
 
     public LiftMotor(DcMotor lift){
         this.lift = lift;
+    }
+
+    public DcMotor getLift(){
+        return lift;
     }
 }

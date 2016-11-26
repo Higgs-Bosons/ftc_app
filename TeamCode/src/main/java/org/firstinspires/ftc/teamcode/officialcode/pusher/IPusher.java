@@ -7,4 +7,7 @@ import org.firstinspires.ftc.teamcode.officialcode.configuration.Constants;
  */
 public interface IPusher {
     void pressButton(double power) throws InterruptedException;
+    void handleMessage() throws InterruptedException;
+    Constants.PusherState getState();
+    void setState(Constants.PusherState state);
 }

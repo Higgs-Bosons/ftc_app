@@ -39,8 +39,24 @@ public class Constants {
         STOP,DRIVING
     }
 
+    public enum LauncherState{
+        STOPPED, FIRING
+    }
+
+    public enum LiftState{
+        ASCENDING, DESCENDING, STOPPED
+    }
+
+    public enum PusherState{
+        STOPPED, L_MOVING, R_MOVING
+    }
+
     public enum TurnType{
         SWING,PIVOT
+    }
+
+    public enum DrivetrainPower{
+        LEFT, RIGHT
     }
 
     public static final int ENCODER_CPR = 1120;

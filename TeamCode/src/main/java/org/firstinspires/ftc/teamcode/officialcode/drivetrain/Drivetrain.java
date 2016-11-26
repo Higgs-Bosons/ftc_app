@@ -2,17 +2,67 @@ package org.firstinspires.ftc.teamcode.officialcode.drivetrain;
 
 import org.firstinspires.ftc.teamcode.officialcode.configuration.Constants;
 import org.firstinspires.ftc.teamcode.officialcode.sensors.Sensors;
+import org.firstinspires.ftc.teamcode.officialcode.teleop.MyMessageQueue;
+import org.firstinspires.ftc.teamcode.officialcode.teleop.TeleopMessages;
+
+import java.util.HashMap;
+import java.util.concurrent.BlockingQueue;
 
 /**
  * Created by Higgs Bosons on 10/22/2016.
  */
-public class Drivetrain implements IDrivetrain, Runnable {
+public class Drivetrain implements IDrivetrain {
     private DriveMotors dMotors;
     private Sensors dSense;
+    private BlockingQueue<TeleopMessages> queue;
+
+    private float powerLF;
+    private float powerLR;
+    private float powerRF;
+    private float powerRR;
 
     public Drivetrain(DriveMotors dMotors, Sensors dSense){
         this.dMotors = dMotors;
         this.dSense = dSense;
+        this.queue = MyMessageQueue.getInstance();
+    }
+
+    private void setLeftMotors(double power){
+        this.dMotors.getLeftFront().setPower(power);
+        this.dMotors.getLeftBack().setPower(power);
+    }
+
+    private void setRightMotors(double power){
+        this.dMotors.getRightFront().setPower(power);
+        this.dMotors.getRightBack().setPower(power);
+    }
+
+    private void setAllPower(double power){
+        this.setLeftMotors(power);
+        this.setRightMotors(power);
+    }
+
+    private void handleDrivetrainMessage(TeleopMessages message){
+        HashMap<String, Object> metadata = message.getMetadata();
+
+        for (String messageName : metadata.keySet()){
+            Constants.DrivetrainPower dtPower = Constants.DrivetrainPower.valueOf(messageName);
+
+            switch (dtPower){
+                case LEFT:
+                    this.setPowerLF((Float) metadata.get(messageName));
+                    this.setPowerLR((Float) metadata.get(messageName));
+
+                    break;
+                case RIGHT:
+                    this.setPowerRF((Float) metadata.get(messageName));
+                    this.setPowerRR((Float) metadata.get(messageName));
+
+                    break;
+                default:
+                    throw new IllegalStateException("Cannot Handle: " + messageName);
+            }
+        }
     }
 
     @Override
@@ -141,27 +191,62 @@ public class Drivetrain implements IDrivetrain, Runnable {
     }
 
     @Override
-    public void joystickDrive() {
-
+    public synchronized float getPowerLF() {
+        return powerLF;
     }
 
     @Override
-    public void run() {
-
+    public synchronized void setPowerLF(float powerLF) {
+        this.powerLF = powerLF;
     }
 
-    private void setLeftMotors(double power){
-        this.dMotors.getLeftFront().setPower(power);
-        this.dMotors.getLeftBack().setPower(power);
+    @Override
+    public synchronized float getPowerLR() {
+        return powerLR;
     }
 
-    private void setRightMotors(double power){
-        this.dMotors.getRightFront().setPower(power);
-        this.dMotors.getRightBack().setPower(power);
+    @Override
+    public synchronized void setPowerLR(float powerLR) {
+        this.powerLR = powerLR;
     }
 
-    private void setAllPower(double power){
-        this.setLeftMotors(power);
-        this.setRightMotors(power);
+    @Override
+    public synchronized float getPowerRF() {
+        return powerRF;
+    }
+
+    @Override
+    public synchronized void setPowerRF(float powerRF) {
+        this.powerRF = powerRF;
+    }
+
+    @Override
+    public synchronized float getPowerRR() {
+        return powerRR;
+    }
+
+    @Override
+    public synchronized void setPowerRR(float powerRR) {
+        this.powerRR = powerRR;
+    }
+
+    @Override
+    public void handleMessage() throws InterruptedException{
+        TeleopMessages msg = this.queue.peek();
+
+        if (msg != null && Constants.RobotComponent.DRIVE_TRAIN.equals(msg.getRobotComponent())){
+            msg = this.queue.take();
+
+            this.handleDrivetrainMessage(msg);
+            this.joystickDrive();
+        }
+    }
+
+    @Override
+    public void joystickDrive() {
+        this.dMotors.getLeftFront().setPower(this.getPowerLF());
+        this.dMotors.getLeftBack().setPower(this.getPowerLR());
+        this.dMotors.getRightFront().setPower(-this.getPowerRF());
+        this.dMotors.getRightBack().setPower(-this.getPowerRR());
     }
 }

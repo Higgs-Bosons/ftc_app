@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.officialcode.Launcher;
+package org.firstinspires.ftc.teamcode.officialcode.launcher;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
 
@@ -10,5 +10,9 @@ public class LauncherMotor {
 
     public LauncherMotor(DcMotor launcher){
         this.launcher = launcher;
+    }
+
+    public DcMotor getLauncher(){
+        return launcher;
     }
 }
