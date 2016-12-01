@@ -22,7 +22,7 @@ public class MyServos {
         return capGrabber;
     }
 
-    public BallLoader ballLoader(){
+    public BallLoader getBallLoader(){
         return ballLoader;
     }
 }

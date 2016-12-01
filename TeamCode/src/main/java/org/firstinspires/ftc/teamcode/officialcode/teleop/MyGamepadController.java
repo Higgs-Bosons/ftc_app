@@ -26,7 +26,9 @@ public class MyGamepadController implements Runnable {
     }
 
     private void handleGamepad(){
-
+        this.handleDrive();
+        this.handleLauncher();
+        this.handleLift();
     }
 
     private boolean exceedsThreshold(Float power){
