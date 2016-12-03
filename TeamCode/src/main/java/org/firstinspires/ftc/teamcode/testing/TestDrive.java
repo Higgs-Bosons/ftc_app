@@ -10,7 +10,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
  */
 
 @TeleOp (name = "Dankliop", group="Memes")
-//@Disabled
+@Disabled
 public class TestDrive extends OpMode {
     DcMotor LeftB;
     DcMotor LeftF;

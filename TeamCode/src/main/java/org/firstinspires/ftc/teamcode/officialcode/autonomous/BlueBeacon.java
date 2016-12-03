@@ -12,5 +12,6 @@ import org.firstinspires.ftc.teamcode.officialcode.configuration.Constants;
 public class BlueBeacon extends BeaconAutonomous {
     public BlueBeacon(){
         super(Constants.Color.BLUE);
+        System.out.println("After Auto");
     }
 }

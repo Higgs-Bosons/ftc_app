@@ -18,9 +18,9 @@ import java.util.Stack;
  * Created by Higgs Bosons on 10/5/2016.
  */
 public class BeaconAutonomous extends Autonomous {
-    private static final byte OFF_WALL_DIST = 0;
-    private static final byte TO_BEACON_DIST = 0;
-    private static final double POWER_ONE = 0.5d;
+    private static final byte OFF_WALL_DIST = 30;
+    private static final byte TO_BEACON_DIST = 43;
+    private static final double POWER_ONE = 0.2d;
     private Constants.Color color;
 
     private Stack<Constants.Turns> turns;
@@ -51,6 +51,7 @@ public class BeaconAutonomous extends Autonomous {
     private void approachBeacons() throws InterruptedException {
         //Move forward to a position where the robot can turn towards the beacon wall
         dDrive.moveDistance((int) (OFF_WALL_DIST), POWER_ONE);
+        System.out.println("Turning");
         //Turn 90 degrees towards the beacon wall
         dDrive.rightAngleTurn(turns.pop());
         /**
@@ -86,15 +87,20 @@ public class BeaconAutonomous extends Autonomous {
 
     @Override
     public void initialize() throws InterruptedException {
+        System.out.println("Initialize Started.");
         this.dDrive = DriveTrainFactory.getInstance(this);
         this.dPusher = PusherFactory.getInstance(this);
         this.sensors = SensorsFactory.getInstance(this);
 
         this.sensors.gyroCalibrate();
 
-        while(this.sensors.getGyro().isCalibrating()){
-            Thread.sleep(2000);
-        }
+        System.out.println("Initializing Gyro.");
+        Thread.sleep(2000);
+//        while(this.sensors.getGyro().isCalibrating()){
+//            Thread.sleep(Constants.THREAD_WAIT_TIME_MS);
+//            idle();
+//        }
+        System.out.println("Initialize Done.");
     }
 
     @Override
@@ -103,13 +109,14 @@ public class BeaconAutonomous extends Autonomous {
 
         try {
             this.approachBeacons();
-            this.goToBeacon(5000);
-            this.activateBeacon(pusherPower);
-            this.goToBeacon(1000);
-            this.activateBeacon(pusherPower);
+            System.out.println("Approaching Beacons");
+//            this.goToBeacon(5000);
+//            this.activateBeacon(pusherPower);
+//            this.goToBeacon(1000);
+//            this.activateBeacon(pusherPower);
         }catch(Exception e){
+            e.printStackTrace();
             System.out.println("Something went wrong!");
-            System.exit(1);
         }
     }
 }

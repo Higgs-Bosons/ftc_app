@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.officialcode.drivetrain;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorController;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
 import org.firstinspires.ftc.teamcode.officialcode.configuration.Constants;
 
@@ -25,7 +26,6 @@ public class DriveMotors {
         this.rightFront = rightFront;
         this.rightBack = rightBack;
 
-        this.getLeftFront().setDirection(DcMotor.Direction.REVERSE);
         this.getLeftBack().setDirection(DcMotor.Direction.REVERSE);
     }
 
