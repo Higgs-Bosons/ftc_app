@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.officialcode.drivetrain;
 
+import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+
 import org.firstinspires.ftc.teamcode.officialcode.configuration.Constants;
 import org.firstinspires.ftc.teamcode.officialcode.sensors.Sensors;
 import org.firstinspires.ftc.teamcode.officialcode.teleop.MyMessageQueue;
@@ -37,11 +39,6 @@ public class Drivetrain implements IDrivetrain {
         this.dMotors.getRightBack().setPower(power);
     }
 
-    private void setAllPower(double power){
-        this.setLeftMotors(power);
-        this.setRightMotors(power);
-    }
-
     private void handleDrivetrainMessage(TeleopMessages message){
         HashMap<String, Object> metadata = message.getMetadata();
 
@@ -67,15 +64,21 @@ public class Drivetrain implements IDrivetrain {
 
     @Override
     public void moveDistance(int distance, double power) throws InterruptedException {
+        System.out.println("Moving Distance Drivetrain");
         this.dMotors.resetControllers();
 
         this.dMotors.encodeInitialize();
 
         int currentPositionL = this.dMotors.getLeftFront().getCurrentPosition();
         int currentPositionR = this.dMotors.getRightFront().getCurrentPosition();
+
+        System.out.println("Left Current Position: " + currentPositionL + ", Right Current Position: " + currentPositionR);
+
         int counts = this.dMotors.getCounts(distance);
         int targetPositionL = currentPositionL + counts;
         int targetPositionR = currentPositionR + counts;
+
+        System.out.println("Left Target Position: " + targetPositionL + ", Right Target Position: " + targetPositionR);
 
         this.dMotors.getLeftFront().setTargetPosition(targetPositionL);
         this.dMotors.getRightFront().setTargetPosition(targetPositionR);
@@ -87,9 +90,10 @@ public class Drivetrain implements IDrivetrain {
         boolean doneR = false;
 
         while (!doneL || !doneR) {
-            Thread.sleep(Constants.THREAD_WAIT_TIME_MS);
             currentPositionL = this.dMotors.getLeftFront().getCurrentPosition();
             currentPositionR = this.dMotors.getRightFront().getCurrentPosition();
+
+            System.out.println("Left Current Position: " + currentPositionL + ", Right Current Position: " + currentPositionR);
 
             if (!doneL && currentPositionL >= targetPositionL) {
                 this.setLeftMotors(0);
@@ -99,16 +103,22 @@ public class Drivetrain implements IDrivetrain {
                 this.setRightMotors(0);
                 doneR = true;
             }
+
+            Thread.sleep(Constants.THREAD_WAIT_TIME_MS);
         }
     }
 
     @Override
     public void rightAngleTurn(Constants.Turns direction) throws InterruptedException {
+        System.out.println("Starting Right Angle");
         this.dSense.gyroCalibrate();
 
-        while(this.dSense.getGyro().isCalibrating()){
-            Thread.sleep(Constants.THREAD_WAIT_TIME_MS);
-        }
+        System.out.println("Starting Calibrate");
+//        while(this.dSense.getGyro().isCalibrating()){
+//            //Thread.sleep(Constants.THREAD_WAIT_TIME_MS);
+//        }
+        Thread.sleep(2000);
+        System.out.println("Ending Calibrate");
 
         int currentHeading = this.dSense.getHeading();
         int finalHeading;
@@ -116,24 +126,32 @@ public class Drivetrain implements IDrivetrain {
         if(direction == Constants.Turns.LEFT_TURN){
             finalHeading = (359 - (89 - (currentHeading - 0)));
 
-            this.setLeftMotors(-0.5);
-            this.setRightMotors(0.5);
+            System.out.println("Current Heading: " + currentHeading + ", Final Heading: " + finalHeading);
+
+            this.setLeftMotors(-0.2);
+            this.setRightMotors(0.2);
 
             while(currentHeading > finalHeading){
+                currentHeading = this.dSense.getHeading();
+                System.out.println("Current Heading: " + currentHeading + ", Final Heading: " + finalHeading);
                 Thread.sleep(Constants.THREAD_WAIT_TIME_MS);
             }
         } else {
             finalHeading =  currentHeading + 90;
 
-            this.setLeftMotors(0.5);
-            this.setRightMotors(-0.5);
+            System.out.println("Current Heading: " + currentHeading + ", Final Heading: " + finalHeading);
+
+            this.setLeftMotors(0.2);
+            this.setRightMotors(-0.2);
 
             while(currentHeading < finalHeading){
+                currentHeading = this.dSense.getHeading();
+                System.out.println("Current Heading: " + currentHeading + ", Final Heading: " + finalHeading);
                 Thread.sleep(Constants.THREAD_WAIT_TIME_MS);
             }
         }
 
-        this.setAllPower(0.0);
+        this.dMotors.setPowerAll(0.0);
     }
 
     @Override
@@ -145,7 +163,7 @@ public class Drivetrain implements IDrivetrain {
         boolean rightFound = false;
         boolean timeExhausted = false;
 
-        this.setAllPower(0.5f);
+        this.dMotors.setPowerAll(0.0);
 
         while (!(leftFound && rightFound) && !timeExhausted) {
             currentTime = System.currentTimeMillis();
@@ -163,7 +181,7 @@ public class Drivetrain implements IDrivetrain {
             Thread.sleep(Constants.THREAD_WAIT_TIME_MS);
         }
 
-        this.setAllPower(0.0f);
+        this.dMotors.setPowerAll(0.0);
         return (leftFound && rightFound);
     }
 
@@ -175,7 +193,7 @@ public class Drivetrain implements IDrivetrain {
         boolean timeExhausted = false;
         boolean beaconFound = false;
 
-        this.setAllPower(0.5f);
+        this.dMotors.setPowerAll(0.0);
 
         do{
             beaconFound = (this.dSense.getHue() > color.getLowThreshold() &&
@@ -186,7 +204,7 @@ public class Drivetrain implements IDrivetrain {
             Thread.sleep(Constants.THREAD_WAIT_TIME_MS);
         }while(!beaconFound && !timeExhausted);
 
-        this.setAllPower(0.0f);
+        this.dMotors.setPowerAll(0.0);
         return beaconFound;
     }
 

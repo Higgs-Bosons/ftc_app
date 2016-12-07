@@ -47,17 +47,6 @@ public class DriveMotors {
         this.getRightFront().setMode(DcMotor.RunMode.RUN_TO_POSITION);
     }
 
-    public boolean isBusy(){
-        return this.getLeftFront().isBusy();
-    }
-
-    public void stopMotors() {
-        this.getLeftFront().setPower(0);
-        this.getLeftBack().setPower(0);
-        this.getRightFront().setPower(0);
-        this.getRightBack().setPower(0);
-    }
-
     public void setPowerAll(double powerAll){
         this.getLeftFront().setPower(powerAll);
         this.getLeftBack().setPower(powerAll);

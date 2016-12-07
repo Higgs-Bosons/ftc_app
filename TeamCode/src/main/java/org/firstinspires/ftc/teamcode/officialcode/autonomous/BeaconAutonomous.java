@@ -50,18 +50,20 @@ public class BeaconAutonomous extends Autonomous {
      */
     private void approachBeacons() throws InterruptedException {
         //Move forward to a position where the robot can turn towards the beacon wall
-        dDrive.moveDistance((int) (OFF_WALL_DIST), POWER_ONE);
+//        System.out.println("Moving Forward");
+//        dDrive.moveDistance((int) (OFF_WALL_DIST), POWER_ONE);
         System.out.println("Turning");
-        //Turn 90 degrees towards the beacon wall
+//        //Turn 90 degrees towards the beacon wall
         dDrive.rightAngleTurn(turns.pop());
-        /**
-         *  Move forward again so it can get into position again so it is can turn parallel to
-         *  beacon wall
-         */
-
-        dDrive.moveDistance((int) (TO_BEACON_DIST), POWER_ONE);
-        //turn robot left again 90 degrees so it is facing the beacon wall
-        dDrive.rightAngleTurn(turns.pop());
+        System.out.println("Done Turn");
+//        /**
+//         *  Move forward again so it can get into position again so it is can turn parallel to
+//         *  beacon wall
+//         */
+//
+//        dDrive.moveDistance((int) (TO_BEACON_DIST), POWER_ONE);
+//        //turn robot left again 90 degrees so it is facing the beacon wall
+//        dDrive.rightAngleTurn(turns.pop());
     }
 
     private void goToBeacon(long finalWaitTime) throws InterruptedException{
@@ -92,15 +94,15 @@ public class BeaconAutonomous extends Autonomous {
         this.dPusher = PusherFactory.getInstance(this);
         this.sensors = SensorsFactory.getInstance(this);
 
-        this.sensors.gyroCalibrate();
-
-        System.out.println("Initializing Gyro.");
-        Thread.sleep(2000);
+//        this.sensors.gyroCalibrate();
+//
+//        System.out.println("Initializing Gyro.");
+//        Thread.sleep(2000);
 //        while(this.sensors.getGyro().isCalibrating()){
 //            Thread.sleep(Constants.THREAD_WAIT_TIME_MS);
 //            idle();
 //        }
-        System.out.println("Initialize Done.");
+//        System.out.println("Initialize Done.");
     }
 
     @Override
@@ -108,8 +110,8 @@ public class BeaconAutonomous extends Autonomous {
         double pusherPower = (this.color == Constants.Color.RED ? 0.5d : -0.5d);
 
         try {
-            this.approachBeacons();
             System.out.println("Approaching Beacons");
+            this.approachBeacons();
 //            this.goToBeacon(5000);
 //            this.activateBeacon(pusherPower);
 //            this.goToBeacon(1000);
