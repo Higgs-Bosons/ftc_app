@@ -22,13 +22,13 @@ public class SensorsFactory {
 
     private static Sensors getSensors(OpMode opMode) throws InterruptedException{
         ColorSensor coloring = opMode.hardwareMap.colorSensor.get(Constants.COLOR_SENSOR);
-        GyroSensor gyro = opMode.hardwareMap.gyroSensor.get(Constants.GYRO_SENSOR);
+//        GyroSensor gyro = opMode.hardwareMap.gyroSensor.get(Constants.GYRO_SENSOR);
         OpticalDistanceSensor rightEOPD = opMode.hardwareMap.opticalDistanceSensor.get(Constants.RIGHT_EOPD);
         OpticalDistanceSensor leftEOPD = opMode.hardwareMap.opticalDistanceSensor.get(Constants.LEFT_EOPD);
 
         coloring.enableLed(false);
 
-        Sensors sensors = new Sensors(leftEOPD, rightEOPD, coloring, gyro);
+        Sensors sensors = new Sensors(leftEOPD, rightEOPD, coloring/*, gyro*/);
 
         return sensors;
     }

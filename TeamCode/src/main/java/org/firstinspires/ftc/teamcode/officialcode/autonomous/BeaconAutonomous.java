@@ -18,16 +18,16 @@ import java.util.Stack;
  * Created by Higgs Bosons on 10/5/2016.
  */
 public class BeaconAutonomous extends Autonomous {
-    private static final byte OFF_WALL_DIST = 30;
+    private static final byte OFF_WALL_DIST = 25;
     private static final byte TO_BEACON_DIST = 43;
-    private static final double POWER_ONE = 0.2d;
+    private static final double POWER_ONE = 0.4d;
     private Constants.Color color;
 
     private Stack<Constants.Turns> turns;
 
     private IDrivetrain dDrive;
     private IPusher dPusher;
-    private Sensors sensors;
+//    private Sensors sensors;
 
     public BeaconAutonomous(Constants.Color color){
         this.color = color;
@@ -51,19 +51,19 @@ public class BeaconAutonomous extends Autonomous {
     private void approachBeacons() throws InterruptedException {
         //Move forward to a position where the robot can turn towards the beacon wall
 //        System.out.println("Moving Forward");
-//        dDrive.moveDistance((int) (OFF_WALL_DIST), POWER_ONE);
-        System.out.println("Turning");
+        dDrive.moveDistance((int) (OFF_WALL_DIST), POWER_ONE);
+//        System.out.println("Turning");
 //        //Turn 90 degrees towards the beacon wall
         dDrive.rightAngleTurn(turns.pop());
-        System.out.println("Done Turn");
+//        System.out.println("Done Turn");
 //        /**
 //         *  Move forward again so it can get into position again so it is can turn parallel to
 //         *  beacon wall
 //         */
 //
-//        dDrive.moveDistance((int) (TO_BEACON_DIST), POWER_ONE);
+        dDrive.moveDistance((int) (TO_BEACON_DIST), POWER_ONE);
 //        //turn robot left again 90 degrees so it is facing the beacon wall
-//        dDrive.rightAngleTurn(turns.pop());
+        dDrive.rightAngleTurn(turns.pop());
     }
 
     private void goToBeacon(long finalWaitTime) throws InterruptedException{
@@ -89,10 +89,10 @@ public class BeaconAutonomous extends Autonomous {
 
     @Override
     public void initialize() throws InterruptedException {
-        System.out.println("Initialize Started.");
+       // System.out.println("Initialize Started.");
         this.dDrive = DriveTrainFactory.getInstance(this);
         this.dPusher = PusherFactory.getInstance(this);
-        this.sensors = SensorsFactory.getInstance(this);
+//        this.sensors = SensorsFactory.getInstance(this);
 
 //        this.sensors.gyroCalibrate();
 //
@@ -110,7 +110,7 @@ public class BeaconAutonomous extends Autonomous {
         double pusherPower = (this.color == Constants.Color.RED ? 0.5d : -0.5d);
 
         try {
-            System.out.println("Approaching Beacons");
+            //System.out.println("Approaching Beacons");
             this.approachBeacons();
 //            this.goToBeacon(5000);
 //            this.activateBeacon(pusherPower);

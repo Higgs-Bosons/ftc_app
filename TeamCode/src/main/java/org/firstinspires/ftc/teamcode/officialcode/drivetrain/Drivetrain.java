@@ -106,50 +106,60 @@ public class Drivetrain implements IDrivetrain {
 
             Thread.sleep(Constants.THREAD_WAIT_TIME_MS);
         }
+
+        this.dMotors.regularController();
     }
 
     @Override
     public void rightAngleTurn(Constants.Turns direction) throws InterruptedException {
-        System.out.println("Starting Right Angle");
-        this.dSense.gyroCalibrate();
-
-        System.out.println("Starting Calibrate");
-//        while(this.dSense.getGyro().isCalibrating()){
-//            //Thread.sleep(Constants.THREAD_WAIT_TIME_MS);
+//        System.out.println("Starting Right Angle");
+//        this.dSense.gyroCalibrate();
+//
+//        System.out.println("Starting Calibrate");
+//
+//        Thread.sleep(2000);
+//
+//        System.out.println("Ending Calibrate");
+//
+//        int currentHeading = this.dSense.getHeading();
+//        int finalHeading;
+//
+//        if(direction == Constants.Turns.LEFT_TURN){
+//            finalHeading = (359 - (89 - (currentHeading - 0)));
+//
+//            System.out.println("Current Heading: " + currentHeading + ", Final Heading: " + finalHeading);
+//
+//            this.setLeftMotors(-0.2);
+//            this.setRightMotors(0.2);
+//
+//            while(currentHeading > finalHeading){
+//                currentHeading = this.dSense.getHeading();
+//                System.out.println("Current Heading: " + currentHeading + ", Final Heading: " + finalHeading);
+//                Thread.sleep(Constants.THREAD_WAIT_TIME_MS);
+//            }
+//        } else {
+//            finalHeading =  currentHeading + 90;
+//
+//            System.out.println("Current Heading: " + currentHeading + ", Final Heading: " + finalHeading);
+//
+//            this.setLeftMotors(0.2);
+//            this.setRightMotors(-0.2);
+//
+//            while(currentHeading < finalHeading){
+//                currentHeading = this.dSense.getHeading();
+//                System.out.println("Current Heading: " + currentHeading + ", Final Heading: " + finalHeading);
+//                Thread.sleep(Constants.THREAD_WAIT_TIME_MS);
+//            }
 //        }
-        Thread.sleep(2000);
-        System.out.println("Ending Calibrate");
-
-        int currentHeading = this.dSense.getHeading();
-        int finalHeading;
-
         if(direction == Constants.Turns.LEFT_TURN){
-            finalHeading = (359 - (89 - (currentHeading - 0)));
-
-            System.out.println("Current Heading: " + currentHeading + ", Final Heading: " + finalHeading);
-
-            this.setLeftMotors(-0.2);
-            this.setRightMotors(0.2);
-
-            while(currentHeading > finalHeading){
-                currentHeading = this.dSense.getHeading();
-                System.out.println("Current Heading: " + currentHeading + ", Final Heading: " + finalHeading);
-                Thread.sleep(Constants.THREAD_WAIT_TIME_MS);
-            }
-        } else {
-            finalHeading =  currentHeading + 90;
-
-            System.out.println("Current Heading: " + currentHeading + ", Final Heading: " + finalHeading);
-
-            this.setLeftMotors(0.2);
-            this.setRightMotors(-0.2);
-
-            while(currentHeading < finalHeading){
-                currentHeading = this.dSense.getHeading();
-                System.out.println("Current Heading: " + currentHeading + ", Final Heading: " + finalHeading);
-                Thread.sleep(Constants.THREAD_WAIT_TIME_MS);
-            }
+            this.setLeftMotors(-0.2d);
+            this.setRightMotors(0.2d);
+        }else{
+            this.setLeftMotors(0.2d);
+            this.setRightMotors(-0.2d);
         }
+
+        Thread.sleep(900);
 
         this.dMotors.setPowerAll(0.0);
     }

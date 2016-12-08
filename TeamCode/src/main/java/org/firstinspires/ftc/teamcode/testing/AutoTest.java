@@ -5,6 +5,8 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
+import org.firstinspires.ftc.teamcode.officialcode.configuration.Constants;
+
 /**
  * Created by Higgs Bosons on 12/3/2016.
  */
@@ -28,11 +30,14 @@ public class AutoTest extends LinearOpMode{
 
         waitForStart();
 
-        leftFront.setPower(0.5d);
-        leftBack.setPower(0.5d);
-        rightBack.setPower(0.5d);
-        rightFront.setPower(0.5d);
+        leftFront.setPower(0.2d);
+        leftBack.setPower(0.2d);
+        rightBack.setPower(0.2d);
+        rightFront.setPower(0.2d);
 
-        Thread.sleep(10000);
+        while(opModeIsActive()) {
+            Thread.sleep(Constants.THREAD_WAIT_TIME_MS);
+            idle();
+        }
     }
 }

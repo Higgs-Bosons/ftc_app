@@ -55,10 +55,17 @@ public class DriveMotors {
     }
 
     public void encodeInitialize(){
-        this.getLeftBack().setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        this.getLeftBack().setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         this.getRightBack().setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         this.getLeftFront().setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         this.getRightFront().setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+    }
+
+    public void regularController(){
+        this.getRightBack().setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        this.getRightBack().setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        this.getRightBack().setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        this.getRightBack().setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
     }
 
     public DcMotor getLeftBack() {
