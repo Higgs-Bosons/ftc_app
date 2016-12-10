@@ -17,7 +17,7 @@ public class Constants {
     }
 
     public enum Color{
-        RED(50.0,80.0),BLUE(50.0,80.0);
+        RED(2,256),BLUE(2,256);
         double lowThreshold;
         double highThreshold;
 
@@ -65,7 +65,8 @@ public class Constants {
 
     public static final int ENCODER_CPR = 1120;
     public static final int THREAD_WAIT_TIME_MS = 20;
-    public static final byte EOPD_WHITE_THRESHOLD_RAW_LOW = 39;
+    public static final short EOPD_WHITE_THRESHOLD = 100;
+    public static final byte COLOR_THRESH = 2;
 
     public static final String LF_MOTOR = "leftFront";
     public static final String LR_MOTOR = "leftRear";
@@ -82,7 +83,7 @@ public class Constants {
     public static final String LOADER_SERVO = "ballLoader";
 
     public static final String COLOR_SENSOR = "color";
-    public static final String GYRO_SENSOR = "gyro";
+    //public static final String GYRO_SENSOR = "gyro";
     public static final String LEFT_EOPD = "lEOPD";
     public static final String RIGHT_EOPD = "rEOPD";
 }

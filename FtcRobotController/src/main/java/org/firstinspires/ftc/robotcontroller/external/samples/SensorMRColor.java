@@ -40,6 +40,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.ColorSensor;
+import com.qualcomm.robotcore.hardware.I2cAddr;
 
 /*
  *
@@ -82,8 +83,10 @@ public class SensorMRColor extends LinearOpMode {
     boolean bLedOn = true;
 
     // get a reference to our ColorSensor object.
-    colorSensor = hardwareMap.colorSensor.get("color sensor");
-
+    colorSensor = hardwareMap.colorSensor.get("color");
+    //colorSensor.setI2cAddress(new I2cAddr(42));
+    System.out.println("I2C 7Address: " + colorSensor.getI2cAddress().get7Bit());
+    System.out.println("I2C 8Address: " + colorSensor.getI2cAddress().get8Bit());
     // Set the LED in the beginning
     colorSensor.enableLed(bLedOn);
 

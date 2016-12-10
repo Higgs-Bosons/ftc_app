@@ -106,6 +106,9 @@ public class Drivetrain implements IDrivetrain {
 
             Thread.sleep(Constants.THREAD_WAIT_TIME_MS);
         }
+
+        this.dMotors.resetControllers();
+        this.dMotors.regularController();
     }
 
     @Override
@@ -149,9 +152,6 @@ public class Drivetrain implements IDrivetrain {
 //                Thread.sleep(Constants.THREAD_WAIT_TIME_MS);
 //            }
 //        }
-        this.dMotors.resetControllers();
-        this.dMotors.regularController();
-
         if(direction == Constants.Turns.LEFT_TURN){
             this.setLeftMotors(-0.2d);
             this.setRightMotors(0.2d);
@@ -160,7 +160,7 @@ public class Drivetrain implements IDrivetrain {
             this.setRightMotors(-0.2d);
         }
 
-        Thread.sleep(900);
+        Thread.sleep(850);
        // Thread.sleep(2000);
 
         this.dMotors.setPowerAll(0.0);
@@ -175,15 +175,23 @@ public class Drivetrain implements IDrivetrain {
         boolean rightFound = false;
         boolean timeExhausted = false;
 
-        this.dMotors.setPowerAll(0.0);
+        this.dMotors.setPowerAll(0.1d);
+
+        double leftEOPDReading;
+        double rightEOPDReading;
 
         while (!(leftFound && rightFound) && !timeExhausted) {
             currentTime = System.currentTimeMillis();
 
-            if(this.dSense.getLeftEOPD().getRawLightDetected() > Constants.EOPD_WHITE_THRESHOLD_RAW_LOW){
+            leftEOPDReading = this.dSense.getLeftEOPD().getRawLightDetected() * 100;
+            rightEOPDReading = this.dSense.getRightEOPD().getRawLightDetected() * 100;
+
+            System.out.println("Left EOPD: " + leftEOPDReading + ", Right EOPD: " + rightEOPDReading);
+
+            if(leftEOPDReading > Constants.EOPD_WHITE_THRESHOLD){
                 this.setLeftMotors(0.0f);
                 leftFound = true;
-            }else if(this.dSense.getRightEOPD().getRawLightDetected() > Constants.EOPD_WHITE_THRESHOLD_RAW_LOW){
+            }else if(rightEOPDReading > Constants.EOPD_WHITE_THRESHOLD){
                 this.setRightMotors(0.0f);
                 rightFound = true;
             }
@@ -205,11 +213,16 @@ public class Drivetrain implements IDrivetrain {
         boolean timeExhausted = false;
         boolean beaconFound = false;
 
-        this.dMotors.setPowerAll(0.0);
+        this.dMotors.setPowerAll(0.1d);
 
         do{
-            beaconFound = (this.dSense.getHue() > color.getLowThreshold() &&
-                    this.dSense.getHue() < color.getHighThreshold());
+            if(color == Constants.Color.BLUE) {
+                System.out.println("Blue val: " + dSense.getColoring().red());
+                beaconFound = (this.dSense.getColoring().blue() > color.getLowThreshold());
+            }else{
+                System.out.println("Red val: " + dSense.getColoring().red());
+                beaconFound = (this.dSense.getColoring().red() > color.getLowThreshold());
+            }
             currentTime = System.currentTimeMillis();
             timeExhausted = currentTime - startTime > finalWaitTime;
 

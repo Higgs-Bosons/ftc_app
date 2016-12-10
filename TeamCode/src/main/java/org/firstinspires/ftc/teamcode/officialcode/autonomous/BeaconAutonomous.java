@@ -18,9 +18,10 @@ import java.util.Stack;
  * Created by Higgs Bosons on 10/5/2016.
  */
 public class BeaconAutonomous extends Autonomous {
-    private static final byte OFF_WALL_DIST = 37;
-    private static final byte TO_BEACON_DIST = 35;
-    private static final double POWER_ONE = 0.6d;
+    private static final byte OFF_WALL_DIST = 35;
+    private static final byte TO_BEACON_DIST = 37;
+    private static final byte MOVE_BACK_DIST = 5;
+    private static final double POWER_ONE = 0.5d;
     private Constants.Color color;
 
     private Stack<Constants.Turns> turns;
@@ -72,11 +73,13 @@ public class BeaconAutonomous extends Autonomous {
         if(!atBeacon){
             throw new IllegalStateException("No Beacon");
         }
+
+        dDrive.moveDistance((int) (-MOVE_BACK_DIST), POWER_ONE );
     }
 
 
     private void activateBeacon(double pusherPower) throws InterruptedException {
-        boolean foundBeacon = dDrive.stopAtBeacon(this.color, 2000);
+        boolean foundBeacon = dDrive.stopAtBeacon(this.color, 5000);
         if(!foundBeacon){
             throw new IllegalStateException("No Beacon");
         }
@@ -112,8 +115,8 @@ public class BeaconAutonomous extends Autonomous {
         try {
             //System.out.println("Approaching Beacons");
             this.approachBeacons();
-//            this.goToBeacon(5000);
-//            this.activateBeacon(pusherPower);
+            this.goToBeacon(5000);
+            this.activateBeacon(pusherPower);
 //            this.goToBeacon(1000);
 //            this.activateBeacon(pusherPower);
         }catch(Exception e){
