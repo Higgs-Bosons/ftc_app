@@ -28,7 +28,7 @@ public class CapGrabber implements IServos{
     }
 
     @Override
-    public void setState(Constants state) {
+    public void setState(Object state) {
 
     }
 }

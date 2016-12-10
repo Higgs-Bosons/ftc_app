@@ -51,6 +51,10 @@ public class Constants {
         STOPPED, L_MOVING, R_MOVING
     }
 
+    public enum BallGrabberState{
+        OPEN, CLOSED
+    }
+
     public enum TurnType{
         SWING,PIVOT
     }

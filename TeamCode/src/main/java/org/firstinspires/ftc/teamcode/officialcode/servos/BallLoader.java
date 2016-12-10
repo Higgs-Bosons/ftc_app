@@ -26,7 +26,7 @@ public class BallLoader implements IServos{
     }
 
     @Override
-    public void setState(Constants state) {
+    public void setState(Object state) {
 
     }
 }

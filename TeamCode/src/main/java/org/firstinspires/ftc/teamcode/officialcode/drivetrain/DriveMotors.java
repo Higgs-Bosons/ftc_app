@@ -27,6 +27,7 @@ public class DriveMotors {
         this.rightBack = rightBack;
 
         this.getLeftBack().setDirection(DcMotor.Direction.REVERSE);
+        this.getLeftFront().setDirection(DcMotor.Direction.REVERSE);
     }
 
     private double getRotations(double distance) {
@@ -40,6 +41,8 @@ public class DriveMotors {
     public void  resetControllers(){
         this.getLeftFront().setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         this.getRightFront().setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        this.getLeftBack().setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        this.getRightBack().setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
     }
 
     public void moveControllers(){
@@ -55,7 +58,7 @@ public class DriveMotors {
     }
 
     public void encodeInitialize(){
-        this.getLeftBack().setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        this.getLeftBack().setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         this.getRightBack().setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         this.getLeftFront().setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         this.getRightFront().setMode(DcMotor.RunMode.RUN_USING_ENCODER);
@@ -63,9 +66,9 @@ public class DriveMotors {
 
     public void regularController(){
         this.getRightBack().setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        this.getRightBack().setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        this.getRightBack().setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        this.getRightBack().setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        this.getLeftBack().setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        this.getRightFront().setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        this.getLeftFront().setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
     }
 
     public DcMotor getLeftBack() {

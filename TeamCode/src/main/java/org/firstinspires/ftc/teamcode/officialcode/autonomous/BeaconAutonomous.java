@@ -18,9 +18,9 @@ import java.util.Stack;
  * Created by Higgs Bosons on 10/5/2016.
  */
 public class BeaconAutonomous extends Autonomous {
-    private static final byte OFF_WALL_DIST = 25;
-    private static final byte TO_BEACON_DIST = 43;
-    private static final double POWER_ONE = 0.4d;
+    private static final byte OFF_WALL_DIST = 37;
+    private static final byte TO_BEACON_DIST = 35;
+    private static final double POWER_ONE = 0.6d;
     private Constants.Color color;
 
     private Stack<Constants.Turns> turns;

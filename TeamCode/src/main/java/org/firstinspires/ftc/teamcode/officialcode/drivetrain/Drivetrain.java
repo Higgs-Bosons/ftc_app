@@ -106,8 +106,6 @@ public class Drivetrain implements IDrivetrain {
 
             Thread.sleep(Constants.THREAD_WAIT_TIME_MS);
         }
-
-        this.dMotors.regularController();
     }
 
     @Override
@@ -151,6 +149,9 @@ public class Drivetrain implements IDrivetrain {
 //                Thread.sleep(Constants.THREAD_WAIT_TIME_MS);
 //            }
 //        }
+        this.dMotors.resetControllers();
+        this.dMotors.regularController();
+
         if(direction == Constants.Turns.LEFT_TURN){
             this.setLeftMotors(-0.2d);
             this.setRightMotors(0.2d);
@@ -160,6 +161,7 @@ public class Drivetrain implements IDrivetrain {
         }
 
         Thread.sleep(900);
+       // Thread.sleep(2000);
 
         this.dMotors.setPowerAll(0.0);
     }
