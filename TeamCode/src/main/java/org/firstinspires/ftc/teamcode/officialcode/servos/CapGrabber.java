@@ -13,12 +13,14 @@ import java.util.concurrent.BlockingQueue;
  */
 public class CapGrabber implements IServos{
     Servo top;
-    Servo bottom;
+    Servo bottomLeft;
+    Servo bottomRight;
     BlockingQueue<TeleopMessages> queue;
 
-    public CapGrabber(Servo top, Servo bottom){
+    public CapGrabber(Servo top, Servo bottomLeft, Servo bottomRight){
         this.top = top;
-        this.bottom = bottom;
+        this.bottomLeft = bottomLeft;
+        this.bottomRight = bottomRight;
         this.queue = MyMessageQueue.getInstance();
     }
 

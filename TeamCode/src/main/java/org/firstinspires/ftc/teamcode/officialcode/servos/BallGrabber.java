@@ -25,6 +25,17 @@ public class BallGrabber implements IServos{
         this.queue = MyMessageQueue.getInstance();
     }
 
+    private void openGates(){
+        left.setPosition(0.25);
+        right.setPosition(0.25);
+    }
+
+    private void closeGates(){
+        left.setPosition(0.0);
+        right.setPosition(0.0);
+
+    }
+
     private void handleServo(TeleopMessages message){
         HashMap<String, Object> metadata = message.getMetadata();
 

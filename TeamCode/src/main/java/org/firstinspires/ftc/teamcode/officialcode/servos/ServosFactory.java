@@ -22,11 +22,12 @@ public class ServosFactory {
         Servo leftBallGrabber = opMode.hardwareMap.servo.get(Constants.L_BALL_SERVO);
         Servo rightBallGrabber = opMode.hardwareMap.servo.get(Constants.R_BALL_SERVO);
         Servo topCapGrabber = opMode.hardwareMap.servo.get(Constants.T_CAP_SERVO);
-        Servo bottomCapGrabber = opMode.hardwareMap.servo.get(Constants.B_CAP_SERVO);
+        Servo bottomLeftCapGrabber = opMode.hardwareMap.servo.get(Constants.BL_CAP_SERVO);
+        Servo bottomRightCapGrabber = opMode.hardwareMap.servo.get(Constants.BR_CAP_SERVO);
         Servo ballLoader = opMode.hardwareMap.servo.get(Constants.LOADER_SERVO);
 
         BallGrabber bGrab = new BallGrabber(leftBallGrabber, rightBallGrabber);
-        CapGrabber cGrab = new CapGrabber(topCapGrabber, bottomCapGrabber);
+        CapGrabber cGrab = new CapGrabber(topCapGrabber, bottomLeftCapGrabber, bottomRightCapGrabber);
         BallLoader bLoad = new BallLoader(ballLoader);
 
         return new MyServos(bGrab, cGrab, bLoad);

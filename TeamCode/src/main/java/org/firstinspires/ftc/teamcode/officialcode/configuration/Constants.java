@@ -55,10 +55,6 @@ public class Constants {
         OPEN, CLOSED
     }
 
-    public enum TurnType{
-        SWING,PIVOT
-    }
-
     public enum DrivetrainPower{
         LEFT, RIGHT
     }
@@ -79,7 +75,8 @@ public class Constants {
     public static final String L_BALL_SERVO = "leftBallGrabber";
     public static final String R_BALL_SERVO = "rightBallGrabber";
     public static final String T_CAP_SERVO = "topCapGrabber";
-    public static final String B_CAP_SERVO = "bottomCapGrabber";
+    public static final String BL_CAP_SERVO = "bottomLeftCapGrabber";
+    public static final String BR_CAP_SERVO = "bottomRightCapGrabber";
     public static final String LOADER_SERVO = "ballLoader";
 
     public static final String COLOR_SENSOR = "color";

@@ -24,22 +24,21 @@ public class MainTeleop extends LinearOpMode {
 
     }
 
-    private void postInitialize() throws InterruptedException{
+    private void play() throws InterruptedException{
         IDrivetrain drivetrain = DriveTrainFactory.getInstance(this);
 
         IPusher pusher = PusherFactory.getInstance(this);
 
-        MyServos servos = ServosFactory.getInstance(this);
-
-        DrivetrainPusherServoController dpsc = new DrivetrainPusherServoController(drivetrain,
-                pusher, servos, servos, servos);
+        DrivetrainPusherController dpsc = new DrivetrainPusherController(drivetrain, pusher);
         new Thread(dpsc).start();
 
         ILift lift = LiftFactory.getInstance(this);
 
         ILauncher launcher = LauncherFactory.getInstance(this);
 
-        LauncherLiftController llc = new LauncherLiftController(lift, launcher);
+        MyServos servos = ServosFactory.getInstance(this);
+
+        LauncherLiftController llc = new LauncherLiftController(lift, launcher,  servos, servos, servos);
         new Thread(llc).start();
 
         MyGamepadController gcController = new MyGamepadController(this);
@@ -53,14 +52,14 @@ public class MainTeleop extends LinearOpMode {
         waitForStart();
 
         try{
-            postInitialize();
+            play();
         }catch (Exception e){
             e.printStackTrace();
-            System.exit(1);
         }
 
         while(opModeIsActive()){
             Thread.sleep(5000);
+            idle();
         }
     }
 }

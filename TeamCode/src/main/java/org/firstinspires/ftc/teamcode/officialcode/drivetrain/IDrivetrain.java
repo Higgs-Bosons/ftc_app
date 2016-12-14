@@ -16,9 +16,11 @@ public interface IDrivetrain {
 
     /**
      * makes the robot turn a 90 degree angle in either the left or right direction
-     * @param direction
+     *
      */
-    void rightAngleTurn(Constants.Turns direction ) throws InterruptedException;
+//    void rightAngleTurn(Constants.Turns direction ) throws InterruptedException;
+
+    void timedAngleTurn(Constants.Turns direction, int angle) throws InterruptedException;
 
     boolean stopAtWhiteLine(long finalWaitTime) throws InterruptedException;
 

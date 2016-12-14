@@ -44,10 +44,8 @@ public class Pusher implements IPusher {
     }
 
     @Override
-    public void pressButton(double power) throws InterruptedException {
+    public void pusherMovement(double power) {
         this.pusher.getPusher().setPower(power);
-        Thread.sleep(1000);
-        this.pusher.getPusher().setPower(0.0d);
     }
 
     @Override
@@ -75,10 +73,10 @@ public class Pusher implements IPusher {
                         this.pusher.getPusher().setPower(0.0f);
                         break;
                     case L_MOVING:
-                        this.pressButton(1.0f);
+                        this.pusherMovement(1.0f);
                         break;
                     case R_MOVING:
-                        this.pressButton(-1.0f);
+                        this.pusherMovement(-1.0f);
                         break;
                     default:
                         throw new IllegalStateException("Unknown State: " + this.getState());

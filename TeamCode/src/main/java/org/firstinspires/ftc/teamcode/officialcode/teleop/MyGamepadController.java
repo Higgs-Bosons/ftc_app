@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.officialcode.teleop;
 
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 
+import org.firstinspires.ftc.robotcore.external.Const;
 import org.firstinspires.ftc.teamcode.officialcode.configuration.Constants;
 
 import java.util.HashMap;
@@ -19,6 +20,8 @@ public class MyGamepadController implements Runnable {
     private Constants.LauncherState lastLauncherState = Constants.LauncherState.STOPPED;
     private Constants.LiftState currentLiftState = Constants.LiftState.STOPPED;
     private Constants.LiftState lastLiftState = Constants.LiftState.STOPPED;
+    private Constants.PusherState currentPusherState = Constants.PusherState.STOPPED;
+    private Constants.PusherState lastPusherState = Constants.PusherState.STOPPED;
 
     public MyGamepadController(OpMode opMode){
         this.queue = MyMessageQueue.getInstance();
@@ -136,6 +139,45 @@ public class MyGamepadController implements Runnable {
             }
             this.queue.offer(message);
             lastLiftState = currentLiftState;
+        }
+    }
+
+    private void handlePusher(){
+        HashMap<String, Object> pusherMovement = new HashMap<String, Object>();
+
+        boolean moveLeft = opMode.gamepad1.left_bumper;
+        boolean moveRight = opMode.gamepad1.right_bumper;
+
+        TeleopMessages message;
+
+        if(moveLeft && !moveRight){
+            currentPusherState = Constants.PusherState.L_MOVING;
+        }else if(moveRight && !moveLeft){
+            currentPusherState = Constants.PusherState.R_MOVING;
+        }else{
+            currentPusherState = Constants.PusherState.STOPPED;
+        }
+
+        if(currentPusherState != lastPusherState){
+            switch (currentPusherState){
+                case L_MOVING:
+                    pusherMovement.put(Constants.PusherState.L_MOVING.name(), true);
+                    message = new TeleopMessages(Constants.RobotComponent.PUSHER, Constants.RobotComponentAction.START, pusherMovement);
+                    break;
+                case R_MOVING:
+                    pusherMovement.put(Constants.PusherState.R_MOVING.name(), true);
+                    message = new TeleopMessages(Constants.RobotComponent.PUSHER, Constants.RobotComponentAction.START, pusherMovement);
+                    break;
+                case STOPPED:
+                    message = new TeleopMessages(Constants.RobotComponent.PUSHER, Constants.RobotComponentAction.STOP, null);
+                    break;
+                default:
+                    System.out.println("*************Illegal State: " + currentPusherState);
+                    message = new TeleopMessages(Constants.RobotComponent.PUSHER, Constants.RobotComponentAction.STOP, null);
+            }
+
+            this.queue.offer(message);
+            lastPusherState = currentPusherState;
         }
     }
 

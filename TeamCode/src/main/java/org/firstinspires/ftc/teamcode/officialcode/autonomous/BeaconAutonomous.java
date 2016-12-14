@@ -18,10 +18,11 @@ import java.util.Stack;
  * Created by Higgs Bosons on 10/5/2016.
  */
 public class BeaconAutonomous extends Autonomous {
-    private static final byte OFF_WALL_DIST = 35;
-    private static final byte TO_BEACON_DIST = 37;
+    private static final byte OFF_WALL_DIST = 5;
+    private static final byte TO_BEACON_DIST = 50;
     private static final byte MOVE_BACK_DIST = 5;
     private static final double POWER_ONE = 0.5d;
+    private static final int ANGLE_TURNS = 55;
     private Constants.Color color;
 
     private Stack<Constants.Turns> turns;
@@ -55,7 +56,7 @@ public class BeaconAutonomous extends Autonomous {
         dDrive.moveDistance((int) (OFF_WALL_DIST), POWER_ONE);
 //        System.out.println("Turning");
 //        //Turn 90 degrees towards the beacon wall
-        dDrive.rightAngleTurn(turns.pop());
+        dDrive.timedAngleTurn(turns.pop(), ANGLE_TURNS);
 //        System.out.println("Done Turn");
 //        /**
 //         *  Move forward again so it can get into position again so it is can turn parallel to
@@ -64,7 +65,7 @@ public class BeaconAutonomous extends Autonomous {
 //
         dDrive.moveDistance((int) (TO_BEACON_DIST), POWER_ONE);
 //        //turn robot left again 90 degrees so it is facing the beacon wall
-        dDrive.rightAngleTurn(turns.pop());
+        dDrive.timedAngleTurn(turns.pop(), ANGLE_TURNS);
     }
 
     private void goToBeacon(long finalWaitTime) throws InterruptedException{
@@ -74,7 +75,11 @@ public class BeaconAutonomous extends Autonomous {
             throw new IllegalStateException("No Beacon");
         }
 
-        dDrive.moveDistance((int) (-MOVE_BACK_DIST), POWER_ONE );
+        dDrive.setPowerLF((float)((-1)*POWER_ONE));
+        dDrive.setPowerRF((float)((-1)*POWER_ONE));
+        dDrive.setPowerLR((float)((-1)*POWER_ONE));
+        dDrive.setPowerRR((float)((-1)*POWER_ONE));
+        Thread.sleep(1000);
     }
 
 
@@ -87,7 +92,9 @@ public class BeaconAutonomous extends Autonomous {
     }
 
     private void pressButton(double power) throws InterruptedException {
-        dPusher.pressButton(power);
+        dPusher.pusherMovement(power);
+        Thread.sleep(1000);
+        dPusher.pusherMovement(0);
     }
 
     @Override
@@ -117,8 +124,8 @@ public class BeaconAutonomous extends Autonomous {
             this.approachBeacons();
             this.goToBeacon(5000);
             this.activateBeacon(pusherPower);
-//            this.goToBeacon(1000);
-//            this.activateBeacon(pusherPower);
+            this.goToBeacon(1000);
+            this.activateBeacon(pusherPower);
         }catch(Exception e){
             e.printStackTrace();
             System.out.println("Something went wrong!");
