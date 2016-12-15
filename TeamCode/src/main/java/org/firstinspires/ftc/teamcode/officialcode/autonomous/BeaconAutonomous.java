@@ -20,9 +20,9 @@ import java.util.Stack;
 public class BeaconAutonomous extends Autonomous {
     private static final byte OFF_WALL_DIST = 5;
     private static final byte TO_BEACON_DIST = 50;
-    private static final byte MOVE_BACK_DIST = 5;
+    private static final byte SECOND_BEACON_DIST = 38;
     private static final double POWER_ONE = 0.5d;
-    private static final int ANGLE_TURNS = 55;
+    private static final int ANGLE_TURNS = 53;
     private Constants.Color color;
 
     private Stack<Constants.Turns> turns;
@@ -75,11 +75,11 @@ public class BeaconAutonomous extends Autonomous {
             throw new IllegalStateException("No Beacon");
         }
 
-        dDrive.setPowerLF((float)((-1)*POWER_ONE));
-        dDrive.setPowerRF((float)((-1)*POWER_ONE));
-        dDrive.setPowerLR((float)((-1)*POWER_ONE));
-        dDrive.setPowerRR((float)((-1)*POWER_ONE));
-        Thread.sleep(1000);
+        this.dDrive.timedMove(-0.2d, 1000);
+    }
+
+    private void goToSecondBeacon() throws InterruptedException {
+        dDrive.moveDistance((int) (SECOND_BEACON_DIST), POWER_ONE);
     }
 
 
@@ -93,6 +93,8 @@ public class BeaconAutonomous extends Autonomous {
 
     private void pressButton(double power) throws InterruptedException {
         dPusher.pusherMovement(power);
+        Thread.sleep(1500);
+        dPusher.pusherMovement(-power);
         Thread.sleep(1000);
         dPusher.pusherMovement(0);
     }
@@ -117,14 +119,15 @@ public class BeaconAutonomous extends Autonomous {
 
     @Override
     public void runAutonomous() throws InterruptedException {
-        double pusherPower = (this.color == Constants.Color.RED ? 0.5d : -0.5d);
+        double pusherPower = (this.color == Constants.Color.RED ? 0.3d : -0.3d);
 
         try {
             //System.out.println("Approaching Beacons");
             this.approachBeacons();
             this.goToBeacon(5000);
             this.activateBeacon(pusherPower);
-            this.goToBeacon(1000);
+            this.goToSecondBeacon();
+            this.goToBeacon(5000);
             this.activateBeacon(pusherPower);
         }catch(Exception e){
             e.printStackTrace();

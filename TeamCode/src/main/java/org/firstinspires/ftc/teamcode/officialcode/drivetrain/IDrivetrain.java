@@ -22,6 +22,8 @@ public interface IDrivetrain {
 
     void timedAngleTurn(Constants.Turns direction, int angle) throws InterruptedException;
 
+    void timedMove(double power, long time) throws InterruptedException;
+
     boolean stopAtWhiteLine(long finalWaitTime) throws InterruptedException;
 
     boolean stopAtBeacon(Constants.Color color, long finalWaitTime) throws InterruptedException;

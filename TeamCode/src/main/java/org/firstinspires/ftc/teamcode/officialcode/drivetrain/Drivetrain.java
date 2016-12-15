@@ -118,60 +118,15 @@ public class Drivetrain implements IDrivetrain {
         this.dMotors.regularController();
     }
 
-//    @Override
-//    public void rightAngleTurn(Constants.Turns direction) throws InterruptedException {
-////        System.out.println("Starting Right Angle");
-////        this.dSense.gyroCalibrate();
-////
-////        System.out.println("Starting Calibrate");
-////
-////        Thread.sleep(2000);
-////
-////        System.out.println("Ending Calibrate");
-////
-////        int currentHeading = this.dSense.getHeading();
-////        int finalHeading;
-////
-////        if(direction == Constants.Turns.LEFT_TURN){
-////            finalHeading = (359 - (89 - (currentHeading - 0)));
-////
-////            System.out.println("Current Heading: " + currentHeading + ", Final Heading: " + finalHeading);
-////
-////            this.setLeftMotors(-0.2);
-////            this.setRightMotors(0.2);
-////
-////            while(currentHeading > finalHeading){
-////                currentHeading = this.dSense.getHeading();
-////                System.out.println("Current Heading: " + currentHeading + ", Final Heading: " + finalHeading);
-////                Thread.sleep(Constants.THREAD_WAIT_TIME_MS);
-////            }
-////        } else {
-////            finalHeading =  currentHeading + 90;
-////
-////            System.out.println("Current Heading: " + currentHeading + ", Final Heading: " + finalHeading);
-////
-////            this.setLeftMotors(0.2);
-////            this.setRightMotors(-0.2);
-////
-////            while(currentHeading < finalHeading){
-////                currentHeading = this.dSense.getHeading();
-////                System.out.println("Current Heading: " + currentHeading + ", Final Heading: " + finalHeading);
-////                Thread.sleep(Constants.THREAD_WAIT_TIME_MS);
-////            }
-////        }
-//        if(direction == Constants.Turns.LEFT_TURN){
-//            this.setLeftMotors(-0.2d);
-//            this.setRightMotors(0.2d);
-//        }else{
-//            this.setLeftMotors(0.2d);
-//            this.setRightMotors(-0.2d);
-//        }
-//
-//        Thread.sleep(850);
-//       // Thread.sleep(2000);
-//
-//        this.dMotors.setPowerAll(0.0);
-//    }
+    @Override
+    public void timedMove(double power, long time) throws InterruptedException {
+        this.setLeftMotors(power);
+        this.setRightMotors(power);
+
+        Thread.sleep(time);
+
+        this.dMotors.setPowerAll(0);
+    }
 
     @Override
     public void timedAngleTurn(Constants.Turns direction, int angle) throws InterruptedException {
@@ -198,7 +153,7 @@ public class Drivetrain implements IDrivetrain {
         boolean rightFound = false;
         boolean timeExhausted = false;
 
-        this.dMotors.setPowerAll(0.1d);
+        this.dMotors.setPowerAll(0.2d);
 
         double leftEOPDReading;
         double rightEOPDReading;
@@ -236,7 +191,7 @@ public class Drivetrain implements IDrivetrain {
         boolean timeExhausted = false;
         boolean beaconFound = false;
 
-        this.dMotors.setPowerAll(0.2d);
+        this.dMotors.setPowerAll(0.1d);
 
         do{
             if(color == Constants.Color.BLUE) {
