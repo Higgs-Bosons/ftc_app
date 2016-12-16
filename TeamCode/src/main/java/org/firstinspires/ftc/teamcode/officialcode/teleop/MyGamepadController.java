@@ -194,13 +194,14 @@ public class MyGamepadController implements Runnable {
         HashMap<String, Object> grabberMovement = new HashMap<String, Object>();
 
         boolean grabbing = opMode.gamepad2.x;
+        boolean opening = opMode.gamepad2.b;
 
         TeleopMessages message;
 
-        if(grabbing && lastBGrabState  == Constants.BallGrabberState.CLOSED){
-            currentBGrabState = Constants.BallGrabberState.OPEN;
-        }else if(grabbing && lastBGrabState == Constants.BallGrabberState.OPEN){
+        if(grabbing){
             currentBGrabState = Constants.BallGrabberState.CLOSED;
+        }else if(opening){
+            currentBGrabState = Constants.BallGrabberState.OPEN;
         }
 
         if(currentBGrabState != lastBGrabState){
@@ -226,13 +227,14 @@ public class MyGamepadController implements Runnable {
     private void handleLoader(){
         HashMap<String, Object> loaderMovement = new HashMap<String, Object>();
 
-        boolean loading = opMode.gamepad2.a;
+        boolean accepting = opMode.gamepad2.a;
+        boolean loading = opMode.gamepad2.y;
 
         TeleopMessages message;
 
-        if(loading && lastLoaderState == Constants.BallLoaderState.DOWN){
+        if(loading){
             currentLoaderState = Constants.BallLoaderState.UP;
-        }else if(loading && lastLoaderState == Constants.BallLoaderState.UP){
+        }else if(accepting){
             currentLoaderState = Constants.BallLoaderState.DOWN;
         }
 
@@ -257,15 +259,16 @@ public class MyGamepadController implements Runnable {
     private void handleCGrabber(){
         HashMap<String, Object> cGrabMovement = new HashMap<String, Object>();
 
-        boolean readyAndGrab = opMode.gamepad2.b;
-        boolean close = opMode.gamepad2.y;
+        boolean ready = opMode.gamepad2.left_bumper;
+        boolean grab = opMode.gamepad2.right_bumper;
+        boolean close = opMode.gamepad2.dpad_left;
 
         TeleopMessages message;
 
-        if(readyAndGrab && lastCGrabState == Constants.CapGrabberState.READY){
-            currentCGrabState = Constants.CapGrabberState.HOLDING;
-        }else if(readyAndGrab && lastCGrabState == Constants.CapGrabberState.HOLDING){
+        if(ready){
             currentCGrabState = Constants.CapGrabberState.READY;
+        }else if(grab){
+            currentCGrabState = Constants.CapGrabberState.HOLDING;
         }else if(close){
             currentCGrabState = Constants.CapGrabberState.CLOSED;
         }
@@ -284,7 +287,7 @@ public class MyGamepadController implements Runnable {
                     message = new TeleopMessages(Constants.RobotComponent.C_GRABBER, Constants.RobotComponentAction.STOP, null);
                     break;
                 default:
-                    System.out.println("****************Illegal State: " + currentLoaderState);
+                    System.out.println("****************Illegal State: " + currentCGrabState);
                     message = new TeleopMessages(Constants.RobotComponent.C_GRABBER, Constants.RobotComponentAction.STOP, null);
             }
             this.queue.offer(message);
