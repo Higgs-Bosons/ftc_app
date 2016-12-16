@@ -19,7 +19,7 @@ public class BallGrabber implements IServos{
     private Constants.BallGrabberState lastState = Constants.BallGrabberState.CLOSED;
     private BlockingQueue<TeleopMessages> queue;
 
-    private static final double OPEN_GATES = 0.25d;
+    private static final double OPEN_GATES = 0.10d;
     private static final double CLOSE_GATES = 0.0d;
 
     public BallGrabber(Servo left, Servo right){
@@ -30,7 +30,8 @@ public class BallGrabber implements IServos{
 
     private void moveGates(double position){
         left.setPosition(position);
-        right.setPosition(position);
+        right.setPosition(1.0d - position);
+        System.out.println("Moving Gates Position: " + position);
     }
 
     private void handleServo(TeleopMessages message){
@@ -38,18 +39,12 @@ public class BallGrabber implements IServos{
 
         switch (message.getRobotComponentAction()){
             case STOP:
-                //System.out.println("***************Stopping People Dropper*************");
                 this.setState(Constants.BallGrabberState.CLOSED);
                 break;
             case START:
-                //if action is to start, get the key of hashmap in order to see how to start
-                //System.out.println("***************Starting People Dropper*************");
                 if(metadata.containsKey(Constants.BallGrabberState.OPEN.name())){
-                    //System.out.println("****Message Handler Setting Servo State to Drop");
                     this.setState(Constants.BallGrabberState.OPEN);
                 } else {
-                    //if left or right isn't in key, stop the dispenser
-                    //System.out.println("****Message Handler Setting Debris Collection State to STOP");
                     this.setState(Constants.BallGrabberState.CLOSED);
                 }//if-else
                 break;

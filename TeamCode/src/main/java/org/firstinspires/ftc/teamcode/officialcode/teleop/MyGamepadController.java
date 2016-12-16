@@ -116,7 +116,7 @@ public class MyGamepadController implements Runnable {
     private void handleLauncher(){
         HashMap<String, Object> launcherActivity = new HashMap<String, Object>();
 
-        boolean enable = opMode.gamepad2.right_trigger > 0.5 ? true : false;
+        boolean enable = opMode.gamepad2.right_trigger > 0.3 ? true : false;
 
         TeleopMessages message;
 
@@ -136,9 +136,7 @@ public class MyGamepadController implements Runnable {
 
                     break;
                 case STOPPED:
-                    launcherActivity.put(Constants.LauncherState.STOPPED.name(), true);
-
-                    message = new TeleopMessages(Constants.RobotComponent.LIFT,
+                    message = new TeleopMessages(Constants.RobotComponent.LAUNCHER,
                             Constants.RobotComponentAction.STOP, null);
 
                     break;
@@ -149,7 +147,7 @@ public class MyGamepadController implements Runnable {
                             Constants.RobotComponentAction.STOP, null);
             }
             this.queue.offer(message);
-            lastLiftState = currentLiftState;
+            lastLauncherState = currentLauncherState;
         }
     }
 
@@ -210,9 +208,11 @@ public class MyGamepadController implements Runnable {
                 case OPEN:
                     grabberMovement.put(Constants.BallGrabberState.OPEN.name(), true);
                     message = new TeleopMessages(Constants.RobotComponent.B_GRABBER, Constants.RobotComponentAction.START, grabberMovement);
+                    System.out.println("Opening Gates");
                     break;
                 case CLOSED:
                     message = new TeleopMessages(Constants.RobotComponent.B_GRABBER, Constants.RobotComponentAction.STOP, null);
+                    System.out.println("Closing Grabber");
                     break;
                 default:
                     System.out.println("*********Illegal State: " + currentBGrabState);

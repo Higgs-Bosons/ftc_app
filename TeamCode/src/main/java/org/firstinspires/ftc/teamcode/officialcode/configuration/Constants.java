@@ -35,10 +35,6 @@ public class Constants {
         }
     }
 
-    public enum DriveState{
-        STOP, DRIVING
-    }
-
     public enum LauncherState{
         STOPPED, FIRING
     }

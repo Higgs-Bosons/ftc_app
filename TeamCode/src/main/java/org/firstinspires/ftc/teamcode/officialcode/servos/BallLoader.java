@@ -35,18 +35,12 @@ public class BallLoader implements IServos{
 
         switch (message.getRobotComponentAction()){
             case STOP:
-                //System.out.println("***************Stopping People Dropper*************");
                 this.setState(Constants.BallLoaderState.DOWN);
                 break;
             case START:
-                //if action is to start, get the key of hashmap in order to see how to start
-                //System.out.println("***************Starting People Dropper*************");
                 if(metadata.containsKey(Constants.BallLoaderState.UP.name())){
-                    //System.out.println("****Message Handler Setting Servo State to Drop");
                     this.setState(Constants.BallLoaderState.UP);
                 } else {
-                    //if left or right isn't in key, stop the dispenser
-                    //System.out.println("****Message Handler Setting Debris Collection State to STOP");
                     this.setState(Constants.BallLoaderState.DOWN);
                 }//if-else
                 break;
