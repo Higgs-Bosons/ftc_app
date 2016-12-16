@@ -36,7 +36,7 @@ public class Constants {
     }
 
     public enum DriveState{
-        STOP,DRIVING
+        STOP, DRIVING
     }
 
     public enum LauncherState{
@@ -55,6 +55,14 @@ public class Constants {
         OPEN, CLOSED
     }
 
+    public enum BallLoaderState{
+        UP, DOWN
+    }
+
+    public enum CapGrabberState{
+        CLOSED, READY, HOLDING
+    }
+
     public enum DrivetrainPower{
         LEFT, RIGHT
     }
@@ -62,7 +70,6 @@ public class Constants {
     public static final int ENCODER_CPR = 1120;
     public static final int THREAD_WAIT_TIME_MS = 20;
     public static final short EOPD_WHITE_THRESHOLD = 100;
-    public static final byte COLOR_THRESH = 2;
 
     public static final String LF_MOTOR = "leftFront";
     public static final String LR_MOTOR = "leftRear";

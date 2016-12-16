@@ -10,11 +10,11 @@ import org.firstinspires.ftc.teamcode.officialcode.servos.MyServos;
  * Created by Higgs Bosons on 11/30/2016.
  */
 public class LauncherLiftController implements Runnable {
-    ILauncher launcher;
-    ILift lift;
-    IServos ballGrabber;
-    IServos ballLoader;
-    IServos capGrabber;
+    private ILauncher launcher;
+    private ILift lift;
+    private IServos ballGrabber;
+    private IServos ballLoader;
+    private IServos capGrabber;
 
 
     public LauncherLiftController(ILift lift, ILauncher launcher, MyServos ballGrabber,
@@ -32,9 +32,9 @@ public class LauncherLiftController implements Runnable {
             while (true){
                 this.launcher.handleMessage();
                 this.lift.handleMessage();
-                ballGrabber.handleMessage();
-                ballLoader.handleMessage();
-                capGrabber.handleMessage();
+                this.ballGrabber.handleMessage();
+                this.ballLoader.handleMessage();
+                this.capGrabber.handleMessage();
                 Thread.sleep(Constants.THREAD_WAIT_TIME_MS);
             }
         }catch (InterruptedException i){

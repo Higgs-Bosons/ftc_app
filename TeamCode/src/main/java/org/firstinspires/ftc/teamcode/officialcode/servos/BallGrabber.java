@@ -19,21 +19,18 @@ public class BallGrabber implements IServos{
     private Constants.BallGrabberState lastState = Constants.BallGrabberState.CLOSED;
     private BlockingQueue<TeleopMessages> queue;
 
+    private static final double OPEN_GATES = 0.25d;
+    private static final double CLOSE_GATES = 0.0d;
+
     public BallGrabber(Servo left, Servo right){
         this.left = left;
         this.right = right;
         this.queue = MyMessageQueue.getInstance();
     }
 
-    private void openGates(){
-        left.setPosition(0.25);
-        right.setPosition(0.25);
-    }
-
-    private void closeGates(){
-        left.setPosition(0.0);
-        right.setPosition(0.0);
-
+    private void moveGates(double position){
+        left.setPosition(position);
+        right.setPosition(position);
     }
 
     private void handleServo(TeleopMessages message){
@@ -77,15 +74,16 @@ public class BallGrabber implements IServos{
             if(!this.getState().equals(lastState)){
                 switch (this.getState()){
                     case OPEN:
+                        this.moveGates(OPEN_GATES);
                         break;
                     case CLOSED:
+                        this.moveGates(CLOSE_GATES);
                         break;
                     default:
                         throw new IllegalStateException("Unknown State: " + this.getState());
                 }
             }
         }
-
     }
 
     @Override
@@ -97,6 +95,4 @@ public class BallGrabber implements IServos{
                 ". Expected object type of Constants.BallGrabberState");
         }
     }
-
-
 }

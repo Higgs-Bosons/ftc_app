@@ -9,8 +9,8 @@ import org.firstinspires.ftc.teamcode.officialcode.servos.MyServos;
  * Created by Higgs Bosons on 11/30/2016.
  */
 public class DrivetrainPusherController implements Runnable {
-    IDrivetrain drivetrain;
-    IPusher pusher;
+    private IDrivetrain drivetrain;
+    private IPusher pusher;
 
     public DrivetrainPusherController(IDrivetrain drivetrain, IPusher pusher){
         this.drivetrain = drivetrain;
@@ -22,8 +22,8 @@ public class DrivetrainPusherController implements Runnable {
     public void run() {
         try{
             while (true){
-                drivetrain.handleMessage();
-                pusher.handleMessage();
+                this.drivetrain.handleMessage();
+                this.pusher.handleMessage();
             }
         }catch (InterruptedException e){
             e.printStackTrace();

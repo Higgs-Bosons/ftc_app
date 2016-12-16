@@ -22,6 +22,13 @@ public class MyGamepadController implements Runnable {
     private Constants.LiftState lastLiftState = Constants.LiftState.STOPPED;
     private Constants.PusherState currentPusherState = Constants.PusherState.STOPPED;
     private Constants.PusherState lastPusherState = Constants.PusherState.STOPPED;
+    private Constants.BallGrabberState currentBGrabState = Constants.BallGrabberState.CLOSED;
+    private Constants.BallGrabberState lastBGrabState = Constants.BallGrabberState.CLOSED;
+    private Constants.BallLoaderState currentLoaderState = Constants.BallLoaderState.DOWN;
+    private Constants.BallLoaderState lastLoaderState = Constants.BallLoaderState.DOWN;
+    private Constants.CapGrabberState currentCGrabState = Constants.CapGrabberState.CLOSED;
+    private Constants.CapGrabberState lastCGrabState = Constants.CapGrabberState.CLOSED;
+
 
     public MyGamepadController(OpMode opMode){
         this.queue = MyMessageQueue.getInstance();
@@ -32,6 +39,10 @@ public class MyGamepadController implements Runnable {
         this.handleDrive();
         this.handleLauncher();
         this.handleLift();
+        this.handlePusher();
+        this.handleBGrabber();
+        this.handleLoader();
+        this.handleCGrabber();
     }
 
     private boolean exceedsThreshold(Float power){
@@ -105,7 +116,7 @@ public class MyGamepadController implements Runnable {
     private void handleLauncher(){
         HashMap<String, Object> launcherActivity = new HashMap<String, Object>();
 
-        boolean enable = opMode.gamepad2.x;
+        boolean enable = opMode.gamepad2.right_trigger > 0.5 ? true : false;
 
         TeleopMessages message;
 
@@ -178,6 +189,106 @@ public class MyGamepadController implements Runnable {
 
             this.queue.offer(message);
             lastPusherState = currentPusherState;
+        }
+    }
+
+    private void handleBGrabber(){
+        HashMap<String, Object> grabberMovement = new HashMap<String, Object>();
+
+        boolean grabbing = opMode.gamepad2.x;
+
+        TeleopMessages message;
+
+        if(grabbing && lastBGrabState  == Constants.BallGrabberState.CLOSED){
+            currentBGrabState = Constants.BallGrabberState.OPEN;
+        }else if(grabbing && lastBGrabState == Constants.BallGrabberState.OPEN){
+            currentBGrabState = Constants.BallGrabberState.CLOSED;
+        }
+
+        if(currentBGrabState != lastBGrabState){
+            switch (currentBGrabState){
+                case OPEN:
+                    grabberMovement.put(Constants.BallGrabberState.OPEN.name(), true);
+                    message = new TeleopMessages(Constants.RobotComponent.B_GRABBER, Constants.RobotComponentAction.START, grabberMovement);
+                    break;
+                case CLOSED:
+                    message = new TeleopMessages(Constants.RobotComponent.B_GRABBER, Constants.RobotComponentAction.STOP, null);
+                    break;
+                default:
+                    System.out.println("*********Illegal State: " + currentBGrabState);
+                    message = new TeleopMessages(Constants.RobotComponent.B_GRABBER, Constants.RobotComponentAction.STOP, null);
+            }
+            this.queue.offer(message);
+            lastBGrabState = currentBGrabState;
+        }
+    }
+
+    private void handleLoader(){
+        HashMap<String, Object> loaderMovement = new HashMap<String, Object>();
+
+        boolean loading = opMode.gamepad2.a;
+
+        TeleopMessages message;
+
+        if(loading && lastLoaderState == Constants.BallLoaderState.DOWN){
+            currentLoaderState = Constants.BallLoaderState.UP;
+        }else if(loading && lastLoaderState == Constants.BallLoaderState.UP){
+            currentLoaderState = Constants.BallLoaderState.DOWN;
+        }
+
+        if(currentLoaderState != lastLoaderState){
+            switch (currentLoaderState){
+                case UP:
+                    loaderMovement.put(Constants.BallLoaderState.UP.name(), true);
+                    message = new TeleopMessages(Constants.RobotComponent.LOADER, Constants.RobotComponentAction.START, loaderMovement);
+                    break;
+                case DOWN:
+                    message = new TeleopMessages(Constants.RobotComponent.LOADER, Constants.RobotComponentAction.STOP, null);
+                    break;
+                default:
+                    System.out.println("****************Illegal State: " + currentLoaderState);
+                    message = new TeleopMessages(Constants.RobotComponent.LOADER, Constants.RobotComponentAction.STOP, null);
+            }
+            this.queue.offer(message);
+            lastLoaderState = currentLoaderState;
+        }
+    }
+
+    private void handleCGrabber(){
+        HashMap<String, Object> cGrabMovement = new HashMap<String, Object>();
+
+        boolean readyAndGrab = opMode.gamepad2.b;
+        boolean close = opMode.gamepad2.y;
+
+        TeleopMessages message;
+
+        if(readyAndGrab && lastCGrabState == Constants.CapGrabberState.READY){
+            currentCGrabState = Constants.CapGrabberState.HOLDING;
+        }else if(readyAndGrab && lastCGrabState == Constants.CapGrabberState.HOLDING){
+            currentCGrabState = Constants.CapGrabberState.READY;
+        }else if(close){
+            currentCGrabState = Constants.CapGrabberState.CLOSED;
+        }
+
+        if(currentCGrabState != lastCGrabState){
+            switch (currentCGrabState){
+                case HOLDING:
+                    cGrabMovement.put(Constants.CapGrabberState.HOLDING.name(), true);
+                    message = new TeleopMessages(Constants.RobotComponent.C_GRABBER, Constants.RobotComponentAction.START, cGrabMovement);
+                    break;
+                case READY:
+                    cGrabMovement.put(Constants.CapGrabberState.READY.name(), true);
+                    message = new TeleopMessages(Constants.RobotComponent.C_GRABBER, Constants.RobotComponentAction.START, cGrabMovement);
+                    break;
+                case CLOSED:
+                    message = new TeleopMessages(Constants.RobotComponent.C_GRABBER, Constants.RobotComponentAction.STOP, null);
+                    break;
+                default:
+                    System.out.println("****************Illegal State: " + currentLoaderState);
+                    message = new TeleopMessages(Constants.RobotComponent.C_GRABBER, Constants.RobotComponentAction.STOP, null);
+            }
+            this.queue.offer(message);
+            lastCGrabState = currentCGrabState;
         }
     }
 
