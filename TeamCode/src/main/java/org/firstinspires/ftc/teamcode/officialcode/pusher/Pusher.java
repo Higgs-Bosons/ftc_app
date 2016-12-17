@@ -14,7 +14,7 @@ import java.util.concurrent.BlockingQueue;
 public class Pusher implements IPusher {
     private PusherMotor pusher;
     private Constants.PusherState currentState = Constants.PusherState.STOPPED;
-    private Constants.PusherState lastState = Constants.PusherState.STOPPED;
+   // private Constants.PusherState lastState = Constants.PusherState.STOPPED;
     BlockingQueue<TeleopMessages> queue;
 
     public Pusher(PusherMotor pusher){
@@ -67,7 +67,7 @@ public class Pusher implements IPusher {
 
             this.handlePusherMessage(msg);
 
-            if (!this.getState().equals(lastState)){
+            //if (!this.getState().equals(lastState)){
                 switch (this.getState()){
                     case STOPPED:
                         this.pusher.getPusher().setPower(0.0f);
@@ -81,8 +81,8 @@ public class Pusher implements IPusher {
                     default:
                         throw new IllegalStateException("Unknown State: " + this.getState());
                 }
-            }
-            lastState = currentState;
+            //}
+            //lastState = currentState;
         }
     }
 }

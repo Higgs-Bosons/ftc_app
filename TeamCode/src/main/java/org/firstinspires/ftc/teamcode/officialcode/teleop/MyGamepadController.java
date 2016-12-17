@@ -89,12 +89,16 @@ public class MyGamepadController implements Runnable {
                     message = new TeleopMessages(Constants.RobotComponent.LIFT,
                             Constants.RobotComponentAction.START, liftDirection);
 
+//                    System.out.println("Ascending at Controller");
+
                     break;
                 case DESCENDING:
                     liftDirection.put(Constants.LiftState.DESCENDING.name(), true);
 
                     message = new TeleopMessages(Constants.RobotComponent.LIFT,
                             Constants.RobotComponentAction.START, liftDirection);
+
+//                    System.out.println("Descending at Controller");
 
                     break;
                 case STOPPED:

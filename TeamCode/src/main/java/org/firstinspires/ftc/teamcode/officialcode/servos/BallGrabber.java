@@ -19,7 +19,7 @@ public class BallGrabber implements IServos{
     //private Constants.BallGrabberState lastState = Constants.BallGrabberState.CLOSED;
     private BlockingQueue<TeleopMessages> queue;
 
-    private static final double OPEN_GATES = 0.40d;
+    private static final double OPEN_GATES = 0.50d;
     private static final double CLOSE_GATES = 0.10d;
 
     public BallGrabber(Servo left, Servo right){

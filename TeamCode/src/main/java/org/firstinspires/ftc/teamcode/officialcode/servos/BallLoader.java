@@ -19,7 +19,7 @@ public class BallLoader implements IServos{
     private BlockingQueue<TeleopMessages> queue;
 
     private static final double LOADING = 0.40d;
-    private static final double RESTING = 0.10d;
+    private static final double RESTING = 0.0d;
 
     public BallLoader(Servo loader){
         this.loader = loader;

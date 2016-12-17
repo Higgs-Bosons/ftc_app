@@ -35,18 +35,18 @@ public class CapGrabber implements IServos{
         switch (state) {
             case HOLDING:
                 this.top.setPosition(0.4d);
-                this.bottomRight.setPosition(0.5d);
-                this.bottomLeft.setPosition(0.5d);
+                this.bottomRight.setPosition(0.6d);
+                this.bottomLeft.setPosition(0.4d);
                 break;
             case READY:
                 this.top.setPosition(0.0d);
-                this.bottomRight.setPosition(0.0d);
-                this.bottomLeft.setPosition(0.0d);
+                this.bottomRight.setPosition(0.6d);
+                this.bottomLeft.setPosition(0.4d);
                 break;
             case CLOSED:
                 this.top.setPosition(1.0d);
-                this.bottomRight.setPosition(0.5d);
-                this.bottomLeft.setPosition(0.5d);
+                this.bottomRight.setPosition(0.0d);
+                this.bottomLeft.setPosition(1.0d);
                 break;
             default:
                 throw new IllegalStateException("Unknown State: " + state);

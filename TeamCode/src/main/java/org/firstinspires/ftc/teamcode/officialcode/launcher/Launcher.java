@@ -14,7 +14,7 @@ import java.util.concurrent.BlockingQueue;
 public class Launcher implements ILauncher {
     private LauncherMotor launcher;
     private Constants.LauncherState currentState = Constants.LauncherState.STOPPED;
-    private Constants.LauncherState lastState = Constants.LauncherState.STOPPED;
+    //private Constants.LauncherState lastState = Constants.LauncherState.STOPPED;
     private BlockingQueue<TeleopMessages> queue;
 
     public Launcher(LauncherMotor launcher) {
@@ -65,7 +65,7 @@ public class Launcher implements ILauncher {
 
             this.handleLauncher(msg);
 
-            if (!this.getState().equals(lastState)){
+            //if (!this.getState().equals(lastState)){
                 switch (this.getState()){
                     case STOPPED:
                         this.cease();
@@ -76,9 +76,9 @@ public class Launcher implements ILauncher {
                     default:
                         throw new IllegalStateException("Unknown State: " + this.getState());
                 }
-            }
+            //}
 
-            lastState = currentState;
+            //lastState = currentState;
         }
     }
 

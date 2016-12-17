@@ -13,7 +13,7 @@ import java.util.concurrent.BlockingQueue;
 public class Lift implements ILift {
     private LiftMotor lift;
     private Constants.LiftState currentState = Constants.LiftState.STOPPED;
-    private Constants.LiftState lastState = Constants.LiftState.STOPPED;
+    //private Constants.LiftState lastState = Constants.LiftState.STOPPED;
     private BlockingQueue<TeleopMessages> queue;
 
     public Lift(LiftMotor lift){
@@ -31,8 +31,10 @@ public class Lift implements ILift {
             case START:
                 if(metadata.containsKey(Constants.LiftState.ASCENDING.name())){
                     this.setState(Constants.LiftState.ASCENDING);
+//                    System.out.println("Ascending at lift");
                 }else if(metadata.containsKey(Constants.LiftState.DESCENDING.name())){
                     this.setState(Constants.LiftState.DESCENDING);
+//                    System.out.println("Descending at lift");
                 }else{
                     this.setState(Constants.LiftState.STOPPED);
                 }
@@ -71,28 +73,30 @@ public class Lift implements ILift {
     public void handleMessage() throws InterruptedException {
         TeleopMessages msg = this.queue.peek();
 
-        if (msg != null && Constants.RobotComponent.LAUNCHER.equals(msg.getRobotComponent())){
+        if (msg != null && Constants.RobotComponent.LIFT.equals(msg.getRobotComponent())){
             msg = this.queue.take();
 
             this.handleLift(msg);
 
-            if (!this.getState().equals(lastState)){
+            //if (!this.getState().equals(lastState)){
                 switch (this.getState()){
                     case STOPPED:
                         this.stop();
                         break;
                     case ASCENDING:
                         this.ascend();
+//                        System.out.println("Ascending");
                         break;
                     case DESCENDING:
                         this.descend();
+//                        System.out.println("Descending");
                         break;
                     default:
                         throw new IllegalStateException("Unknown State: " + this.getState());
                 }
-            }
+            //}
 
-            lastState = currentState;
+           // lastState = currentState;
         }
     }
 }
