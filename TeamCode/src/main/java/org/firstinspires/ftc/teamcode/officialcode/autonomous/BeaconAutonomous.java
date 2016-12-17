@@ -7,6 +7,9 @@ import org.firstinspires.ftc.teamcode.officialcode.pusher.IPusher;
 import org.firstinspires.ftc.teamcode.officialcode.pusher.PusherFactory;
 import org.firstinspires.ftc.teamcode.officialcode.sensors.Sensors;
 import org.firstinspires.ftc.teamcode.officialcode.sensors.SensorsFactory;
+import org.firstinspires.ftc.teamcode.officialcode.servos.IServos;
+import org.firstinspires.ftc.teamcode.officialcode.servos.MyServos;
+import org.firstinspires.ftc.teamcode.officialcode.servos.ServosFactory;
 
 import java.util.Stack;
 
@@ -29,7 +32,7 @@ public class BeaconAutonomous extends Autonomous {
 
     private IDrivetrain dDrive;
     private IPusher dPusher;
-//    private Sensors sensors;
+    private MyServos dServos;
 
     public BeaconAutonomous(Constants.Color color){
         this.color = color;
@@ -104,6 +107,9 @@ public class BeaconAutonomous extends Autonomous {
        // System.out.println("Initialize Started.");
         this.dDrive = DriveTrainFactory.getInstance(this);
         this.dPusher = PusherFactory.getInstance(this);
+        this.dServos = ServosFactory.getInstance(this);
+
+        this.dServos.getCapGrabber().closeGrabber();
 //        this.sensors = SensorsFactory.getInstance(this);
 
 //        this.sensors.gyroCalibrate();

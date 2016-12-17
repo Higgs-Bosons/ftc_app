@@ -17,7 +17,7 @@ public class CapGrabber implements IServos{
     private Servo bottomLeft;
     private Servo bottomRight;
     private Constants.CapGrabberState state = Constants.CapGrabberState.CLOSED;
-    private Constants.CapGrabberState lastState = Constants.CapGrabberState.CLOSED;
+    //private Constants.CapGrabberState lastState = Constants.CapGrabberState.CLOSED;
     private BlockingQueue<TeleopMessages> queue;
 
     public CapGrabber(Servo top, Servo bottomLeft, Servo bottomRight){
@@ -27,22 +27,26 @@ public class CapGrabber implements IServos{
         this.queue = MyMessageQueue.getInstance();
     }
 
+    public void closeGrabber(){
+        moveCGrabber(Constants.CapGrabberState.CLOSED);
+    }
+
     private void moveCGrabber(Constants.CapGrabberState state){
         switch (state) {
             case HOLDING:
-                this.top.setPosition(0.7d);
+                this.top.setPosition(0.4d);
                 this.bottomRight.setPosition(0.5d);
                 this.bottomLeft.setPosition(0.5d);
                 break;
             case READY:
-                this.top.setPosition(1.0d);
-                this.bottomRight.setPosition(0.5d);
-                this.bottomLeft.setPosition(0.5d);
-                break;
-            case CLOSED:
                 this.top.setPosition(0.0d);
                 this.bottomRight.setPosition(0.0d);
                 this.bottomLeft.setPosition(0.0d);
+                break;
+            case CLOSED:
+                this.top.setPosition(1.0d);
+                this.bottomRight.setPosition(0.5d);
+                this.bottomLeft.setPosition(0.5d);
                 break;
             default:
                 throw new IllegalStateException("Unknown State: " + state);
@@ -83,9 +87,9 @@ public class CapGrabber implements IServos{
             msg = this.queue.take();
             this.handleServo(msg);
 
-            if(!this.getState().equals(lastState)){
+            //if(!this.getState().equals(lastState)){
                 moveCGrabber(this.getState());
-            }
+            //}
         }
     }
 

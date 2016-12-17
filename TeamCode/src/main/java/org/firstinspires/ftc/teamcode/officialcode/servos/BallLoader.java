@@ -15,11 +15,11 @@ import java.util.concurrent.BlockingQueue;
 public class BallLoader implements IServos{
     private Servo loader;
     private Constants.BallLoaderState state = Constants.BallLoaderState.DOWN;
-    private Constants.BallLoaderState lastState = Constants.BallLoaderState.DOWN;
+    //private Constants.BallLoaderState lastState = Constants.BallLoaderState.DOWN;
     private BlockingQueue<TeleopMessages> queue;
 
-    private static final double LOADING = 0.25d;
-    private static final double RESTING = 0.0d;
+    private static final double LOADING = 0.40d;
+    private static final double RESTING = 0.10d;
 
     public BallLoader(Servo loader){
         this.loader = loader;
@@ -62,7 +62,7 @@ public class BallLoader implements IServos{
             msg = this.queue.take();
             this.handleServo(msg);
 
-            if(!this.getState().equals(lastState)){
+           // if(!this.getState().equals(lastState)){
                 switch (this.getState()){
                     case DOWN:
                         this.moveLoader(RESTING);
@@ -73,7 +73,7 @@ public class BallLoader implements IServos{
                     default:
                         throw new IllegalStateException("Unknown State: " + this.getState());
                 }
-            }
+           // }
         }
 
     }

@@ -23,11 +23,11 @@ public class MyGamepadController implements Runnable {
     private Constants.PusherState currentPusherState = Constants.PusherState.STOPPED;
     private Constants.PusherState lastPusherState = Constants.PusherState.STOPPED;
     private Constants.BallGrabberState currentBGrabState = Constants.BallGrabberState.CLOSED;
-    private Constants.BallGrabberState lastBGrabState = Constants.BallGrabberState.CLOSED;
+    private Constants.BallGrabberState lastBGrabState = Constants.BallGrabberState.OPEN;
     private Constants.BallLoaderState currentLoaderState = Constants.BallLoaderState.DOWN;
-    private Constants.BallLoaderState lastLoaderState = Constants.BallLoaderState.DOWN;
+    private Constants.BallLoaderState lastLoaderState = Constants.BallLoaderState.UP;
     private Constants.CapGrabberState currentCGrabState = Constants.CapGrabberState.CLOSED;
-    private Constants.CapGrabberState lastCGrabState = Constants.CapGrabberState.CLOSED;
+    private Constants.CapGrabberState lastCGrabState = Constants.CapGrabberState.READY;
 
 
     public MyGamepadController(OpMode opMode){
@@ -116,7 +116,7 @@ public class MyGamepadController implements Runnable {
     private void handleLauncher(){
         HashMap<String, Object> launcherActivity = new HashMap<String, Object>();
 
-        boolean enable = opMode.gamepad2.right_trigger > 0.3 ? true : false;
+        boolean enable = (opMode.gamepad2.right_trigger > 0.3 ? true : false);
 
         TeleopMessages message;
 
@@ -209,11 +209,11 @@ public class MyGamepadController implements Runnable {
                 case OPEN:
                     grabberMovement.put(Constants.BallGrabberState.OPEN.name(), true);
                     message = new TeleopMessages(Constants.RobotComponent.B_GRABBER, Constants.RobotComponentAction.START, grabberMovement);
-                    System.out.println("Opening Gates");
+                    //System.out.println("Opening Gates");
                     break;
                 case CLOSED:
                     message = new TeleopMessages(Constants.RobotComponent.B_GRABBER, Constants.RobotComponentAction.STOP, null);
-                    System.out.println("Closing Grabber");
+                    //System.out.println("Closing Grabber");
                     break;
                 default:
                     System.out.println("*********Illegal State: " + currentBGrabState);
