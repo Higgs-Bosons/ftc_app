@@ -26,8 +26,10 @@ public class DriveMotors {
         this.rightFront = rightFront;
         this.rightBack = rightBack;
 
-        this.getLeftBack().setDirection(DcMotor.Direction.REVERSE);
-        this.getLeftFront().setDirection(DcMotor.Direction.REVERSE);
+        if(!this.getLeftFront().getDirection().equals(DcMotorSimple.Direction.REVERSE)) {
+            this.getLeftBack().setDirection(DcMotor.Direction.REVERSE);
+            this.getLeftFront().setDirection(DcMotor.Direction.REVERSE);
+        }
     }
 
     private double getRotations(double distance) {
@@ -48,13 +50,6 @@ public class DriveMotors {
     public void moveControllers(){
         this.getLeftFront().setMode(DcMotor.RunMode.RUN_TO_POSITION);
         this.getRightFront().setMode(DcMotor.RunMode.RUN_TO_POSITION);
-    }
-
-    public void setPowerAll(double powerAll){
-        this.getLeftFront().setPower(powerAll);
-        this.getLeftBack().setPower(powerAll);
-        this.getRightFront().setPower(powerAll);
-        this.getRightBack().setPower(powerAll);
     }
 
     public void encodeInitialize(){

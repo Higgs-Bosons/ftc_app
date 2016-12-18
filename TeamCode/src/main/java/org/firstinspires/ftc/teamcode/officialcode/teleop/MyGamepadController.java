@@ -52,8 +52,8 @@ public class MyGamepadController implements Runnable {
     private void handleDrive(){
         HashMap<String, Object> drivetrainPower = new HashMap<String, Object>();
 
-        float lp = opMode.gamepad1.left_stick_y * 0.8f;
-        float rp = opMode.gamepad1.right_stick_y * 0.8f;
+        float lp = opMode.gamepad1.left_stick_y * -0.6f;
+        float rp = opMode.gamepad1.right_stick_y * 0.6f;
 
         Float leftPower = (-1) * (exceedsThreshold(lp) ? new Float(lp) : 0.0f);
         Float rightPower = exceedsThreshold(rp) ? new Float(rp) : 0.0f;
@@ -308,10 +308,6 @@ public class MyGamepadController implements Runnable {
             }catch (InterruptedException e){
                 e.printStackTrace();
                 break;
-            }
-            catch (Exception e){
-                e.printStackTrace();
-
             }
         }
     }

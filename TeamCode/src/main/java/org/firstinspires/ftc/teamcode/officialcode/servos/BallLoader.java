@@ -18,12 +18,16 @@ public class BallLoader implements IServos{
     //private Constants.BallLoaderState lastState = Constants.BallLoaderState.DOWN;
     private BlockingQueue<TeleopMessages> queue;
 
-    private static final double LOADING = 0.40d;
-    private static final double RESTING = 0.0d;
+    private static final double LOADING = 0.60d;
+    private static final double RESTING = 0.20d;
 
     public BallLoader(Servo loader){
         this.loader = loader;
         this.queue = MyMessageQueue.getInstance();
+    }
+
+    public void downLoader(){
+        this.loader.setPosition(RESTING);
     }
 
     private void moveLoader(double position){

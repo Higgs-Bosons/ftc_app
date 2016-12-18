@@ -28,6 +28,11 @@ public class BallGrabber implements IServos{
         this.queue = MyMessageQueue.getInstance();
     }
 
+    public void fullClose(){
+        left.setPosition(0.0d);
+        right.setPosition(1.0d);
+    }
+
     private void moveGates(double position){
         left.setPosition(position);
         right.setPosition(1.0d - position);

@@ -21,11 +21,12 @@ import java.util.Stack;
  * Created by Higgs Bosons on 10/5/2016.
  */
 public class BeaconAutonomous extends Autonomous {
-    private static final byte OFF_WALL_DIST = 5;
-    private static final byte TO_BEACON_DIST = 50;
+    private static final byte OFF_WALL_DIST = 15;
+    private static final byte TO_BEACON_DIST = 60;
     private static final byte SECOND_BEACON_DIST = 38;
-    private static final double POWER_ONE = 0.5d;
+    private static final double POWER_ONE = 0.7d;
     private static final int ANGLE_TURNS = 53;
+    private static final double WHITE_LINE_PWER = 0.2d;
     private Constants.Color color;
 
     private Stack<Constants.Turns> turns;
@@ -71,14 +72,14 @@ public class BeaconAutonomous extends Autonomous {
         dDrive.timedAngleTurn(turns.pop(), ANGLE_TURNS);
     }
 
-    private void goToBeacon(long finalWaitTime) throws InterruptedException{
+    private void goToBeacon(long finalWaitTime, double power) throws InterruptedException{
         //detects white line with sensors to align itself to the beacon
-        boolean atBeacon = dDrive.stopAtWhiteLine(finalWaitTime);
+        boolean atBeacon = dDrive.stopAtWhiteLine(finalWaitTime, power);
         if(!atBeacon){
             throw new IllegalStateException("No Beacon");
         }
 
-        this.dDrive.timedMove(-0.2d, 1000);
+        this.dDrive.timedMove(-0.2d, 600);
     }
 
     private void goToSecondBeacon() throws InterruptedException {
@@ -110,6 +111,8 @@ public class BeaconAutonomous extends Autonomous {
         this.dServos = ServosFactory.getInstance(this);
 
         this.dServos.getCapGrabber().closeGrabber();
+        this.dServos.getBallGrabber().fullClose();
+        this.dServos.getBallLoader().downLoader();
 //        this.sensors = SensorsFactory.getInstance(this);
 
 //        this.sensors.gyroCalibrate();
@@ -130,10 +133,10 @@ public class BeaconAutonomous extends Autonomous {
         try {
             //System.out.println("Approaching Beacons");
             this.approachBeacons();
-            this.goToBeacon(5000);
+            this.goToBeacon(5000, -WHITE_LINE_PWER);
             this.activateBeacon(pusherPower);
             this.goToSecondBeacon();
-            this.goToBeacon(5000);
+            this.goToBeacon(5000, WHITE_LINE_PWER);
             this.activateBeacon(pusherPower);
         }catch(Exception e){
             e.printStackTrace();

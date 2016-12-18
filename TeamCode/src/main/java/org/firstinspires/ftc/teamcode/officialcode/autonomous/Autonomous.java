@@ -11,7 +11,7 @@ public abstract class Autonomous extends LinearOpMode implements IAutonomous{
 
     @Override
     public void runOpMode() throws InterruptedException{
-        System.out.println("Starting OpMode");
+        //System.out.println("Starting OpMode");
         this.initialize();
 
         waitForStart();
@@ -20,7 +20,7 @@ public abstract class Autonomous extends LinearOpMode implements IAutonomous{
         this.runAutonomous();
 
         while(opModeIsActive()){
-            Thread.sleep(10);
+            Thread.sleep(500);
             idle();
         }
     }

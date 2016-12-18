@@ -27,8 +27,9 @@ public class CapGrabber implements IServos{
         this.queue = MyMessageQueue.getInstance();
     }
 
-    public void closeGrabber(){
+    public void closeGrabber() throws InterruptedException {
         moveCGrabber(Constants.CapGrabberState.CLOSED);
+        Thread.sleep(1000);
     }
 
     private void moveCGrabber(Constants.CapGrabberState state){

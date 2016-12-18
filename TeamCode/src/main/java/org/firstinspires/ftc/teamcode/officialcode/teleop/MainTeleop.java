@@ -20,6 +20,10 @@ import org.firstinspires.ftc.teamcode.officialcode.servos.ServosFactory;
 
 @TeleOp(name = "main", group = "TeleOp")
 public class MainTeleop extends LinearOpMode {
+    Thread dpscThread;
+    Thread llcThread;
+    Thread gcThread;
+
     private void initialize() throws InterruptedException{
 
     }
@@ -30,7 +34,8 @@ public class MainTeleop extends LinearOpMode {
         IPusher pusher = PusherFactory.getInstance(this);
 
         DrivetrainPusherController dpsc = new DrivetrainPusherController(drivetrain, pusher);
-        new Thread(dpsc).start();
+        dpscThread = new Thread(dpsc);
+        dpscThread.start();
 
         ILift lift = LiftFactory.getInstance(this);
 
@@ -39,10 +44,12 @@ public class MainTeleop extends LinearOpMode {
         MyServos servos = ServosFactory.getInstance(this);
 
         LauncherLiftController llc = new LauncherLiftController(lift, launcher,  servos, servos, servos);
-        new Thread(llc).start();
+        llcThread = new Thread(llc);
+        llcThread.start();
 
         MyGamepadController gcController = new MyGamepadController(this);
-        new Thread(gcController).start();
+        gcThread = new Thread(gcController);
+        gcThread.start();
     }
 
     @Override
@@ -57,9 +64,18 @@ public class MainTeleop extends LinearOpMode {
             e.printStackTrace();
         }
 
-        while(opModeIsActive()){
-            Thread.sleep(5000);
-            idle();
+        try {
+            while(opModeIsActive()){
+                Thread.sleep(5000);
+                idle();
+            }
+        } catch(InterruptedException e){
+            //System.out.println("Interrupting Threads");
+
+            gcThread.interrupt();
+            llcThread.interrupt();
+            dpscThread.interrupt();
+            throw e;
         }
     }
 }

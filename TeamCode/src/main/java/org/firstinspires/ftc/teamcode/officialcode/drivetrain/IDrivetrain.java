@@ -24,7 +24,7 @@ public interface IDrivetrain {
 
     void timedMove(double power, long time) throws InterruptedException;
 
-    boolean stopAtWhiteLine(long finalWaitTime) throws InterruptedException;
+    boolean stopAtWhiteLine(long finalWaitTime, double power) throws InterruptedException;
 
     boolean stopAtBeacon(Constants.Color color, long finalWaitTime) throws InterruptedException;
 
