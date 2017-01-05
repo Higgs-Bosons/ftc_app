@@ -4,6 +4,7 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.GyroSensor;
 import com.qualcomm.robotcore.hardware.OpticalDistanceSensor;
+import com.qualcomm.robotcore.hardware.TouchSensor;
 
 import org.firstinspires.ftc.teamcode.officialcode.configuration.Constants;
 
@@ -22,13 +23,15 @@ public class SensorsFactory {
 
     private static Sensors getSensors(OpMode opMode) throws InterruptedException{
         ColorSensor coloring = opMode.hardwareMap.colorSensor.get(Constants.COLOR_SENSOR);
-//        GyroSensor gyro = opMode.hardwareMap.gyroSensor.get(Constants.GYRO_SENSOR);
+        GyroSensor gyro = opMode.hardwareMap.gyroSensor.get(Constants.GYRO_SENSOR);
         OpticalDistanceSensor rightEOPD = opMode.hardwareMap.opticalDistanceSensor.get(Constants.RIGHT_EOPD);
         OpticalDistanceSensor leftEOPD = opMode.hardwareMap.opticalDistanceSensor.get(Constants.LEFT_EOPD);
+        TouchSensor rTouch = opMode.hardwareMap.touchSensor.get(Constants.RIGHT_TOUCHER);
+        TouchSensor lTouch = opMode.hardwareMap.touchSensor.get(Constants.LEFT_TOUCHER);
 
         coloring.enableLed(false);
 
-        Sensors sensors = new Sensors(leftEOPD, rightEOPD, coloring/*, gyro*/);
+        Sensors sensors = new Sensors(leftEOPD, rightEOPD, coloring, gyro, rTouch, lTouch);
 
         return sensors;
     }

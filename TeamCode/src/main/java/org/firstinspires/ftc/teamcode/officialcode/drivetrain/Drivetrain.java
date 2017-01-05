@@ -26,7 +26,9 @@ public class Drivetrain implements IDrivetrain {
 
     private static final int TIMED_PER_DEGREE = 12;
     private static final double TURN_POWER = 0.2d;
-    private static final double DISTANCE_PER_DEGREE = 0.3d;
+//    private static final double DISTANCE_PER_DEGREE = 0.3d;
+    private static final double MAX_TURN_POWER = 1.5;
+    private static final double MIN_TURN_POWER = 0.1;
 
     public Drivetrain(DriveMotors dMotors, Sensors dSense){
         this.dMotors = dMotors;
@@ -42,6 +44,69 @@ public class Drivetrain implements IDrivetrain {
     private void setRightMotors(double power){
         this.dMotors.getRightFront().setPower(power);
         this.dMotors.getRightBack().setPower(power);
+    }
+
+    private Constants.Turns getDirection(int finalHeading, int currentHeading){
+        Constants.Turns direction;
+        int headingDiff = finalHeading - currentHeading;
+
+        if(headingDiff > 0){
+            direction = headingDiff <= 180 ? Constants.Turns.RIGHT_TURN : Constants.Turns.LEFT_TURN;
+        }else{
+            direction = headingDiff <= -180 ? Constants.Turns.RIGHT_TURN : Constants.Turns.LEFT_TURN;
+        }
+
+        return direction;
+    }
+
+    private int getAngle(int finalHeading, int currentHeading, Constants.Turns direction) {
+        int returnValue = 0;
+        switch (direction) {
+            case LEFT_TURN:
+                if (finalHeading < currentHeading) {
+                    returnValue = (360 - currentHeading) + finalHeading;
+                } else {
+                    returnValue = finalHeading - currentHeading;
+                }
+                break;
+            case RIGHT_TURN:
+                if (currentHeading < finalHeading) {
+                    returnValue = (360 - finalHeading) + currentHeading;
+                } else {
+                    returnValue = currentHeading - finalHeading;
+                }
+                break;
+            default:
+                throw new IllegalStateException("No turns specified: " + direction);
+        }
+        return returnValue;
+    }
+
+    private void setTurnPower(Constants.Turns direction, int angle) {
+        double currentPower = (MAX_TURN_POWER / 180d) * (double) angle;
+        if (currentPower < MIN_TURN_POWER) {
+            currentPower = MIN_TURN_POWER;
+        }else if(currentPower > 0.3){
+            currentPower = 0.3;
+        }
+
+        switch (direction) {
+            case LEFT_TURN:
+                this.setLeftMotors(-currentPower);
+                this.setRightMotors(currentPower);
+
+                System.out.println("********Turning Left at Power" + currentPower);
+                break;
+            case RIGHT_TURN:
+                this.setLeftMotors(currentPower);
+                this.setRightMotors(-currentPower);
+
+                System.out.println("********Turning Right at Power" + currentPower);
+                break;
+            default:
+                this.setLeftMotors(0.0f);
+                this.setRightMotors(0.0f);
+        }
     }
 
     private void handleDrivetrainMessage(TeleopMessages message){
@@ -121,56 +186,58 @@ public class Drivetrain implements IDrivetrain {
     }
 
 
-  //  @Override
-    public void encoderAngleTurn(Constants.Turns direction, int angle, double power) throws InterruptedException {
-//        System.out.println("Moving Distance Drivetrain");
+//  //  @Override
+//    public void encoderAngleTurn(Constants.Turns direction, int angle, double power) throws InterruptedException {
+////        System.out.println("Moving Distance Drivetrain");
+//
+//        double leftPower;
+//        double rightPower;
+//        DcMotor targetMotor;
+//
+//        boolean isLeft = Constants.Turns.LEFT_TURN.equals(direction);
+//
+//        if(isLeft){
+//            leftPower = -power;
+//            rightPower = power;
+//            targetMotor = this.dMotors.getRightFront();
+//        }else{
+//            leftPower = power;
+//            rightPower = -power;
+//            targetMotor = this.dMotors.getRightFront();
+//        }
+//
+//        this.dMotors.resetControllers();
+//
+//        this.dMotors.encodeInitialize();
+//
+//        int currentPosition = targetMotor.getCurrentPosition();
+//
+////        System.out.println("Left Current Position: " + currentPositionL + ", Right Current Position: " + currentPositionR);
+//
+//        int counts = this.dMotors.getCounts(angle*DISTANCE_PER_DEGREE);
+//        int targetPosition = currentPosition + counts;
+//
+////        System.out.println("Left Target Position: " + targetPositionL + ", Right Target Position: " + targetPositionR);
+//        targetMotor.setTargetPosition(targetPosition);
+//
+//        targetMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+//
+//        this.setLeftMotors(leftPower);
+//        this.setRightMotors(rightPower);
+//
+//        while (currentPosition < targetPosition) {
+//            currentPosition = targetMotor.getCurrentPosition();
+//
+////            System.out.println("Left Current Position: " + currentPositionL + ", Right Current Position: " + currentPositionR);
+//
+//            Thread.sleep(Constants.THREAD_WAIT_TIME_MS);
+//        }
+//
+//        this.dMotors.resetControllers();
+//        this.dMotors.regularController();
+//    }
 
-        double leftPower;
-        double rightPower;
-        DcMotor targetMotor;
 
-        boolean isLeft = Constants.Turns.LEFT_TURN.equals(direction);
-
-        if(isLeft){
-            leftPower = -power;
-            rightPower = power;
-            targetMotor = this.dMotors.getRightFront();
-        }else{
-            leftPower = power;
-            rightPower = -power;
-            targetMotor = this.dMotors.getRightFront();
-        }
-
-        this.dMotors.resetControllers();
-
-        this.dMotors.encodeInitialize();
-
-        int currentPosition = targetMotor.getCurrentPosition();
-
-//        System.out.println("Left Current Position: " + currentPositionL + ", Right Current Position: " + currentPositionR);
-
-        int counts = this.dMotors.getCounts(angle*DISTANCE_PER_DEGREE);
-        int targetPosition = currentPosition + counts;
-
-//        System.out.println("Left Target Position: " + targetPositionL + ", Right Target Position: " + targetPositionR);
-        targetMotor.setTargetPosition(targetPosition);
-
-        targetMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-
-        this.setLeftMotors(leftPower);
-        this.setRightMotors(rightPower);
-
-        while (currentPosition < targetPosition) {
-            currentPosition = targetMotor.getCurrentPosition();
-
-//            System.out.println("Left Current Position: " + currentPositionL + ", Right Current Position: " + currentPositionR);
-
-            Thread.sleep(Constants.THREAD_WAIT_TIME_MS);
-        }
-
-        this.dMotors.resetControllers();
-        this.dMotors.regularController();
-    }
 
     @Override
     public void timedMove(double power, long time) throws InterruptedException {
@@ -184,17 +251,41 @@ public class Drivetrain implements IDrivetrain {
     }
 
     @Override
+    public void goToHeading(int finalHeading) throws InterruptedException {
+        int currentHeading;
+        Constants.Turns direction;
+        int angle;
+        boolean done = false;
+
+        while(!done){
+            currentHeading = this.dSense.getHeading();
+            System.out.println("***********Current Heading: " + currentHeading);
+
+            if(Math.abs(currentHeading-finalHeading) < 2){
+                done = true;
+                this.setLeftMotors(0.0d);
+                this.setRightMotors(0.0d);
+            }else{
+                direction = this.getDirection(finalHeading, currentHeading);
+                angle = this.getAngle(finalHeading, currentHeading, direction);
+                this.setTurnPower(direction, angle);
+                Thread.sleep(Constants.THREAD_WAIT_TIME_MS);
+            }
+        }
+    }
+
+    @Override
     public void timedAngleTurn(Constants.Turns direction, int angle) throws InterruptedException {
-        if(direction == Constants.Turns.LEFT_TURN){
+        if (direction == Constants.Turns.LEFT_TURN) {
             this.setLeftMotors(-TURN_POWER);
             this.setRightMotors(TURN_POWER);
-        }else{
+        } else {
             this.setLeftMotors(TURN_POWER);
             this.setRightMotors(-TURN_POWER);
         }
 
         Thread.sleep(angle * TIMED_PER_DEGREE);
-       // Thread.sleep(2000);
+        // Thread.sleep(2000);
 
         this.setLeftMotors(0.0d);
         this.setLeftMotors(0.0d);
@@ -269,6 +360,39 @@ public class Drivetrain implements IDrivetrain {
         this.setLeftMotors(0.0d);
         this.setRightMotors(0.0d);
         return beaconFound;
+    }
+
+    @Override
+    public boolean wallAlign(long finalWaitTime) throws InterruptedException{
+        long currentTime;
+
+        long startTime = System.currentTimeMillis();
+        boolean timeExhausted = false;
+        boolean rFound = false;
+        boolean lFound = false;
+
+        this.setLeftMotors(0.5d);
+        this.setRightMotors(0.5d);
+
+        while(!(lFound && rFound) && !timeExhausted) {
+            currentTime = System.currentTimeMillis();
+
+            if (this.dSense.getlTouch().isPressed()) {
+                this.setLeftMotors(0.0f);
+                lFound = true;
+            } else if (this.dSense.getrTouch().isPressed()) {
+                this.setRightMotors(0.0f);
+                rFound = true;
+            }
+
+            timeExhausted = currentTime - startTime > finalWaitTime;
+
+            Thread.sleep(Constants.THREAD_WAIT_TIME_MS);
+        }
+
+        this.setLeftMotors(0.0d);
+        this.setRightMotors(0.0d);
+        return (lFound && rFound);
     }
 
     @Override

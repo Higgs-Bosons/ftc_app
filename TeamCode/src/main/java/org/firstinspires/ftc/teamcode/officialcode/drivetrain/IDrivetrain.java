@@ -18,7 +18,8 @@ public interface IDrivetrain {
      * makes the robot turn a 90 degree angle in either the left or right direction
      *
      */
-//    void rightAngleTurn(Constants.Turns direction ) throws InterruptedException;
+
+    void goToHeading(int finalHeading) throws InterruptedException;
 
     void timedAngleTurn(Constants.Turns direction, int angle) throws InterruptedException;
 
@@ -27,6 +28,8 @@ public interface IDrivetrain {
     boolean stopAtWhiteLine(long finalWaitTime, double power) throws InterruptedException;
 
     boolean stopAtBeacon(Constants.Color color, long finalWaitTime) throws InterruptedException;
+
+    boolean wallAlign(long finalWaitTime) throws InterruptedException;
 
     float getPowerLF();
 

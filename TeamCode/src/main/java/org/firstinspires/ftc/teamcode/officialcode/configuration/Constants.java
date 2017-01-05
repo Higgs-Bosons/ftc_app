@@ -59,6 +59,10 @@ public class Constants {
         CLOSED, READY, HOLDING
     }
 
+    public enum TouchersState{
+        RETRACTED, READY
+    }
+
     public enum DrivetrainPower{
         LEFT, RIGHT
     }
@@ -81,9 +85,13 @@ public class Constants {
     public static final String BL_CAP_SERVO = "bottomLeftCapGrabber";
     public static final String BR_CAP_SERVO = "bottomRightCapGrabber";
     public static final String LOADER_SERVO = "ballLoader";
+    public static final String RIGHT_TOUCHER_SERVO = "rTouch";
+    public static final String LEFT_TOUCHER_SERVO = "lTouch";
 
     public static final String COLOR_SENSOR = "color";
-    //public static final String GYRO_SENSOR = "gyro";
+    public static final String GYRO_SENSOR = "gyro";
     public static final String LEFT_EOPD = "lEOPD";
     public static final String RIGHT_EOPD = "rEOPD";
+    public static final String RIGHT_TOUCHER = "rTouchSense";
+    public static final String LEFT_TOUCHER = "lTouchSense";
 }

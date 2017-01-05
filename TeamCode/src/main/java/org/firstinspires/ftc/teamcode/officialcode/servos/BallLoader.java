@@ -30,6 +30,10 @@ public class BallLoader implements IServos{
         this.loader.setPosition(RESTING);
     }
 
+    public void raiseLoader(){
+        this.loader.setPosition(LOADING);
+    }
+
     private void moveLoader(double position){
         this.loader.setPosition(position);
     }
