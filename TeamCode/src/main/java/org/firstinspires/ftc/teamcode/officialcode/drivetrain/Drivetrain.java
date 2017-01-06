@@ -132,6 +132,16 @@ public class Drivetrain implements IDrivetrain {
         }
     }
 
+    private void rampUp(double maxPower) throws InterruptedException {
+        double multiFactor = maxPower > 0.0 ? 1.0d : -1.0d;
+
+        for (double i = 0.0d; i <= Math.abs(maxPower); i += 0.1d) {
+            this.setLeftMotors(i * multiFactor);
+            this.setRightMotors(i * multiFactor);
+            Thread.sleep(100);
+        }
+    }
+
     @Override
     public void moveDistance(int distance, double power) throws InterruptedException {
 //        System.out.println("Moving Distance Drivetrain");
@@ -142,24 +152,24 @@ public class Drivetrain implements IDrivetrain {
         int currentPositionL = this.dMotors.getLeftFront().getCurrentPosition();
         int currentPositionR = this.dMotors.getRightFront().getCurrentPosition();
 
-//        System.out.println("Left Current Position: " + currentPositionL + ", Right Current Position: " + currentPositionR);
+        System.out.println("Left Current Position: " + currentPositionL + ", Right Current Position: " + currentPositionR);
 
         int counts = this.dMotors.getCounts(distance);
-        int targetPositionL = currentPositionL + counts;
-        int targetPositionR = currentPositionR + counts;
+        int targetPositionL = power > 0.0d ? currentPositionL + counts : currentPositionL - counts;
+        int targetPositionR = power > 0.0d ? currentPositionR + counts : currentPositionR - counts;
 
-//        System.out.println("Left Target Position: " + targetPositionL + ", Right Target Position: " + targetPositionR);
+        System.out.println("Left Target Position: " + targetPositionL + ", Right Target Position: " + targetPositionR);
 
         this.dMotors.getLeftFront().setTargetPosition(targetPositionL);
         this.dMotors.getRightFront().setTargetPosition(targetPositionR);
         this.dMotors.moveControllers();
 
-        for(double i = 0.0d; i <= power; i += 0.1d){
-            this.setLeftMotors(i);
-            this.setRightMotors(i);
-            Thread.sleep(100);
-        }
+        this.rampUp(power);
 
+        int absTargetL = Math.abs(targetPositionL);
+        int absTargetR = Math.abs(targetPositionR);
+        boolean slowDownL = false;
+        boolean slowDownR = false;
         boolean doneL = false;
         boolean doneR = false;
 
@@ -169,13 +179,30 @@ public class Drivetrain implements IDrivetrain {
 
 //            System.out.println("Left Current Position: " + currentPositionL + ", Right Current Position: " + currentPositionR);
 
-            if (!doneL && currentPositionL >= targetPositionL) {
+            doneL = Math.abs(currentPositionL) >= absTargetL;
+            doneR = Math.abs(currentPositionR) >= absTargetR;
+
+            slowDownL = absTargetL - Math.abs(currentPositionL) < 1120;
+            slowDownR = absTargetR - Math.abs(currentPositionR) < 1120;
+
+            if (doneL) {
                 this.setLeftMotors(0);
-                doneL = true;
+            }else if(slowDownL){
+                double usePower = power * 0.5d;
+                if(Math.abs(usePower) > 0.2d){
+                    System.out.println("Slowing Left: " + usePower);
+                    this.setLeftMotors(usePower);
+                }
             }
-            if (!doneR && currentPositionR >= targetPositionR) {
+
+            if (doneR) {
                 this.setRightMotors(0);
-                doneR = true;
+            }else if(slowDownR){
+                double usePower = power * 0.5d;
+                if(Math.abs(usePower) > 0.2d){
+                    System.out.println("Slowing Right: " + usePower);
+                    this.setRightMotors(usePower);
+                }
             }
 
             Thread.sleep(Constants.THREAD_WAIT_TIME_MS);

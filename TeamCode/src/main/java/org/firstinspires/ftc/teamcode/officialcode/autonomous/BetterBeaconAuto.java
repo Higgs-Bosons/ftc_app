@@ -17,16 +17,13 @@ import java.util.Stack;
 /**
  * Created by Higgs Bosons on 1/4/2017.
  */
-public class BetterBeaconAuto extends Autonomous {
+public abstract class BetterBeaconAuto extends Autonomous {
     private static final byte OFF_WALL_DIST = 15;
     private static final byte TO_WALL_DIST = 60;
-    private static final byte SECOND_BEACON_DIST = 38;
+    private static final byte AWAY_WALL_DIST = -10;
+    private static final byte SECOND_BEACON_DIST = -38;
     private static final double POWER_ONE = 0.7d;
-    private static final int ANGLE_TURNS = 53;
     private static final double WHITE_LINE_PWER = 0.2d;
-    private Constants.Color color;
-
-    private Stack<Integer> turns;
 
     private IDrivetrain dDrive;
     private ILauncher dLaunch;
@@ -34,16 +31,8 @@ public class BetterBeaconAuto extends Autonomous {
     private MyServos dServos;
     private Sensors sensors;
 
-    public BetterBeaconAuto(Constants.Color color){
-        this.color = color;
-        turns = new Stack<>();
-
-        if(this.color == Constants.Color.RED){
-            turns.add(ANGLE_TURNS); turns.add(360-ANGLE_TURNS);
-        }else{
-            turns.add(360-ANGLE_TURNS); turns.add(ANGLE_TURNS);
-        }
-    }
+    protected abstract Stack<Integer> getTurns();
+    protected abstract Constants.Color getColor();
 
     private void makeABasket() throws InterruptedException {
         this.dDrive.moveDistance((int) (OFF_WALL_DIST), POWER_ONE);
@@ -56,11 +45,11 @@ public class BetterBeaconAuto extends Autonomous {
     }
 
     private void toWall() throws InterruptedException {
-        this.dDrive.goToHeading(turns.pop());
+        this.dDrive.goToHeading(this.getTurns().pop());
 
         this.dDrive.moveDistance((int) (TO_WALL_DIST), POWER_ONE);
 
-        this.dDrive.goToHeading(turns.pop());
+        this.dDrive.goToHeading(this.getTurns().pop());
 
         this.dServos.getTouchers().activate();
 
@@ -68,8 +57,8 @@ public class BetterBeaconAuto extends Autonomous {
     }
 
     private void beaconPrep() throws InterruptedException {
-        this.dDrive.timedMove(-POWER_ONE, 1000);
-        this.dDrive.goToHeading(turns.pop());
+        this.dDrive.moveDistance(AWAY_WALL_DIST, -POWER_ONE);
+        this.dDrive.goToHeading(this.getTurns().pop());
     }
 
     private void toBeacon(long finalWaitTime, double power) throws InterruptedException{
@@ -83,11 +72,12 @@ public class BetterBeaconAuto extends Autonomous {
     }
 
     private void secondBeacon() throws InterruptedException {
-        dDrive.moveDistance((int) (SECOND_BEACON_DIST), POWER_ONE);
+        dDrive.moveDistance((int) (SECOND_BEACON_DIST), -POWER_ONE);
     }
 
+
     private void activateBeacon(double pusherPower) throws InterruptedException {
-        boolean foundBeacon = dDrive.stopAtBeacon(this.color, 5000);
+        boolean foundBeacon = dDrive.stopAtBeacon(this.getColor(), 5000);
         if(!foundBeacon){
             throw new IllegalStateException("No Beacon");
         }
@@ -118,18 +108,19 @@ public class BetterBeaconAuto extends Autonomous {
 
         this.sensors.gyroCalibrate();
 
-        System.out.println("Initializing Gyro.");
-//        Thread.sleep(2000);
+//        System.out.println("Initializing Gyro.");
+
         while(this.sensors.getGyro().isCalibrating()){
             Thread.sleep(Constants.THREAD_WAIT_TIME_MS);
             idle();
         }
-        System.out.println("Initialize Done.");
+
+//        System.out.println("Initialize Done.");
     }
 
     @Override
     public void runAutonomous() throws InterruptedException {
-        double pusherPower = (this.color == Constants.Color.RED ? 0.3d : -0.3d);
+        double pusherPower = (this.getColor() == Constants.Color.RED ? 0.3d : -0.3d);
 
         try {
             //System.out.println("Approaching Beacons");
