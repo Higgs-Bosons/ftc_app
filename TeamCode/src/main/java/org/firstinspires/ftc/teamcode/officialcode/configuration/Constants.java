@@ -77,7 +77,8 @@ public class Constants {
     public static final String RR_MOTOR = "rightRear";
     public static final String LAUNCHER_MOTOR = "launcher";
     public static final String PUSHER_MOTOR = "pusher";
-    public static final String LIFT_MOTOR = "lift";
+    public static final String LEFT_LIFT_MOTOR = "leftLift";
+    public static final String RIGHT_LIFT_MOTOR = "rightLift";
 
     public static final String L_BALL_SERVO = "leftBallGrabber";
     public static final String R_BALL_SERVO = "rightBallGrabber";

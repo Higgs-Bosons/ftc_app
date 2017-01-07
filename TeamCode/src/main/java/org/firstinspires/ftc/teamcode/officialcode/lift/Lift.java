@@ -46,17 +46,20 @@ public class Lift implements ILift {
 
     @Override
     public void ascend(){
-        lift.getLift().setPower(1.0f);
+        lift.getLeftLift().setPower(1.0f);
+        lift.getRightLift().setPower(-1.0f);
     }
 
     @Override
     public void descend(){
-        lift.getLift().setPower(-1.0f);
+        lift.getLeftLift().setPower(-1.0f);
+        lift.getRightLift().setPower(1.0f);
     }
 
     @Override
     public void stop(){
-        lift.getLift().setPower(0.0f);
+        lift.getLeftLift().setPower(0.0f);
+        lift.getRightLift().setPower(0.0f);
     }
 
     @Override

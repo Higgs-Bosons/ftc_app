@@ -6,13 +6,19 @@ import com.qualcomm.robotcore.hardware.DcMotor;
  * Created by Higgs Bosons on 11/23/2016.
  */
 public class LiftMotor {
-    DcMotor lift;
+    DcMotor leftLift;
+    DcMotor rightLift;
 
-    public LiftMotor(DcMotor lift){
-        this.lift = lift;
+    public LiftMotor(DcMotor leftLift, DcMotor rightLift){
+        this.leftLift = leftLift;
+        this.rightLift = rightLift;
     }
 
-    public DcMotor getLift(){
-        return lift;
+    public DcMotor getLeftLift(){
+        return leftLift;
+    }
+
+    public DcMotor getRightLift(){
+        return rightLift;
     }
 }

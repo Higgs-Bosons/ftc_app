@@ -20,8 +20,9 @@ public class LiftFactory {
     }
 
     private static LiftMotor getLiftMotor(OpMode opMode){
-        DcMotor lift = opMode.hardwareMap.dcMotor.get(Constants.LIFT_MOTOR);
+        DcMotor leftLift = opMode.hardwareMap.dcMotor.get(Constants.LEFT_LIFT_MOTOR);
+        DcMotor rightLift = opMode.hardwareMap.dcMotor.get(Constants.RIGHT_LIFT_MOTOR);
 
-        return new LiftMotor(lift);
+        return new LiftMotor(leftLift, rightLift);
     }
 }
