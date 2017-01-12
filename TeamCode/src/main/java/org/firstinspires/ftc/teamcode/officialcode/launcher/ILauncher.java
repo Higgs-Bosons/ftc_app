@@ -3,7 +3,7 @@ package org.firstinspires.ftc.teamcode.officialcode.launcher;
 import org.firstinspires.ftc.teamcode.officialcode.configuration.Constants;
 
 /**
- * Created by Higgs Bosons on 11/23/2016.
+ * Interface for Launcher class
  */
 public interface ILauncher {
     void fire();
@@ -11,4 +11,4 @@ public interface ILauncher {
     void handleMessage() throws InterruptedException;
     Constants.LauncherState getState();
     void setState(Constants.LauncherState launcherState);
-}
+}//interface
