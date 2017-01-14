@@ -10,15 +10,28 @@ public class LiftMotor {
     DcMotor leftLift;
     DcMotor rightLift;
 
+    /**
+     * initialize lift motors
+     * @param leftLift
+     * @param rightLift
+     */
     public LiftMotor(DcMotor leftLift, DcMotor rightLift){
         this.leftLift = leftLift;
         this.rightLift = rightLift;
     }//constructor
 
+    /**
+     * getter for left lift
+     * @return
+     */
     public DcMotor getLeftLift(){
         return leftLift;
     }//getLeftLift
 
+    /**
+     * getter for right lift
+     * @return
+     */
     public DcMotor getRightLift(){
         return rightLift;
     }//getRightLift

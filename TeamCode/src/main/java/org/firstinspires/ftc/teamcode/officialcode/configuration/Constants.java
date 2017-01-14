@@ -127,16 +127,16 @@ public class Constants {
     public static final String RR_MOTOR = "rightRear";
     public static final String LAUNCHER_MOTOR = "launcher";
     public static final String PUSHER_MOTOR = "pusher";
-    public static final String LEFT_LIFT_MOTOR = "leftLift";
-    public static final String RIGHT_LIFT_MOTOR = "rightLift";
+    public static final String LEFT_LIFT_MOTOR = "lLift";
+    public static final String RIGHT_LIFT_MOTOR = "rLift";
 
     //servo hardware mapping names
-    public static final String L_BALL_SERVO = "leftBallGrabber";
-    public static final String R_BALL_SERVO = "rightBallGrabber";
-    public static final String T_CAP_SERVO = "topCapGrabber";
-    public static final String BL_CAP_SERVO = "bottomLeftCapGrabber";
-    public static final String BR_CAP_SERVO = "bottomRightCapGrabber";
-    public static final String LOADER_SERVO = "ballLoader";
+    public static final String L_BALL_SERVO = "lBGrabber";
+    public static final String R_BALL_SERVO = "rBGrabber";
+    public static final String T_CAP_SERVO = "tCGrabber";
+    public static final String BL_CAP_SERVO = "lCGrabber";
+    public static final String BR_CAP_SERVO = "rCGrabber";
+    public static final String LOADER_SERVO = "bLoader";
     public static final String RIGHT_TOUCHER_SERVO = "rTouch";
     public static final String LEFT_TOUCHER_SERVO = "lTouch";
 

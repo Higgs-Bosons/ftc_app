@@ -15,19 +15,28 @@ import org.firstinspires.ftc.teamcode.officialcode.servos.MyServos;
 import org.firstinspires.ftc.teamcode.officialcode.servos.ServosFactory;
 
 /**
- * Created by Higgs Bosons on 10/12/2016.
+ * Class for activating teleop
  */
 
 @TeleOp(name = "main", group = "TeleOp")
 public class MainTeleop extends LinearOpMode {
+    //declare threads
     Thread dpscThread;
     Thread llcThread;
     Thread gcThread;
 
+    /**
+     * Initialize actions
+     * @throws InterruptedException
+     */
     private void initialize() throws InterruptedException{
 
-    }
+    }//initialize
 
+    /**
+     * Declares and initializes instances of all components and their threads
+     * @throws InterruptedException
+     */
     private void play() throws InterruptedException{
         IDrivetrain drivetrain = DriveTrainFactory.getInstance(this);
 
@@ -50,20 +59,28 @@ public class MainTeleop extends LinearOpMode {
         MyGamepadController gcController = new MyGamepadController(this);
         gcThread = new Thread(gcController);
         gcThread.start();
-    }
+    }//play
 
+    /**
+     * LinearOpModes's runOpMode()
+     * @throws InterruptedException
+     */
     @Override
     public void runOpMode() throws InterruptedException {
+        //initialization
         this.initialize();
 
+        //wait for play button
         waitForStart();
 
+        //try to start threads
         try{
             play();
         }catch (Exception e){
             e.printStackTrace();
-        }
+        }//try-catch
 
+        //sleep while op mode is running and interrupt threads when stopping it
         try {
             while(opModeIsActive()){
                 Thread.sleep(5000);
@@ -76,6 +93,6 @@ public class MainTeleop extends LinearOpMode {
             llcThread.interrupt();
             dpscThread.interrupt();
             throw e;
-        }
-    }
-}
+        }//try-catch
+    }//runOpMode
+}//class
