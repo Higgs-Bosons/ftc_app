@@ -8,7 +8,7 @@ import java.util.HashMap;
 import java.util.concurrent.BlockingQueue;
 
 /**
- * Created by Higgs Bosons on 11/23/2016.
+ * Class for controlling lift
  */
 public class Lift implements ILift {
     //declare lift motor, lift state, and messages queue

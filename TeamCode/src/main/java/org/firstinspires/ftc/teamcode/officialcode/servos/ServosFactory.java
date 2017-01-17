@@ -6,19 +6,25 @@ import com.qualcomm.robotcore.hardware.Servo;
 import org.firstinspires.ftc.teamcode.officialcode.configuration.Constants;
 
 /**
- * Created by Higgs Bosons on 11/23/2016.
+ * Class for servos factory
  */
 public class ServosFactory {
+	//declare MyServos variable
     private static MyServos servos;
 
+	/**
+	 * get an instance of MyServos and assign it to the variable if it is null
+	 * @param opMode
+	 */
     public static synchronized MyServos getInstance(OpMode opMode){
         if(servos == null){
             servos = getMyServos(opMode);
-        }
+        }//if
         return servos;
-    }
+    }//getInstance
 
     private static MyServos getMyServos(OpMode opMode){
+		//hardware map the servos
         Servo leftBallGrabber = opMode.hardwareMap.servo.get(Constants.L_BALL_SERVO);
         Servo rightBallGrabber = opMode.hardwareMap.servo.get(Constants.R_BALL_SERVO);
         Servo topCapGrabber = opMode.hardwareMap.servo.get(Constants.T_CAP_SERVO);
@@ -28,11 +34,13 @@ public class ServosFactory {
         Servo rToucher = opMode.hardwareMap.servo.get(Constants.RIGHT_TOUCHER_SERVO);
         Servo lToucher = opMode.hardwareMap.servo.get(Constants.LEFT_TOUCHER_SERVO);
 
+		//create objects out of different groups of servos
         BallGrabber bGrab = new BallGrabber(leftBallGrabber, rightBallGrabber);
         CapGrabber cGrab = new CapGrabber(topCapGrabber, bottomLeftCapGrabber, bottomRightCapGrabber);
         BallLoader bLoad = new BallLoader(ballLoader);
         TouchEnablers touchers = new TouchEnablers(rToucher, lToucher);
 
+		//Create object out of various servo groups
         return new MyServos(bGrab, cGrab, bLoad, touchers);
-    }
-}
+    }//getMyServos
+}//class

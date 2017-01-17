@@ -10,35 +10,53 @@ import java.util.HashMap;
 import java.util.concurrent.BlockingQueue;
 
 /**
- * Created by Higgs Bosons on 11/23/2016.
+ * IServos implementation of the particle grabber
  */
 public class BallGrabber implements IServos{
+	//declare servos
     private Servo left;
     private Servo right;
+	//declare and initialize state
     private Constants.BallGrabberState state = Constants.BallGrabberState.CLOSED;
-    //private Constants.BallGrabberState lastState = Constants.BallGrabberState.CLOSED;
+	//delcare message queue
     private BlockingQueue<TeleopMessages> queue;
 
+	//Constants for servo positions
     private static final double OPEN_GATES = 0.70d;
     private static final double CLOSE_GATES = 0.30d;
+	private static final double FULL_CLOSE = 0.0d;
 
+	/**
+	 * initialize servos and queue
+	 * @param left
+	 * @param right
+	 */
     public BallGrabber(Servo left, Servo right){
         this.left = left;
         this.right = right;
         this.queue = MyMessageQueue.getInstance();
-    }
+    }//constructor
 
+	/**
+	 * close gates completely
+	 */
     public void fullClose(){
-        left.setPosition(0.0d);
-        right.setPosition(1.0d);
-    }
+        left.setPosition(FULL_CLOSE);
+        right.setPosition(1.0d - FULL_CLOSE);
+    }//fullClose
 
+	/**
+	 * moving the gates to specific position
+	 */
     private void moveGates(double position){
         left.setPosition(position);
         right.setPosition(1.0d - position);
         //System.out.println("Moving Gates Position: " + position);
-    }
-
+    }//moveGates
+	
+	/**
+	 * handle servo based on given message
+	 */
     private void handleServo(TeleopMessages message){
         HashMap<String, Object> metadata = message.getMetadata();
 
@@ -60,11 +78,17 @@ public class BallGrabber implements IServos{
                 throw new IllegalStateException("Cannot Handle: " + message.getRobotComponentAction());
         }//switch
     }
-
+	
+	/**
+	 *
+	 */
     public Constants.BallGrabberState getState(){
         return state;
     }
 
+	/**
+	 *
+	 */
     @Override
     public void handleMessage() throws InterruptedException {
         TeleopMessages msg = this.queue.peek();
@@ -73,21 +97,22 @@ public class BallGrabber implements IServos{
             msg = this.queue.take();
             this.handleServo(msg);
 
-        //    if(!this.getState().equals(lastState)){
-                switch (this.getState()){
-                    case OPEN:
-                        this.moveGates(OPEN_GATES);
-                        break;
-                    case CLOSED:
-                        this.moveGates(CLOSE_GATES);
-                        break;
-                    default:
-                        throw new IllegalStateException("Unknown State: " + this.getState());
-                }
-          //  }
+			switch (this.getState()){
+				case OPEN:
+					this.moveGates(OPEN_GATES);
+					break;
+				case CLOSED:
+					this.moveGates(CLOSE_GATES);
+					break;
+				default:
+					throw new IllegalStateException("Unknown State: " + this.getState());
+			}
         }
     }
 
+	/**
+	 *
+	 */
     @Override
     public void setState(Object state) {
         if(state instanceof Constants.BallGrabberState){

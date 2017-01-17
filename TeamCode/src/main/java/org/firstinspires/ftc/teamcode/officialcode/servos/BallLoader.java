@@ -10,12 +10,11 @@ import java.util.HashMap;
 import java.util.concurrent.BlockingQueue;
 
 /**
- * Created by Higgs Bosons on 11/23/2016.
+ * IServos implementation of the particle loader
  */
 public class BallLoader implements IServos{
     private Servo loader;
     private Constants.BallLoaderState state = Constants.BallLoaderState.DOWN;
-    //private Constants.BallLoaderState lastState = Constants.BallLoaderState.DOWN;
     private BlockingQueue<TeleopMessages> queue;
 
     private static final double LOADING = 0.60d;
@@ -70,20 +69,17 @@ public class BallLoader implements IServos{
             msg = this.queue.take();
             this.handleServo(msg);
 
-           // if(!this.getState().equals(lastState)){
-                switch (this.getState()){
-                    case DOWN:
-                        this.moveLoader(RESTING);
-                        break;
-                    case UP:
-                        this.moveLoader(LOADING);
-                        break;
-                    default:
-                        throw new IllegalStateException("Unknown State: " + this.getState());
-                }
-           // }
+			switch (this.getState()){
+				case DOWN:
+					this.moveLoader(RESTING);
+					break;
+				case UP:
+					this.moveLoader(LOADING);
+					break;
+				default:
+					throw new IllegalStateException("Unknown State: " + this.getState());
+			}
         }
-
     }
 
     @Override

@@ -10,14 +10,13 @@ import java.util.HashMap;
 import java.util.concurrent.BlockingQueue;
 
 /**
- * Created by Higgs Bosons on 11/23/2016.
+ * IServos implementation of the cap ball grabber
  */
 public class CapGrabber implements IServos{
     private Servo top;
     private Servo bottomLeft;
     private Servo bottomRight;
     private Constants.CapGrabberState state = Constants.CapGrabberState.CLOSED;
-    //private Constants.CapGrabberState lastState = Constants.CapGrabberState.CLOSED;
     private BlockingQueue<TeleopMessages> queue;
 
     public CapGrabber(Servo top, Servo bottomLeft, Servo bottomRight){
@@ -88,9 +87,7 @@ public class CapGrabber implements IServos{
             msg = this.queue.take();
             this.handleServo(msg);
 
-            //if(!this.getState().equals(lastState)){
-                moveCGrabber(this.getState());
-            //}
+			moveCGrabber(this.getState());
         }
     }
 
