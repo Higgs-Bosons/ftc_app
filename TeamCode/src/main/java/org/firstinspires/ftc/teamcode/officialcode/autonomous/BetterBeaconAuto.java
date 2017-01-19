@@ -15,36 +15,62 @@ import org.firstinspires.ftc.teamcode.officialcode.servos.ServosFactory;
 import java.util.Stack;
 
 /**
- * Created by Higgs Bosons on 1/4/2017.
+ * Beacon Autonomous 2.0 abstraction
  */
 public abstract class BetterBeaconAuto extends Autonomous {
-    private static final byte OFF_WALL_DIST = 15;
+    //autonomous constant distances and powers
+    private static final byte OFF_WALL_DIST = 35;
+    private static final byte AWAY_BALL_DIST = -12;
     private static final byte TO_WALL_DIST = 60;
     private static final byte AWAY_WALL_DIST = -10;
     private static final byte SECOND_BEACON_DIST = -38;
     private static final double POWER_ONE = 0.7d;
     private static final double WHITE_LINE_PWER = 0.2d;
 
+    //Declare components' variables
     private IDrivetrain dDrive;
     private ILauncher dLaunch;
     private IPusher dPusher;
     private MyServos dServos;
     private Sensors sensors;
 
+    //declare abstract methods for getting color and turns
     protected abstract Stack<Integer> getTurns();
     protected abstract Constants.Color getColor();
 
+    /**
+     * Drive forward and make a basket
+     * @throws InterruptedException
+     */
     private void makeABasket() throws InterruptedException {
-        this.dDrive.moveDistance((int) (OFF_WALL_DIST), POWER_ONE);
-
+        //begin firing launcher
         this.dLaunch.fire();
-        Thread.sleep(1000);
-        this.dServos.getBallLoader().raiseLoader();
-        this.sleep(500);
-        this.dLaunch.cease();
-    }
 
+        //move distance to vortex
+        this.dDrive.moveDistance((int) (OFF_WALL_DIST), POWER_ONE);
+        Thread.sleep(500);
+
+        //open up doors to partial close position
+        this.dServos.getBallGrabber().partialClose();
+        Thread.sleep(500);
+
+        //raise ball loader
+        this.dServos.getBallLoader().raiseLoader();
+        this.sleep(1000);
+
+        //Cease launcher fire
+        this.dLaunch.cease();
+    }//makeABasket
+
+    /**
+     * align self to beacon wall
+     * @throws InterruptedException
+     */
     private void toWall() throws InterruptedException {
+        System.out.println("Going to wall!");
+
+        this.dDrive.moveDistance(AWAY_BALL_DIST, -POWER_ONE);
+
         this.dDrive.goToHeading(this.getTurns().pop());
 
         this.dDrive.moveDistance((int) (TO_WALL_DIST), POWER_ONE);
@@ -126,12 +152,12 @@ public abstract class BetterBeaconAuto extends Autonomous {
             //System.out.println("Approaching Beacons");
             this.makeABasket();
             this.toWall();
-            this.beaconPrep();
-            this.toBeacon(5000, WHITE_LINE_PWER);
-            this.activateBeacon(pusherPower);
-            this.secondBeacon();
-            this.toBeacon(5000, -WHITE_LINE_PWER);
-            this.activateBeacon(pusherPower);
+//            this.beaconPrep();
+//            this.toBeacon(5000, WHITE_LINE_PWER);
+//            this.activateBeacon(pusherPower);
+//            this.secondBeacon();
+//            this.toBeacon(5000, -WHITE_LINE_PWER);
+//            this.activateBeacon(pusherPower);
         }catch(Exception e){
             e.printStackTrace();
             System.out.println("Something went wrong!");

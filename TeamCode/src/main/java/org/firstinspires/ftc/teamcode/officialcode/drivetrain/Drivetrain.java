@@ -139,12 +139,14 @@ public class Drivetrain implements IDrivetrain {
             this.setLeftMotors(i * multiFactor);
             this.setRightMotors(i * multiFactor);
             Thread.sleep(100);
+
+            System.out.println("Ramping up to power: " + (i * multiFactor));
         }
     }
 
     @Override
     public void moveDistance(int distance, double power) throws InterruptedException {
-//        System.out.println("Moving Distance Drivetrain");
+        System.out.println("Moving Distance Drivetrain");
         this.dMotors.resetControllers();
 
         this.dMotors.encodeInitialize();
@@ -155,8 +157,10 @@ public class Drivetrain implements IDrivetrain {
         System.out.println("Left Current Position: " + currentPositionL + ", Right Current Position: " + currentPositionR);
 
         int counts = this.dMotors.getCounts(distance);
-        int targetPositionL = power > 0.0d ? currentPositionL + counts : currentPositionL - counts;
-        int targetPositionR = power > 0.0d ? currentPositionR + counts : currentPositionR - counts;
+//        int targetPositionL = power > 0.0d ? currentPositionL + counts : currentPositionL - counts;
+//        int targetPositionR = power > 0.0d ? currentPositionR + counts : currentPositionR - counts;
+        int targetPositionL = currentPositionL + counts;
+        int targetPositionR = currentPositionR + counts;
 
         System.out.println("Left Target Position: " + targetPositionL + ", Right Target Position: " + targetPositionR);
 
@@ -177,7 +181,7 @@ public class Drivetrain implements IDrivetrain {
             currentPositionL = this.dMotors.getLeftFront().getCurrentPosition();
             currentPositionR = this.dMotors.getRightFront().getCurrentPosition();
 
-//            System.out.println("Left Current Position: " + currentPositionL + ", Right Current Position: " + currentPositionR);
+            System.out.println("Left Current Position: " + currentPositionL + ", Right Current Position: " + currentPositionR);
 
             doneL = Math.abs(currentPositionL) >= absTargetL;
             doneR = Math.abs(currentPositionR) >= absTargetR;

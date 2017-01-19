@@ -22,8 +22,8 @@ public class BallGrabber implements IServos{
     private BlockingQueue<TeleopMessages> queue;
 
 	//Constants for servo positions
-    private static final double OPEN_GATES = 0.70d;
-    private static final double CLOSE_GATES = 0.30d;
+    private static final double OPEN_GATES = 0.5d;
+    private static final double CLOSE_GATES = 0.1d;
 	private static final double FULL_CLOSE = 0.0d;
 
 	/**
@@ -41,9 +41,15 @@ public class BallGrabber implements IServos{
 	 * close gates completely
 	 */
     public void fullClose(){
-        left.setPosition(FULL_CLOSE);
-        right.setPosition(1.0d - FULL_CLOSE);
+        moveGates(FULL_CLOSE);
     }//fullClose
+
+    /**
+     * partially close gates
+     */
+    public void partialClose(){
+        moveGates(CLOSE_GATES);
+    }
 
 	/**
 	 * moving the gates to specific position

@@ -24,9 +24,9 @@ public class TouchEnablers{
 	 * @param right
 	 * @param left
 	 */
-    public TouchEnablers(Servo right, Servo left){
-        this.right = right;
+    public TouchEnablers(Servo left, Servo right){
         this.left = left;
+        this.right = right;
     }//constructor
 
 	/**
