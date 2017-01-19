@@ -49,7 +49,7 @@ public class BallGrabber implements IServos{
      */
     public void partialClose(){
         moveGates(CLOSE_GATES);
-    }
+    }//partialClose
 
 	/**
 	 * moving the gates to specific position
@@ -83,17 +83,17 @@ public class BallGrabber implements IServos{
                 //if an invalid action is found, throw an exception
                 throw new IllegalStateException("Cannot Handle: " + message.getRobotComponentAction());
         }//switch
-    }
+    }//handleServo
 	
 	/**
-	 *
+	 * get state of ball grabber
 	 */
     public Constants.BallGrabberState getState(){
         return state;
-    }
+    }//getState
 
 	/**
-	 *
+	 * handle message interface method
 	 */
     @Override
     public void handleMessage() throws InterruptedException {
@@ -112,12 +112,12 @@ public class BallGrabber implements IServos{
 					break;
 				default:
 					throw new IllegalStateException("Unknown State: " + this.getState());
-			}
-        }
-    }
+			}//switch
+        }//if
+    }//handleMessage
 
 	/**
-	 *
+	 * interface method for setting state
 	 */
     @Override
     public void setState(Object state) {
@@ -126,6 +126,6 @@ public class BallGrabber implements IServos{
         }else{
             throw new IllegalArgumentException("Invalid state type: " + state +
                 ". Expected object type of Constants.BallGrabberState");
-        }
-    }
-}
+        }//if-else
+    }//setState
+}//class
