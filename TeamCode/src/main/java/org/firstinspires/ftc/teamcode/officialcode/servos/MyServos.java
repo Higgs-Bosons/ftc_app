@@ -8,20 +8,17 @@ public class MyServos {
     private BallGrabber ballGrabber;
     private CapGrabber capGrabber;
     private BallLoader ballLoader;
-    private TouchEnablers touchers;
 
 	/**
 	 * initialize servos
 	 * @param ballGrabber
 	 * @param capGrabber
 	 * @param ballLoader
-	 * @param touchers
 	 */	 
-    public MyServos(BallGrabber ballGrabber, CapGrabber capGrabber, BallLoader ballLoader, TouchEnablers touchers){
+    public MyServos(BallGrabber ballGrabber, CapGrabber capGrabber, BallLoader ballLoader){
         this.ballGrabber = ballGrabber;
         this.capGrabber = capGrabber;
         this.ballLoader = ballLoader;
-        this.touchers = touchers;
     }//constructors
 
     public BallGrabber getBallGrabber(){
@@ -35,8 +32,4 @@ public class MyServos {
     public BallLoader getBallLoader(){
         return ballLoader;
     }//getBallLoader
-
-    public TouchEnablers getTouchers(){
-        return touchers;
-    }//getTouchers
 }//class

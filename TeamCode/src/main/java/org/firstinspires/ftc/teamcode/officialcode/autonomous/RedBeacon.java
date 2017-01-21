@@ -17,9 +17,10 @@ public class RedBeacon extends BetterBeaconAuto{
 
     public RedBeacon(){
         super();
-        turns.add(0);
-        turns.add(270);
-        turns.add(315);
+//        turns.add(10);
+        turns.add(350);
+        turns.add(280);
+        turns.add(340);
     }
 
     @Override
@@ -30,5 +31,10 @@ public class RedBeacon extends BetterBeaconAuto{
     @Override
     protected Constants.Color getColor(){
         return Constants.Color.RED;
+    }
+
+    @Override
+    protected boolean isSkipBasket() {
+        return false;
     }
 }

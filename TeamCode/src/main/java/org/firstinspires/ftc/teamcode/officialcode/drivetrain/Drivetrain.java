@@ -189,8 +189,8 @@ public class Drivetrain implements IDrivetrain {
             doneL = Math.abs(currentPositionL) >= absTargetL;
             doneR = Math.abs(currentPositionR) >= absTargetR;
             //SA: See if we can reduce to half rotation
-            slowDownL = absTargetL - Math.abs(currentPositionL) < 1120;
-            slowDownR = absTargetR - Math.abs(currentPositionR) < 1120;
+            slowDownL = absTargetL - Math.abs(currentPositionL) < 560;
+            slowDownR = absTargetR - Math.abs(currentPositionR) < 560;
 
             if (doneL) {
                 this.setLeftMotors(0);
