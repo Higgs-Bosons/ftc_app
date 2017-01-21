@@ -117,7 +117,9 @@ public class Constants {
 
     //Misc. constants
     public static final int ENCODER_CPR = 1120;
+    //SA: Change this to 5 ms, if that does not work change to 10 ms
     public static final int THREAD_WAIT_TIME_MS = 20;
+    public static final int DIRE_THREAD_WAIT_MS = 5;
     public static final short EOPD_WHITE_THRESHOLD = 100;
 
     //motor hardware mapping names

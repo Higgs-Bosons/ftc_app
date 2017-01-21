@@ -21,8 +21,8 @@ public abstract class BetterBeaconAuto extends Autonomous {
     //autonomous constant distances and powers
     private static final byte OFF_WALL_DIST = 35;
     private static final byte AWAY_BALL_DIST = -20;
-    private static final byte TO_WALL_DIST = 60;
-    private static final byte AWAY_WALL_DIST = -7;
+    private static final byte TO_WALL_DIST = 75;
+    private static final byte AWAY_WALL_DIST = -5;
     private static final byte SECOND_BEACON_DIST = -38;
     private static final double POWER_ONE = 1.0d;
     private static final double WHITE_LINE_PWER = 0.2d;
@@ -48,18 +48,22 @@ public abstract class BetterBeaconAuto extends Autonomous {
 
         //move distance to vortex
         this.dDrive.moveDistance((int) (OFF_WALL_DIST), POWER_ONE);
-        Thread.sleep(500);
+        this.dServos.getBallGrabber().partialClose();
+//        Thread.sleep(500);
 
         //open up doors to partial close position
-        this.dServos.getBallGrabber().partialClose();
-        Thread.sleep(500);
+        //SA: Can we move this to the initialize method or before the previous thread sleep?
+//        this.dServos.getBallGrabber().partialClose();
+//        Thread.sleep(500);
 
         //raise ball loader
         this.dServos.getBallLoader().raiseLoader();
-        this.sleep(1000);
+        //SA: Reduce this time to 500 ms
+        this.sleep(500);
 
         //Cease launcher fire
-        this.dLaunch.cease();
+        //SA: Move this to after we move back
+//        this.dLaunch.cease();
     }//makeABasket
 
     /**
@@ -70,11 +74,13 @@ public abstract class BetterBeaconAuto extends Autonomous {
         System.out.println("Going to wall!");
 
         this.dDrive.moveDistance(AWAY_BALL_DIST, -POWER_ONE);
-
+        //Moved from makeABasket to here
+        this.dLaunch.cease();
         this.dDrive.goToHeading(this.getTurns().pop());
 
         this.dServos.getCapGrabber().topMover(Constants.CapGrabberState.READY);
-
+        //SA: See if we can increase this distance to reduce the time going to the was and also
+        //to the shite line
         this.dDrive.moveDistance((int) (TO_WALL_DIST), POWER_ONE);
 
         this.dDrive.goToHeading(this.getTurns().pop());
@@ -103,7 +109,7 @@ public abstract class BetterBeaconAuto extends Autonomous {
         this.dDrive.timedMove(-0.2d, 600);
     }
 
-    private void secondBeacon() throws InterruptedException {
+    private void  secondBeacon() throws InterruptedException {
         dDrive.moveDistance((int) (SECOND_BEACON_DIST), -POWER_ONE);
     }
 
@@ -118,9 +124,9 @@ public abstract class BetterBeaconAuto extends Autonomous {
 
     private void pressButton(double power) throws InterruptedException {
         dPusher.pusherMovement(power);
-        Thread.sleep(1500);
+        Thread.sleep(500);
         dPusher.pusherMovement(-power);
-        Thread.sleep(1000);
+        Thread.sleep(500);
         dPusher.pusherMovement(0);
     }
 

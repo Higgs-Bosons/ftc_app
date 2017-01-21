@@ -140,6 +140,7 @@ public class Drivetrain implements IDrivetrain {
         for (double i = 0.0d; i <= Math.abs(maxPower); i += 0.1d) {
             this.setLeftMotors(i * multiFactor);
             this.setRightMotors(i * multiFactor);
+            //SA: Change this to Thread wait time in ms
             Thread.sleep(100);
 
             System.out.println("Ramping up to power: " + (i * multiFactor));
@@ -187,7 +188,7 @@ public class Drivetrain implements IDrivetrain {
 
             doneL = Math.abs(currentPositionL) >= absTargetL;
             doneR = Math.abs(currentPositionR) >= absTargetR;
-
+            //SA: See if we can reduce to half rotation
             slowDownL = absTargetL - Math.abs(currentPositionL) < 1120;
             slowDownR = absTargetR - Math.abs(currentPositionR) < 1120;
 
@@ -195,7 +196,8 @@ public class Drivetrain implements IDrivetrain {
                 this.setLeftMotors(0);
             }else if(slowDownL){
                 double usePower = power * 0.5d;
-                if(Math.abs(usePower) > 0.2d){
+                //SA: see if we can reduce the min power below to 0.3
+                if(Math.abs(usePower) > 0.3d){
                     System.out.println("Slowing Left: " + usePower);
                     this.setLeftMotors(usePower);
                 }
@@ -205,7 +207,8 @@ public class Drivetrain implements IDrivetrain {
                 this.setRightMotors(0);
             }else if(slowDownR){
                 double usePower = power * 0.5d;
-                if(Math.abs(usePower) > 0.2d){
+                //SA: see if we can reduce the min power below to 0.3
+                if(Math.abs(usePower) > 0.3d){
                     System.out.println("Slowing Right: " + usePower);
                     this.setRightMotors(usePower);
                 }
@@ -294,7 +297,7 @@ public class Drivetrain implements IDrivetrain {
             currentHeading = this.dSense.getHeading();
             System.out.println("***********Current Heading: " + currentHeading);
 
-            if(Math.abs(currentHeading-finalHeading) < 2){
+            if(Math.abs(currentHeading-finalHeading) < 3){
                 done = true;
                 this.setLeftMotors(0.0d);
                 this.setRightMotors(0.0d);
@@ -302,7 +305,7 @@ public class Drivetrain implements IDrivetrain {
                 direction = this.getDirection(finalHeading, currentHeading);
                 angle = this.getAngle(finalHeading, currentHeading, direction);
                 this.setTurnPower(direction, angle);
-                Thread.sleep(Constants.THREAD_WAIT_TIME_MS);
+                Thread.sleep(Constants.DIRE_THREAD_WAIT_MS);
             }
         }
     }
@@ -350,14 +353,16 @@ public class Drivetrain implements IDrivetrain {
             if(leftEOPDReading > Constants.EOPD_WHITE_THRESHOLD){
                 this.setLeftMotors(0.0f);
                 leftFound = true;
-            }else if(rightEOPDReading > Constants.EOPD_WHITE_THRESHOLD){
+            }
+            //SA: Same error as in the touch sensor, there was an else if here
+            if(rightEOPDReading > Constants.EOPD_WHITE_THRESHOLD){
                 this.setRightMotors(0.0f);
                 rightFound = true;
             }
 
             timeExhausted = currentTime - startTime > finalWaitTime;
 
-            Thread.sleep(Constants.THREAD_WAIT_TIME_MS);
+            Thread.sleep(Constants.DIRE_THREAD_WAIT_MS);
         }
 
         this.setLeftMotors(0.0f);
@@ -415,7 +420,9 @@ public class Drivetrain implements IDrivetrain {
                 System.out.println("Left Pressed");
                 this.setLeftMotors(0.0f);
                 lFound = true;
-            } else if (this.dSense.getrTouch().getValue() != 0.0d) {
+            }
+
+            if (this.dSense.getrTouch().getValue() != 0.0d) {
                 System.out.println("Right Pressed");
                 this.setRightMotors(0.0f);
                 rFound = true;
@@ -423,7 +430,7 @@ public class Drivetrain implements IDrivetrain {
 
             timeExhausted = currentTime - startTime > finalWaitTime;
 
-            Thread.sleep(Constants.THREAD_WAIT_TIME_MS);
+            Thread.sleep(Constants.DIRE_THREAD_WAIT_MS);
         }
         System.out.println("Done Touching");
 
