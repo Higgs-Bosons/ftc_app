@@ -45,6 +45,18 @@ public class CapGrabber implements IServos{
     }//closeGrabber
 
     /**
+     * move only top part of grabber
+     * @param state
+     */
+    public void topMover(Constants.CapGrabberState state) {
+        if(state == Constants.CapGrabberState.CLOSED) {
+            this.top.setPosition(1.0d);
+        }else{
+            this.top.setPosition(0.0d);
+        }//if-else
+    }//topMover
+
+    /**
      * move cap grabber to passed in position
      * @param state
      */

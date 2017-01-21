@@ -17,7 +17,7 @@ public class BlueBeacon extends BetterBeaconAuto {
     public BlueBeacon(){
         super();
         turns.add(0);
-        turns.add(90);
+        turns.add(80);
         turns.add(20);
     }
 
@@ -28,6 +28,6 @@ public class BlueBeacon extends BetterBeaconAuto {
 
     @Override
     protected Constants.Color getColor(){
-        return Constants.Color.RED;
+        return Constants.Color.BLUE;
     }
 }

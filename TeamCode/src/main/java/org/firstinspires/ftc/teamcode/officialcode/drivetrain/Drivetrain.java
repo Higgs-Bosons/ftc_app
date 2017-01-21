@@ -404,18 +404,18 @@ public class Drivetrain implements IDrivetrain {
         boolean rFound = false;
         boolean lFound = false;
 
-        this.setLeftMotors(0.2d);
-        this.setRightMotors(0.2d);
+        this.setLeftMotors(0.6d);
+        this.setRightMotors(0.6d);
 
         while(!(lFound && rFound) && !timeExhausted) {
             currentTime = System.currentTimeMillis();
             System.out.println("Left Touch Sensor Value:" + this.dSense.getlTouch().getValue());
             System.out.println("Right Touch Sensor Value:" + this.dSense.getrTouch().getValue());
-            if (this.dSense.getlTouch().isPressed()) {
+            if (this.dSense.getlTouch().getValue() != 0.0) {
                 System.out.println("Left Pressed");
                 this.setLeftMotors(0.0f);
                 lFound = true;
-            } else if (this.dSense.getrTouch().isPressed()) {
+            } else if (this.dSense.getrTouch().getValue() != 0.0d) {
                 System.out.println("Right Pressed");
                 this.setRightMotors(0.0f);
                 rFound = true;

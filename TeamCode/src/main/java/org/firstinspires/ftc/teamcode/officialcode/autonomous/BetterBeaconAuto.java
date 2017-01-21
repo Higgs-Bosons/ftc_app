@@ -22,9 +22,9 @@ public abstract class BetterBeaconAuto extends Autonomous {
     private static final byte OFF_WALL_DIST = 35;
     private static final byte AWAY_BALL_DIST = -20;
     private static final byte TO_WALL_DIST = 60;
-    private static final byte AWAY_WALL_DIST = -10;
+    private static final byte AWAY_WALL_DIST = -7;
     private static final byte SECOND_BEACON_DIST = -38;
-    private static final double POWER_ONE = 0.7d;
+    private static final double POWER_ONE = 1.0d;
     private static final double WHITE_LINE_PWER = 0.2d;
 
     //Declare components' variables
@@ -73,18 +73,24 @@ public abstract class BetterBeaconAuto extends Autonomous {
 
         this.dDrive.goToHeading(this.getTurns().pop());
 
+        this.dServos.getCapGrabber().topMover(Constants.CapGrabberState.READY);
+
         this.dDrive.moveDistance((int) (TO_WALL_DIST), POWER_ONE);
 
         this.dDrive.goToHeading(this.getTurns().pop());
 
 //        this.dServos.getTouchers().activate();
 
-        this.dDrive.wallAlign(5000);
+        boolean wallAlign = this.dDrive.wallAlign(5000);
+        if(!wallAlign){
+            throw new IllegalStateException("No Wall!");
+        }
     }
 
     private void beaconPrep() throws InterruptedException {
         this.dDrive.moveDistance(AWAY_WALL_DIST, -POWER_ONE);
         this.dDrive.goToHeading(this.getTurns().pop());
+        this.dServos.getCapGrabber().topMover(Constants.CapGrabberState.CLOSED);
     }
 
     private void toBeacon(long finalWaitTime, double power) throws InterruptedException{
@@ -154,10 +160,10 @@ public abstract class BetterBeaconAuto extends Autonomous {
             this.toWall();
             this.beaconPrep();
             this.toBeacon(5000, WHITE_LINE_PWER);
-//            this.activateBeacon(pusherPower);
-//            this.secondBeacon();
-//            this.toBeacon(5000, -WHITE_LINE_PWER);
-//            this.activateBeacon(pusherPower);
+            this.activateBeacon(pusherPower);
+            this.secondBeacon();
+            this.toBeacon(5000, -WHITE_LINE_PWER);
+            this.activateBeacon(pusherPower);
         }catch(Exception e){
             e.printStackTrace();
             System.out.println("Something went wrong!");
