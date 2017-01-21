@@ -20,7 +20,7 @@ import java.util.Stack;
 public abstract class BetterBeaconAuto extends Autonomous {
     //autonomous constant distances and powers
     private static final byte OFF_WALL_DIST = 35;
-    private static final byte AWAY_BALL_DIST = -12;
+    private static final byte AWAY_BALL_DIST = -20;
     private static final byte TO_WALL_DIST = 60;
     private static final byte AWAY_WALL_DIST = -10;
     private static final byte SECOND_BEACON_DIST = -38;
@@ -77,7 +77,7 @@ public abstract class BetterBeaconAuto extends Autonomous {
 
         this.dDrive.goToHeading(this.getTurns().pop());
 
-        this.dServos.getTouchers().activate();
+//        this.dServos.getTouchers().activate();
 
         this.dDrive.wallAlign(5000);
     }
@@ -128,7 +128,7 @@ public abstract class BetterBeaconAuto extends Autonomous {
         this.dServos.getCapGrabber().closeGrabber();
         this.dServos.getBallGrabber().fullClose();
         this.dServos.getBallLoader().downLoader();
-        this.dServos.getTouchers().retract();
+//        this.dServos.getTouchers().retract();
 
         this.sensors = SensorsFactory.getInstance(this);
 
@@ -152,8 +152,8 @@ public abstract class BetterBeaconAuto extends Autonomous {
             //System.out.println("Approaching Beacons");
             this.makeABasket();
             this.toWall();
-//            this.beaconPrep();
-//            this.toBeacon(5000, WHITE_LINE_PWER);
+            this.beaconPrep();
+            this.toBeacon(5000, WHITE_LINE_PWER);
 //            this.activateBeacon(pusherPower);
 //            this.secondBeacon();
 //            this.toBeacon(5000, -WHITE_LINE_PWER);

@@ -18,8 +18,8 @@ public class RedBeacon extends BetterBeaconAuto{
     public RedBeacon(){
         super();
         turns.add(0);
-        turns.add(90);
-        turns.add(45);
+        turns.add(270);
+        turns.add(315);
     }
 
     @Override

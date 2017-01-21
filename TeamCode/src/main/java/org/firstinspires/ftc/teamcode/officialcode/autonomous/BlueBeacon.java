@@ -17,8 +17,8 @@ public class BlueBeacon extends BetterBeaconAuto {
     public BlueBeacon(){
         super();
         turns.add(0);
-        turns.add(270);
-        turns.add(315);
+        turns.add(90);
+        turns.add(20);
     }
 
     @Override

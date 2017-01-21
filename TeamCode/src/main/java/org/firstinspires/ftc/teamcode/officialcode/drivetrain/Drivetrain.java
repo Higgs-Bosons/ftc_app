@@ -86,9 +86,11 @@ public class Drivetrain implements IDrivetrain {
         double currentPower = (MAX_TURN_POWER / 180d) * (double) angle;
         if (currentPower < MIN_TURN_POWER) {
             currentPower = MIN_TURN_POWER;
-        }else if(currentPower > 0.3){
-            currentPower = 0.3;
+        }else if(currentPower > 0.2){
+            currentPower = 0.2;
         }
+
+        System.out.println("Turn power: " + currentPower);
 
         switch (direction) {
             case LEFT_TURN:
@@ -402,16 +404,19 @@ public class Drivetrain implements IDrivetrain {
         boolean rFound = false;
         boolean lFound = false;
 
-        this.setLeftMotors(0.5d);
-        this.setRightMotors(0.5d);
+        this.setLeftMotors(0.2d);
+        this.setRightMotors(0.2d);
 
         while(!(lFound && rFound) && !timeExhausted) {
             currentTime = System.currentTimeMillis();
-
+            System.out.println("Left Touch Sensor Value:" + this.dSense.getlTouch().getValue());
+            System.out.println("Right Touch Sensor Value:" + this.dSense.getrTouch().getValue());
             if (this.dSense.getlTouch().isPressed()) {
+                System.out.println("Left Pressed");
                 this.setLeftMotors(0.0f);
                 lFound = true;
             } else if (this.dSense.getrTouch().isPressed()) {
+                System.out.println("Right Pressed");
                 this.setRightMotors(0.0f);
                 rFound = true;
             }
@@ -420,6 +425,7 @@ public class Drivetrain implements IDrivetrain {
 
             Thread.sleep(Constants.THREAD_WAIT_TIME_MS);
         }
+        System.out.println("Done Touching");
 
         this.setLeftMotors(0.0d);
         this.setRightMotors(0.0d);
