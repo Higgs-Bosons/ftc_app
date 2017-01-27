@@ -3,16 +3,36 @@ package org.firstinspires.ftc.teamcode.officialcode.lift;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
 /**
- * Created by Higgs Bosons on 11/23/2016.
+ * Class for lifting motors
  */
 public class LiftMotor {
-    DcMotor lift;
+    //Declare motors for lift, use a constructor to initialize it, and make their getter methods
+    DcMotor leftLift;
+    DcMotor rightLift;
 
-    public LiftMotor(DcMotor lift){
-        this.lift = lift;
-    }
+    /**
+     * initialize lift motors
+     * @param leftLift
+     * @param rightLift
+     */
+    public LiftMotor(DcMotor leftLift, DcMotor rightLift){
+        this.leftLift = leftLift;
+        this.rightLift = rightLift;
+    }//constructor
 
-    public DcMotor getLift(){
-        return lift;
-    }
-}
+    /**
+     * getter for left lift
+     * @return
+     */
+    public DcMotor getLeftLift(){
+        return leftLift;
+    }//getLeftLift
+
+    /**
+     * getter for right lift
+     * @return
+     */
+    public DcMotor getRightLift(){
+        return rightLift;
+    }//getRightLift
+}//class

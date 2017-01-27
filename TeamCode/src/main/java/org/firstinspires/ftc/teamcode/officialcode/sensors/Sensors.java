@@ -3,48 +3,92 @@ package org.firstinspires.ftc.teamcode.officialcode.sensors;
 import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.GyroSensor;
 import com.qualcomm.robotcore.hardware.OpticalDistanceSensor;
+import com.qualcomm.robotcore.hardware.TouchSensor;
 
 /**
- * Created by Higgs Bosons on 11/5/2016.
+ * Class for declaring, initializing, and providing getters for sensors
  */
 public class Sensors {
+	//declare sensors
     private OpticalDistanceSensor leftEOPD;
     private OpticalDistanceSensor rightEOPD;
     private ColorSensor coloring;
-//    private GyroSensor gyro;
+    private GyroSensor gyro;
+    private TouchSensor rTouch;
+    private TouchSensor lTouch;
 
-    public Sensors(OpticalDistanceSensor leftEOPD, OpticalDistanceSensor rightEOPD, ColorSensor coloring/*, GyroSensor gyro*/){
+	/**
+	 * initialize sensors
+	 * @param leftEOPD
+	 * @param rightEOPD
+	 * @param coloring
+	 * @param gyro
+	 * @param rTouch
+	 * @param lTouch
+	 */
+    public Sensors(OpticalDistanceSensor leftEOPD, OpticalDistanceSensor rightEOPD,
+                   ColorSensor coloring, GyroSensor gyro, TouchSensor rTouch, TouchSensor lTouch){
         this.leftEOPD = leftEOPD;
         this.rightEOPD = rightEOPD;
         this.coloring = coloring;
-//        this.gyro = gyro;
-    }
+        this.gyro = gyro;
+        this.rTouch = rTouch;
+        this.lTouch = lTouch;
+    }//constructor
 
+	/**
+	 * getter for color sensor
+	 */
     public ColorSensor getColoring(){
         return coloring;
-    }
+    }//getColoring
 
-//    public GyroSensor getGyro(){
-//        return gyro;
-//    }
+	/**
+	 * getter for gyro sensor
+	 */
+    public GyroSensor getGyro(){
+        return gyro;
+    }//getGyro
 
+	/**
+	 * getter for left EOPD sensor
+	 */
     public OpticalDistanceSensor getLeftEOPD(){
         return leftEOPD;
-    }
+    }//getLeftEOPD
 
+	/**
+	 * getter for right EOPD sensor
+	 */
     public OpticalDistanceSensor getRightEOPD(){
         return rightEOPD;
-    }
+    }//getRightEOPD
 
-//    public int getHeading(){
-//        return this.getGyro().getHeading();
-//    }
+	/**
+	 * getter for right touch sensor
+	 */
+    public TouchSensor getrTouch(){
+        return rTouch;
+    }//getrTouch
 
-//    public void gyroCalibrate(){
-//        this.getGyro().calibrate();
-//    }
+	/**
+	 * getter for left touch sensor
+	 */
+    public TouchSensor getlTouch() {
+        return lTouch;
+    }//getlTouch
 
-    public int getHue(){
-        return this.getColoring().argb();
-    }
-}
+	/**
+	 * method for getting current gyro heading
+	 */
+    public int getHeading(){
+        return this.getGyro().getHeading();
+    }//getHeading
+
+	/**
+	 * method for calibrating gyro sensor
+	 */
+    public void gyroCalibrate(){
+        this.getGyro().calibrate();
+    }//gyroCalibrate
+}//class

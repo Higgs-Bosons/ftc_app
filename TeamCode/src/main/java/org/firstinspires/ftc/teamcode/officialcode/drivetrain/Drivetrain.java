@@ -26,7 +26,9 @@ public class Drivetrain implements IDrivetrain {
 
     private static final int TIMED_PER_DEGREE = 12;
     private static final double TURN_POWER = 0.2d;
-    private static final double DISTANCE_PER_DEGREE = 0.3d;
+//    private static final double DISTANCE_PER_DEGREE = 0.3d;
+    private static final double MAX_TURN_POWER = 1.5;
+    private static final double MIN_TURN_POWER = 0.1;
 
     public Drivetrain(DriveMotors dMotors, Sensors dSense){
         this.dMotors = dMotors;
@@ -42,6 +44,71 @@ public class Drivetrain implements IDrivetrain {
     private void setRightMotors(double power){
         this.dMotors.getRightFront().setPower(power);
         this.dMotors.getRightBack().setPower(power);
+    }
+
+    private Constants.Turns getDirection(int finalHeading, int currentHeading){
+        Constants.Turns direction;
+        int headingDiff = finalHeading - currentHeading;
+
+        if(headingDiff > 0){
+            direction = headingDiff <= 180 ? Constants.Turns.RIGHT_TURN : Constants.Turns.LEFT_TURN;
+        }else{
+            direction = headingDiff <= -180 ? Constants.Turns.RIGHT_TURN : Constants.Turns.LEFT_TURN;
+        }
+
+        return direction;
+    }
+
+    private int getAngle(int finalHeading, int currentHeading, Constants.Turns direction) {
+        int returnValue = 0;
+        switch (direction) {
+            case LEFT_TURN:
+                if (finalHeading < currentHeading) {
+                    returnValue = (360 - currentHeading) + finalHeading;
+                } else {
+                    returnValue = finalHeading - currentHeading;
+                }
+                break;
+            case RIGHT_TURN:
+                if (currentHeading < finalHeading) {
+                    returnValue = (360 - finalHeading) + currentHeading;
+                } else {
+                    returnValue = currentHeading - finalHeading;
+                }
+                break;
+            default:
+                throw new IllegalStateException("No turns specified: " + direction);
+        }
+        return returnValue;
+    }
+
+    private void setTurnPower(Constants.Turns direction, int angle) {
+        double currentPower = (MAX_TURN_POWER / 180d) * (double) angle;
+        if (currentPower < MIN_TURN_POWER) {
+            currentPower = MIN_TURN_POWER;
+        }else if(currentPower > 0.2){
+            currentPower = 0.2;
+        }
+
+        System.out.println("Turn power: " + currentPower);
+
+        switch (direction) {
+            case LEFT_TURN:
+                this.setLeftMotors(-currentPower);
+                this.setRightMotors(currentPower);
+
+                System.out.println("********Turning Left at Power" + currentPower);
+                break;
+            case RIGHT_TURN:
+                this.setLeftMotors(currentPower);
+                this.setRightMotors(-currentPower);
+
+                System.out.println("********Turning Right at Power" + currentPower);
+                break;
+            default:
+                this.setLeftMotors(0.0f);
+                this.setRightMotors(0.0f);
+        }
     }
 
     private void handleDrivetrainMessage(TeleopMessages message){
@@ -67,9 +134,22 @@ public class Drivetrain implements IDrivetrain {
         }
     }
 
+    private void rampUp(double maxPower) throws InterruptedException {
+        double multiFactor = maxPower > 0.0 ? 1.0d : -1.0d;
+
+        for (double i = 0.0d; i <= Math.abs(maxPower); i += 0.1d) {
+            this.setLeftMotors(i * multiFactor);
+            this.setRightMotors(i * multiFactor);
+            //SA: Change this to Thread wait time in ms
+            Thread.sleep(100);
+
+            System.out.println("Ramping up to power: " + (i * multiFactor));
+        }
+    }
+
     @Override
     public void moveDistance(int distance, double power) throws InterruptedException {
-//        System.out.println("Moving Distance Drivetrain");
+        System.out.println("Moving Distance Drivetrain");
         this.dMotors.resetControllers();
 
         this.dMotors.encodeInitialize();
@@ -77,24 +157,26 @@ public class Drivetrain implements IDrivetrain {
         int currentPositionL = this.dMotors.getLeftFront().getCurrentPosition();
         int currentPositionR = this.dMotors.getRightFront().getCurrentPosition();
 
-//        System.out.println("Left Current Position: " + currentPositionL + ", Right Current Position: " + currentPositionR);
+        System.out.println("Left Current Position: " + currentPositionL + ", Right Current Position: " + currentPositionR);
 
         int counts = this.dMotors.getCounts(distance);
+//        int targetPositionL = power > 0.0d ? currentPositionL + counts : currentPositionL - counts;
+//        int targetPositionR = power > 0.0d ? currentPositionR + counts : currentPositionR - counts;
         int targetPositionL = currentPositionL + counts;
         int targetPositionR = currentPositionR + counts;
 
-//        System.out.println("Left Target Position: " + targetPositionL + ", Right Target Position: " + targetPositionR);
+        System.out.println("Left Target Position: " + targetPositionL + ", Right Target Position: " + targetPositionR);
 
         this.dMotors.getLeftFront().setTargetPosition(targetPositionL);
         this.dMotors.getRightFront().setTargetPosition(targetPositionR);
         this.dMotors.moveControllers();
 
-        for(double i = 0.0d; i <= power; i += 0.1d){
-            this.setLeftMotors(i);
-            this.setRightMotors(i);
-            Thread.sleep(100);
-        }
+        this.rampUp(power);
 
+        int absTargetL = Math.abs(targetPositionL);
+        int absTargetR = Math.abs(targetPositionR);
+        boolean slowDownL = false;
+        boolean slowDownR = false;
         boolean doneL = false;
         boolean doneR = false;
 
@@ -102,15 +184,34 @@ public class Drivetrain implements IDrivetrain {
             currentPositionL = this.dMotors.getLeftFront().getCurrentPosition();
             currentPositionR = this.dMotors.getRightFront().getCurrentPosition();
 
-//            System.out.println("Left Current Position: " + currentPositionL + ", Right Current Position: " + currentPositionR);
+            System.out.println("Left Current Position: " + currentPositionL + ", Right Current Position: " + currentPositionR);
 
-            if (!doneL && currentPositionL >= targetPositionL) {
+            doneL = Math.abs(currentPositionL) >= absTargetL;
+            doneR = Math.abs(currentPositionR) >= absTargetR;
+            //SA: See if we can reduce to half rotation
+            slowDownL = absTargetL - Math.abs(currentPositionL) < 560;
+            slowDownR = absTargetR - Math.abs(currentPositionR) < 560;
+
+            if (doneL) {
                 this.setLeftMotors(0);
-                doneL = true;
+            }else if(slowDownL){
+                double usePower = power * 0.5d;
+                //SA: see if we can reduce the min power below to 0.3
+                if(Math.abs(usePower) > 0.3d){
+                    System.out.println("Slowing Left: " + usePower);
+                    this.setLeftMotors(usePower);
+                }
             }
-            if (!doneR && currentPositionR >= targetPositionR) {
+
+            if (doneR) {
                 this.setRightMotors(0);
-                doneR = true;
+            }else if(slowDownR){
+                double usePower = power * 0.5d;
+                //SA: see if we can reduce the min power below to 0.3
+                if(Math.abs(usePower) > 0.3d){
+                    System.out.println("Slowing Right: " + usePower);
+                    this.setRightMotors(usePower);
+                }
             }
 
             Thread.sleep(Constants.THREAD_WAIT_TIME_MS);
@@ -121,56 +222,58 @@ public class Drivetrain implements IDrivetrain {
     }
 
 
-  //  @Override
-    public void encoderAngleTurn(Constants.Turns direction, int angle, double power) throws InterruptedException {
-//        System.out.println("Moving Distance Drivetrain");
+//  //  @Override
+//    public void encoderAngleTurn(Constants.Turns direction, int angle, double power) throws InterruptedException {
+////        System.out.println("Moving Distance Drivetrain");
+//
+//        double leftPower;
+//        double rightPower;
+//        DcMotor targetMotor;
+//
+//        boolean isLeft = Constants.Turns.LEFT_TURN.equals(direction);
+//
+//        if(isLeft){
+//            leftPower = -power;
+//            rightPower = power;
+//            targetMotor = this.dMotors.getRightFront();
+//        }else{
+//            leftPower = power;
+//            rightPower = -power;
+//            targetMotor = this.dMotors.getRightFront();
+//        }
+//
+//        this.dMotors.resetControllers();
+//
+//        this.dMotors.encodeInitialize();
+//
+//        int currentPosition = targetMotor.getCurrentPosition();
+//
+////        System.out.println("Left Current Position: " + currentPositionL + ", Right Current Position: " + currentPositionR);
+//
+//        int counts = this.dMotors.getCounts(angle*DISTANCE_PER_DEGREE);
+//        int targetPosition = currentPosition + counts;
+//
+////        System.out.println("Left Target Position: " + targetPositionL + ", Right Target Position: " + targetPositionR);
+//        targetMotor.setTargetPosition(targetPosition);
+//
+//        targetMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+//
+//        this.setLeftMotors(leftPower);
+//        this.setRightMotors(rightPower);
+//
+//        while (currentPosition < targetPosition) {
+//            currentPosition = targetMotor.getCurrentPosition();
+//
+////            System.out.println("Left Current Position: " + currentPositionL + ", Right Current Position: " + currentPositionR);
+//
+//            Thread.sleep(Constants.THREAD_WAIT_TIME_MS);
+//        }
+//
+//        this.dMotors.resetControllers();
+//        this.dMotors.regularController();
+//    }
 
-        double leftPower;
-        double rightPower;
-        DcMotor targetMotor;
 
-        boolean isLeft = Constants.Turns.LEFT_TURN.equals(direction);
-
-        if(isLeft){
-            leftPower = -power;
-            rightPower = power;
-            targetMotor = this.dMotors.getRightFront();
-        }else{
-            leftPower = power;
-            rightPower = -power;
-            targetMotor = this.dMotors.getRightFront();
-        }
-
-        this.dMotors.resetControllers();
-
-        this.dMotors.encodeInitialize();
-
-        int currentPosition = targetMotor.getCurrentPosition();
-
-//        System.out.println("Left Current Position: " + currentPositionL + ", Right Current Position: " + currentPositionR);
-
-        int counts = this.dMotors.getCounts(angle*DISTANCE_PER_DEGREE);
-        int targetPosition = currentPosition + counts;
-
-//        System.out.println("Left Target Position: " + targetPositionL + ", Right Target Position: " + targetPositionR);
-        targetMotor.setTargetPosition(targetPosition);
-
-        targetMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-
-        this.setLeftMotors(leftPower);
-        this.setRightMotors(rightPower);
-
-        while (currentPosition < targetPosition) {
-            currentPosition = targetMotor.getCurrentPosition();
-
-//            System.out.println("Left Current Position: " + currentPositionL + ", Right Current Position: " + currentPositionR);
-
-            Thread.sleep(Constants.THREAD_WAIT_TIME_MS);
-        }
-
-        this.dMotors.resetControllers();
-        this.dMotors.regularController();
-    }
 
     @Override
     public void timedMove(double power, long time) throws InterruptedException {
@@ -184,17 +287,41 @@ public class Drivetrain implements IDrivetrain {
     }
 
     @Override
+    public void goToHeading(int finalHeading) throws InterruptedException {
+        int currentHeading;
+        Constants.Turns direction;
+        int angle;
+        boolean done = false;
+
+        while(!done){
+            currentHeading = this.dSense.getHeading();
+            System.out.println("***********Current Heading: " + currentHeading);
+
+            if(Math.abs(currentHeading-finalHeading) < 3){
+                done = true;
+                this.setLeftMotors(0.0d);
+                this.setRightMotors(0.0d);
+            }else{
+                direction = this.getDirection(finalHeading, currentHeading);
+                angle = this.getAngle(finalHeading, currentHeading, direction);
+                this.setTurnPower(direction, angle);
+                Thread.sleep(Constants.DIRE_THREAD_WAIT_MS);
+            }
+        }
+    }
+
+    @Override
     public void timedAngleTurn(Constants.Turns direction, int angle) throws InterruptedException {
-        if(direction == Constants.Turns.LEFT_TURN){
+        if (direction == Constants.Turns.LEFT_TURN) {
             this.setLeftMotors(-TURN_POWER);
             this.setRightMotors(TURN_POWER);
-        }else{
+        } else {
             this.setLeftMotors(TURN_POWER);
             this.setRightMotors(-TURN_POWER);
         }
 
         Thread.sleep(angle * TIMED_PER_DEGREE);
-       // Thread.sleep(2000);
+        // Thread.sleep(2000);
 
         this.setLeftMotors(0.0d);
         this.setLeftMotors(0.0d);
@@ -226,14 +353,16 @@ public class Drivetrain implements IDrivetrain {
             if(leftEOPDReading > Constants.EOPD_WHITE_THRESHOLD){
                 this.setLeftMotors(0.0f);
                 leftFound = true;
-            }else if(rightEOPDReading > Constants.EOPD_WHITE_THRESHOLD){
+            }
+            //SA: Same error as in the touch sensor, there was an else if here
+            if(rightEOPDReading > Constants.EOPD_WHITE_THRESHOLD){
                 this.setRightMotors(0.0f);
                 rightFound = true;
             }
 
             timeExhausted = currentTime - startTime > finalWaitTime;
 
-            Thread.sleep(Constants.THREAD_WAIT_TIME_MS);
+            Thread.sleep(Constants.DIRE_THREAD_WAIT_MS);
         }
 
         this.setLeftMotors(0.0f);
@@ -269,6 +398,45 @@ public class Drivetrain implements IDrivetrain {
         this.setLeftMotors(0.0d);
         this.setRightMotors(0.0d);
         return beaconFound;
+    }
+
+    @Override
+    public boolean wallAlign(long finalWaitTime) throws InterruptedException{
+        long currentTime;
+
+        long startTime = System.currentTimeMillis();
+        boolean timeExhausted = false;
+        boolean rFound = false;
+        boolean lFound = false;
+
+        this.setLeftMotors(0.6d);
+        this.setRightMotors(0.6d);
+
+        while(!(lFound && rFound) && !timeExhausted) {
+            currentTime = System.currentTimeMillis();
+            System.out.println("Left Touch Sensor Value:" + this.dSense.getlTouch().getValue());
+            System.out.println("Right Touch Sensor Value:" + this.dSense.getrTouch().getValue());
+            if (this.dSense.getlTouch().getValue() != 0.0) {
+                System.out.println("Left Pressed");
+                this.setLeftMotors(0.0f);
+                lFound = true;
+            }
+
+            if (this.dSense.getrTouch().getValue() != 0.0d) {
+                System.out.println("Right Pressed");
+                this.setRightMotors(0.0f);
+                rFound = true;
+            }
+
+            timeExhausted = currentTime - startTime > finalWaitTime;
+
+            Thread.sleep(Constants.DIRE_THREAD_WAIT_MS);
+        }
+        System.out.println("Done Touching");
+
+        this.setLeftMotors(0.0d);
+        this.setRightMotors(0.0d);
+        return (lFound && rFound);
     }
 
     @Override

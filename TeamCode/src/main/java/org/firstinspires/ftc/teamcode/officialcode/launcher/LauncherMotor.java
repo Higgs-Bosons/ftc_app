@@ -3,16 +3,25 @@ package org.firstinspires.ftc.teamcode.officialcode.launcher;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
 /**
- * Created by Higgs Bosons on 11/23/2016.
+ * Class for creating the launcher motor
  */
 public class LauncherMotor {
+    //Declare launcher motor, initialize it with a constructor, and make a getter function for it
     DcMotor launcher;
 
+    /**
+     * constructor for initializing launcher motor
+     * @param launcher
+     */
     public LauncherMotor(DcMotor launcher){
         this.launcher = launcher;
-    }
+    }//constructor
 
+    /**
+     * getter method for launcher motor
+     * @return launcher
+     */
     public DcMotor getLauncher(){
         return launcher;
-    }
-}
+    }//getLauncher
+}//class
