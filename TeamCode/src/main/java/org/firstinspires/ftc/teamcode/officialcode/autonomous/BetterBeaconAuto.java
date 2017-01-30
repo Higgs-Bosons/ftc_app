@@ -78,10 +78,7 @@ public abstract class BetterBeaconAuto extends Autonomous {
 
         this.dDrive.goToHeading(this.getTurns().pop());
 
-        boolean wallAlign = this.dDrive.wallAlign(5000);
-        if(!wallAlign){
-            throw new IllegalStateException("No Wall!");
-        }
+        this.dDrive.wallAlign(3000);
     }
 
     private void beaconPrep() throws InterruptedException {
@@ -102,9 +99,9 @@ public abstract class BetterBeaconAuto extends Autonomous {
 
     private void  secondBeacon() throws InterruptedException {
         dDrive.moveDistance((int) (SECOND_BEACON_DIST), -POWER_ONE);
-        if(this.getColor().equals(Constants.Color.BLUE)){
-            this.dDrive.goToHeading(this.getTurns().pop());
-        }
+//        if(this.getColor().equals(Constants.Color.BLUE)){
+//            this.dDrive.goToHeading(this.getTurns().pop());
+//        }
     }
 
 
