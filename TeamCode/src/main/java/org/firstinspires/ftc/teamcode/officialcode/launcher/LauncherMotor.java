@@ -15,6 +15,7 @@ public class LauncherMotor {
      */
     public LauncherMotor(DcMotor launcher){
         this.launcher = launcher;
+        this.launcher.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
     }//constructor
 
     /**
