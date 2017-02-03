@@ -59,7 +59,7 @@ public class Launcher implements ILauncher {
      */
     @Override
     public void fire(){
-        launcher.getLauncher().setPower(-0.80f);
+        launcher.getLauncher().setPower(-0.09f);
     }//fire
 
     /**
