@@ -401,7 +401,7 @@ public class Drivetrain implements IDrivetrain {
     }
 
     @Override
-    public boolean wallAlign(long finalWaitTime) throws InterruptedException{
+    public void wallAlign(long finalWaitTime) throws InterruptedException{
         long currentTime;
 
         long startTime = System.currentTimeMillis();
@@ -436,7 +436,6 @@ public class Drivetrain implements IDrivetrain {
 
         this.setLeftMotors(0.0d);
         this.setRightMotors(0.0d);
-        return (lFound && rFound);
     }
 
     @Override

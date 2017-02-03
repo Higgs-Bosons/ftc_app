@@ -29,7 +29,7 @@ public interface IDrivetrain {
 
     boolean stopAtBeacon(Constants.Color color, long finalWaitTime) throws InterruptedException;
 
-    boolean wallAlign(long finalWaitTime) throws InterruptedException;
+    void wallAlign(long finalWaitTime) throws InterruptedException;
 
     float getPowerLF();
 

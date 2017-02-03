@@ -20,9 +20,9 @@ import java.util.Stack;
 public abstract class BetterBeaconAuto extends Autonomous {
     //autonomous constant distances and powers
     private static final byte OFF_WALL_DIST = 35;
-    private static final byte OFF_WALL_DIST_NO_BASKET = 15;
+//    private static final byte OFF_WALL_DIST_NO_BASKET = 15;
     private static final byte AWAY_BALL_DIST = -20;
-    private static final byte TO_WALL_DIST = 75;
+    private static final byte TO_WALL_DIST = 65;
     private static final byte AWAY_WALL_DIST = -5;
     private static final byte SECOND_BEACON_DIST = -38;
     private static final double POWER_ONE = 1.0d;
@@ -39,7 +39,7 @@ public abstract class BetterBeaconAuto extends Autonomous {
     //declare abstract methods for getting color and turns
     protected abstract Stack<Integer> getTurns();
     protected abstract Constants.Color getColor();
-    protected abstract boolean isSkipBasket();
+//    protected abstract boolean isSkipBasket();
     /**
      * Drive forward and make a basket
      * @throws InterruptedException
@@ -51,12 +51,15 @@ public abstract class BetterBeaconAuto extends Autonomous {
         //move distance to vortex
         this.dDrive.moveDistance((int) (OFF_WALL_DIST), POWER_ONE);
 
+
         this.dServos.getBallGrabber().partialClose();
 
         //raise ball loader
         this.dServos.getBallLoader().raiseLoader();
 //        this.sleep(500);
 
+        this.dServos.getCapGrabber().topMover(Constants.CapGrabberState.READY);
+        Thread.sleep(500);
     }//makeABasket
 
     /**
@@ -66,22 +69,20 @@ public abstract class BetterBeaconAuto extends Autonomous {
     private void toWall() throws InterruptedException {
         System.out.println("Going to wall!");
 
-        this.dDrive.moveDistance(AWAY_BALL_DIST, -POWER_ONE);
+//        this.dDrive.moveDistance(AWAY_BALL_DIST, -POWER_ONE);
         //Moved from makeABasket to here
         this.dLaunch.cease();
 
         this.dDrive.goToHeading(this.getTurns().pop());
 
-        this.dServos.getCapGrabber().topMover(Constants.CapGrabberState.READY);
 
         this.dDrive.moveDistance((int) (TO_WALL_DIST), POWER_ONE);
 
+        this.dDrive.moveDistance(-5, -POWER_ONE);
+
         this.dDrive.goToHeading(this.getTurns().pop());
 
-        boolean wallAlign = this.dDrive.wallAlign(5000);
-        if(!wallAlign){
-            throw new IllegalStateException("No Wall!");
-        }
+        this.dDrive.wallAlign(3000);
     }
 
     private void beaconPrep() throws InterruptedException {
@@ -96,15 +97,14 @@ public abstract class BetterBeaconAuto extends Autonomous {
         if(!atBeacon){
             throw new IllegalStateException("No Beacon");
         }
-
-        this.dDrive.timedMove(-0.8d, 250);
+        Thread.sleep(500);
     }
 
     private void  secondBeacon() throws InterruptedException {
         dDrive.moveDistance((int) (SECOND_BEACON_DIST), -POWER_ONE);
-        if(this.getColor().equals(Constants.Color.BLUE)){
-            this.dDrive.goToHeading(this.getTurns().pop());
-        }
+//        if(this.getColor().equals(Constants.Color.BLUE)){
+//            this.dDrive.goToHeading(this.getTurns().pop());
+//        }
     }
 
 
@@ -154,12 +154,7 @@ public abstract class BetterBeaconAuto extends Autonomous {
         double pusherPower = (this.getColor() == Constants.Color.RED ? 1.0d : -1.0d);
 
         try {
-            //System.out.println("Approaching Beacons");
-            if(this.isSkipBasket()){
-                this.dDrive.moveDistance((int) (OFF_WALL_DIST_NO_BASKET), POWER_ONE);
-            }else{
-                this.makeABasket();
-            }
+            this.makeABasket();
             this.toWall();
             this.beaconPrep();
             this.toBeacon(5000, WHITE_LINE_PWER);

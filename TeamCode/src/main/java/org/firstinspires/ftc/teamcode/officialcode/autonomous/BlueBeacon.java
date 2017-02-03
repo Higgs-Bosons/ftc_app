@@ -16,10 +16,10 @@ public class BlueBeacon extends BetterBeaconAuto {
 
     public BlueBeacon(){
         super();
-        turns.add(350);
-        turns.add(10);
+//        turns.add(5);
+        turns.add(15);
         turns.add(80);
-        turns.add(20);
+        turns.add(30);
     }
 
     @Override
@@ -32,8 +32,8 @@ public class BlueBeacon extends BetterBeaconAuto {
         return Constants.Color.BLUE;
     }
 
-    @Override
-    protected boolean isSkipBasket(){
-        return false;
-    }
+//    @Override
+//    protected boolean isSkipBasket(){
+//        return false;
+//    }
 }

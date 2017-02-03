@@ -31,10 +31,10 @@ public class BallAndPark extends Autonomous {
     @Override
     public void runAutonomous() throws InterruptedException {
         this.dLaunch.fire();
-        this.dDrive.moveDistance(30, 1.0d);
+        this.dDrive.moveDistance(42, 1.0d);
         this.dServos.getBallLoader().raiseLoader();
         Thread.sleep(1000);
-        this.dDrive.moveDistance(5, 1.0d);
+        this.dDrive.timedMove(1.0d, 1000);
         this.dLaunch.cease();
     }
 }
