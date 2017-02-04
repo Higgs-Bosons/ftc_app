@@ -78,7 +78,7 @@ public abstract class BetterBeaconAuto extends Autonomous {
 
         this.dDrive.moveDistance((int) (TO_WALL_DIST), POWER_ONE);
 
-        this.dDrive.moveDistance(-5, -POWER_ONE);
+        this.dDrive.moveDistance(-10, -POWER_ONE);
 
         this.dDrive.goToHeading(this.getTurns().pop());
 
@@ -161,7 +161,7 @@ public abstract class BetterBeaconAuto extends Autonomous {
             this.activateBeacon(pusherPower, 500);
             this.secondBeacon();
             this.toBeacon(5000, -WHITE_LINE_PWER);
-            this.activateBeacon(pusherPower, 500);
+            this.activateBeacon(pusherPower, 1000);
         }catch(Exception e){
             e.printStackTrace();
             System.out.println("Something went wrong!");
