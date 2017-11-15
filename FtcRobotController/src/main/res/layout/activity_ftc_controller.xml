@@ -48,12 +48,12 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
     android:background="@color/black">
 
     <ImageView
-      android:id="@+id/robotIcon"
-      android:src="@drawable/icon_robotcontroller"
-      android:layout_width="wrap_content"
-      android:layout_height="fill_parent"
-      android:adjustViewBounds="true"
-      android:layout_margin="1dp"/>
+        android:id="@+id/robotIcon"
+        android:layout_width="wrap_content"
+        android:layout_height="fill_parent"
+        android:layout_margin="1dp"
+        android:adjustViewBounds="true"
+        android:src="@drawable/icon_robotcontroller" />
 
     <TextView
       android:id="@+id/textDeviceName"
@@ -94,6 +94,11 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin" >
+
+    <TextView
+        android:id="@+id/BOB"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
 
     <TextView
       android:id="@+id/textNetworkConnectionStatus"

@@ -1,0 +1,7 @@
+class RobotDirection{
+        final static int Forward = 1;
+        final static int Backwards = -1;
+    }
+    @IntDef({org.firstinspires.ftc.teamcode.officialcode.Autonomus.AutonomousCode.RobotDirection.Forward, org.firstinspires.ftc.teamcode.officialcode.Autonomus.AutonomousCode.RobotDirection.Backwards})
+    @Retention(RetentionPolicy.SOURCE)
+    @interface rection{}
