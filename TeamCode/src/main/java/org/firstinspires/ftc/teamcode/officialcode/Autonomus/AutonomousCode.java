@@ -5,7 +5,7 @@ import com.qualcomm.robotcore.hardware.*;
 import org.firstinspires.ftc.robotcore.internal.*;
 import org.firstinspires.ftc.teamcode.officialcode.Robot.*;
 
-import static org.firstinspires.ftc.teamcode.Constants.*;
+import static org.firstinspires.ftc.teamcode.officialcode.Constants.*;
 
 @Autonomous(name = "Autonomous", group = "Program")
 public class AutonomousCode extends LinearOpMode{

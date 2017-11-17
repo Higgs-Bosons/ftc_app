@@ -1,8 +1,6 @@
 package org.firstinspires.ftc.teamcode.officialcode;
 
 import android.support.annotation.*;
-import org.firstinspires.ftc.teamcode.Constants;
-import org.firstinspires.ftc.teamcode.officialcode.Robot.DriveMotors;
 
 import java.lang.annotation.*;
 

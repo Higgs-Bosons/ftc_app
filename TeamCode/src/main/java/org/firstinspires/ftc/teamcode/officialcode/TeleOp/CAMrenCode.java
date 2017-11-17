@@ -5,7 +5,6 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
-//TODO We need to aline the Liner Servo (Arm) and adjust the Up/Down movement amounts. Arm.setPosition();
 //                       all the way up : 0.27 all the way down : 0.47
 @TeleOp(name = "TeleOp For Cam Wheels", group = "Beacon")
 public class CAMrenCode extends LinearOpMode {

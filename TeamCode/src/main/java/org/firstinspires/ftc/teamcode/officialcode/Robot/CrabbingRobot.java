@@ -6,10 +6,10 @@ import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.robotcore.internal.AppUtil;
 import org.firstinspires.ftc.robotcore.internal.UILocation;
-import org.firstinspires.ftc.teamcode.Constants;
+import org.firstinspires.ftc.teamcode.officialcode.Constants;
 
-import static org.firstinspires.ftc.teamcode.Constants.BLUE;
-import static org.firstinspires.ftc.teamcode.Constants.RED;
+import static org.firstinspires.ftc.teamcode.officialcode.Constants.BLUE;
+import static org.firstinspires.ftc.teamcode.officialcode.Constants.RED;
 
 
 public class CrabbingRobot{
