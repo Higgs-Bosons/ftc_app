@@ -93,14 +93,8 @@ public class AutonomousCode extends LinearOpMode{
     private void ReadProgram(){
         for(int LineInProgram = 0; LineInProgram <= PROGRAM.length-1;LineInProgram++){
             if(PROGRAM[LineInProgram][0] == RobotActions.KnockOffJewel){
-               Crabby.driveMotors.Move(Forwards,360,0.2);
+               Crabby.KnockOffJewel(COLOR);
             }
         }
     }
-
-
-
-
-
-
 }

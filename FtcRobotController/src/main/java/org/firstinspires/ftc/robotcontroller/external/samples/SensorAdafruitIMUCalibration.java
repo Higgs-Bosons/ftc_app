@@ -33,7 +33,8 @@ THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 package org.firstinspires.ftc.robotcontroller.external.samples;
 
 import com.qualcomm.hardware.adafruit.AdafruitBNO055IMU;
-import com.qualcomm.hardware.adafruit.BNO055IMU;
+
+import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
@@ -58,7 +59,7 @@ import java.util.Locale;
  * "Section 3.11 Calibration" of the BNO055 specification.
  *
  * <p>Manual calibration of the IMU is definitely NOT necessary: except for the magnetometer
- * (which is not used by the default {@link com.qualcomm.hardware.adafruit.BNO055IMU.SensorMode#IMU
+ * (which is not used by the default {@link com.qualcomm.hardware.bosch.BNO055IMU.SensorMode#IMU
  * SensorMode#IMU}), the BNO055 is internally self-calibrating and thus can be very successfully
  * used without manual intervention. That said, performing a one-time calibration, saving the
  * results persistently, then loading them again at each run can help reduce the time that automatic
@@ -101,7 +102,7 @@ import java.util.Locale;
  * magnetometer cannot actually be calibrated.</p>
  *
  * @see AdafruitBNO055IMU
- * @see com.qualcomm.hardware.adafruit.BNO055IMU.Parameters#calibrationDataFile
+ * @see com.qualcomm.hardware.bosch.BNO055IMU.Parameters#calibrationDataFile
  * @see <a href="https://www.bosch-sensortec.com/bst/products/all_products/bno055">BNO055 product page</a>
  * @see <a href="https://ae-bst.resource.bosch.com/media/_tech/media/datasheets/BST_BNO055_DS000_14.pdf">BNO055 specification</a>
  */
