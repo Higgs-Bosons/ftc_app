@@ -9,7 +9,7 @@ public class IntStringDefInterfaces {
     @Retention(RetentionPolicy.SOURCE)
     public @interface RedOrBlue{}
 
-    @IntDef({Constants.Backwards, Constants.Forwards, Constants.Glide})
+    @IntDef({Constants.Backwards, Constants.Forwards})
     @Retention(RetentionPolicy.SOURCE)
     public @interface rection{}
 }

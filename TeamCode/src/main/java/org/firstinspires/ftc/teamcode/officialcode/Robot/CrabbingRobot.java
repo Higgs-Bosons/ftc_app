@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.officialcode.Robot;
 
+import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
@@ -16,7 +17,7 @@ public class CrabbingRobot{
     public Sensors sensors;
     public Servos servos;
     public DriveMotors driveMotors;
-    public AttachmentMotors attachmentMotors;
+    private AttachmentMotors attachmentMotors;
 
     public CrabbingRobot(){
 
@@ -27,14 +28,14 @@ public class CrabbingRobot{
     public void GiveDriveMotors(DcMotor LeftFront, DcMotor RightFront, DcMotor LeftBack, DcMotor RightBack){
         driveMotors = new DriveMotors(LeftFront, RightFront, LeftBack, RightBack);
     }
-    public void GiveSensors(ColorSensor SuperNitron9000){
-        this.sensors = new Sensors(SuperNitron9000);
+    public void GiveSensors(ColorSensor SuperNitron9000, BNO055IMU IMU){
+        this.sensors = new Sensors(SuperNitron9000, IMU);
     }
     public void GiveServos(Servo FishTail, Servo JackSmith){
         this.servos = new Servos(FishTail, JackSmith);
     }
 
-    public void Pause(int Duration){
+    private void Pause(int Duration){
         try{
             Thread.sleep(Duration);
         }catch (Exception ignore){}
@@ -65,12 +66,9 @@ public class CrabbingRobot{
             AppUtil.getInstance().showToast(UILocation.BOTH,"I SEE BLUE");
         }
         if(ColorISee.equalsIgnoreCase(Color)){
-            this.driveMotors.Move(Constants.Backwards, 180, 0.8);
+           this.driveMotors.Turn(10);
         }else{
-            this.driveMotors.Move(Constants.Forwards, 180, 0.8);
+            this.driveMotors.Turn(350);
         }
-
-
-
     }
 }

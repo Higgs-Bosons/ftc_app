@@ -6,5 +6,7 @@ public class Constants {
 
     public final static int Forwards = 1;
     public final static int Backwards = -1;
-    public final static int Glide = 2;
+
+    public final static int Wheel_Diameter = 4; // INCHES
+    public final static int Motor_Tick_Per_Rotation = 1150;
 }

@@ -34,7 +34,7 @@ public class CAMrenCode extends LinearOpMode {
 
         Arm = hardwareMap.servo.get("Jack Smith");
         Grabby = hardwareMap.servo.get("Grabby");
-        Arm.setPosition(0.27);
+        Arm.setPosition(0.3);
         Grabby.setPosition(0);
     }
 
@@ -85,10 +85,10 @@ public class CAMrenCode extends LinearOpMode {
     }
     private void Check_Jack() {
         if (gamepad1.left_trigger >= 0.1 || gamepad1.right_trigger >= 0.1) {
-            Arm.setPosition(0.37);
+            Arm.setPosition(0.3);
         }
         if (gamepad1.left_bumper || gamepad1.right_bumper) {
-            Arm.setPosition(0.27);
+            Arm.setPosition(0.50);
         }
     }
     private void Check_Arm_Stuff() {
