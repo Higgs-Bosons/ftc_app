@@ -48,7 +48,7 @@ public class DriveMotors {
                     power = 0.1;
                 }
             }
-            if(Math.abs(( - 180)) >= whereToTurnTo){
+            if(Math.abs(( readGyro() - 180)) >= whereToTurnTo){
                 this.TurnMotorsOn(power,-power,power,-power);
             }else{
                 this.TurnMotorsOn(-power,power,-power,power);
@@ -56,13 +56,13 @@ public class DriveMotors {
         }
         STOP();
     }
-    private void TurnMotorsOn(double PowerToLeftFront, double PowerToRightFront, double PowerToLeftBack, double PowerToRightBack){
+    void TurnMotorsOn(double PowerToLeftFront, double PowerToRightFront, double PowerToLeftBack, double PowerToRightBack){
         this.LF.setPower(PowerToLeftFront);
         this.RF.setPower(PowerToRightFront);
         this.LB.setPower(PowerToLeftBack);
         this.RB.setPower(PowerToRightBack);
     }
-    private void STOP(){
+    void STOP(){
         this.LB.setPower(0.0);
         this.RB.setPower(0.0);
         this.LF.setPower(0.0);

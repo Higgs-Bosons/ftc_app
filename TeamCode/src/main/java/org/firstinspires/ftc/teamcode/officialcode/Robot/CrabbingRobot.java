@@ -7,7 +7,6 @@ import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.robotcore.internal.AppUtil;
 import org.firstinspires.ftc.robotcore.internal.UILocation;
-import org.firstinspires.ftc.teamcode.officialcode.Constants;
 
 import static org.firstinspires.ftc.teamcode.officialcode.Constants.BLUE;
 import static org.firstinspires.ftc.teamcode.officialcode.Constants.RED;
@@ -38,7 +37,9 @@ public class CrabbingRobot{
     private void Pause(int Duration){
         try{
             Thread.sleep(Duration);
-        }catch (Exception ignore){}
+        }catch (Exception ignore){
+
+        }
     }
     public void KnockOffJewel(String Color){
         int RED_COUNT = 0;
@@ -57,6 +58,8 @@ public class CrabbingRobot{
                BLUE_COUNT++;
             }
         }
+        servos.getServo(Servos.FishTail).setPosition(0.6);
+        Pause(1000);
         AppUtil.getInstance().showToast(UILocation.BOTH,"RED COUNT: "+RED_COUNT+"\nBLUE COUNT: "+BLUE_COUNT);
         if(RED_COUNT > BLUE_COUNT){
             ColorISee = RED;
@@ -65,10 +68,14 @@ public class CrabbingRobot{
             ColorISee = BLUE;
             AppUtil.getInstance().showToast(UILocation.BOTH,"I SEE BLUE");
         }
-        if(ColorISee.equalsIgnoreCase(Color)){
-           this.driveMotors.Turn(10);
+        if(!ColorISee.equalsIgnoreCase(Color)){
+            this.driveMotors.TurnMotorsOn(-0.5,0.5,-0.5,0.5);
+            this.Pause(300);
         }else{
-            this.driveMotors.Turn(350);
+            this.driveMotors.TurnMotorsOn(0.5,-0.5,0.5,-0.5);
+            this.Pause(300);
         }
+        this.driveMotors.STOP();
+        servos.getServo(Servos.FishTail).setPosition(0);
     }
 }

@@ -105,9 +105,9 @@ public class CAMrenCode extends LinearOpMode {
         }
 
         if (gamepad2.left_bumper) {
-            Grabby.setPosition(0.35);
+            Grabby.setPosition(0.60);
         } else if (gamepad2.right_bumper) {
-            Grabby.setPosition(0.5);
+            Grabby.setPosition(0.75);
         }
     }
 

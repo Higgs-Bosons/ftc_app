@@ -29,6 +29,6 @@ public class Sensors {
         if(Value<0){
             Value = (180+(181 - Math.abs(Value)));
         }
-        return Value;
+        return 180 % Value;
     }
 }

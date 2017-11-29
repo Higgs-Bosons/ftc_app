@@ -35,6 +35,8 @@ public class AutonomousCode extends LinearOpMode{
     }
 
     public void initialize(){
+        GatherInfo();
+
         DcMotor lf = hardwareMap.dcMotor.get("LF");
         DcMotor lb = hardwareMap.dcMotor.get("LB");
         DcMotor rf = hardwareMap.dcMotor.get("RF");
@@ -43,7 +45,7 @@ public class AutonomousCode extends LinearOpMode{
         rf.setDirection(DcMotorSimple.Direction.REVERSE);
         rb.setDirection(DcMotorSimple.Direction.REVERSE);
         Servo FishTail = hardwareMap.servo.get("FishTail");
-        Servo Jack = hardwareMap.servo.get("Jack Smith");Jack.setPosition(0.1);
+        Servo Jack = hardwareMap.servo.get("Jack Smith");Jack.setPosition(0.2);
 
         ColorSensor SuperNitron9000 = hardwareMap.colorSensor.get("SuperNitron9000");
         BNO055IMU imu;
@@ -63,8 +65,8 @@ public class AutonomousCode extends LinearOpMode{
         Crabby.GiveSensors(SuperNitron9000, imu);
         Crabby.GiveAttachmentMotors();
 
-        GatherInfo();
         WriteProgram();
+        AppUtil.getInstance().showToast(UILocation.BOTH,"Ready To Run! :-)");
     }
     private void GatherInfo(){
         telemetry.addData("Alliance Color:",COLOR);
@@ -91,17 +93,17 @@ public class AutonomousCode extends LinearOpMode{
             telemetry.addData("Alliance Color:",COLOR);
             telemetry.addData("POSITION ON FIELD:", PositionOnField);telemetry.update();
         }
-
-
-
-        AppUtil.getInstance().showToast(UILocation.BOTH,"All Needed Info Given");
     }
     private void WriteProgram(){
         if(PositionOnField.equals("LEFT")){
             if(COLOR.equals(RED)){
-                //TODO WRITE CODE FOR POSITION
+                PROGRAM = new int[][]{{RobotActions.KnockOffJewel, RobotActions.NULL},
+                        {RobotActions.Turn, 340},
+                        {RobotActions.Move_Forward, 30}};
             }else{
-                //TODO WRITE CODE FOR POSITION
+                PROGRAM = new int[][]{{RobotActions.KnockOffJewel, RobotActions.NULL},
+                        {RobotActions.Turn, 20},
+                        {RobotActions.Move_Backwards, 30}};
             }
         }
         if(PositionOnField.equals("RIGHT")){
@@ -110,7 +112,9 @@ public class AutonomousCode extends LinearOpMode{
                         {RobotActions.Turn, 25},
                         {RobotActions.Move_Forward, 30}};
             }else{
-                //TODO WRITE CODE FOR POSITION
+                PROGRAM = new int[][]{{RobotActions.KnockOffJewel, RobotActions.NULL},
+                        {RobotActions.Turn, 340},
+                        {RobotActions.Move_Backwards, 30}};
             }
         }
     }
