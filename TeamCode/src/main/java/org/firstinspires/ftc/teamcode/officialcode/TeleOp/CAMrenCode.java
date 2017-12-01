@@ -14,7 +14,7 @@ import org.firstinspires.ftc.teamcode.officialcode.Robot.Servos;
 public class CAMrenCode extends LinearOpMode {
     private CrabbingRobot Crabby;
 
-    private void initialize() throws InterruptedException {
+    private void initialize() throws InterruptedException{
         Crabby = new CrabbingRobot();
         DcMotor Left_Front = hardwareMap.dcMotor.get("LF");
         DcMotor Right_Front = hardwareMap.dcMotor.get("RF");
@@ -41,8 +41,7 @@ public class CAMrenCode extends LinearOpMode {
         Crabby.GiveServos(FishTail, JackSmith, Grabby);
         Crabby.GiveAttachmentMotors(ARMy);
     }
-
-    public void runOpMode() throws InterruptedException {
+    public void runOpMode() throws InterruptedException{
         initialize();
         waitForStart();
         while (opModeIsActive()) {
@@ -53,10 +52,10 @@ public class CAMrenCode extends LinearOpMode {
         }
     }
 
-    private void Check_Joystick_Control() {
+    private void Check_Joystick_Control(){
         Crabby.driveMotors.TurnMotorsOn(-gamepad1.left_stick_y,-gamepad1.left_stick_y,-gamepad1.right_stick_y,-gamepad1.right_stick_y);
     }
-    private void Check_Slide() {
+    private void Check_Slide(){
         if (gamepad1.dpad_right) {
             while (gamepad1.dpad_right) {
                 Crabby.driveMotors.TurnMotorsOn(0.8,-0.8,-0.8,0.8);
@@ -71,7 +70,7 @@ public class CAMrenCode extends LinearOpMode {
             Crabby.driveMotors.STOP();
         }
     }
-    private void Check_Jack() {
+    private void Check_Jack(){
         if (gamepad1.left_trigger >= 0.1 || gamepad1.right_trigger >= 0.1) {
             Crabby.servos.getServo(Servos.JackSmith).setPosition(0.3);
         }
@@ -79,7 +78,7 @@ public class CAMrenCode extends LinearOpMode {
             Crabby.servos.getServo(Servos.JackSmith).setPosition(0.5);
         }
     }
-    private void Check_Arm_Stuff() {
+    private void Check_Arm_Stuff(){
         boolean isMoving = false;
         if (gamepad2.left_trigger > 0.1) {
             isMoving = true;
