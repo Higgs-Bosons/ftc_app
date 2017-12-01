@@ -2,20 +2,25 @@ package org.firstinspires.ftc.teamcode.officialcode.Robot;
 
 import com.qualcomm.robotcore.hardware.Servo;
 
-class Servos {
+public class Servos {
     static final String FishTail = "Fish Tail";
-    private static final String JackSmith = "JackSmith";
+    public static final String JackSmith = "JackSmith";
+    public static final String Grabby = "Grabby";
     private Servo FishTailServo;
     private Servo JackSmithServo;
-    Servos(Servo FishTail, Servo JackSmith){
+    private Servo GrabbyServo;
+    Servos(Servo FishTail, Servo JackSmith, Servo Grabby){
         this.FishTailServo = FishTail;
         this.JackSmithServo = JackSmith;
+        this.GrabbyServo = Grabby;
     }
-    Servo getServo(String Name){
+    public Servo getServo(String Name){
         if(Name.equalsIgnoreCase(FishTail)){
             return FishTailServo;
         }else if(Name.equalsIgnoreCase(JackSmith)){
             return JackSmithServo;
+        }else if(Name.equalsIgnoreCase(Grabby)){
+            return GrabbyServo;
         }
         return FishTailServo;
     }

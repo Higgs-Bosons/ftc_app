@@ -7,7 +7,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
 
-public class Sensors {
+class Sensors {
     private ColorSensor SuperNitron9000;
     private BNO055IMU IMU;
     Sensors(ColorSensor SuperNitron9000, BNO055IMU IMU){
@@ -24,11 +24,11 @@ public class Sensors {
         }
         return 900990999;
     }
-    public float ReadGyro(){
+    float ReadGyro(){
         float Value = IMU.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES).firstAngle ;
         if(Value<0){
             Value = (180+(181 - Math.abs(Value)));
         }
-        return 180 % Value;
+        return Value;
     }
 }

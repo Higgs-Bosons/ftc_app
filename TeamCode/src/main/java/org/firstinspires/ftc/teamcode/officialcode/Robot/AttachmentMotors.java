@@ -1,10 +1,18 @@
 package org.firstinspires.ftc.teamcode.officialcode.Robot;
 
-/**
- * Created by TOAST on 11/4/2017.
- */
+import com.qualcomm.robotcore.hardware.DcMotor;
 
 public class AttachmentMotors {
-    public AttachmentMotors(){}
+    private DcMotor ArmLifterMotor;
+    public static final String ArmLifter = "ARM LIFTER";
+    AttachmentMotors(DcMotor ArmLifter){
+        this.ArmLifterMotor = ArmLifter;
+    }
+    public DcMotor getMotor(String MotorName){
+        if(MotorName.equals(ArmLifter)){
+            return ArmLifterMotor;
+        }
+        return ArmLifterMotor;
+    }
 
 }

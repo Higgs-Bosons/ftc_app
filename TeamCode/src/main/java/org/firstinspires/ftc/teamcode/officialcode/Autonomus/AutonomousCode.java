@@ -23,12 +23,7 @@ public class AutonomousCode extends LinearOpMode{
         Thread billy = new Thread(runProgram);
         billy.start();
         while(opModeIsActive()){
-            telemetry.addData("ENCODER RF", Crabby.driveMotors.getRF().getCurrentPosition());
-            telemetry.addData("ENCODER LF", Crabby.driveMotors.getLF().getCurrentPosition());
-            telemetry.addData("ENCODER RB", Crabby.driveMotors.getRB().getCurrentPosition());
-            telemetry.addData("ENCODER LB", Crabby.driveMotors.getLB().getCurrentPosition());
-            telemetry.addData("GYRO",Crabby.sensors.ReadGyro());
-            telemetry.update();
+            telemetry.addData("RUNNING",":-)");
         }
         billy.interrupt();
 
@@ -41,10 +36,12 @@ public class AutonomousCode extends LinearOpMode{
         DcMotor lb = hardwareMap.dcMotor.get("LB");
         DcMotor rf = hardwareMap.dcMotor.get("RF");
         DcMotor rb = hardwareMap.dcMotor.get("RB");
+        DcMotor ARMy = hardwareMap.dcMotor.get("ARM-Y");
 
         rf.setDirection(DcMotorSimple.Direction.REVERSE);
         rb.setDirection(DcMotorSimple.Direction.REVERSE);
         Servo FishTail = hardwareMap.servo.get("FishTail");
+        Servo Grabby = hardwareMap.servo.get("Grabby");
         Servo Jack = hardwareMap.servo.get("Jack Smith");Jack.setPosition(0.2);
 
         ColorSensor SuperNitron9000 = hardwareMap.colorSensor.get("SuperNitron9000");
@@ -60,10 +57,10 @@ public class AutonomousCode extends LinearOpMode{
         imu.initialize(parameters);
 
         Crabby = new CrabbingRobot();
-        Crabby.GiveServos(FishTail, null);
+        Crabby.GiveServos(FishTail, Jack, Grabby);
         Crabby.GiveDriveMotors(lf,rf,lb,rb);
         Crabby.GiveSensors(SuperNitron9000, imu);
-        Crabby.GiveAttachmentMotors();
+        Crabby.GiveAttachmentMotors(ARMy);
 
         WriteProgram();
         AppUtil.getInstance().showToast(UILocation.BOTH,"Ready To Run! :-)");
@@ -98,22 +95,22 @@ public class AutonomousCode extends LinearOpMode{
         if(PositionOnField.equals("LEFT")){
             if(COLOR.equals(RED)){
                 PROGRAM = new int[][]{{RobotActions.KnockOffJewel, RobotActions.NULL},
-                        {RobotActions.Turn, 340},
-                        {RobotActions.Move_Forward, 30}};
+                        {RobotActions.Turn, 0},
+                        {RobotActions.Move_Forward, 20}};
             }else{
                 PROGRAM = new int[][]{{RobotActions.KnockOffJewel, RobotActions.NULL},
-                        {RobotActions.Turn, 20},
+                        {RobotActions.Turn, 340},
                         {RobotActions.Move_Backwards, 30}};
             }
         }
         if(PositionOnField.equals("RIGHT")){
             if(COLOR.equals(RED)){
                 PROGRAM = new int[][]{{RobotActions.KnockOffJewel, RobotActions.NULL},
-                        {RobotActions.Turn, 25},
+                        {RobotActions.Turn, 20},
                         {RobotActions.Move_Forward, 30}};
             }else{
                 PROGRAM = new int[][]{{RobotActions.KnockOffJewel, RobotActions.NULL},
-                        {RobotActions.Turn, 340},
+                        {RobotActions.Turn, 0},
                         {RobotActions.Move_Backwards, 30}};
             }
         }

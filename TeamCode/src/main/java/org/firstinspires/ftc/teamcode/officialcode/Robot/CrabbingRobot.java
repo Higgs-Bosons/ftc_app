@@ -13,16 +13,16 @@ import static org.firstinspires.ftc.teamcode.officialcode.Constants.RED;
 
 
 public class CrabbingRobot{
-    public Sensors sensors;
+    Sensors sensors;
     public Servos servos;
     public DriveMotors driveMotors;
-    private AttachmentMotors attachmentMotors;
+    public AttachmentMotors attachmentMotors;
 
     public CrabbingRobot(){
 
     }
-    public void GiveAttachmentMotors(){
-        attachmentMotors = new AttachmentMotors();
+    public void GiveAttachmentMotors(DcMotor ArmLifter){
+        attachmentMotors = new AttachmentMotors(ArmLifter);
     }
     public void GiveDriveMotors(DcMotor LeftFront, DcMotor RightFront, DcMotor LeftBack, DcMotor RightBack){
         driveMotors = new DriveMotors(LeftFront, RightFront, LeftBack, RightBack);
@@ -30,8 +30,8 @@ public class CrabbingRobot{
     public void GiveSensors(ColorSensor SuperNitron9000, BNO055IMU IMU){
         this.sensors = new Sensors(SuperNitron9000, IMU);
     }
-    public void GiveServos(Servo FishTail, Servo JackSmith){
-        this.servos = new Servos(FishTail, JackSmith);
+    public void GiveServos(Servo FishTail, Servo JackSmith, Servo Grabby){
+        this.servos = new Servos(FishTail, JackSmith, Grabby);
     }
 
     private void Pause(int Duration){
@@ -47,6 +47,7 @@ public class CrabbingRobot{
         int RED_READING;
         int BLUE_READING;
         String ColorISee;
+        boolean NO_COLOR = false;
         for(double counter = 0.05; counter <= 0.8; counter = counter + 0.01) {
             RED_READING = this.sensors.ReadColor("RED");
             BLUE_READING = this.sensors.ReadColor("BLUE");
@@ -60,22 +61,27 @@ public class CrabbingRobot{
         }
         servos.getServo(Servos.FishTail).setPosition(0.6);
         Pause(1000);
-        AppUtil.getInstance().showToast(UILocation.BOTH,"RED COUNT: "+RED_COUNT+"\nBLUE COUNT: "+BLUE_COUNT);
         if(RED_COUNT > BLUE_COUNT){
             ColorISee = RED;
             AppUtil.getInstance().showToast(UILocation.BOTH,"I SEE RED");
-        }else{
+        }else if(RED_COUNT < BLUE_COUNT){
             ColorISee = BLUE;
             AppUtil.getInstance().showToast(UILocation.BOTH,"I SEE BLUE");
-        }
-        if(!ColorISee.equalsIgnoreCase(Color)){
-            this.driveMotors.TurnMotorsOn(-0.5,0.5,-0.5,0.5);
-            this.Pause(300);
         }else{
-            this.driveMotors.TurnMotorsOn(0.5,-0.5,0.5,-0.5);
-            this.Pause(300);
+            NO_COLOR = true;
+            ColorISee = BLUE;
+            AppUtil.getInstance().showToast(UILocation.BOTH,"I SAW NO COLOR");
         }
-        this.driveMotors.STOP();
+        if(!NO_COLOR){
+            if(!ColorISee.equalsIgnoreCase(Color)){
+                this.driveMotors.TurnMotorsOn(-0.5,0.5,-0.5,0.5);
+                this.Pause(300);
+            }else{
+                this.driveMotors.TurnMotorsOn(0.5,-0.5,0.5,-0.5);
+                this.Pause(300);
+            }
+            this.driveMotors.STOP();
+        }
         servos.getServo(Servos.FishTail).setPosition(0);
     }
 }
