@@ -1,19 +1,13 @@
 package org.firstinspires.ftc.teamcode.officialcode.Robot;
 
 import com.qualcomm.hardware.bosch.BNO055IMU;
-import com.qualcomm.robotcore.hardware.ColorSensor;
-import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.Servo;
-
-import org.firstinspires.ftc.robotcore.internal.AppUtil;
-import org.firstinspires.ftc.robotcore.internal.UILocation;
-
-import static org.firstinspires.ftc.teamcode.officialcode.Constants.BLUE;
-import static org.firstinspires.ftc.teamcode.officialcode.Constants.RED;
+import com.qualcomm.robotcore.hardware.*;
+import org.firstinspires.ftc.robotcore.internal.*;
+import static org.firstinspires.ftc.teamcode.officialcode.Constants.*;
 
 
 public class CrabbingRobot{
-    Sensors sensors;
+    public Sensors sensors;
     public Servos servos;
     public DriveMotors driveMotors;
     public AttachmentMotors attachmentMotors;
@@ -22,10 +16,10 @@ public class CrabbingRobot{
 
     }
     public void GiveAttachmentMotors(DcMotor ArmLifter){
-        attachmentMotors = new AttachmentMotors(ArmLifter);
+        this.attachmentMotors = new AttachmentMotors(ArmLifter);
     }
     public void GiveDriveMotors(DcMotor LeftFront, DcMotor RightFront, DcMotor LeftBack, DcMotor RightBack){
-        driveMotors = new DriveMotors(LeftFront, RightFront, LeftBack, RightBack);
+        this.driveMotors = new DriveMotors(LeftFront, RightFront, LeftBack, RightBack);
     }
     public void GiveSensors(ColorSensor SuperNitron9000, BNO055IMU IMU){
         this.sensors = new Sensors(SuperNitron9000, IMU);
@@ -48,10 +42,10 @@ public class CrabbingRobot{
         int BLUE_READING;
         String ColorISee;
         boolean NO_COLOR = false;
-        for(double counter = 0.05; counter <= 0.8; counter = counter + 0.01) {
+        for(double counter = 0.16; counter <= 0.9; counter = counter + 0.01) {
             RED_READING = this.sensors.ReadColor("RED");
             BLUE_READING = this.sensors.ReadColor("BLUE");
-            servos.getServo(Servos.FishTail).setPosition(counter);
+            this.servos.getServo(Servos.FishTail).setPosition(counter);
             Pause(10);
             if(RED_READING > BLUE_READING && RED_READING >= 3){
                 RED_COUNT++;
@@ -59,7 +53,7 @@ public class CrabbingRobot{
                BLUE_COUNT++;
             }
         }
-        servos.getServo(Servos.FishTail).setPosition(0.6);
+        this.servos.getServo(Servos.FishTail).setPosition(0.72);
         Pause(1000);
         if(RED_COUNT > BLUE_COUNT){
             ColorISee = RED;
@@ -82,6 +76,7 @@ public class CrabbingRobot{
             }
             this.driveMotors.STOP();
         }
-        servos.getServo(Servos.FishTail).setPosition(0);
+        this.servos.getServo(Servos.FishTail).setPosition(0.16);
+        this.Pause(1000);
     }
 }

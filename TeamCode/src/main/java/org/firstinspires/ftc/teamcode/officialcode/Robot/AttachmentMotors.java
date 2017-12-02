@@ -10,9 +10,9 @@ public class AttachmentMotors {
     }
     public DcMotor getMotor(String MotorName){
         if(MotorName.equals(ArmLifter)){
-            return ArmLifterMotor;
+            return this.ArmLifterMotor;
         }
-        return ArmLifterMotor;
+        return this.ArmLifterMotor;
     }
 
 }

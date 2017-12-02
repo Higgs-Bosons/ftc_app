@@ -1,11 +1,11 @@
 package org.firstinspires.ftc.teamcode.officialcode.Autonomus;
 
-import com.qualcomm.hardware.bosch.BNO055IMU;
-import com.qualcomm.hardware.bosch.JustLoggingAccelerationIntegrator;
+import com.qualcomm.hardware.bosch.*;
 import com.qualcomm.robotcore.eventloop.opmode.*;
 import com.qualcomm.robotcore.hardware.*;
 import org.firstinspires.ftc.robotcore.internal.*;
 import org.firstinspires.ftc.teamcode.officialcode.Robot.*;
+import org.firstinspires.ftc.teamcode.officialcode.TeleOp.CAMraCode;
 
 import static org.firstinspires.ftc.teamcode.officialcode.Constants.*;
 
@@ -20,18 +20,18 @@ public class AutonomousCode extends LinearOpMode{
         initialize();
         waitForStart();
         Runnable runProgram = new runProgram();
-        Thread billy = new Thread(runProgram);
-        billy.start();
+        Thread AutonomousThread = new Thread(runProgram);
+        AutonomousThread.start();
+        CAMraCode.COLOR = COLOR;
+        telemetry.clearAll();
         while(opModeIsActive()){
-            telemetry.addData("RUNNING",":-)");
+            telemetry.addData("GYRO",Crabby.sensors.ReadGyro());telemetry.update();
         }
-        billy.interrupt();
-
+        AutonomousThread.interrupt();
     }
 
     public void initialize(){
-        GatherInfo();
-
+        telemetry.clearAll();
         DcMotor lf = hardwareMap.dcMotor.get("LF");
         DcMotor lb = hardwareMap.dcMotor.get("LB");
         DcMotor rf = hardwareMap.dcMotor.get("RF");
@@ -49,7 +49,7 @@ public class AutonomousCode extends LinearOpMode{
         BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
         parameters.angleUnit = BNO055IMU.AngleUnit.DEGREES;
         parameters.accelUnit = BNO055IMU.AccelUnit.METERS_PERSEC_PERSEC;
-        parameters.calibrationDataFile = "BNO055IMUCalibration.json"; // see the calibration sample opmode
+        parameters.calibrationDataFile = "BNO055IMUCalibration.json";
         parameters.loggingEnabled = true;
         parameters.loggingTag = "imu";
         parameters.accelerationIntegrationAlgorithm = new JustLoggingAccelerationIntegrator();
@@ -61,23 +61,25 @@ public class AutonomousCode extends LinearOpMode{
         Crabby.GiveDriveMotors(lf,rf,lb,rb);
         Crabby.GiveSensors(SuperNitron9000, imu);
         Crabby.GiveAttachmentMotors(ARMy);
-
+        GatherInfo();
         WriteProgram();
-        AppUtil.getInstance().showToast(UILocation.BOTH,"Ready To Run! :-)");
+        telemetry.clearAll();
+        telemetry.addData("STATUS:","READY TO RUN! :-)");telemetry.update();
     }
     private void GatherInfo(){
         telemetry.addData("Alliance Color:",COLOR);
         telemetry.addData("POSITION ON FIELD:", PositionOnField);telemetry.update();
+        telemetry.addData("WHEN FINISHED ", "PRESS Y");
         boolean HasPosition = false;
         boolean HasColor = false;
-
-        while(!HasPosition || !HasColor){
+        boolean ALL_INFO = false;
+        while(!gamepad1.y){
             if(gamepad1.x){
                 COLOR = BLUE;
                 HasColor = true;
             }else if(gamepad1.b){
-                COLOR = RED;
                 HasColor = true;
+                COLOR = RED;
             }
 
             if(gamepad1.dpad_right){
@@ -89,13 +91,18 @@ public class AutonomousCode extends LinearOpMode{
             }
             telemetry.addData("Alliance Color:",COLOR);
             telemetry.addData("POSITION ON FIELD:", PositionOnField);telemetry.update();
+            telemetry.addData("WHEN FINISHED ", "PRESS Y");
+            if(HasPosition && HasColor && !ALL_INFO){
+                AppUtil.getInstance().showToast(UILocation.BOTH,"Ready To Run! :-)");
+                ALL_INFO = true;
+            }
         }
     }
     private void WriteProgram(){
         if(PositionOnField.equals("LEFT")){
             if(COLOR.equals(RED)){
                 PROGRAM = new int[][]{{RobotActions.KnockOffJewel, RobotActions.NULL},
-                        {RobotActions.Turn, 0},
+                        {RobotActions.Turn, 359},
                         {RobotActions.Move_Forward, 20}};
             }else{
                 PROGRAM = new int[][]{{RobotActions.KnockOffJewel, RobotActions.NULL},
@@ -110,12 +117,11 @@ public class AutonomousCode extends LinearOpMode{
                         {RobotActions.Move_Forward, 30}};
             }else{
                 PROGRAM = new int[][]{{RobotActions.KnockOffJewel, RobotActions.NULL},
-                        {RobotActions.Turn, 0},
+                        {RobotActions.Turn, 359},
                         {RobotActions.Move_Backwards, 30}};
             }
         }
     }
-
     private class runProgram implements Runnable{
         public void run(){
             ReadProgram();

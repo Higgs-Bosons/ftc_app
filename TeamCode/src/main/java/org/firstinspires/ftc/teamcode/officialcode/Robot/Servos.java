@@ -1,9 +1,10 @@
 package org.firstinspires.ftc.teamcode.officialcode.Robot;
 
 import com.qualcomm.robotcore.hardware.Servo;
+import org.firstinspires.ftc.teamcode.officialcode.IntStringDefInterfaces;
 
 public class Servos {
-    static final String FishTail = "Fish Tail";
+    public static final String FishTail = "Fish Tail";
     public static final String JackSmith = "JackSmith";
     public static final String Grabby = "Grabby";
     private Servo FishTailServo;
@@ -14,14 +15,14 @@ public class Servos {
         this.JackSmithServo = JackSmith;
         this.GrabbyServo = Grabby;
     }
-    public Servo getServo(String Name){
+    public Servo getServo(@IntStringDefInterfaces.ServoName String Name){
         if(Name.equalsIgnoreCase(FishTail)){
-            return FishTailServo;
+            return this.FishTailServo;
         }else if(Name.equalsIgnoreCase(JackSmith)){
-            return JackSmithServo;
+            return this.JackSmithServo;
         }else if(Name.equalsIgnoreCase(Grabby)){
-            return GrabbyServo;
+            return this.GrabbyServo;
         }
-        return FishTailServo;
+        return this.FishTailServo;
     }
 }

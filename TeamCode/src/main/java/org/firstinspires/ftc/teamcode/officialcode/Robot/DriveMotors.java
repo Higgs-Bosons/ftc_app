@@ -27,17 +27,17 @@ public class DriveMotors {
     public void Move(@rection int Direction, int Duration, double Power){
         int Distance = (int) (Duration / (Math.PI * Constants.Wheel_Diameter) * Constants.Motor_Tick_Per_Rotation );
         ResetEncoders();
-        RF.setPower(Power * Direction);
-        RB.setPower(Power * Direction);
-        LF.setPower(Power * Direction);
-        LB.setPower(Power * Direction);
+        this.RF.setPower(Power * Direction);
+        this.RB.setPower(Power * Direction);
+        this.LF.setPower(Power * Direction);
+        this.LB.setPower(Power * Direction);
 
         boolean isRightSideDone = false;
         boolean isLeftSideDone = false;
 
         while(!isLeftSideDone || !isRightSideDone){
-            if(Math.abs(RF.getCurrentPosition())>=Distance){RF.setPower(0.0);RB.setPower(0.0);isRightSideDone = true;}
-            if(Math.abs(LF.getCurrentPosition())>=Distance){LF.setPower(0.0);LB.setPower(0.0);isLeftSideDone = true;}
+            if(Math.abs(this.RF.getCurrentPosition())>=Distance){this.RF.setPower(0.0);this.RB.setPower(0.0);isRightSideDone = true;}
+            if(Math.abs(this.LF.getCurrentPosition())>=Distance){this.LF.setPower(0.0);this.LB.setPower(0.0);isLeftSideDone = true;}
         }
     }
     public void Turn(int whereToTurnTo){
@@ -65,16 +65,16 @@ public class DriveMotors {
 
 //-------{TOOLS}------------------------------------------------------------------------------------
     private void ResetEncoders(){
-    RF.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-    LF.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-    RB.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-    LB.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        this.RF.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        this.LF.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        this.RB.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        this.LB.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
-    RF.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-    LF.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-    RB.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-    LB.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-}
+        this.RF.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        this.LF.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        this.RB.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        this.LB.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+    }
     private float readGyro(){
         return AutonomousCode.Crabby.sensors.ReadGyro();
     }
@@ -86,7 +86,7 @@ public class DriveMotors {
         while(LOOP){
             VirtualDegrees ++;
             counterOne ++;
-            if(VirtualDegrees == 360){VirtualDegrees = 0;}
+            if(VirtualDegrees == 361){VirtualDegrees = 0;}
             if(VirtualDegrees == -1) {VirtualDegrees = 360;}
             LOOP = !(Math.abs(VirtualDegrees - Target) <= 2.5);
         }
@@ -95,7 +95,7 @@ public class DriveMotors {
         while(LOOP){
             VirtualDegrees --;
             counterTwo ++;
-            if(VirtualDegrees == 360){VirtualDegrees = 0;}
+            if(VirtualDegrees == 361){VirtualDegrees = 0;}
             if(VirtualDegrees == -1) {VirtualDegrees = 360;}
             LOOP = !(Math.abs(VirtualDegrees - Target) <= 2.5);
         }
