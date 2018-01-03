@@ -2,7 +2,10 @@ package org.firstinspires.ftc.teamcode.officialcode.Robot;
 
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.robotcore.hardware.*;
-import org.firstinspires.ftc.robotcore.internal.*;
+
+import org.firstinspires.ftc.robotcore.internal.system.AppUtil;
+import org.firstinspires.ftc.robotcore.internal.ui.UILocation;
+
 import static org.firstinspires.ftc.teamcode.officialcode.Constants.*;
 
 
@@ -57,6 +60,7 @@ public class CrabbingRobot{
         Pause(1000);
         if(RED_COUNT > BLUE_COUNT){
             ColorISee = RED;
+
             AppUtil.getInstance().showToast(UILocation.BOTH,"I SEE RED");
         }else if(RED_COUNT < BLUE_COUNT){
             ColorISee = BLUE;

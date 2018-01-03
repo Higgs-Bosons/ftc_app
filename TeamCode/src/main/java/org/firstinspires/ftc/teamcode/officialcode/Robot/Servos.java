@@ -15,7 +15,7 @@ public class Servos {
         this.JackSmithServo = JackSmith;
         this.GrabbyServo = Grabby;
     }
-    public Servo getServo(@IntStringDefInterfaces.ServoName String Name){
+    public Servo getServo(String Name){
         if(Name.equalsIgnoreCase(FishTail)){
             return this.FishTailServo;
         }else if(Name.equalsIgnoreCase(JackSmith)){
