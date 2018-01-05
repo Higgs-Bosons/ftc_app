@@ -2,9 +2,8 @@ package org.firstinspires.ftc.teamcode.officialcode.OmniWheelRobot;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
 
-import org.firstinspires.ftc.teamcode.officialcode.Autonomus.AutonomousCode;
+import org.firstinspires.ftc.teamcode.officialcode.Autonomus.OmniAutonomous;
 import org.firstinspires.ftc.teamcode.officialcode.Constants;
-import org.firstinspires.ftc.teamcode.officialcode.IntStringDefInterfaces.rection;
 
 public class DriveMotors {
     private DcMotor RF;
@@ -24,9 +23,23 @@ public class DriveMotors {
         this.RB.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         this.LB.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         }
-    public void Move(int Angle, int DistanceInches, double Power) {
+    public void Move(Constants.RobotDirection Direction, int DistanceInches, double Power) {
         int DistanceTicks = (int) (DistanceInches / (Math.PI * Constants.Wheel_Diameter) * Constants.Motor_Tick_Per_Rotation);
+        double X = Direction.getX();
+        double Y = Direction.getY();
+        boolean keepLooping = true;
+        int averageTicks;
         ResetEncoders();
+        float RFPower = (float) ((X+Y)*Power);
+        float RBPower = (float) ((Y-X)*Power);
+        float LFPower = (float) ((Y-X)*Power);
+        float LBPower = (float) ((X+Y)*Power);
+        TurnMotorsOn(LFPower,RFPower, LBPower, RBPower);
+        while (keepLooping){
+            averageTicks = ((RF.getCurrentPosition() + RB.getCurrentPosition() + LF.getCurrentPosition() + LB.getCurrentPosition())/4);
+            keepLooping = ((Math.abs(averageTicks)) <= DistanceTicks);
+        }
+        STOP();
 
     }
 
@@ -35,8 +48,8 @@ public class DriveMotors {
         while (Math.abs(whereToTurnTo - readGyro()) >= 2.5) {
         double power = Math.abs((whereToTurnTo - readGyro()) / 100);
         if(power <= 0.1){power = 0.1;}
-        if(WhichWay){this.TurnMotorsOn(power,-power,power,-power);
-        }else{       this.TurnMotorsOn(-power,power,-power,power);}
+        if(WhichWay){this.TurnMotorsOn(power,power,power,power);
+        }else{       this.TurnMotorsOn(power,power,power,power);}
         }
         STOP();
     }
@@ -46,7 +59,7 @@ public class DriveMotors {
         this.LB.setPower(PowerToLeftBack);
         this.RB.setPower(PowerToRightBack);
         }
-    public void STOP(){
+    private void STOP(){
         this.LB.setPower(0.0);
         this.RB.setPower(0.0);
         this.LF.setPower(0.0);
@@ -66,8 +79,8 @@ public class DriveMotors {
         this.LB.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         }
     private float readGyro(){
-        return AutonomousCode.Crabby.sensors.ReadGyro();
-        }
+        return OmniAutonomous.Crabby.sensors.ReadGyro();
+    }
     private boolean WhichWayToTurn(int Target, int Gyro){
         int  VirtualDegrees = Gyro;
         int counterOne = 0;

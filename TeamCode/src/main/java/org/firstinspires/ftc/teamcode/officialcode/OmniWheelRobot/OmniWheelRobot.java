@@ -41,8 +41,6 @@ public class OmniWheelRobot{
 
         }
     }
-
-
     public void KnockOffJewel(String Color){
         int RED_COUNT = 0;
         int BLUE_COUNT = 0;
@@ -91,5 +89,7 @@ public class OmniWheelRobot{
         this.servos.getServo(Servos.FishTailSwinger).setPosition(0.47);
         this.Pause(1000);
     }
-
+    public void ScoreAGlyph(String Color, String PositionOnField, String KeyColumn){
+        //Do Stuff
+    }
 }
