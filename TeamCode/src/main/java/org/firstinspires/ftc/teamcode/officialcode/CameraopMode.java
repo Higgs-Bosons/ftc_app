@@ -12,7 +12,11 @@ public class CameraopMode extends LinearOpMode {
     CameraOp Camera;
     @Override public void runOpMode() {
         Camera = new CameraOp();
-        Camera.init(); 
+        Camera.init();
+        waitForStart();
+        Camera.convertImage();
+
+       // AppUtil.getInstance().showToast(UILocation.BOTH,Camera.blue(Camera.image.getPixel(1,1))+"");
 
     }
 
