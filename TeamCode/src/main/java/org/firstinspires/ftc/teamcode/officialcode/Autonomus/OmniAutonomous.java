@@ -11,6 +11,7 @@ import org.firstinspires.ftc.robotcore.internal.ui.UILocation;
 import org.firstinspires.ftc.teamcode.officialcode.Constants;
 import org.firstinspires.ftc.teamcode.officialcode.OmniWheelRobot.OmniWheelRobot;
 import org.firstinspires.ftc.teamcode.officialcode.OmniWheelRobot.*;
+import org.firstinspires.ftc.teamcode.officialcode.TeleOp.XControl;
 
 import static org.firstinspires.ftc.teamcode.officialcode.Constants.*;
 @Autonomous(name = "Autonomous Omni", group = "Program")
@@ -20,47 +21,47 @@ public class OmniAutonomous extends LinearOpMode{
     public static OmniWheelRobot Crabby;
     private String COLOR ="NULL";
     private String PositionOnField = "NULL";
-    private String KeyColumn = "NULL";
+    private String KeyColumn = "CENTER";
     private int[][] PROGRAM;
-    private VuforiaTrackable Tracker;
+    VuforiaTrackables relicTrackables;
+    VuforiaTrackable relicTemplate;
 
     //-------{STARTING OF THE PROGRAM}------------------------------------------------------------------
     public void runOpMode() throws InterruptedException {
         initialize();
         waitForStart();
-        Runnable programedMission = new runProgram();
-        Thread programedMissionThread = new Thread(programedMission);
+        relicTrackables.activate();
+        Runnable PROGRAM = new runProgram();
+        Thread programedMissionThread = new Thread(PROGRAM);
         programedMissionThread.run();
-        while (opModeIsActive()) {
-            telemetry.addData("Vuforia",readPictograph(false));telemetry.update();
+        while(opModeIsActive()) {
+           telemetry.addData("Vuforia",readPictograph(false));telemetry.update();
         }
-        readPictograph(true);
         programedMissionThread.interrupt();
     }
 
     //-------{INITIALIZE PHASE}-------------------------------------------------------------------------
     private void initialize(){
+        GatherInfo();
         Crabby = new OmniWheelRobot();
         initializeSensors();
         initializeServos();
         initializeMotors();
         initializeVuforia();
-        GatherInfo();
         WriteProgram();
         telemetry.clearAll();
         telemetry.addData("STATUS:","READY TO RUN! :-)");telemetry.update();
     }
     private void initializeVuforia(){
-        int cameraMonitor = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId","id",
-                hardwareMap.appContext.getPackageName());
-        VuforiaLocalizer.Parameters parameters = new VuforiaLocalizer.Parameters(cameraMonitor);
+        int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
+        VuforiaLocalizer.Parameters parameters = new VuforiaLocalizer.Parameters(cameraMonitorViewId);
         parameters.vuforiaLicenseKey = Constants.VUFORIA_KEY;
         parameters.cameraDirection = VuforiaLocalizer.CameraDirection.BACK;
         VuforiaLocalizer vuforia = ClassFactory.createVuforiaLocalizer(parameters);
-        VuforiaTrackables trackables = vuforia.loadTrackablesFromAsset("RelicVuMark");
-        Tracker = trackables.get(0);
-        Tracker.setName("trackableTemplet");
-        trackables.activate();
+
+        relicTrackables = vuforia.loadTrackablesFromAsset("RelicVuMark");
+        relicTemplate = relicTrackables.get(0);
+        relicTemplate.setName("relicVuMarkTemplate");
     }
     private void initializeMotors(){
         DcMotor Left_Front = hardwareMap.dcMotor.get("LF");
@@ -77,9 +78,9 @@ public class OmniAutonomous extends LinearOpMode{
         Right_Front.setDirection(DcMotorSimple.Direction.REVERSE);
 
         Crabby.GiveDriveMotors(Left_Front, Right_Front, Left_Back, Right_Back);
-        /*
+
         DcMotor ArmLifter = hardwareMap.dcMotor.get("ArmLifter");
-        DcMotor HorizontalLift = hardwareMap.dcMotor.get("HorizontalLift");
+        DcMotor HorizontalLift = hardwareMap.dcMotor.get("LinearSlide");
         DcMotor ConveyorLower = hardwareMap.dcMotor.get("ConveyorLower");
         DcMotor ConveyorUpper = hardwareMap.dcMotor.get("ConveyorUpper");
 
@@ -89,19 +90,24 @@ public class OmniAutonomous extends LinearOpMode{
         ConveyorUpper.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
         Crabby.GiveAttachmentMotors(ArmLifter, HorizontalLift, ConveyorLower, ConveyorUpper);
-        */
+
 
     }
     private void initializeServos(){
         Servo FishTailLifter = hardwareMap.servo.get("FishTailLifter");
         Servo FishTailSwinger = hardwareMap.servo.get("FishTailSwinger");
-        Servo Grabby = null; //= hardwareMap.servo.get("Grabby");
-        Crabby.GiveServos(FishTailLifter, FishTailSwinger, Grabby);
+        Servo GrabberOne = hardwareMap.servo.get("GrabberOne");
+        Servo GrabberTwo = hardwareMap.servo.get("GrabberTwo");
+        Servo Clampy = hardwareMap.servo.get("Clampy");
+        Servo RML = hardwareMap.servo.get("RML");
+        Servo Lifter = hardwareMap.servo.get("Lifter");
+        Crabby.GiveServos(FishTailLifter, FishTailSwinger, GrabberOne, GrabberTwo, Clampy, RML, Lifter);
 
 
     }
     private void initializeSensors(){
         ColorSensor SuperNitron9000 = hardwareMap.colorSensor.get("SuperNitron9000");
+        OpticalDistanceSensor LIGHT = hardwareMap.opticalDistanceSensor.get("Light");
         BNO055IMU imu;
         BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
         parameters.angleUnit = BNO055IMU.AngleUnit.DEGREES;
@@ -113,24 +119,7 @@ public class OmniAutonomous extends LinearOpMode{
         imu = hardwareMap.get(BNO055IMU.class, "imu");
         imu.initialize(parameters);
 
-        int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id",
-                hardwareMap.appContext.getPackageName());
-        VuforiaLocalizer.Parameters parametersView = new VuforiaLocalizer.Parameters(cameraMonitorViewId);
-        parametersView.vuforiaLicenseKey = "AV0wWub/////AAAAGSKQHdIYCUOUg23YaF6tD9iJGTKb6AvM5+agdRdqaxaB" +
-                "KUaNM6IktQg+50ag4j03QdDbsGNhBZwjWpdsU+kQA7EG+aaAhgKqWpzVQlvuC0320Hy8aQZTgVegtu3el9r" +
-                "ly5X2CeDuM3fzhdeVOmOCwUWviYbH+6GtFlXCWOrX3i09Roe4GOTLeG7sBR7Br28I0hLTRKiwalhFtkr/IR" +
-                "jJTKvdL3CQGWhY+8Q30BTEhbYxA18d88OtgZMO712LNfRnD2btkxQjEFKdND+sGo+AovdwCsVCQY/6xmyZSAh" +
-                "i4FvanKtdgHFbdOrUp7MCkoA0CVh2kQfvulGLQGp/Zx3WivkYZ3+euoVTbzjcYo6721C1";
-        parametersView.cameraDirection = VuforiaLocalizer.CameraDirection.BACK;
-        VuforiaLocalizer vuforia = ClassFactory.createVuforiaLocalizer(parametersView);
-
-        VuforiaTrackables relicTrackables = vuforia.loadTrackablesFromAsset("RelicVuMark");
-        VuforiaTrackable relicTemplate = relicTrackables.get(0);
-        relicTemplate.setName("relicVuMarkTemplate"); // can help in debugging; otherwise not necessary
-
-        relicTrackables.activate();
-
-        Crabby.GiveSensors(SuperNitron9000, imu);
+        Crabby.GiveSensors(SuperNitron9000, imu, LIGHT);
     }
 
     //------{WRITING THE PROGRAM}-----------------------------------------------------------------------
@@ -165,28 +154,37 @@ public class OmniAutonomous extends LinearOpMode{
                 ALL_INFO = true;
             }
         }
+        XControl.COLOR = COLOR;
+        XControl.PositionOnField = PositionOnField;
     }
     private void WriteProgram(){
         if(PositionOnField.equals("LEFT")){
             if(COLOR.equals(RED)){
                 PROGRAM = new int[][]{
-                        {RobotActions.Read_Pictograph, RobotActions.NULL},
-                        {RobotActions.KnockOffJewel, RobotActions.NULL},};
+                        {RobotActions.KnockOffJewel, RobotActions.NULL},
+                        {RobotActions.MoveS, 25},
+                        {RobotActions.MoveW, 2}};
             }else{
                 PROGRAM = new int[][]{
-                        {RobotActions.Read_Pictograph, RobotActions.NULL},
-                        {RobotActions.KnockOffJewel, RobotActions.NULL},};
+                        {RobotActions.KnockOffJewel, RobotActions.NULL},
+                        {RobotActions.MoveN, 20},
+                        {RobotActions.MoveE, 8}};
             }
         }
         if(PositionOnField.equals("RIGHT")){
             if(COLOR.equals(RED)){
                 PROGRAM = new int[][]{
-                        {RobotActions.Read_Pictograph, RobotActions.NULL},
-                        {RobotActions.KnockOffJewel, RobotActions.NULL},};
+                        {RobotActions.KnockOffJewel, RobotActions.NULL},
+                        {RobotActions.MoveS, 20},
+                        {RobotActions.MoveE, 23},
+                        {RobotActions.Turn, 0},
+                        {RobotActions.Turn, 0},
+                        {RobotActions.AlineToRow, RobotActions.NULL}};
             }else{
                 PROGRAM = new int[][]{
-                        {RobotActions.Read_Pictograph, RobotActions.NULL},
-                        {RobotActions.KnockOffJewel, RobotActions.NULL},};
+                        {RobotActions.KnockOffJewel, RobotActions.NULL},
+                        {RobotActions.MoveN, 25},
+                        {RobotActions.MoveW, 2}};
             }
         }
     }
@@ -202,19 +200,37 @@ public class OmniAutonomous extends LinearOpMode{
         for(int LineInProgram = 0; LineInProgram <= PROGRAM.length-1;LineInProgram++){
             if(PROGRAM[LineInProgram][0] == RobotActions.KnockOffJewel){
                 Crabby.KnockOffJewel(COLOR);
-            }else if(PROGRAM[LineInProgram][0] == RobotActions.Move) {
-                Crabby.driveMotors.Move(N, PROGRAM[LineInProgram][1], 0.8);
+            }else if(PROGRAM[LineInProgram][0] == RobotActions.MoveN) {
+                Crabby.driveMotors.Move(N, PROGRAM[LineInProgram][1], 0.5);
+            }else if(PROGRAM[LineInProgram][0] == RobotActions.MoveS) {
+                Crabby.driveMotors.Move(S, PROGRAM[LineInProgram][1], 0.5);
+            }else if(PROGRAM[LineInProgram][0] == RobotActions.MoveE) {
+                Crabby.driveMotors.Move(E, PROGRAM[LineInProgram][1], 0.5);
+            }else if(PROGRAM[LineInProgram][0] == RobotActions.MoveW) {
+                Crabby.driveMotors.Move(W, PROGRAM[LineInProgram][1], 0.5);
+            }else if(PROGRAM[LineInProgram][0] == RobotActions.Turn){
+                Crabby.driveMotors.Turn(PROGRAM[LineInProgram][1]);
+            }else if(PROGRAM[LineInProgram][0] == RobotActions.MoveNW) {
+                Crabby.driveMotors.Move(NW, PROGRAM[LineInProgram][1], 0.5);
+            }else if(PROGRAM[LineInProgram][0] == RobotActions.MoveSW) {
+                Crabby.driveMotors.Move(SW, PROGRAM[LineInProgram][1], 0.5);
+            }else if(PROGRAM[LineInProgram][0] == RobotActions.MoveNE) {
+                Crabby.driveMotors.Move(NE, PROGRAM[LineInProgram][1], 0.5);
+            }else if(PROGRAM[LineInProgram][0] == RobotActions.MoveSE) {
+                Crabby.driveMotors.Move(SE, PROGRAM[LineInProgram][1], 0.5);
             }else if(PROGRAM[LineInProgram][0] == RobotActions.Turn){
                 Crabby.driveMotors.Turn(PROGRAM[LineInProgram][1]);
             }else if(PROGRAM[LineInProgram][0] == RobotActions.Read_Pictograph){
                 KeyColumn = readPictograph(true);
+            }else if(PROGRAM[LineInProgram][0] == RobotActions.AlineToRow){
+                Crabby.ScoreAGlyph(KeyColumn);
             }
         }
     }
 
     //------{TOOLS}-------------------------------------------------------------------------------------
     private String readPictograph(boolean MakeAToast){
-        RelicRecoveryVuMark vuMark = RelicRecoveryVuMark.from(Tracker);
+        RelicRecoveryVuMark vuMark = RelicRecoveryVuMark.from(relicTemplate);
         if(MakeAToast){
             String ToastText = "KEY COLUMN: " + vuMark.toString();
             AppUtil.getInstance().showToast(UILocation.BOTH,ToastText);

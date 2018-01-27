@@ -46,6 +46,7 @@ import android.hardware.usb.UsbManager;
 import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.os.IBinder;
+import android.os.Looper;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.view.Menu;
@@ -57,6 +58,7 @@ import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.blocks.ftcrobotcontroller.BlocksActivity;
 import com.google.blocks.ftcrobotcontroller.ProgrammingModeActivity;
@@ -96,6 +98,7 @@ import com.qualcomm.robotcore.wifi.WifiDirectAssistant;
 import org.firstinspires.ftc.ftccommon.external.SoundPlayingRobotMonitor;
 import org.firstinspires.ftc.ftccommon.internal.FtcRobotControllerWatchdogService;
 import org.firstinspires.ftc.ftccommon.internal.ProgramAndManageActivity;
+import org.firstinspires.ftc.robotcontroller.OpModes.CameraOp;
 import org.firstinspires.ftc.robotcore.internal.hardware.DragonboardLynxDragonboardIsPresentPin;
 import org.firstinspires.ftc.robotcore.internal.network.DeviceNameManager;
 import org.firstinspires.ftc.robotcore.internal.network.PreferenceRemoterRC;
@@ -116,7 +119,6 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 
 @SuppressWarnings("WeakerAccess")
 public class FtcRobotControllerActivity extends Activity {
-    public Camera camera;
     public static final String TAG = "RCActivity";
     public String getTag() {
         return TAG;
@@ -206,6 +208,7 @@ public class FtcRobotControllerActivity extends Activity {
     }
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        camera = initCamera();
         RobotLog.onApplicationStart();  // robustify against onCreate() following onDestroy() but using the same app instance, which apparently does happen
         RobotLog.vv(TAG, "onCreate()");
         ThemedActivity.appAppThemeToActivity(getTag(), this); // do this way instead of inherit to help AppInventor
@@ -294,7 +297,6 @@ public class FtcRobotControllerActivity extends Activity {
         ServiceController.startService(FtcRobotControllerWatchdogService.class);
         bindToService();
         logPackageVersions();
-        camera=openFrontFacingCamera();
     }
     protected UpdateUI createUpdateUI() {
         Restarter restarter = new RobotRestarter();
@@ -420,8 +422,6 @@ public class FtcRobotControllerActivity extends Activity {
 
         if (id == R.id.action_programming_mode) {
             if (cfgFileMgr.getActiveConfig().isNoConfig()) {
-                // Tell the user they must configure the robot before starting programming mode.
-                // TODO: as we are no longer truly 'modal' this warning should be adapted
                 AppUtil.getInstance().showToast(UILocation.BOTH, context, context.getString(R.string.toastConfigureRobotBeforeProgrammingMode));
             } else {
                 Intent programmingModeIntent = new Intent(AppUtil.getDefContext(), ProgrammingModeActivity.class);
@@ -572,29 +572,22 @@ public class FtcRobotControllerActivity extends Activity {
             }
         }
     }
-    public static Camera openFrontFacingCamera() {
-        int cameraId = -1;
-        Camera cam = null;
-        int numberOfCameras = Camera.getNumberOfCameras();
-        for (int i = 0; i < numberOfCameras; i++) {
-            Camera.CameraInfo info = new Camera.CameraInfo();
-            Camera.getCameraInfo(i, info);
-            if (info.facing == Camera.CameraInfo.CAMERA_FACING_FRONT) {
-                cameraId = i;
-                break;
-            }
-        }
-        try {
-            cam = Camera.open(cameraId);
-        } catch (Exception e) {
 
-        }
-        return cam;
+    public Camera camera;
+    public Camera initCamera() {
+        return  Camera.open(Camera.CameraInfo.CAMERA_FACING_BACK);
     }
-    public void initPreview(final Camera camera, final CameraOp context, final Camera.PreviewCallback previewCallback) {
-        context.preview = new CameraPreview(FtcRobotControllerActivity.this, camera, previewCallback);
-        FrameLayout previewLayout = (FrameLayout) findViewById(R.id.previewLayout);
-        previewLayout.addView(context.preview);
+
+    public void initPreview(final Camera camera, final CameraOp cameraOp, final Camera.PreviewCallback previewCallback) {
+        Runnable Runny = new Runnable() {
+            public void run() {
+                cameraOp.preview = new CameraPreview(context, camera, previewCallback);
+                FrameLayout previewLayout = (FrameLayout) findViewById(R.id.previewLayout);
+                previewLayout.addView(cameraOp.preview);
+            }
+        };
+        runOnUiThread(Runny);
+        Runny.run();
     }
 }
 

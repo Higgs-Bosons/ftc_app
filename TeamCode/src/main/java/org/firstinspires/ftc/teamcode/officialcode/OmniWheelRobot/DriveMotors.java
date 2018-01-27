@@ -6,10 +6,10 @@ import org.firstinspires.ftc.teamcode.officialcode.Autonomus.OmniAutonomous;
 import org.firstinspires.ftc.teamcode.officialcode.Constants;
 
 public class DriveMotors {
-    private DcMotor RF;
-    private DcMotor RB;
-    private DcMotor LF;
-    private DcMotor LB;
+    public DcMotor RF;
+    public DcMotor RB;
+    public DcMotor LF;
+    public DcMotor LB;
 
 //-------{CALLS FOR ROBOT MOVEMENT}-----------------------------------------------------------------
     DriveMotors(DcMotor LeftFront, DcMotor RightFront, DcMotor LeftBack, DcMotor RightBack){
@@ -23,7 +23,7 @@ public class DriveMotors {
         this.RB.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         this.LB.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         }
-    public void Move(Constants.RobotDirection Direction, int DistanceInches, double Power) {
+    public void Move(Constants.RobotDirection Direction, double DistanceInches, double Power) {
         int DistanceTicks = (int) (DistanceInches / (Math.PI * Constants.Wheel_Diameter) * Constants.Motor_Tick_Per_Rotation);
         double X = Direction.getX();
         double Y = Direction.getY();
@@ -36,20 +36,24 @@ public class DriveMotors {
         float LBPower = (float) ((X+Y)*Power);
         TurnMotorsOn(LFPower,RFPower, LBPower, RBPower);
         while (keepLooping){
-            averageTicks = ((RF.getCurrentPosition() + RB.getCurrentPosition() + LF.getCurrentPosition() + LB.getCurrentPosition())/4);
-            keepLooping = ((Math.abs(averageTicks)) <= DistanceTicks);
+            averageTicks = ((Math.abs(RF.getCurrentPosition()) + Math.abs(RB.getCurrentPosition())
+                    + Math.abs(LF.getCurrentPosition()) + Math.abs(LB.getCurrentPosition()))/4);
+            keepLooping = ((Math.abs(averageTicks)) <= (Math.abs(DistanceTicks)));
         }
         STOP();
 
     }
 
     public void Turn(int whereToTurnTo){
+        double power= 0.2;
         boolean WhichWay = WhichWayToTurn(whereToTurnTo, (int) readGyro());
+        while (Math.abs(whereToTurnTo - readGyro()) >= 20) {
+            if(!WhichWay){this.TurnMotorsOn(power,-power,power,-power);}else{this.TurnMotorsOn(-power,power,-power,power);}
+        }
+        power = 0.1;
+        WhichWay = WhichWayToTurn(whereToTurnTo, (int) readGyro());
         while (Math.abs(whereToTurnTo - readGyro()) >= 2.5) {
-        double power = Math.abs((whereToTurnTo - readGyro()) / 100);
-        if(power <= 0.1){power = 0.1;}
-        if(WhichWay){this.TurnMotorsOn(power,power,power,power);
-        }else{       this.TurnMotorsOn(power,power,power,power);}
+            if(!WhichWay){this.TurnMotorsOn(power,-power,power,-power);}else{this.TurnMotorsOn(-power,power,-power,power);}
         }
         STOP();
     }
@@ -59,7 +63,7 @@ public class DriveMotors {
         this.LB.setPower(PowerToLeftBack);
         this.RB.setPower(PowerToRightBack);
         }
-    private void STOP(){
+    public void STOP(){
         this.LB.setPower(0.0);
         this.RB.setPower(0.0);
         this.LF.setPower(0.0);
