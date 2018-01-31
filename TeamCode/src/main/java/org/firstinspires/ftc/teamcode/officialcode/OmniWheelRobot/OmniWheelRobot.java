@@ -93,70 +93,43 @@ public class OmniWheelRobot{
         this.servos.getServo(Servos.FishTailLifter).setPosition(0.9);
     }
 
-    private boolean LOOP = true;
-    private int[] DetectArray = new int[1000];
     private int ROW = 1;
     public void ScoreAGlyph(String KeyColumn){
-        if(KeyColumn.equals("LEFT") ) {ROW = 3;}
+        if(KeyColumn.equals("LEFT") ) {ROW = 1;}
         if(KeyColumn.equals("CENTER")){ROW = 2;}
-        if(KeyColumn.equals("RIGHT")) {ROW = 1;}
-        read();
-        autoFixSpike();
+        if(KeyColumn.equals("RIGHT")) {ROW = 3;}
         alineRow(ROW);
         fineTune();
     }
-    private void read(){
-        this.sensors.setSpike(150);
-        int LoopCount = 0;
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                driveMotors.Move(Constants.W, 24, 0.1);
-                LOOP = false;
-            }
-        }).start();
-        while(LOOP){
-            DetectArray[LoopCount] = this.sensors.getReflectedLight();
-            LoopCount++;
-        }
-    }
-    private void autoFixSpike(){
-        int Average = DetectArray[0];
-        int MAX = DetectArray[0];
-        for(int Count = 1; Count < DetectArray.length; Count++){
-            if(DetectArray[Count] > MAX){MAX = DetectArray[Count];}
-            if(DetectArray[Count] != 0){
-                Average = ((Average + DetectArray[Count])/2);
-            }
-        }
-        Average = (Average + Average + MAX)/3;
-        AppUtil.getInstance().showToast(UILocation.BOTH, "AutoFix: "+Average);
-        this.sensors.setSpike(Average);
-    }
     private void alineRow(int row){
-        int count;
-        int counter;
+        int OldReading;
         this.driveMotors.Turn(0);
-        this.driveMotors.TurnMotorsOn(-0.1, 0.1, 0.1, -0.1);
-        for(int LOOP = row+1; LOOP != 0;){
-            count = 0;
-            counter=0;
-            while(!this.sensors.AboveSpike()){}
-            while(count<5){if(!this.sensors.AboveSpike()){count++;}else{counter++;}}
-            if(counter > 3){
-                LOOP--;
-            }
+        this.driveMotors.TurnMotorsOn(0.1, -0.1, -0.1, 0.1);
+        OldReading = this.sensors.getReflectedLight();
+        for(int LOOP = row; LOOP != 0;){
+            while(OldReading + 35 > this.sensors.getReflectedLight()){OldReading = this.sensors.getReflectedLight();}
+            while(OldReading - 35 < this.sensors.getReflectedLight()){OldReading = this.sensors.getReflectedLight();}
+            OldReading = this.sensors.getReflectedLight();
+            LOOP--;
+            AppUtil.getInstance().showToast(UILocation.BOTH, "FOUND ONE");
         }
         this.driveMotors.STOP();
     }
     private void fineTune(){
+        this.driveMotors.Turn(0);
+        this.driveMotors.Turn(0);
+        int OldReading = this.sensors.getReflectedLight();
+        this.driveMotors.Move(Constants.E, 2, 0.07);
         for(int Count = 1; Count <= 2; Count++){
-            this.driveMotors.Move(Constants.E, 0.5, 0.07);
+            this.driveMotors.Move(Constants.E, 1, 0.07);
             this.driveMotors.TurnMotorsOn(0.07, -0.07, -0.07, 0.07);
-            while(!this.sensors.AboveSpike()){}
+            while(OldReading + 50 > this.sensors.getReflectedLight()){OldReading = this.sensors.getReflectedLight();}
+            OldReading = this.sensors.getReflectedLight();
+            this.driveMotors.Turn(0);
         }
         this.driveMotors.Turn(0);
-        this.driveMotors.Move(Constants.N, 2, 0.07);
         this.driveMotors.Turn(0);
+        this.driveMotors.Move(Constants.S, 7, 0.4);
+        this.driveMotors.Move(Constants.N, 2, 0.07);
     }
 }

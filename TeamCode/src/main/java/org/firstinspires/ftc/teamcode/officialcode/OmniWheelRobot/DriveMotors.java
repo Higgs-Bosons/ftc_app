@@ -6,10 +6,10 @@ import org.firstinspires.ftc.teamcode.officialcode.Autonomus.OmniAutonomous;
 import org.firstinspires.ftc.teamcode.officialcode.Constants;
 
 public class DriveMotors {
-    public DcMotor RF;
-    public DcMotor RB;
-    public DcMotor LF;
-    public DcMotor LB;
+    private DcMotor RF;
+    private DcMotor RB;
+    private DcMotor LF;
+    private DcMotor LB;
 
 //-------{CALLS FOR ROBOT MOVEMENT}-----------------------------------------------------------------
     DriveMotors(DcMotor LeftFront, DcMotor RightFront, DcMotor LeftBack, DcMotor RightBack){
@@ -45,14 +45,21 @@ public class DriveMotors {
     }
 
     public void Turn(int whereToTurnTo){
-        double power= 0.2;
+        int counter = 0;
+        double power= 0.4;
         boolean WhichWay = WhichWayToTurn(whereToTurnTo, (int) readGyro());
-        while (Math.abs(whereToTurnTo - readGyro()) >= 20) {
+        while (HowFar(whereToTurnTo, (int) readGyro()) >= 100) {
             if(!WhichWay){this.TurnMotorsOn(power,-power,power,-power);}else{this.TurnMotorsOn(-power,power,-power,power);}
         }
         power = 0.1;
         WhichWay = WhichWayToTurn(whereToTurnTo, (int) readGyro());
-        while (Math.abs(whereToTurnTo - readGyro()) >= 2.5) {
+        while (HowFar(whereToTurnTo, (int) readGyro()) >= 2.5) {
+            if(counter == 25){
+                WhichWay = WhichWayToTurn(whereToTurnTo, (int) readGyro());
+                counter = 0;
+            }else{
+                counter++;
+            }
             if(!WhichWay){this.TurnMotorsOn(power,-power,power,-power);}else{this.TurnMotorsOn(-power,power,-power,power);}
         }
         STOP();
@@ -107,5 +114,31 @@ public class DriveMotors {
         LOOP = !(Math.abs(VirtualDegrees - Target) <= 2.5);
         }
         return counterOne > counterTwo;
+    }
+    private int HowFar(int Target, int Gyro){
+        int  VirtualDegrees = Gyro;
+        int counterOne = 0;
+        int counterTwo = 0;
+        boolean LOOP = true;
+        while(LOOP){
+            VirtualDegrees ++;
+            counterOne ++;
+            if(VirtualDegrees == 361){VirtualDegrees = 0;}
+            if(VirtualDegrees == -1) {VirtualDegrees = 360;}
+            LOOP = !(Math.abs(VirtualDegrees - Target) <= 2.5);
         }
+        LOOP = true;
+        VirtualDegrees = Gyro;
+        while(LOOP){
+            VirtualDegrees --;
+            counterTwo ++;
+            if(VirtualDegrees == 361){VirtualDegrees = 0;}
+            if(VirtualDegrees == -1) {VirtualDegrees = 360;}
+            LOOP = !(Math.abs(VirtualDegrees - Target) <= 2.5);
+        }
+        if(counterOne < counterTwo){
+            return counterOne;
+        }
+        return counterTwo;
+    }
 }

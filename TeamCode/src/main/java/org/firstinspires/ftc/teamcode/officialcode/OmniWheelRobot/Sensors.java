@@ -13,7 +13,6 @@ public class Sensors extends Constants{
     private ColorSensor SuperNitron9000;
     private BNO055IMU IMU;
     private OpticalDistanceSensor LIGHT;
-    private int Spike = 30;
 
     Sensors(ColorSensor SuperNitron9000, BNO055IMU IMU,  OpticalDistanceSensor Light){
         this.SuperNitron9000 = SuperNitron9000;
@@ -39,11 +38,5 @@ public class Sensors extends Constants{
     }
     public int getReflectedLight(){
         return (int) Math.floor((LIGHT.getRawLightDetected()/LIGHT.getRawLightDetectedMax()) * 1000);
-    }
-    public void setSpike(int NewSpike){
-        this.Spike = NewSpike;
-    }
-    public boolean AboveSpike(){
-        return (getReflectedLight() >= Spike);
     }
 }

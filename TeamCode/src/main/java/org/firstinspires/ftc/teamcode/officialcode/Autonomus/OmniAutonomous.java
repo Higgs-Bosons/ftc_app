@@ -12,8 +12,8 @@ import org.firstinspires.ftc.teamcode.officialcode.Constants;
 import org.firstinspires.ftc.teamcode.officialcode.OmniWheelRobot.OmniWheelRobot;
 import org.firstinspires.ftc.teamcode.officialcode.OmniWheelRobot.*;
 import org.firstinspires.ftc.teamcode.officialcode.TeleOp.XControl;
-
 import static org.firstinspires.ftc.teamcode.officialcode.Constants.*;
+
 @Autonomous(name = "Autonomous Omni", group = "Program")
 public class OmniAutonomous extends LinearOpMode{
 
@@ -21,10 +21,10 @@ public class OmniAutonomous extends LinearOpMode{
     public static OmniWheelRobot Crabby;
     private String COLOR ="NULL";
     private String PositionOnField = "NULL";
-    private String KeyColumn = "CENTER";
-    private int[][] PROGRAM;
-    VuforiaTrackables relicTrackables;
-    VuforiaTrackable relicTemplate;
+    private String KeyColumn = "RIGHT";
+    private double[][] PROGRAM;
+    private VuforiaTrackables relicTrackables;
+    private VuforiaTrackable relicTemplate;
 
     //-------{STARTING OF THE PROGRAM}------------------------------------------------------------------
     public void runOpMode() throws InterruptedException {
@@ -33,9 +33,9 @@ public class OmniAutonomous extends LinearOpMode{
         relicTrackables.activate();
         Runnable PROGRAM = new runProgram();
         Thread programedMissionThread = new Thread(PROGRAM);
-        programedMissionThread.run();
+        programedMissionThread.start();
         while(opModeIsActive()) {
-           telemetry.addData("Vuforia",readPictograph(false));telemetry.update();
+           telemetry.addData("Vuforia",readPictograph(false, false));telemetry.update();
         }
         programedMissionThread.interrupt();
     }
@@ -43,6 +43,8 @@ public class OmniAutonomous extends LinearOpMode{
     //-------{INITIALIZE PHASE}-------------------------------------------------------------------------
     private void initialize(){
         GatherInfo();
+        telemetry.clearAll();
+        telemetry.addData("STATUS "," INITIALIZING");telemetry.update();
         Crabby = new OmniWheelRobot();
         initializeSensors();
         initializeServos();
@@ -50,7 +52,7 @@ public class OmniAutonomous extends LinearOpMode{
         initializeVuforia();
         WriteProgram();
         telemetry.clearAll();
-        telemetry.addData("STATUS:","READY TO RUN! :-)");telemetry.update();
+        telemetry.addData("STATUS "," READY TO RUN! :-)");telemetry.update();
     }
     private void initializeVuforia(){
         int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
@@ -124,8 +126,8 @@ public class OmniAutonomous extends LinearOpMode{
 
     //------{WRITING THE PROGRAM}-----------------------------------------------------------------------
     private void GatherInfo(){
-        telemetry.addData("Alliance Color:",COLOR);
-        telemetry.addData("POSITION ON FIELD:", PositionOnField);telemetry.update();
+        telemetry.addData("Alliance Color",COLOR);
+        telemetry.addData("POSITION ON FIELD", PositionOnField);telemetry.update();
         telemetry.addData("WHEN FINISHED ", "PRESS Y");
         boolean HasPosition = false;
         boolean HasColor = false;
@@ -146,8 +148,8 @@ public class OmniAutonomous extends LinearOpMode{
                 PositionOnField = "LEFT";
                 HasPosition = true;
             }
-            telemetry.addData("Alliance Color:",COLOR);
-            telemetry.addData("POSITION ON FIELD:", PositionOnField);telemetry.update();
+            telemetry.addData("Alliance Color",COLOR);
+            telemetry.addData("POSITION ON FIELD", PositionOnField);telemetry.update();
             telemetry.addData("WHEN FINISHED ", "PRESS Y");
             if(HasPosition && HasColor && !ALL_INFO){
                 AppUtil.getInstance().showToast(UILocation.BOTH,"Ready To Run! :-)");
@@ -160,12 +162,10 @@ public class OmniAutonomous extends LinearOpMode{
     private void WriteProgram(){
         if(PositionOnField.equals("LEFT")){
             if(COLOR.equals(RED)){
-                PROGRAM = new int[][]{
-                        {RobotActions.KnockOffJewel, RobotActions.NULL},
-                        {RobotActions.MoveS, 25},
-                        {RobotActions.MoveW, 2}};
+                PROGRAM = new double[][]{{
+                        RobotActions.AlineToRow,RobotActions.NULL}};
             }else{
-                PROGRAM = new int[][]{
+                PROGRAM = new double[][]{
                         {RobotActions.KnockOffJewel, RobotActions.NULL},
                         {RobotActions.MoveN, 20},
                         {RobotActions.MoveE, 8}};
@@ -173,15 +173,18 @@ public class OmniAutonomous extends LinearOpMode{
         }
         if(PositionOnField.equals("RIGHT")){
             if(COLOR.equals(RED)){
-                PROGRAM = new int[][]{
+                PROGRAM = new double[][]{
+                        {RobotActions.Read_Pictograph, RobotActions.NULL},
                         {RobotActions.KnockOffJewel, RobotActions.NULL},
-                        {RobotActions.MoveS, 20},
-                        {RobotActions.MoveE, 23},
+                        {RobotActions.MoveS, 22},
+                        {RobotActions.MoveE, 18},
+                        {RobotActions.MoveS, 7},
+                        {RobotActions.MoveE, 2},
                         {RobotActions.Turn, 0},
                         {RobotActions.Turn, 0},
                         {RobotActions.AlineToRow, RobotActions.NULL}};
             }else{
-                PROGRAM = new int[][]{
+                PROGRAM = new double[][]{
                         {RobotActions.KnockOffJewel, RobotActions.NULL},
                         {RobotActions.MoveN, 25},
                         {RobotActions.MoveW, 2}};
@@ -201,27 +204,27 @@ public class OmniAutonomous extends LinearOpMode{
             if(PROGRAM[LineInProgram][0] == RobotActions.KnockOffJewel){
                 Crabby.KnockOffJewel(COLOR);
             }else if(PROGRAM[LineInProgram][0] == RobotActions.MoveN) {
-                Crabby.driveMotors.Move(N, PROGRAM[LineInProgram][1], 0.5);
+                Crabby.driveMotors.Move(N, PROGRAM[LineInProgram][1], 0.3);
             }else if(PROGRAM[LineInProgram][0] == RobotActions.MoveS) {
-                Crabby.driveMotors.Move(S, PROGRAM[LineInProgram][1], 0.5);
+                Crabby.driveMotors.Move(S, PROGRAM[LineInProgram][1], 0.3);
             }else if(PROGRAM[LineInProgram][0] == RobotActions.MoveE) {
-                Crabby.driveMotors.Move(E, PROGRAM[LineInProgram][1], 0.5);
+                Crabby.driveMotors.Move(E, PROGRAM[LineInProgram][1], 0.3);
             }else if(PROGRAM[LineInProgram][0] == RobotActions.MoveW) {
-                Crabby.driveMotors.Move(W, PROGRAM[LineInProgram][1], 0.5);
+                Crabby.driveMotors.Move(W, PROGRAM[LineInProgram][1], 0.3);
             }else if(PROGRAM[LineInProgram][0] == RobotActions.Turn){
-                Crabby.driveMotors.Turn(PROGRAM[LineInProgram][1]);
+                Crabby.driveMotors.Turn((int) PROGRAM[LineInProgram][1]);
             }else if(PROGRAM[LineInProgram][0] == RobotActions.MoveNW) {
-                Crabby.driveMotors.Move(NW, PROGRAM[LineInProgram][1], 0.5);
+                Crabby.driveMotors.Move(NW, PROGRAM[LineInProgram][1], 0.3);
             }else if(PROGRAM[LineInProgram][0] == RobotActions.MoveSW) {
-                Crabby.driveMotors.Move(SW, PROGRAM[LineInProgram][1], 0.5);
+                Crabby.driveMotors.Move(SW, PROGRAM[LineInProgram][1], 0.3);
             }else if(PROGRAM[LineInProgram][0] == RobotActions.MoveNE) {
-                Crabby.driveMotors.Move(NE, PROGRAM[LineInProgram][1], 0.5);
+                Crabby.driveMotors.Move(NE, PROGRAM[LineInProgram][1], 0.3);
             }else if(PROGRAM[LineInProgram][0] == RobotActions.MoveSE) {
-                Crabby.driveMotors.Move(SE, PROGRAM[LineInProgram][1], 0.5);
+                Crabby.driveMotors.Move(SE, PROGRAM[LineInProgram][1], 0.3);
             }else if(PROGRAM[LineInProgram][0] == RobotActions.Turn){
-                Crabby.driveMotors.Turn(PROGRAM[LineInProgram][1]);
+                Crabby.driveMotors.Turn((int)PROGRAM[LineInProgram][1]);
             }else if(PROGRAM[LineInProgram][0] == RobotActions.Read_Pictograph){
-                KeyColumn = readPictograph(true);
+                KeyColumn = readPictograph(true, true);
             }else if(PROGRAM[LineInProgram][0] == RobotActions.AlineToRow){
                 Crabby.ScoreAGlyph(KeyColumn);
             }
@@ -229,8 +232,11 @@ public class OmniAutonomous extends LinearOpMode{
     }
 
     //------{TOOLS}-------------------------------------------------------------------------------------
-    private String readPictograph(boolean MakeAToast){
+    private String readPictograph(boolean MakeAToast, boolean LOOP){
         RelicRecoveryVuMark vuMark = RelicRecoveryVuMark.from(relicTemplate);
+        if(LOOP){
+            while(vuMark.toString().equals("UNKNOWN")){vuMark = RelicRecoveryVuMark.from(relicTemplate);}
+        }
         if(MakeAToast){
             String ToastText = "KEY COLUMN: " + vuMark.toString();
             AppUtil.getInstance().showToast(UILocation.BOTH,ToastText);
