@@ -89,47 +89,62 @@ public class OmniWheelRobot{
         this.servos.getServo(Servos.FishTailLifter).setPosition(0.95);
         this.Pause(1000);
         this.servos.getServo(Servos.FishTailSwinger).setPosition(0.1);
-        this.Pause(1000);
-        this.servos.getServo(Servos.FishTailLifter).setPosition(0.9);
+
     }
 
     private int ROW = 1;
-    public void ScoreAGlyph(String KeyColumn){
-        if(KeyColumn.equals("LEFT") ) {ROW = 1;}
-        if(KeyColumn.equals("CENTER")){ROW = 2;}
-        if(KeyColumn.equals("RIGHT")) {ROW = 3;}
+    private int degrees = 0;
+    private int Direction = 1;
+    public void ScoreAGlyph(String KeyColumn, String Color, String Position){
+        if(Position.equals("LEFT")&Color.equals(Constants.RED)){degrees = 270;}
+        if(Position.equals("RIGHT")&Color.equals(Constants.RED)){degrees = 0;}
+        if(Position.equals("LEFT")&Color.equals(Constants.BLUE)){degrees = 180;}
+        if(Color.equals(Constants.RED)){
+            Direction = -1;
+            if(KeyColumn.equals("LEFT") ) {ROW = 3;}
+            if(KeyColumn.equals("CENTER")){ROW = 2;}
+            if(KeyColumn.equals("RIGHT")) {ROW = 1;}
+        }else{
+            if(KeyColumn.equals("LEFT") ) {ROW = 1;}
+            if(KeyColumn.equals("CENTER")){ROW = 2;}
+            if(KeyColumn.equals("RIGHT")) {ROW = 3;}
+        }
         alineRow(ROW);
         fineTune();
     }
     private void alineRow(int row){
+        if(Direction == -1){
+            this.driveMotors.Move(Constants.W, 1, 0.1);
+        }else{
+            this.driveMotors.Move(Constants.E, 2.5, 0.1);
+        }
         int OldReading;
-        this.driveMotors.Turn(0);
-        this.driveMotors.TurnMotorsOn(0.1, -0.1, -0.1, 0.1);
+        this.driveMotors.Turn(degrees);
+        this.driveMotors.TurnMotorsOn(0.2 * Direction, -0.2 * Direction
+                , -0.2 * Direction, 0.2 * Direction);
         OldReading = this.sensors.getReflectedLight();
         for(int LOOP = row; LOOP != 0;){
             while(OldReading + 35 > this.sensors.getReflectedLight()){OldReading = this.sensors.getReflectedLight();}
             while(OldReading - 35 < this.sensors.getReflectedLight()){OldReading = this.sensors.getReflectedLight();}
             OldReading = this.sensors.getReflectedLight();
             LOOP--;
-            AppUtil.getInstance().showToast(UILocation.BOTH, "FOUND ONE");
         }
         this.driveMotors.STOP();
     }
     private void fineTune(){
-        this.driveMotors.Turn(0);
-        this.driveMotors.Turn(0);
+        this.driveMotors.Turn(degrees);
+        this.driveMotors.Turn(degrees);
         int OldReading = this.sensors.getReflectedLight();
-        this.driveMotors.Move(Constants.E, 2, 0.07);
-        for(int Count = 1; Count <= 2; Count++){
-            this.driveMotors.Move(Constants.E, 1, 0.07);
-            this.driveMotors.TurnMotorsOn(0.07, -0.07, -0.07, 0.07);
-            while(OldReading + 50 > this.sensors.getReflectedLight()){OldReading = this.sensors.getReflectedLight();}
-            OldReading = this.sensors.getReflectedLight();
-            this.driveMotors.Turn(0);
+        this.driveMotors.Move(Constants.E, 1, 0.1);
+        this.driveMotors.TurnMotorsOn(0.1, -0.1,-0.1, 0.1);
+        while(OldReading + 50 > this.sensors.getReflectedLight()){OldReading = this.sensors.getReflectedLight();}
+        if(Direction == 1){
+            while(OldReading - 50 < this.sensors.getReflectedLight()){OldReading = this.sensors.getReflectedLight();}
         }
-        this.driveMotors.Turn(0);
-        this.driveMotors.Turn(0);
-        this.driveMotors.Move(Constants.S, 7, 0.4);
+        this.driveMotors.Turn(degrees);
+        this.driveMotors.Turn(degrees);
+        this.driveMotors.Turn(degrees);
+        this.driveMotors.Move(Constants.S, 1, 0.07);
         this.driveMotors.Move(Constants.N, 2, 0.07);
     }
 }

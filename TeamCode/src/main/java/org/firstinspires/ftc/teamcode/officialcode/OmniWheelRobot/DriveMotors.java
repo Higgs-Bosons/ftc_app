@@ -48,7 +48,7 @@ public class DriveMotors {
         int counter = 0;
         double power= 0.4;
         boolean WhichWay = WhichWayToTurn(whereToTurnTo, (int) readGyro());
-        while (HowFar(whereToTurnTo, (int) readGyro()) >= 100) {
+        while (HowFar(whereToTurnTo, (int) readGyro()) >= 25) {
             if(!WhichWay){this.TurnMotorsOn(power,-power,power,-power);}else{this.TurnMotorsOn(-power,power,-power,power);}
         }
         power = 0.1;

@@ -162,13 +162,24 @@ public class OmniAutonomous extends LinearOpMode{
     private void WriteProgram(){
         if(PositionOnField.equals("LEFT")){
             if(COLOR.equals(RED)){
-                PROGRAM = new double[][]{{
-                        RobotActions.AlineToRow,RobotActions.NULL}};
+                PROGRAM = new double[][]{
+                        {RobotActions.Read_Pictograph, RobotActions.NULL},
+                        {RobotActions.KnockOffJewel, RobotActions.NULL},
+                        {RobotActions.MoveS, 20, 0.4},
+                        {RobotActions.Turn, 270},
+                        {RobotActions.MoveS, 7, 0.1},
+                        {RobotActions.Turn, 270},
+                        {RobotActions.AlineToRow, RobotActions.NULL}};
             }else{
                 PROGRAM = new double[][]{
+                        {RobotActions.Read_Pictograph, RobotActions.NULL},
                         {RobotActions.KnockOffJewel, RobotActions.NULL},
-                        {RobotActions.MoveN, 20},
-                        {RobotActions.MoveE, 8}};
+                        {RobotActions.MoveN, 20, 0.5},
+                        {RobotActions.Turn, 180},
+                        {RobotActions.MoveW, 2.2, 0.5},
+                        {RobotActions.MoveS, 6, 0.2},
+                        {RobotActions.MoveN, 0.4, 0.1},
+                        {RobotActions.AlineToRow, RobotActions.NULL}};
             }
         }
         if(PositionOnField.equals("RIGHT")){
@@ -176,18 +187,17 @@ public class OmniAutonomous extends LinearOpMode{
                 PROGRAM = new double[][]{
                         {RobotActions.Read_Pictograph, RobotActions.NULL},
                         {RobotActions.KnockOffJewel, RobotActions.NULL},
-                        {RobotActions.MoveS, 22},
-                        {RobotActions.MoveE, 18},
-                        {RobotActions.MoveS, 7},
-                        {RobotActions.MoveE, 2},
+                        {RobotActions.MoveS, 22, 0.4},
+                        {RobotActions.MoveE, 7, 0.6},
+                        {RobotActions.MoveS, 6, 0.1},
                         {RobotActions.Turn, 0},
                         {RobotActions.Turn, 0},
                         {RobotActions.AlineToRow, RobotActions.NULL}};
             }else{
                 PROGRAM = new double[][]{
                         {RobotActions.KnockOffJewel, RobotActions.NULL},
-                        {RobotActions.MoveN, 25},
-                        {RobotActions.MoveW, 2}};
+                        {RobotActions.MoveN, 25, 0.5},
+                        {RobotActions.MoveW, 2, 0.5}};
             }
         }
     }
@@ -204,29 +214,29 @@ public class OmniAutonomous extends LinearOpMode{
             if(PROGRAM[LineInProgram][0] == RobotActions.KnockOffJewel){
                 Crabby.KnockOffJewel(COLOR);
             }else if(PROGRAM[LineInProgram][0] == RobotActions.MoveN) {
-                Crabby.driveMotors.Move(N, PROGRAM[LineInProgram][1], 0.3);
+                Crabby.driveMotors.Move(N, PROGRAM[LineInProgram][1], PROGRAM[LineInProgram][2]);
             }else if(PROGRAM[LineInProgram][0] == RobotActions.MoveS) {
-                Crabby.driveMotors.Move(S, PROGRAM[LineInProgram][1], 0.3);
+                Crabby.driveMotors.Move(S, PROGRAM[LineInProgram][1], PROGRAM[LineInProgram][2]);
             }else if(PROGRAM[LineInProgram][0] == RobotActions.MoveE) {
-                Crabby.driveMotors.Move(E, PROGRAM[LineInProgram][1], 0.3);
+                Crabby.driveMotors.Move(E, PROGRAM[LineInProgram][1], PROGRAM[LineInProgram][2]);
             }else if(PROGRAM[LineInProgram][0] == RobotActions.MoveW) {
-                Crabby.driveMotors.Move(W, PROGRAM[LineInProgram][1], 0.3);
+                Crabby.driveMotors.Move(W, PROGRAM[LineInProgram][1], PROGRAM[LineInProgram][2]);
             }else if(PROGRAM[LineInProgram][0] == RobotActions.Turn){
                 Crabby.driveMotors.Turn((int) PROGRAM[LineInProgram][1]);
             }else if(PROGRAM[LineInProgram][0] == RobotActions.MoveNW) {
-                Crabby.driveMotors.Move(NW, PROGRAM[LineInProgram][1], 0.3);
+                Crabby.driveMotors.Move(NW, PROGRAM[LineInProgram][1], PROGRAM[LineInProgram][2]);
             }else if(PROGRAM[LineInProgram][0] == RobotActions.MoveSW) {
-                Crabby.driveMotors.Move(SW, PROGRAM[LineInProgram][1], 0.3);
+                Crabby.driveMotors.Move(SW, PROGRAM[LineInProgram][1], PROGRAM[LineInProgram][2]);
             }else if(PROGRAM[LineInProgram][0] == RobotActions.MoveNE) {
-                Crabby.driveMotors.Move(NE, PROGRAM[LineInProgram][1], 0.3);
+                Crabby.driveMotors.Move(NE, PROGRAM[LineInProgram][1], PROGRAM[LineInProgram][2]);
             }else if(PROGRAM[LineInProgram][0] == RobotActions.MoveSE) {
-                Crabby.driveMotors.Move(SE, PROGRAM[LineInProgram][1], 0.3);
+                Crabby.driveMotors.Move(SE, PROGRAM[LineInProgram][1], PROGRAM[LineInProgram][2]);
             }else if(PROGRAM[LineInProgram][0] == RobotActions.Turn){
                 Crabby.driveMotors.Turn((int)PROGRAM[LineInProgram][1]);
             }else if(PROGRAM[LineInProgram][0] == RobotActions.Read_Pictograph){
                 KeyColumn = readPictograph(true, true);
             }else if(PROGRAM[LineInProgram][0] == RobotActions.AlineToRow){
-                Crabby.ScoreAGlyph(KeyColumn);
+                Crabby.ScoreAGlyph(KeyColumn, COLOR, PositionOnField);
             }
         }
     }
