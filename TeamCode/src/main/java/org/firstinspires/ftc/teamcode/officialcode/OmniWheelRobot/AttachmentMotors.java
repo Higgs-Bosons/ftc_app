@@ -10,7 +10,6 @@ public class AttachmentMotors extends Constants{
     private DcMotor ConveyorLowerMotor;
     private DcMotor ConveyorUpperMotor;
 
-
     AttachmentMotors(DcMotor ArmLifter, DcMotor HorizontalLift,  DcMotor ConveyorLower, DcMotor ConveyorUpper){
         this.ArmLifterMotor = ArmLifter;
         this.HorizontalLiftMotor = HorizontalLift;

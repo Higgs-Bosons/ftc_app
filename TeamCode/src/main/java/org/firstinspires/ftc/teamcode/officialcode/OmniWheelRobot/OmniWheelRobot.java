@@ -10,15 +10,14 @@ import org.firstinspires.ftc.robotcore.internal.system.AppUtil;
 import org.firstinspires.ftc.robotcore.internal.ui.UILocation;
 import org.firstinspires.ftc.teamcode.officialcode.Constants;
 
-import static org.firstinspires.ftc.teamcode.officialcode.Constants.BLUE;
-import static org.firstinspires.ftc.teamcode.officialcode.Constants.RED;
-
-
-public class OmniWheelRobot{
+public class OmniWheelRobot extends Constants{
     public Sensors sensors;
     public Servos servos;
     public DriveMotors driveMotors;
     public AttachmentMotors attachmentMotors;
+    private int ROW = 1;
+    private int degrees = 0;
+    private int Direction = 1;
 
     public OmniWheelRobot(){
 
@@ -92,14 +91,11 @@ public class OmniWheelRobot{
 
     }
 
-    private int ROW = 1;
-    private int degrees = 0;
-    private int Direction = 1;
     public void ScoreAGlyph(String KeyColumn, String Color, String Position){
-        if(Position.equals("LEFT")&Color.equals(Constants.RED)){degrees = 270;}
-        if(Position.equals("RIGHT")&Color.equals(Constants.RED)){degrees = 0;}
-        if(Position.equals("LEFT")&Color.equals(Constants.BLUE)){degrees = 180;}
-        if(Color.equals(Constants.RED)){
+        if(Position.equals("LEFT")&Color.equals(RED)){degrees = 270;}
+        if(Position.equals("RIGHT")&Color.equals(RED)){degrees = 0;}
+        if(Position.equals("LEFT")&Color.equals(BLUE)){degrees = 180;}
+        if(Color.equals(RED)){
             Direction = -1;
             if(KeyColumn.equals("LEFT") ) {ROW = 3;}
             if(KeyColumn.equals("CENTER")){ROW = 2;}
@@ -111,12 +107,13 @@ public class OmniWheelRobot{
         }
         alineRow(ROW);
         fineTune();
+        dropOff();
     }
     private void alineRow(int row){
         if(Direction == -1){
-            this.driveMotors.Move(Constants.W, 1, 0.1);
+            this.driveMotors.Move(W, 1, 0.1);
         }else{
-            this.driveMotors.Move(Constants.E, 2.5, 0.1);
+            this.driveMotors.Move(E, 2.5, 0.1);
         }
         int OldReading;
         this.driveMotors.Turn(degrees);
@@ -135,16 +132,23 @@ public class OmniWheelRobot{
         this.driveMotors.Turn(degrees);
         this.driveMotors.Turn(degrees);
         int OldReading = this.sensors.getReflectedLight();
-        this.driveMotors.Move(Constants.E, 1, 0.1);
+        this.driveMotors.Move(E, 1, 0.1);
         this.driveMotors.TurnMotorsOn(0.1, -0.1,-0.1, 0.1);
         while(OldReading + 50 > this.sensors.getReflectedLight()){OldReading = this.sensors.getReflectedLight();}
-        if(Direction == 1){
-            while(OldReading - 50 < this.sensors.getReflectedLight()){OldReading = this.sensors.getReflectedLight();}
-        }
+       // if(Direction == 1){
+         //   while(OldReading - 50 < this.sensors.getReflectedLight()){OldReading = this.sensors.getReflectedLight();}
+        //}
         this.driveMotors.Turn(degrees);
         this.driveMotors.Turn(degrees);
         this.driveMotors.Turn(degrees);
-        this.driveMotors.Move(Constants.S, 1, 0.07);
-        this.driveMotors.Move(Constants.N, 2, 0.07);
+        this.driveMotors.Move(S, 1, 0.07);
+        this.driveMotors.Move(N, 2, 0.07);
+    }
+    private void dropOff(){
+        this.attachmentMotors.getMotor(ConveyorUpper).setPower(-0.5);
+        this.attachmentMotors.getMotor(ConveyorLower).setPower(-0.5);
+        this.Pause(4000);
+        this.attachmentMotors.getMotor(ConveyorUpper).setPower(0);
+        this.attachmentMotors.getMotor(ConveyorLower).setPower(0);
     }
 }
