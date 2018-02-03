@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.officialcode.TeleOp;
 
 import com.qualcomm.hardware.bosch.*;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.*;
@@ -23,7 +24,6 @@ public class OmniTeleOp extends LinearOpMode {
     private boolean GrabbingRelic = false;
     private int InstructionPage = 0;
     private boolean Slow = false;
-    private boolean Moving = false;
     private boolean LimitedMovement = false;
     private void initialize(){
         Robot = new OmniWheelRobot();
@@ -119,7 +119,7 @@ public class OmniTeleOp extends LinearOpMode {
             telemetry.addData("Controller", " DRIVER");
             telemetry.addData("Turn", " Right Joystick X");
             telemetry.addData("Movement", " Left Joystick");
-            telemetry.addData("Slow Down", " B Button");
+            telemetry.addData("Slow Down", " A Button");
             telemetry.addData("Limit Controls", " X Button");
             telemetry.update();
         }
@@ -137,7 +137,7 @@ public class OmniTeleOp extends LinearOpMode {
             telemetry.addData("Controller", " DRIVER");
             telemetry.addData("Extend", " DPad Left");
             telemetry.addData("Retract (just motor)", " DPad Right");
-            telemetry.addData("Grab/Release Relic", " A Button");
+            telemetry.addData("Grab/Release Relic", " B Button");
             telemetry.addData("Lift Relic", " DPad Up");
             telemetry.addData("Lower Relic", " DPad Down");
             telemetry.update();
@@ -182,98 +182,17 @@ public class OmniTeleOp extends LinearOpMode {
 
         }
     }
-    public void CheckForInvert(){
-        double ALL = (Math.abs(gamepad1.left_stick_x) + Math.abs(gamepad1.left_stick_y) + Math.abs(gamepad1.right_stick_x));
-        if(this.gamepad1.b) {
-            while(this.gamepad1.b){}
-            Slow = !Slow;
-        }
-        if(this.gamepad1.x) {
-            while(this.gamepad1.x){}
-            LimitedMovement = !LimitedMovement;
-        }
-        if(!Moving){
-            double speed;
-            double x = gamepad1.left_stick_x;
-            double y = gamepad1.left_stick_y;
-            if(Robot.sensors.ReadGyro() <= 45 || Robot.sensors.ReadGyro() >= 315){
-                if(!Slow){speed = 0.8;}else{speed = 0.4;}
-                float RFPower = (float) ((x + y)*speed);
-                float RBPower = (float) ((y - x)*speed);
-                float LFPower = (float) ((y - x)*speed);
-                float LBPower = (float) ((x + y)*speed);
-                if(Math.abs(gamepad1.right_stick_x) >= 0.1) {
-                    LBPower = (float)  ((gamepad1.right_stick_x)* speed);
-                    LFPower = (float)  ((gamepad1.right_stick_x)* speed);
-                    RBPower = (float) ((-gamepad1.right_stick_x)* speed);
-                    RFPower = (float) ((-gamepad1.right_stick_x)* speed);
-                }
-                Robot.driveMotors.TurnMotorsOn(LFPower,RFPower, LBPower, RBPower);
-            }else if(inRange((int) Robot.sensors.ReadGyro(), 135, 45)){
-                double oldX = x;
-                x=y;
-                y=oldX;
-                if(!Slow){speed = 0.8;}else{speed = 0.4;}
-                float RFPower = (float) ((x + y)*speed);
-                float RBPower = (float) ((y - x)*speed);
-                float LFPower = (float) ((y - x)*speed);
-                float LBPower = (float) ((x + y)*speed);
-                if(Math.abs(gamepad1.right_stick_x) >= 0.1) {
-                    LBPower = (float)  ((gamepad1.right_stick_x)* speed);
-                    LFPower = (float)  ((gamepad1.right_stick_x)* speed);
-                    RBPower = (float) ((-gamepad1.right_stick_x)* speed);
-                    RFPower = (float) ((-gamepad1.right_stick_x)* speed);
-                }
-                Robot.driveMotors.TurnMotorsOn(LFPower,RFPower, LBPower, RBPower);
-            }else if(inRange((int) Robot.sensors.ReadGyro(), 225, 135)){
-                x=-x;
-                y=-y;
-                if(!Slow){speed = 0.8;}else{speed = 0.4;}
-                float RFPower = (float) ((x + y)*speed);
-                float RBPower = (float) ((y - x)*speed);
-                float LFPower = (float) ((y - x)*speed);
-                float LBPower = (float) ((x + y)*speed);
-                if(Math.abs(gamepad1.right_stick_x) >= 0.1) {
-                    LBPower = (float)  ((gamepad1.right_stick_x)* speed);
-                    LFPower = (float)  ((gamepad1.right_stick_x)* speed);
-                    RBPower = (float) ((-gamepad1.right_stick_x)* speed);
-                    RFPower = (float) ((-gamepad1.right_stick_x)* speed);
-                }
-                Robot.driveMotors.TurnMotorsOn(LFPower,RFPower, LBPower, RBPower);
-            }else if(inRange((int) Robot.sensors.ReadGyro(), 315, 225)){
-                double oldX = x;
-                x=-y;
-                y=-oldX;
-                if(!Slow){speed = 0.8;}else{speed = 0.4;}
-                float RFPower = (float) ((x + y)*speed);
-                float RBPower = (float) ((y - x)*speed);
-                float LFPower = (float) ((y - x)*speed);
-                float LBPower = (float) ((x + y)*speed);
-                if(Math.abs(gamepad1.right_stick_x) >= 0.1) {
-                    LBPower = (float)  ((gamepad1.right_stick_x)* speed);
-                    LFPower = (float)  ((gamepad1.right_stick_x)* speed);
-                    RBPower = (float) ((-gamepad1.right_stick_x)* speed);
-                    RFPower = (float) ((-gamepad1.right_stick_x)* speed);
-                }
-                Robot.driveMotors.TurnMotorsOn(LFPower,RFPower, LBPower, RBPower);
-            }
-        }
-    }
-    public boolean inRange(int ValueToTest, int Max, int Min){
-        return ((ValueToTest >= Min) && (ValueToTest <= Max));
-    }
 
     private void Check_Joystick_Control(){
         double ALL = (Math.abs(gamepad1.left_stick_x) + Math.abs(gamepad1.left_stick_y) + Math.abs(gamepad1.right_stick_x));
-        if(this.gamepad1.b) {
-            while(this.gamepad1.b){}
+        if(this.gamepad1.a) {
+            while(this.gamepad1.a){}
             Slow = !Slow;
         }
         if(this.gamepad1.x) {
             while(this.gamepad1.x){}
             LimitedMovement = !LimitedMovement;
         }
-        Moving =  ALL >= 0.6;
         if(LimitedMovement){
             if(ALL >= 0.6){
                 double speed;
@@ -291,10 +210,10 @@ public class OmniTeleOp extends LinearOpMode {
                 float LFPower = (float) ((y - x)*speed);
                 float LBPower = (float) ((x + y)*speed);
                 if(Math.abs(gamepad1.right_stick_x) >= 0.1) {
-                    LBPower = (float)  ((gamepad1.right_stick_x)* speed);
-                    LFPower = (float)  ((gamepad1.right_stick_x)* speed);
-                    RBPower = (float) ((-gamepad1.right_stick_x)* speed);
-                    RFPower = (float) ((-gamepad1.right_stick_x)* speed);
+                    LBPower = (float)  ((gamepad1.right_stick_x)* -speed);
+                    LFPower = (float)  ((gamepad1.right_stick_x)* -speed);
+                    RBPower = (float) ((-gamepad1.right_stick_x)* -speed);
+                    RFPower = (float) ((-gamepad1.right_stick_x)* -speed);
                 }
                 Robot.driveMotors.TurnMotorsOn(LFPower,RFPower, LBPower, RBPower);
             }else{
@@ -310,10 +229,10 @@ public class OmniTeleOp extends LinearOpMode {
                 float LFPower = (float) ((gamepad1.left_stick_y - gamepad1.left_stick_x)*speed);
                 float LBPower = (float) ((gamepad1.left_stick_x + gamepad1.left_stick_y)*speed);
                 if(Math.abs(gamepad1.right_stick_x) >= 0.1) {
-                    LBPower = (float)  ((gamepad1.right_stick_x)* speed);
-                    LFPower = (float)  ((gamepad1.right_stick_x)* speed);
-                    RBPower = (float) ((-gamepad1.right_stick_x)* speed);
-                    RFPower = (float) ((-gamepad1.right_stick_x)* speed);
+                    LBPower = (float)  ((gamepad1.right_stick_x)* -speed);
+                    LFPower = (float)  ((gamepad1.right_stick_x)* -speed);
+                    RBPower = (float) ((-gamepad1.right_stick_x)* -speed);
+                    RFPower = (float) ((-gamepad1.right_stick_x)* -speed);
                 }
                 Robot.driveMotors.TurnMotorsOn(LFPower,RFPower, LBPower, RBPower);
             }else{
@@ -366,14 +285,14 @@ public class OmniTeleOp extends LinearOpMode {
         }
     }
     private void Check_Slide(){
-        if(this.gamepad1.a){
+        if(this.gamepad1.b){
             if(GrabbingRelic){
-                while(this.gamepad1.a){
+                while(this.gamepad1.b){
                     GrabbingRelic = false;
                     Robot.servos.getServo(Servos.Clampy).setPosition(1);
                 }
             }else{
-                while(this.gamepad1.a) {
+                while(this.gamepad1.b) {
                     GrabbingRelic = true;
                     Robot.servos.getServo(Servos.Clampy).setPosition(0);
                 }

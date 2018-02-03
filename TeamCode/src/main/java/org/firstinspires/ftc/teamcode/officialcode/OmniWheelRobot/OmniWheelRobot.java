@@ -142,7 +142,7 @@ public class OmniWheelRobot extends Constants{
         this.driveMotors.Turn(degrees);
         this.driveMotors.Turn(degrees);
         this.driveMotors.Move(S, 1, 0.07);
-        this.driveMotors.Move(N, 2, 0.07);
+        this.driveMotors.Move(N, 3, 0.07);
     }
     private void dropOff(){
         this.attachmentMotors.getMotor(ConveyorUpper).setPower(-0.5);

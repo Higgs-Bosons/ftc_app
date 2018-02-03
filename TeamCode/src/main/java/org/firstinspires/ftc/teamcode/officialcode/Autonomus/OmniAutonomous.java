@@ -29,6 +29,7 @@ public class OmniAutonomous extends LinearOpMode{
     //-------{STARTING OF THE PROGRAM}------------------------------------------------------------------
     public void runOpMode() throws InterruptedException {
         initialize();
+        telemetry.addData("INITIALIZED ","-)");telemetry.update();
         waitForStart();
         relicTrackables.activate();
         Runnable PROGRAM = new runProgram();
@@ -192,7 +193,11 @@ public class OmniAutonomous extends LinearOpMode{
                         {RobotActions.MoveS, 6, 0.1},
                         {RobotActions.Turn, 0},
                         {RobotActions.Turn, 0},
-                        {RobotActions.AlineToRow, RobotActions.NULL}};
+                        {RobotActions.MoveN, 2, 0.5},
+                        {RobotActions.AlineToRow, RobotActions.NULL},
+                        {RobotActions.MoveS, 3, 0.2},
+                        {RobotActions.MoveN, 4, 0.5},
+                        {RobotActions.Turn, 90}};
             }else{
                 PROGRAM = new double[][]{
                         {RobotActions.KnockOffJewel, RobotActions.NULL},
