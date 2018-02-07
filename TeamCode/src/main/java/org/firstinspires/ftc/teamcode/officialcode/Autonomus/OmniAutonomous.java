@@ -13,10 +13,8 @@ import org.firstinspires.ftc.teamcode.officialcode.OmniWheelRobot.OmniWheelRobot
 import org.firstinspires.ftc.teamcode.officialcode.OmniWheelRobot.*;
 import org.firstinspires.ftc.teamcode.officialcode.TeleOp.XControl;
 import static org.firstinspires.ftc.teamcode.officialcode.Constants.*;
-
 @Autonomous(name = "Autonomous Omni", group = "Program")
 public class OmniAutonomous extends LinearOpMode{
-
     //-------{VARIABLES}--------------------------------------------------------------------------------
     public static OmniWheelRobot Crabby;
     private String COLOR ="NULL";
@@ -175,12 +173,16 @@ public class OmniAutonomous extends LinearOpMode{
                 PROGRAM = new double[][]{
                         {RobotActions.Read_Pictograph, RobotActions.NULL},
                         {RobotActions.KnockOffJewel, RobotActions.NULL},
-                        {RobotActions.MoveN, 20, 0.5},
+                        {RobotActions.MoveN, 20, 0.6},
                         {RobotActions.Turn, 180},
-                        {RobotActions.MoveW, 2.2, 0.5},
-                        {RobotActions.MoveS, 6, 0.2},
-                        {RobotActions.MoveN, 0.4, 0.1},
-                        {RobotActions.AlineToRow, RobotActions.NULL}};
+                        {RobotActions.MoveW, 2.2, 0.3},
+                        {RobotActions.MoveS, 6, 0.4},
+                        {RobotActions.MoveN, 0.3, 0.2},
+                        {RobotActions.AlineToRow, RobotActions.NULL},
+                        {RobotActions.MoveN, 3, 0.7},
+                        {RobotActions.MoveS, 5, 0.2},
+                        {RobotActions.MoveN, 5, 0.3},
+                        {RobotActions.Turn, 90}};
             }
         }
         if(PositionOnField.equals("RIGHT")){
@@ -189,15 +191,14 @@ public class OmniAutonomous extends LinearOpMode{
                         {RobotActions.Read_Pictograph, RobotActions.NULL},
                         {RobotActions.KnockOffJewel, RobotActions.NULL},
                         {RobotActions.MoveS, 22, 0.4},
-                        {RobotActions.MoveE, 7, 0.6},
-                        {RobotActions.MoveS, 6, 0.1},
+                        {RobotActions.MoveE, 7, 0.4},
+                        {RobotActions.MoveS, 6, 0.2},
                         {RobotActions.Turn, 0},
-                        {RobotActions.Turn, 0},
-                        {RobotActions.MoveN, 2, 0.5},
                         {RobotActions.AlineToRow, RobotActions.NULL},
+                        {RobotActions.MoveN, 2, 0.5},
                         {RobotActions.MoveS, 3, 0.2},
                         {RobotActions.MoveN, 4, 0.5},
-                        {RobotActions.Turn, 90}};
+                        {RobotActions.Turn, 270}};
             }else{
                 PROGRAM = new double[][]{
                         {RobotActions.KnockOffJewel, RobotActions.NULL},

@@ -1,12 +1,8 @@
 package org.firstinspires.ftc.teamcode.officialcode.OmniWheelRobot;
 
 import com.qualcomm.hardware.bosch.BNO055IMU;
-import com.qualcomm.robotcore.hardware.ColorSensor;
-import com.qualcomm.robotcore.hardware.OpticalDistanceSensor;
-
-import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
-import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
-import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
+import com.qualcomm.robotcore.hardware.*;
+import org.firstinspires.ftc.robotcore.external.navigation.*;
 import org.firstinspires.ftc.teamcode.officialcode.Constants;
 
 public class Sensors extends Constants{
@@ -27,7 +23,7 @@ public class Sensors extends Constants{
         }else if(color.equalsIgnoreCase("GREEN")){
             return this.SuperNitron9000.green();
         }
-        return 900990999;
+        return -1;
     }
     public float ReadGyro(){
         float Value = this.IMU.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES).firstAngle ;
@@ -36,7 +32,7 @@ public class Sensors extends Constants{
         }
         return Value;
     }
-    public int getReflectedLight(){
+    int getReflectedLight(){
         return (int) Math.floor((LIGHT.getRawLightDetected()/LIGHT.getRawLightDetectedMax()) * 1000);
     }
 }

@@ -1,11 +1,7 @@
 package org.firstinspires.ftc.teamcode.officialcode.OmniWheelRobot;
 
 import com.qualcomm.hardware.bosch.BNO055IMU;
-import com.qualcomm.robotcore.hardware.ColorSensor;
-import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.OpticalDistanceSensor;
-import com.qualcomm.robotcore.hardware.Servo;
-
+import com.qualcomm.robotcore.hardware.*;
 import org.firstinspires.ftc.robotcore.internal.system.AppUtil;
 import org.firstinspires.ftc.robotcore.internal.ui.UILocation;
 import org.firstinspires.ftc.teamcode.officialcode.Constants;
@@ -50,7 +46,7 @@ public class OmniWheelRobot extends Constants{
         String ColorISee;
         boolean NO_COLOR = false;
         this.servos.getServo(Servos.FishTailSwinger).setPosition(0.5);
-        for(double counter = 0.8; counter >= 0.3; counter -= 0.01) {
+        for(double counter = 0.85; counter >= 0.35; counter -= 0.01) {
             RED_READING = this.sensors.ReadColor("RED");
             BLUE_READING = this.sensors.ReadColor("BLUE");
             this.servos.getServo(Servos.FishTailLifter).setPosition(counter);
@@ -62,10 +58,8 @@ public class OmniWheelRobot extends Constants{
             }
         }
         this.servos.getServo(Servos.FishTailLifter).setPosition(0.5);
-        Pause(1000);
         if(RED_COUNT > BLUE_COUNT){
             ColorISee = RED;
-
             AppUtil.getInstance().showToast(UILocation.BOTH,"I SEE RED");
         }else if(RED_COUNT < BLUE_COUNT){
             ColorISee = BLUE;
@@ -76,13 +70,12 @@ public class OmniWheelRobot extends Constants{
             AppUtil.getInstance().showToast(UILocation.BOTH,"I SAW NO COLOR");
         }
         if(!NO_COLOR){
-
             if(!ColorISee.equalsIgnoreCase(Color)){
-                this.servos.getServo(Servos.FishTailSwinger).setPosition(0.35);
-                this.Pause(300);
+                this.servos.getServo(Servos.FishTailSwinger).setPosition(0.4);
+                //this.Pause(300);
             }else{
-                this.servos.getServo(Servos.FishTailSwinger).setPosition(0.65);
-                this.Pause(300);
+                this.servos.getServo(Servos.FishTailSwinger).setPosition(0.6);
+                //this.Pause(300);
             }
         }
         this.servos.getServo(Servos.FishTailLifter).setPosition(0.95);
@@ -111,9 +104,9 @@ public class OmniWheelRobot extends Constants{
     }
     private void alineRow(int row){
         if(Direction == -1){
-            this.driveMotors.Move(W, 1, 0.1);
+            this.driveMotors.Move(W, 1, 0.3);
         }else{
-            this.driveMotors.Move(E, 2.5, 0.1);
+            this.driveMotors.Move(E, 2.5, 0.3);
         }
         int OldReading;
         this.driveMotors.Turn(degrees);
@@ -132,7 +125,7 @@ public class OmniWheelRobot extends Constants{
         this.driveMotors.Turn(degrees);
         this.driveMotors.Turn(degrees);
         int OldReading = this.sensors.getReflectedLight();
-        this.driveMotors.Move(E, 1, 0.1);
+        this.driveMotors.Move(E, 3, 0.4);
         this.driveMotors.TurnMotorsOn(0.1, -0.1,-0.1, 0.1);
         while(OldReading + 50 > this.sensors.getReflectedLight()){OldReading = this.sensors.getReflectedLight();}
        // if(Direction == 1){
@@ -141,8 +134,9 @@ public class OmniWheelRobot extends Constants{
         this.driveMotors.Turn(degrees);
         this.driveMotors.Turn(degrees);
         this.driveMotors.Turn(degrees);
-        this.driveMotors.Move(S, 1, 0.07);
-        this.driveMotors.Move(N, 3, 0.07);
+        this.driveMotors.Move(S, 1, 0.3);
+        this.driveMotors.Move(N, 3, 0.3);
+
     }
     private void dropOff(){
         this.attachmentMotors.getMotor(ConveyorUpper).setPower(-0.5);
