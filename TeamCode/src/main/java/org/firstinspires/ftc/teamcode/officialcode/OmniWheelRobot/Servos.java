@@ -12,7 +12,10 @@ public class Servos extends Constants{
     private Servo GrabberOneServo;
     private Servo GrabberTwoServo;
     private Servo LifterServo;
-    Servos(Servo FishTailLifter,  Servo FishTailSwinger, Servo GrabberOne, Servo GrabberTwo, Servo Clampy, Servo RML, Servo Lifter){
+    private Servo GrabberSpinOneServo;
+    private Servo GrabberSpinTwoServo;
+    Servos(Servo FishTailLifter,  Servo FishTailSwinger, Servo GrabberOne, Servo GrabberTwo,
+           Servo Clampy, Servo RML, Servo Lifter, Servo Spin1, Servo Spin2){
         this.FishTailSwingerServo = FishTailSwinger;
         this.FishTailLifterServo = FishTailLifter;
         this.GrabberOneServo = GrabberOne;
@@ -20,6 +23,8 @@ public class Servos extends Constants{
         this.LifterServo = Lifter;
         this.ClampyServo = Clampy;
         this.RMLServo = RML;
+        this.GrabberSpinOneServo = Spin1;
+        this.GrabberSpinTwoServo = Spin2;
     }
     public Servo getServo(String Name){
         switch (Name){
@@ -37,6 +42,10 @@ public class Servos extends Constants{
                 return ClampyServo;
             case Lifter:
                 return LifterServo;
+            case GrabberSpinOne:
+                return GrabberSpinOneServo;
+            case GrabberSpinTwo:
+                return GrabberSpinTwoServo;
         }
         return this.FishTailLifterServo;
     }

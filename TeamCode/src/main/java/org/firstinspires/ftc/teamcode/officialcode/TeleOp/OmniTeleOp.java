@@ -14,19 +14,19 @@ import static org.firstinspires.ftc.teamcode.officialcode.Constants.RML;
 
 //Open Controls:
 //DRIVER:
-//X, Y, ALL TRIGGERS + BUMPERS
+//X, ALL TRIGGERS + BUMPERS
 
 
 @TeleOp(name = "TeleOp", group = "Beacon")
 public class OmniTeleOp extends LinearOpMode {
-    private OmniWheelRobot Robot;
+    private OmniWheelRobot Omni;
     private boolean GrabbingGlyph = false;
     private boolean GrabbingRelic = false;
     private int InstructionPage = 0;
     private boolean Slow = false;
     private boolean LimitedMovement = false;
     private void initialize(){
-        Robot = new OmniWheelRobot();
+        Omni = new OmniWheelRobot();
         initializeSensors();
         initializeServos();
         initializeMotors();
@@ -45,29 +45,31 @@ public class OmniTeleOp extends LinearOpMode {
         Right_Back.setDirection(DcMotorSimple.Direction.REVERSE);
         Right_Front.setDirection(DcMotorSimple.Direction.REVERSE);
 
-        Robot.GiveDriveMotors(Left_Front, Right_Front, Left_Back, Right_Back);
+        Omni.GiveDriveMotors(Left_Front, Right_Front, Left_Back, Right_Back);
 
         DcMotor ArmLifter = hardwareMap.dcMotor.get("ArmLifter");
-        DcMotor HorizontalLift = hardwareMap.dcMotor.get("LinearSlide");
-        DcMotor ConveyorLower = hardwareMap.dcMotor.get("ConveyorLower");
-        DcMotor ConveyorUpper = hardwareMap.dcMotor.get("ConveyorUpper");
-        ArmLifter.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        HorizontalLift.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        ConveyorLower.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        ConveyorUpper.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        DcMotor SlideExtender = hardwareMap.dcMotor.get("LinearSlide");
+        DcMotor SlideRetracter = hardwareMap.dcMotor.get("SlideRetractor");
+        DcMotor Conveyor = hardwareMap.dcMotor.get("Conveyor");
 
-        Robot.GiveAttachmentMotors(ArmLifter, HorizontalLift, ConveyorLower, ConveyorUpper);
-        Robot.attachmentMotors.getMotor(Constants.ArmLifter).setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        ArmLifter.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        SlideExtender.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        SlideRetracter.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        Conveyor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
+        Omni.GiveAttachmentMotors(ArmLifter, Conveyor, SlideExtender, SlideRetracter);
     }
     private void initializeServos(){
         Servo FishTailLifter = hardwareMap.servo.get("FishTailLifter");
         Servo FishTailSwinger = hardwareMap.servo.get("FishTailSwinger");
         Servo GrabberOne = hardwareMap.servo.get("GrabberOne");
         Servo GrabberTwo = hardwareMap.servo.get("GrabberTwo");
+        Servo GrabberSpinOne = hardwareMap.servo.get("Grabber1");
+        Servo GrabberSpinTwo = hardwareMap.servo.get("Grabber2");
         Servo Clampy = hardwareMap.servo.get("Clampy");
         Servo RML = hardwareMap.servo.get("RML");
         Servo Lifter = hardwareMap.servo.get("Lifter");
-        Robot.GiveServos(FishTailLifter, FishTailSwinger, GrabberOne, GrabberTwo, Clampy, RML, Lifter);
+        Omni.GiveServos(FishTailLifter, FishTailSwinger, GrabberOne, GrabberTwo, Clampy, RML, Lifter,GrabberSpinOne, GrabberSpinTwo);
     }
     private void initializeSensors(){
         ColorSensor SuperNitron9000 = hardwareMap.colorSensor.get("SuperNitron9000");
@@ -82,7 +84,7 @@ public class OmniTeleOp extends LinearOpMode {
         parameters.accelerationIntegrationAlgorithm = new JustLoggingAccelerationIntegrator();
         imu = hardwareMap.get(BNO055IMU.class, "imu");
         imu.initialize(parameters);
-        Robot.GiveSensors(SuperNitron9000, imu, LIGHT);
+        Omni.GiveSensors(SuperNitron9000, imu, LIGHT);
     }
 
     public void runOpMode() throws InterruptedException{
@@ -155,19 +157,19 @@ public class OmniTeleOp extends LinearOpMode {
     }
     public class Servo_Setup implements Runnable{
         public void run(){
-            Robot.servos.getServo(Servos.GrabberOne).setPosition(1);
-            Robot.servos.getServo(Servos.GrabberTwo).setPosition(0);
-            Robot.servos.getServo(Servos.Lifter).setPosition(0.25);
-            Robot.servos.getServo(Servos.RML).setPosition(0.25);
-            Robot.servos.getServo(Servos.Clampy).setPosition(1);
-            Robot.Pause(1000);
-            Robot.servos.getServo(Servos.GrabberOne).setPosition(0.15);
-            Robot.servos.getServo(Servos.GrabberTwo).setPosition(0.45);
-            Robot.servos.getServo(Servos.FishTailLifter).setPosition(0.95);
-            Robot.Pause(1000);
-            Robot.servos.getServo(Servos.FishTailSwinger).setPosition(0.1);
-            Robot.Pause(1000);
-            Robot.servos.getServo(Servos.FishTailLifter).setPosition(0.9);
+            Omni.servos.getServo(Servos.GrabberOne).setPosition(1);
+            Omni.servos.getServo(Servos.GrabberTwo).setPosition(0);
+            Omni.servos.getServo(Servos.Lifter).setPosition(0.25);
+            Omni.servos.getServo(Servos.RML).setPosition(0.25);
+            Omni.servos.getServo(Servos.Clampy).setPosition(1);
+            Omni.Pause(1000);
+            Omni.servos.getServo(Servos.GrabberOne).setPosition(0.15);
+            Omni.servos.getServo(Servos.GrabberTwo).setPosition(0.45);
+            Omni.servos.getServo(Servos.FishTailLifter).setPosition(0.95);
+            Omni.Pause(1000);
+            Omni.servos.getServo(Servos.FishTailSwinger).setPosition(0.1);
+            Omni.Pause(1000);
+            Omni.servos.getServo(Servos.FishTailLifter).setPosition(0.9);
         }
     }
     public class CheckControls implements Runnable{
@@ -175,6 +177,7 @@ public class OmniTeleOp extends LinearOpMode {
             while(opModeIsActive()){
                 Check_Joystick_Control();
                 Check_Conveyor();
+                Check_Grabber();
                 Check_Slide();
                 Check_Other();
                 displayInfo();
@@ -215,9 +218,9 @@ public class OmniTeleOp extends LinearOpMode {
                     RBPower = (float) ((-gamepad1.right_stick_x)* -speed);
                     RFPower = (float) ((-gamepad1.right_stick_x)* -speed);
                 }
-                Robot.driveMotors.TurnMotorsOn(LFPower,RFPower, LBPower, RBPower);
+                Omni.driveMotors.TurnMotorsOn(LFPower,RFPower, LBPower, RBPower);
             }else{
-                Robot.driveMotors.TurnMotorsOn(0,0,0,0);
+                Omni.driveMotors.TurnMotorsOn(0,0,0,0);
             }
         }else {
             if(ALL >= 0.6){
@@ -234,54 +237,55 @@ public class OmniTeleOp extends LinearOpMode {
                     RBPower = (float) ((-gamepad1.right_stick_x)* -speed);
                     RFPower = (float) ((-gamepad1.right_stick_x)* -speed);
                 }
-                Robot.driveMotors.TurnMotorsOn(LFPower,RFPower, LBPower, RBPower);
+                Omni.driveMotors.TurnMotorsOn(LFPower,RFPower, LBPower, RBPower);
             }else{
-                Robot.driveMotors.TurnMotorsOn(0,0,0,0);
+                Omni.driveMotors.TurnMotorsOn(0,0,0,0);
             }
         }
 
     }
-    private void Check_Conveyor(){
-        if(this.gamepad2.right_trigger > 0.1){
-            Robot.attachmentMotors.getMotor(ConveyorUpper).setPower(-0.5);
-        }else if(this.gamepad2.right_bumper){
-            Robot.attachmentMotors.getMotor(ConveyorUpper).setPower(0.5);
-        }else{
-            Robot.attachmentMotors.getMotor(ConveyorUpper).setPower(0);
-        }
-
-        if(this.gamepad2.left_trigger > 0.1){
-            Robot.attachmentMotors.getMotor(ConveyorLower).setPower(-0.5);
-        }else if(this.gamepad2.left_bumper){
-            Robot.attachmentMotors.getMotor(ConveyorLower).setPower(0.5);
-        }else{
-            Robot.attachmentMotors.getMotor(ConveyorLower).setPower(0);
-        }
-
-
-
-        if(this.gamepad2.dpad_down) {
-            Robot.attachmentMotors.getMotor(ArmLifter).setPower(-0.5);
-        }else if(this.gamepad2.dpad_up) {
-            Robot.attachmentMotors.getMotor(ArmLifter).setPower(0.5);
-        }else {
-            Robot.attachmentMotors.getMotor(ArmLifter).setPower(0);
-        }
-
+    private void Check_Grabber(){
         if(this.gamepad2.a){
             if(GrabbingGlyph){
                 while (this.gamepad2.a){
                     GrabbingGlyph = false;
-                    Robot.servos.getServo(Servos.GrabberOne).setPosition(0.25);
-                    Robot.servos.getServo(Servos.GrabberTwo).setPosition(0.45);
+                    Omni.servos.getServo(Servos.GrabberOne).setPosition(0.53);
+                    Omni.servos.getServo(Servos.GrabberTwo).setPosition(0.43);
                 }
             }else{
                 while (this.gamepad2.a) {
                     GrabbingGlyph = true;
-                    Robot.servos.getServo(Servos.GrabberOne).setPosition(0.50);
-                    Robot.servos.getServo(Servos.GrabberTwo).setPosition(0.26);
+                    Omni.servos.getServo(Servos.GrabberOne).setPosition(0.43);
+                    Omni.servos.getServo(Servos.GrabberTwo).setPosition(0.53);
                 }
             }
+        }
+        if(this.gamepad2.left_bumper){
+            Omni.servos.getServo(Servos.GrabberSpinOne).setPosition(1.0);
+            Omni.servos.getServo(Servos.GrabberSpinOne).setPosition(0);
+        }else if(this.gamepad2.left_trigger > 0.1){
+            Omni.servos.getServo(Servos.GrabberSpinOne).setPosition(0);
+            Omni.servos.getServo(Servos.GrabberSpinOne).setPosition(1.0);
+        }else{
+            Omni.servos.getServo(Servos.GrabberSpinOne).setPosition(0.5);
+            Omni.servos.getServo(Servos.GrabberSpinOne).setPosition(0.5);
+        }
+    }
+    private void Check_Conveyor(){
+        if(this.gamepad2.right_trigger > 0.1){
+            Omni.attachmentMotors.getMotor(Conveyor).setPower(-0.5);
+        }else if(this.gamepad2.right_bumper){
+            Omni.attachmentMotors.getMotor(Conveyor).setPower(0.5);
+        }else{
+            Omni.attachmentMotors.getMotor(Conveyor).setPower(0);
+        }
+
+        if(this.gamepad2.dpad_down) {
+            Omni.attachmentMotors.getMotor(ArmLifter).setPower(0.5);
+        }else if(this.gamepad2.dpad_up) {
+            Omni.attachmentMotors.getMotor(ArmLifter).setPower(-0.5);
+        }else {
+            Omni.attachmentMotors.getMotor(ArmLifter).setPower(0);
         }
     }
     private void Check_Slide(){
@@ -289,45 +293,56 @@ public class OmniTeleOp extends LinearOpMode {
             if(GrabbingRelic){
                 while(this.gamepad1.b){
                     GrabbingRelic = false;
-                    Robot.servos.getServo(Servos.Clampy).setPosition(1);
+                    Omni.servos.getServo(Servos.Clampy).setPosition(1);
                 }
             }else{
                 while(this.gamepad1.b) {
                     GrabbingRelic = true;
-                    Robot.servos.getServo(Servos.Clampy).setPosition(0);
+                    Omni.servos.getServo(Servos.Clampy).setPosition(0);
                 }
             }
         }
         if(this.gamepad1.dpad_up){
-            Robot.servos.getServo(RML).setPosition(0.70);
+            Omni.servos.getServo(RML).setPosition(0.70);
         }else if(this.gamepad1.dpad_down){
-            Robot.servos.getServo(RML).setPosition(0.25);
+            Omni.servos.getServo(RML).setPosition(0.25);
         }
         if(this.gamepad1.dpad_right){
-            Robot.attachmentMotors.getMotor(HorizontalLift).setPower(0.5);
+            Omni.attachmentMotors.getMotor(SlideExtender).setPower(0.5);
         }else if(this.gamepad1.dpad_left){
-            Robot.attachmentMotors.getMotor(HorizontalLift).setPower(-0.5);
+            Omni.attachmentMotors.getMotor(SlideExtender).setPower(-0.5);
         }else{
-            Robot.attachmentMotors.getMotor(HorizontalLift).setPower(0);
+            Omni.attachmentMotors.getMotor(SlideExtender).setPower(0);
+        }
+
+        if(this.gamepad1.right_bumper || this.gamepad1.left_bumper){
+            new Thread(new Runnable() {
+                public void run() {
+                    Omni.servos.getServo(RML).setPosition(.25);
+                    Omni.Pause(500);
+                    Omni.servos.getServo(Servos.Clampy).setPosition(0);
+                    Omni.servos.getServo(RML).setPosition(0);
+                }
+            }).start();
         }
     }
     private void Check_Other(){
         if(this.gamepad2.dpad_left || this.gamepad2.dpad_right){
-            Robot.servos.getServo(Servos.GrabberOne).setPosition(1);
-            Robot.servos.getServo(Servos.GrabberTwo).setPosition(0);
+            Omni.servos.getServo(Servos.GrabberOne).setPosition(1);
+            Omni.servos.getServo(Servos.GrabberTwo).setPosition(0);
         }
         if(this.gamepad2.y){
-            Robot.servos.getServo(Servos.FishTailLifter).setPosition(0.95);
-            Robot.Pause(1000);
-            Robot.servos.getServo(Servos.FishTailSwinger).setPosition(0.1);
-            Robot.Pause(1000);
-            Robot.servos.getServo(Servos.FishTailLifter).setPosition(0.9);
+            Omni.servos.getServo(Servos.FishTailLifter).setPosition(0.95);
+            Omni.Pause(1000);
+            Omni.servos.getServo(Servos.FishTailSwinger).setPosition(0.1);
+            Omni.Pause(1000);
+            Omni.servos.getServo(Servos.FishTailLifter).setPosition(0.9);
         }
         if(this.gamepad2.b){
-            Robot.servos.getServo(Servos.Lifter).setPosition(0.25);
+            Omni.servos.getServo(Servos.Lifter).setPosition(0.25);
         }
         if(this.gamepad2.x){
-            Robot.servos.getServo(Servos.Lifter).setPosition(0.5);
+            Omni.servos.getServo(Servos.Lifter).setPosition(0.5);
         }
     }
 }

@@ -4,8 +4,8 @@ public class Constants {
     public static final String RED = "RED";
     public static final String BLUE = "BLUE";
 
-    public final static int Forwards = 1;
-    public final static int Backwards = -1;
+    final static int Forwards = 1;
+    final static int Backwards = -1;
 
     public final static RobotDirection N = new RobotDirection(0,-1);
     public final static RobotDirection S = new RobotDirection(0,1);
@@ -17,12 +17,9 @@ public class Constants {
     public final static RobotDirection SE = new RobotDirection(0.8,0.8);
 
     public static final String ArmLifter = "ARM LIFTER";
-    public static final String HorizontalLift = "HORIZONTAL LIFT";
-    public static final String ConveyorLower = "CONVEYOR LOWER";
-    public static final String ConveyorUpper = "CONVEYOR UPPER";
-
-    public static int ON = 0;
-    public static int OFF = 1;
+    public static final String SlideExtender = "Slide Extender";
+    public static final String SlideRetracter = "Slide Retracter";
+    public static final String Conveyor = "CONVEYOR";
 
     public final static int Wheel_Diameter = 4; // INCHES
     public final static int Motor_Tick_Per_Rotation = 1150;
@@ -31,6 +28,8 @@ public class Constants {
     public static final String FishTailSwinger = "Fish Tail Swinger";
     public static final String GrabberOne = "GrabberOne";
     public static final String GrabberTwo = "GrabberTwo";
+    public static final String GrabberSpinOne = "GrabberSpinOne";
+    public static final String GrabberSpinTwo = "GrabberSpinTwo";
     public static final String Clampy = "Clampy";
     public static final String RML = "RML";
     public static final String Lifter = "Lifter";

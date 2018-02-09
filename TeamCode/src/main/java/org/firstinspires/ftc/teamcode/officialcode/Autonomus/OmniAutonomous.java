@@ -16,7 +16,7 @@ import static org.firstinspires.ftc.teamcode.officialcode.Constants.*;
 @Autonomous(name = "Autonomous Omni", group = "Program")
 public class OmniAutonomous extends LinearOpMode{
     //-------{VARIABLES}--------------------------------------------------------------------------------
-    public static OmniWheelRobot Crabby;
+    public static OmniWheelRobot Omni;
     private String COLOR ="NULL";
     private String PositionOnField = "NULL";
     private String KeyColumn = "RIGHT";
@@ -44,7 +44,7 @@ public class OmniAutonomous extends LinearOpMode{
         GatherInfo();
         telemetry.clearAll();
         telemetry.addData("STATUS "," INITIALIZING");telemetry.update();
-        Crabby = new OmniWheelRobot();
+        Omni = new OmniWheelRobot();
         initializeSensors();
         initializeServos();
         initializeMotors();
@@ -78,31 +78,31 @@ public class OmniAutonomous extends LinearOpMode{
         Right_Back.setDirection(DcMotorSimple.Direction.REVERSE);
         Right_Front.setDirection(DcMotorSimple.Direction.REVERSE);
 
-        Crabby.GiveDriveMotors(Left_Front, Right_Front, Left_Back, Right_Back);
+        Omni.GiveDriveMotors(Left_Front, Right_Front, Left_Back, Right_Back);
 
         DcMotor ArmLifter = hardwareMap.dcMotor.get("ArmLifter");
-        DcMotor HorizontalLift = hardwareMap.dcMotor.get("LinearSlide");
-        DcMotor ConveyorLower = hardwareMap.dcMotor.get("ConveyorLower");
-        DcMotor ConveyorUpper = hardwareMap.dcMotor.get("ConveyorUpper");
+        DcMotor SlideExtender = hardwareMap.dcMotor.get("LinearSlide");
+        DcMotor SlideRetracter = hardwareMap.dcMotor.get("SlideRetractor");
+        DcMotor Conveyor = hardwareMap.dcMotor.get("Conveyor");
 
         ArmLifter.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        HorizontalLift.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        ConveyorLower.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        ConveyorUpper.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        SlideExtender.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        SlideRetracter.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        Conveyor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
-        Crabby.GiveAttachmentMotors(ArmLifter, HorizontalLift, ConveyorLower, ConveyorUpper);
-
-
+        Omni.GiveAttachmentMotors(ArmLifter, Conveyor, SlideExtender, SlideRetracter);
     }
     private void initializeServos(){
         Servo FishTailLifter = hardwareMap.servo.get("FishTailLifter");
         Servo FishTailSwinger = hardwareMap.servo.get("FishTailSwinger");
         Servo GrabberOne = hardwareMap.servo.get("GrabberOne");
         Servo GrabberTwo = hardwareMap.servo.get("GrabberTwo");
+        Servo GrabberSpinOne = hardwareMap.servo.get("Grabber1");
+        Servo GrabberSpinTwo = hardwareMap.servo.get("Grabber2");
         Servo Clampy = hardwareMap.servo.get("Clampy");
         Servo RML = hardwareMap.servo.get("RML");
         Servo Lifter = hardwareMap.servo.get("Lifter");
-        Crabby.GiveServos(FishTailLifter, FishTailSwinger, GrabberOne, GrabberTwo, Clampy, RML, Lifter);
+        Omni.GiveServos(FishTailLifter, FishTailSwinger, GrabberOne, GrabberTwo, Clampy, RML, Lifter,GrabberSpinOne, GrabberSpinTwo);
 
 
     }
@@ -120,7 +120,7 @@ public class OmniAutonomous extends LinearOpMode{
         imu = hardwareMap.get(BNO055IMU.class, "imu");
         imu.initialize(parameters);
 
-        Crabby.GiveSensors(SuperNitron9000, imu, LIGHT);
+        Omni.GiveSensors(SuperNitron9000, imu, LIGHT);
     }
 
     //------{WRITING THE PROGRAM}-----------------------------------------------------------------------
@@ -211,6 +211,7 @@ public class OmniAutonomous extends LinearOpMode{
     //------{READING THE PROGRAM}-----------------------------------------------------------------------
     private class runProgram implements Runnable{
         public void run(){
+            Omni.servos.getServo(Servos.Lifter).setPosition(0.3);
             ReadProgram();
             requestOpModeStop();
         }
@@ -218,31 +219,31 @@ public class OmniAutonomous extends LinearOpMode{
     private void ReadProgram(){
         for(int LineInProgram = 0; LineInProgram <= PROGRAM.length-1;LineInProgram++){
             if(PROGRAM[LineInProgram][0] == RobotActions.KnockOffJewel){
-                Crabby.KnockOffJewel(COLOR);
+                Omni.KnockOffJewel(COLOR);
             }else if(PROGRAM[LineInProgram][0] == RobotActions.MoveN) {
-                Crabby.driveMotors.Move(N, PROGRAM[LineInProgram][1], PROGRAM[LineInProgram][2]);
+                Omni.driveMotors.Move(N, PROGRAM[LineInProgram][1], PROGRAM[LineInProgram][2]);
             }else if(PROGRAM[LineInProgram][0] == RobotActions.MoveS) {
-                Crabby.driveMotors.Move(S, PROGRAM[LineInProgram][1], PROGRAM[LineInProgram][2]);
+                Omni.driveMotors.Move(S, PROGRAM[LineInProgram][1], PROGRAM[LineInProgram][2]);
             }else if(PROGRAM[LineInProgram][0] == RobotActions.MoveE) {
-                Crabby.driveMotors.Move(E, PROGRAM[LineInProgram][1], PROGRAM[LineInProgram][2]);
+                Omni.driveMotors.Move(E, PROGRAM[LineInProgram][1], PROGRAM[LineInProgram][2]);
             }else if(PROGRAM[LineInProgram][0] == RobotActions.MoveW) {
-                Crabby.driveMotors.Move(W, PROGRAM[LineInProgram][1], PROGRAM[LineInProgram][2]);
+                Omni.driveMotors.Move(W, PROGRAM[LineInProgram][1], PROGRAM[LineInProgram][2]);
             }else if(PROGRAM[LineInProgram][0] == RobotActions.Turn){
-                Crabby.driveMotors.Turn((int) PROGRAM[LineInProgram][1]);
+                Omni.driveMotors.Turn((int) PROGRAM[LineInProgram][1]);
             }else if(PROGRAM[LineInProgram][0] == RobotActions.MoveNW) {
-                Crabby.driveMotors.Move(NW, PROGRAM[LineInProgram][1], PROGRAM[LineInProgram][2]);
+                Omni.driveMotors.Move(NW, PROGRAM[LineInProgram][1], PROGRAM[LineInProgram][2]);
             }else if(PROGRAM[LineInProgram][0] == RobotActions.MoveSW) {
-                Crabby.driveMotors.Move(SW, PROGRAM[LineInProgram][1], PROGRAM[LineInProgram][2]);
+                Omni.driveMotors.Move(SW, PROGRAM[LineInProgram][1], PROGRAM[LineInProgram][2]);
             }else if(PROGRAM[LineInProgram][0] == RobotActions.MoveNE) {
-                Crabby.driveMotors.Move(NE, PROGRAM[LineInProgram][1], PROGRAM[LineInProgram][2]);
+                Omni.driveMotors.Move(NE, PROGRAM[LineInProgram][1], PROGRAM[LineInProgram][2]);
             }else if(PROGRAM[LineInProgram][0] == RobotActions.MoveSE) {
-                Crabby.driveMotors.Move(SE, PROGRAM[LineInProgram][1], PROGRAM[LineInProgram][2]);
+                Omni.driveMotors.Move(SE, PROGRAM[LineInProgram][1], PROGRAM[LineInProgram][2]);
             }else if(PROGRAM[LineInProgram][0] == RobotActions.Turn){
-                Crabby.driveMotors.Turn((int)PROGRAM[LineInProgram][1]);
+                Omni.driveMotors.Turn((int)PROGRAM[LineInProgram][1]);
             }else if(PROGRAM[LineInProgram][0] == RobotActions.Read_Pictograph){
                 KeyColumn = readPictograph(true, true);
             }else if(PROGRAM[LineInProgram][0] == RobotActions.AlineToRow){
-                Crabby.ScoreAGlyph(KeyColumn, COLOR, PositionOnField);
+                Omni.ScoreAGlyph(KeyColumn, COLOR, PositionOnField);
             }
         }
     }

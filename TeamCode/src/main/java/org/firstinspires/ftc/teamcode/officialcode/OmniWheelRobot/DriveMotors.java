@@ -90,7 +90,7 @@ public class DriveMotors {
         this.LB.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         }
     private float readGyro(){
-        return OmniAutonomous.Crabby.sensors.ReadGyro();
+        return OmniAutonomous.Omni.sensors.ReadGyro();
     }
     private boolean WhichWayToTurn(int Target, int Gyro){
         int  VirtualDegrees = Gyro;

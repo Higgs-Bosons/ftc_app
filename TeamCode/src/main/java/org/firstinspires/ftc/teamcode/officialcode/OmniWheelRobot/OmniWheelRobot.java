@@ -18,8 +18,8 @@ public class OmniWheelRobot extends Constants{
     public OmniWheelRobot(){
 
     }
-    public void GiveAttachmentMotors(DcMotor ArmLifter, DcMotor HorizontalLift,  DcMotor ConveyorLower, DcMotor ConveyorUpper){
-        this.attachmentMotors = new AttachmentMotors(ArmLifter,  HorizontalLift,   ConveyorLower,  ConveyorUpper);
+    public void GiveAttachmentMotors(DcMotor ArmLifter, DcMotor Conveyor, DcMotor SlideExtender, DcMotor SlideRetracter){
+        this.attachmentMotors = new AttachmentMotors(ArmLifter, Conveyor, SlideExtender, SlideRetracter);
     }
     public void GiveDriveMotors(DcMotor LeftFront, DcMotor RightFront, DcMotor LeftBack, DcMotor RightBack){
         this.driveMotors = new DriveMotors(LeftFront, RightFront, LeftBack, RightBack);
@@ -27,8 +27,8 @@ public class OmniWheelRobot extends Constants{
     public void GiveSensors(ColorSensor SuperNitron9000, BNO055IMU IMU, OpticalDistanceSensor LIGHT){
         this.sensors = new Sensors(SuperNitron9000, IMU, LIGHT);
     }
-    public void GiveServos(Servo FishTailLifter,  Servo FishTailSwinger, Servo GrabberOne, Servo GrabberTwo, Servo Clampy, Servo RML, Servo Lifter){
-        this.servos = new Servos(FishTailLifter, FishTailSwinger, GrabberOne, GrabberTwo, Clampy, RML,Lifter);
+    public void GiveServos(Servo FishTailLifter,Servo FishTailSwinger,Servo GrabberOne,Servo GrabberTwo,Servo Clampy,Servo RML,Servo Lifter,Servo GrabberSpinOne,Servo GrabberSpinTwo){
+        this.servos = new Servos(FishTailLifter, FishTailSwinger, GrabberOne, GrabberTwo, Clampy, RML,Lifter, GrabberSpinOne, GrabberSpinTwo);
     }
 
     public void Pause(int Duration){
@@ -139,10 +139,8 @@ public class OmniWheelRobot extends Constants{
 
     }
     private void dropOff(){
-        this.attachmentMotors.getMotor(ConveyorUpper).setPower(-0.5);
-        this.attachmentMotors.getMotor(ConveyorLower).setPower(-0.5);
+        this.attachmentMotors.getMotor(Conveyor).setPower(-0.5);
         this.Pause(4000);
-        this.attachmentMotors.getMotor(ConveyorUpper).setPower(0);
-        this.attachmentMotors.getMotor(ConveyorLower).setPower(0);
+        this.attachmentMotors.getMotor(Conveyor).setPower(0);
     }
 }
