@@ -9,10 +9,9 @@ import org.firstinspires.ftc.robotcore.external.navigation.*;
 import org.firstinspires.ftc.robotcore.internal.system.AppUtil;
 import org.firstinspires.ftc.robotcore.internal.ui.UILocation;
 import org.firstinspires.ftc.teamcode.officialcode.Constants;
-import org.firstinspires.ftc.teamcode.officialcode.OmniWheelRobot.OmniWheelRobot;
 import org.firstinspires.ftc.teamcode.officialcode.OmniWheelRobot.*;
-import org.firstinspires.ftc.teamcode.officialcode.TeleOp.XControl;
 import static org.firstinspires.ftc.teamcode.officialcode.Constants.*;
+
 @Autonomous(name = "Autonomous Omni", group = "Program")
 public class OmniAutonomous extends LinearOpMode{
     //-------{VARIABLES}--------------------------------------------------------------------------------
@@ -155,8 +154,6 @@ public class OmniAutonomous extends LinearOpMode{
                 ALL_INFO = true;
             }
         }
-        XControl.COLOR = COLOR;
-        XControl.PositionOnField = PositionOnField;
     }
     private void WriteProgram(){
         if(PositionOnField.equals("LEFT")){
@@ -201,9 +198,13 @@ public class OmniAutonomous extends LinearOpMode{
                         {RobotActions.Turn, 270}};
             }else{
                 PROGRAM = new double[][]{
+                        {RobotActions.Read_Pictograph, RobotActions.NULL},
                         {RobotActions.KnockOffJewel, RobotActions.NULL},
-                        {RobotActions.MoveN, 25, 0.5},
-                        {RobotActions.MoveW, 2, 0.5}};
+                        {RobotActions.MoveN, 20, 0.4},
+                        {RobotActions.Turn, 90},
+                        {RobotActions.MoveS, 7, 0.1},
+                        {RobotActions.Turn, 90},
+                        {RobotActions.AlineToRow, RobotActions.NULL}};
             }
         }
     }

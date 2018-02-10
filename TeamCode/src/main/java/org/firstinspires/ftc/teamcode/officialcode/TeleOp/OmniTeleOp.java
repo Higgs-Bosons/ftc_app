@@ -1,12 +1,10 @@
 package org.firstinspires.ftc.teamcode.officialcode.TeleOp;
 
 import com.qualcomm.hardware.bosch.*;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.*;
 
-import org.firstinspires.ftc.teamcode.officialcode.Constants;
 import org.firstinspires.ftc.teamcode.officialcode.OmniWheelRobot.*;
 
 import static org.firstinspires.ftc.teamcode.officialcode.Constants.*;
