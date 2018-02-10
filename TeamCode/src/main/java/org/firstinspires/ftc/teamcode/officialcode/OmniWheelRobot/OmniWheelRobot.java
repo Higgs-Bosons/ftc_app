@@ -13,12 +13,10 @@ public class OmniWheelRobot extends Constants{  //This is the class we made to h
     public AttachmentMotors attachmentMotors;   //This controls all the motors used for attachments.
     private int ROW = 1;                        //This stores the target Cryptobox column.
     private int degrees = 0;                    //This stores how much we need to turn when we are aligning to the Cryptobox.
-    private int Direction = 1;                  //Stores which direction we need to scan.
+    private double Direction = 0.2;             //Stores which direction we need to scan.
 
 //------------{OmniWheelRobot}--------------------------------------------------------------------------------------------------------------------------
-    public OmniWheelRobot(){
-
-    }//Empty
+    public OmniWheelRobot(){}//Empty
     //In here we pass all of the Attachment Motors, we can't use hardwareMap in here.
     public void GiveAttachmentMotors(DcMotor ArmLifter, DcMotor Conveyor, DcMotor SlideExtender, DcMotor SlideRetracter){
         //It then gives the motors to an AttachmentMotor object.
@@ -32,7 +30,7 @@ public class OmniWheelRobot extends Constants{  //This is the class we made to h
     public void GiveSensors(ColorSensor SuperNitron9000, BNO055IMU IMU, OpticalDistanceSensor LIGHT){
         this.sensors = new Sensors(SuperNitron9000, IMU, LIGHT);
     }
-    //And here is where was pass all of the 9 Servos to  a Servo object.
+    //And here is where we pass all of the 9 Servos to a Servo object.
     public void GiveServos(Servo FishTailLifter,Servo FishTailSwinger,Servo GrabberOne,Servo GrabberTwo,Servo Clampy,Servo RML,Servo Lifter,Servo GrabberSpinOne,Servo GrabberSpinTwo){
         this.servos = new Servos(FishTailLifter, FishTailSwinger, GrabberOne, GrabberTwo, Clampy, RML,Lifter, GrabberSpinOne, GrabberSpinTwo);
     }
@@ -97,63 +95,63 @@ public class OmniWheelRobot extends Constants{  //This is the class we made to h
         this.servos.getServo(Servos.FishTailSwinger).setPosition(0.1);          // and moves it lowers it onto the support beam.
     }
 
-    public void ScoreAGlyph(String KeyColumn, String Color, String Position){
-        if(Position.equals("LEFT")&Color.equals(RED)){degrees = 270;}
-        if(Position.equals("RIGHT")&Color.equals(RED)){degrees = 0;}
-        if(Position.equals("LEFT")&Color.equals(BLUE)){degrees = 180;}
-        if(Color.equals(RED)){
-            Direction = -1;
-            if(KeyColumn.equals("LEFT") ) {ROW = 3;}
-            if(KeyColumn.equals("CENTER")){ROW = 2;}
+    //We use this program to align to the correct Cryptobox column, and drop off the preloaded glyph.
+    public void ScoreAGlyph(String KeyColumn, String Color, String Position){//We pass the key column, the alliance color, and the position on the field.
+        if(Position.equals("LEFT")&Color.equals(RED)){degrees = 270;}        //If we are on team red, and the left side, degrees = 270.
+        if(Position.equals("LEFT")&Color.equals(BLUE)){degrees = 180;}       //if we are on team blue, and the left side, degrees = 180.
+        if(Color.equals(RED)){                                               //If we are on red, we set Direction to -1, reversing the
+            Direction = -0.2;                                                  // direction that we scan the columns. Then we convert the String
+            if(KeyColumn.equals("LEFT") ) {ROW = 3;}                         // Vuforia gives us for the key column, to an integer, that we use to go
+            if(KeyColumn.equals("CENTER")){ROW = 2;}                         // to the correct column.
             if(KeyColumn.equals("RIGHT")) {ROW = 1;}
-        }else{
-            if(KeyColumn.equals("LEFT") ) {ROW = 1;}
+        }else{                                                               //If we are not on team red (we are on team blue), we then convert the
+            if(KeyColumn.equals("LEFT") ) {ROW = 1;}                         // String to an integer, using a different method.
             if(KeyColumn.equals("CENTER")){ROW = 2;}
             if(KeyColumn.equals("RIGHT")) {ROW = 3;}
         }
-        alineRow(ROW);
-        fineTune();
-        dropOff();
+        alignRow(ROW);                                                       //Then we pass ROW to alignRow(), which aligns us to the correct column.
+        fineTune();                                                          //Then we run fineTune() to align precisely to the column
+        dropOff();                                                           //And finally dropOff() to drop in the glyph.
     }
-    private void alineRow(int row){
-        if(Direction == -1){
-            this.driveMotors.Move(W, 1, 0.3);
-        }else{
-            this.driveMotors.Move(E, 2.5, 0.3);
+    private void alignRow(int row){
+        int OldReading;                                                              //Stores the previous reading.
+
+        if(Direction == -0.2){                                                       //If Direction equals -0.2, which means that we are on team red,
+            this.driveMotors.Move(W, 1, 0.3);                    // we move 1 inch to the left, to make sure we see the first
+        }else{                                                                       // column. If we are on blue, we move the other way, also to
+            this.driveMotors.Move(E, 2.5, 0.3);                  // make sure we see the first column.
         }
-        int OldReading;
-        this.driveMotors.Turn(degrees);
-        this.driveMotors.TurnMotorsOn(0.2 * Direction, -0.2 * Direction
-                , -0.2 * Direction, 0.2 * Direction);
-        OldReading = this.sensors.getReflectedLight();
-        for(int LOOP = row; LOOP != 0;){
-            while(OldReading + 35 > this.sensors.getReflectedLight()){OldReading = this.sensors.getReflectedLight();}
-            while(OldReading - 35 < this.sensors.getReflectedLight()){OldReading = this.sensors.getReflectedLight();}
-            OldReading = this.sensors.getReflectedLight();
-            LOOP--;
-        }
-        this.driveMotors.STOP();
+
+        this.driveMotors.Turn(degrees);                                              //We turn to degrees, to make sure we are parallel to the wall.
+        this.driveMotors.TurnMotorsOn(Direction, -Direction,-Direction, Direction);  //We then slow move across the Cryptobox.
+        OldReading = this.sensors.getReflectedLight();                               //OldReading is set to the current reflected light reading.
+        for(int LOOP = row; LOOP != 0;LOOP--){                                       //We then loop till we have looped the number of times row is.
+            while(OldReading + 35 > this.sensors.getReflectedLight())                //We wait until the current reading is greater than the OldReading
+            {OldReading = this.sensors.getReflectedLight();}                         // plus 35. If it is not, OldReading is set to the current reading.
+            while(OldReading - 35 < this.sensors.getReflectedLight())                //We then wait for the current reading to go back down, still setting
+            {OldReading = this.sensors.getReflectedLight();}                         // the OldReading to the current reading.
+            OldReading = this.sensors.getReflectedLight();                           //We then set OldReading to the current reading, an decrees LOOP
+        }                                                                            // (in the for loop).
+        this.driveMotors.STOP();                                                     //Finally we stop the driveMotors.
     }
     private void fineTune(){
+        this.driveMotors.Turn(degrees);                                           //We now turn to degrees, two times for more accuracy.
         this.driveMotors.Turn(degrees);
-        this.driveMotors.Turn(degrees);
-        int OldReading = this.sensors.getReflectedLight();
-        this.driveMotors.Move(E, 3, 0.4);
-        this.driveMotors.TurnMotorsOn(0.1, -0.1,-0.1, 0.1);
-        while(OldReading + 50 > this.sensors.getReflectedLight()){OldReading = this.sensors.getReflectedLight();}
-       // if(Direction == 1){
-         //   while(OldReading - 50 < this.sensors.getReflectedLight()){OldReading = this.sensors.getReflectedLight();}
-        //}
-        this.driveMotors.Turn(degrees);
-        this.driveMotors.Turn(degrees);
-        this.driveMotors.Turn(degrees);
-        this.driveMotors.Move(S, 1, 0.3);
-        this.driveMotors.Move(N, 3, 0.3);
-
+        int OldReading = this.sensors.getReflectedLight();                        //OldReading is set to the current reflected light intensity.
+        this.driveMotors.Move(E, 3, 0.4);                     //We move 3 inches to the left (East, we are backwards).
+        this.driveMotors.TurnMotorsOn(0.1, -0.1,  //Then we start moving slowly to the right.
+                -0.1, 0.1);
+        while(OldReading + 50 > this.sensors.getReflectedLight())                 //We wait for the current reading till we se a "spike" (the current
+        {OldReading = this.sensors.getReflectedLight();}                          // reading is 50 more than OldReading). While it is a no, we set the
+        this.driveMotors.Turn(degrees);                                           // OldReading to the current reading.
+        this.driveMotors.Turn(degrees);                                           //We now turn to degrees, two times for more accuracy.
+        this.driveMotors.Move(S, 1, 0.3);                     //Then back up to make sure we are straight,
+        this.driveMotors.Move(N, 3, 0.3);                     // and move forward to give the glyph we are going to drop room to land
+                                                                                  // flat.
     }
     private void dropOff(){
-        this.attachmentMotors.getMotor(Conveyor).setPower(-0.5);
-        this.Pause(4000);
-        this.attachmentMotors.getMotor(Conveyor).setPower(0);
+        this.attachmentMotors.getMotor(Conveyor).setPower(-0.5);  //We power the ConveyorBelt, turning it.
+        this.Pause(4000);                                //Pause 4 seconds (4000 milliseconds).
+        this.attachmentMotors.getMotor(Conveyor).setPower(0);     //We stop the motor.
     }
 }
