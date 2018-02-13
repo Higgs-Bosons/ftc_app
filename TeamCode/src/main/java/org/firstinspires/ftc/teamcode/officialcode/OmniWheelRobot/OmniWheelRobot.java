@@ -12,8 +12,7 @@ public class OmniWheelRobot extends Constants{  //This is the class we made to h
     public DriveMotors driveMotors;             //This takes care of moving the Robot.
     public AttachmentMotors attachmentMotors;   //This controls all the motors used for attachments.
     private int ROW = 1;                        //This stores the target Cryptobox column.
-    private int degrees = 0;                    //This stores how much we need to turn when we are aligning to the Cryptobox.
-    private double Direction = 0.2;             //Stores which direction we need to scan.
+    private double Direction = 0.15;             //Stores which direction we need to scan.
 
 //------------{OmniWheelRobot}--------------------------------------------------------------------------------------------------------------------------
     public OmniWheelRobot(){}//Empty
@@ -96,11 +95,9 @@ public class OmniWheelRobot extends Constants{  //This is the class we made to h
     }
 
     //We use this program to align to the correct Cryptobox column, and drop off the preloaded glyph.
-    public void ScoreAGlyph(String KeyColumn, String Color, String Position){//We pass the key column, the alliance color, and the position on the field.
-        if(Position.equals("LEFT")&Color.equals(RED)){degrees = 270;}        //If we are on team red, and the left side, degrees = 270.
-        if(Position.equals("LEFT")&Color.equals(BLUE)){degrees = 180;}       //if we are on team blue, and the left side, degrees = 180.
+    public void ScoreAGlyph(String KeyColumn, String Color){//We pass the key column, the alliance color, and the position on the field.
         if(Color.equals(RED)){                                               //If we are on red, we set Direction to -1, reversing the
-            Direction = -0.2;                                                  // direction that we scan the columns. Then we convert the String
+            Direction = -0.15;                                                  // direction that we scan the columns. Then we convert the String
             if(KeyColumn.equals("LEFT") ) {ROW = 3;}                         // Vuforia gives us for the key column, to an integer, that we use to go
             if(KeyColumn.equals("CENTER")){ROW = 2;}                         // to the correct column.
             if(KeyColumn.equals("RIGHT")) {ROW = 1;}
@@ -115,14 +112,12 @@ public class OmniWheelRobot extends Constants{  //This is the class we made to h
     }
     private void alignRow(int row){
         int OldReading;                                                              //Stores the previous reading.
-
-        if(Direction == -0.2){                                                       //If Direction equals -0.2, which means that we are on team red,
-            this.driveMotors.Move(W, 1, 0.3);                    // we move 1 inch to the left, to make sure we see the first
+        if(Direction < 0){                                                           //If Direction is less than 0, which means that we are on team red,
+            this.driveMotors.Move(W, 3, 0.1);                    // we move 3 inches to the left, to make sure we see the first
         }else{                                                                       // column. If we are on blue, we move the other way, also to
-            this.driveMotors.Move(E, 2.5, 0.3);                  // make sure we see the first column.
+            this.driveMotors.Move(E, 2.5, 0.1);                  // make sure we see the first column.
         }
-
-        this.driveMotors.Turn(degrees);                                              //We turn to degrees, to make sure we are parallel to the wall.
+        this.driveMotors.Turn(0);                                      //We turn to 0, to make sure we are parallel to the wall.
         this.driveMotors.TurnMotorsOn(Direction, -Direction,-Direction, Direction);  //We then slow move across the Cryptobox.
         OldReading = this.sensors.getReflectedLight();                               //OldReading is set to the current reflected light reading.
         for(int LOOP = row; LOOP != 0;LOOP--){                                       //We then loop till we have looped the number of times row is.
@@ -130,24 +125,24 @@ public class OmniWheelRobot extends Constants{  //This is the class we made to h
             {OldReading = this.sensors.getReflectedLight();}                         // plus 35. If it is not, OldReading is set to the current reading.
             while(OldReading - 35 < this.sensors.getReflectedLight())                //We then wait for the current reading to go back down, still setting
             {OldReading = this.sensors.getReflectedLight();}                         // the OldReading to the current reading.
-            OldReading = this.sensors.getReflectedLight();                           //We then set OldReading to the current reading, an decrees LOOP
+            OldReading = this.sensors.getReflectedLight();                           //We then set OldReading to the current reading, an decreases LOOP
         }                                                                            // (in the for loop).
         this.driveMotors.STOP();                                                     //Finally we stop the driveMotors.
     }
     private void fineTune(){
-        this.driveMotors.Turn(degrees);                                           //We now turn to degrees, two times for more accuracy.
-        this.driveMotors.Turn(degrees);
+        this.driveMotors.Turn(0);                                   //We now turn to 0, two times for more accuracy.
+        this.driveMotors.Turn(0);
         int OldReading = this.sensors.getReflectedLight();                        //OldReading is set to the current reflected light intensity.
-        this.driveMotors.Move(E, 3, 0.4);                     //We move 3 inches to the left (East, we are backwards).
+        this.driveMotors.Move(E, 2, 0.2);                     //We move 3 inches to the left (East, we are backwards).
         this.driveMotors.TurnMotorsOn(0.1, -0.1,  //Then we start moving slowly to the right.
                 -0.1, 0.1);
         while(OldReading + 50 > this.sensors.getReflectedLight())                 //We wait for the current reading till we se a "spike" (the current
         {OldReading = this.sensors.getReflectedLight();}                          // reading is 50 more than OldReading). While it is a no, we set the
-        this.driveMotors.Turn(degrees);                                           // OldReading to the current reading.
-        this.driveMotors.Turn(degrees);                                           //We now turn to degrees, two times for more accuracy.
-        this.driveMotors.Move(S, 1, 0.3);                     //Then back up to make sure we are straight,
+        this.driveMotors.Turn(0);                                           // OldReading to the current reading.
+        this.driveMotors.Turn(0);                                    //We now turn to 0, two times for more accuracy.
+        this.driveMotors.Move(S, 4, 0.3);                     //Then back up to make sure we are straight,
         this.driveMotors.Move(N, 3, 0.3);                     // and move forward to give the glyph we are going to drop room to land
-                                                                                  // flat.
+        this.driveMotors.Turn(0);                                   // flat. An turn back to 0.
     }
     private void dropOff(){
         this.attachmentMotors.getMotor(Conveyor).setPower(-0.5);  //We power the ConveyorBelt, turning it.

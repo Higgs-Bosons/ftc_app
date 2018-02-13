@@ -16,7 +16,7 @@ public class Sensors extends Constants{
         this.IMU = IMU;
         this.LIGHT = Light;
     }
-    int ReadColor(String color){
+    public int ReadColor(String color){
         if(color.equalsIgnoreCase("RED")){
             return this.SuperNitron9000.red();
         }else if(color.equalsIgnoreCase("BLUE")){
@@ -33,7 +33,7 @@ public class Sensors extends Constants{
         }
         return Value;
     }
-    int getReflectedLight(){
+    public int getReflectedLight(){
         return (int) Math.floor((LIGHT.getRawLightDetected()/LIGHT.getRawLightDetectedMax()) * 1000);
     }
     public void ResetGyro(){

@@ -26,14 +26,17 @@ public class OmniAutonomous extends LinearOpMode{
     //-------{STARTING OF THE PROGRAM}------------------------------------------------------------------
     public void runOpMode() throws InterruptedException {
         initialize();
-        telemetry.addData("INITIALIZED ","-)");telemetry.update();
         waitForStart();
         relicTrackables.activate();
         Runnable PROGRAM = new runProgram();
         Thread programedMissionThread = new Thread(PROGRAM);
         programedMissionThread.start();
         while(opModeIsActive()) {
-           telemetry.addData("Vuforia",readPictograph(false, false));telemetry.update();
+            telemetry.addData("Vuforia",readPictograph(false, false));
+            telemetry.addData("Red    ",Omni.sensors.ReadColor(RED));
+            telemetry.addData("Blue   ",Omni.sensors.ReadColor(BLUE));
+            telemetry.addData("Gyro   ",Omni.sensors.ReadGyro());
+            telemetry.addData("Light  ",Omni.sensors.getReflectedLight());telemetry.update();
         }
         programedMissionThread.interrupt();
     }
@@ -161,11 +164,13 @@ public class OmniAutonomous extends LinearOpMode{
                 PROGRAM = new double[][]{
                         {RobotActions.Read_Pictograph, RobotActions.NULL},
                         {RobotActions.KnockOffJewel, RobotActions.NULL},
-                        {RobotActions.MoveS, 20, 0.4},
+                        {RobotActions.MoveS, 20, 0.5},
                         {RobotActions.Turn, 270},
-                        {RobotActions.MoveS, 7, 0.1},
-                        {RobotActions.Turn, 270},
-                        {RobotActions.AlineToRow, RobotActions.NULL}};
+                        {RobotActions.MoveS, 7, 0.4},
+                        {RobotActions.ResetGyro, RobotActions.NULL},
+                        {RobotActions.MoveN, 0.8, 0.2},
+                        {RobotActions.AlineToRow, RobotActions.NULL},
+                        {RobotActions.MoveN, 1, 0.7}};
             }else{
                 PROGRAM = new double[][]{
                         {RobotActions.Read_Pictograph, RobotActions.NULL},
@@ -174,11 +179,12 @@ public class OmniAutonomous extends LinearOpMode{
                         {RobotActions.Turn, 180},
                         {RobotActions.MoveW, 2.2, 0.3},
                         {RobotActions.MoveS, 6, 0.4},
-                        {RobotActions.MoveN, 0.3, 0.2},
+                        {RobotActions.ResetGyro, RobotActions.NULL},
+                        {RobotActions.MoveN, 0.8, 0.2},
                         {RobotActions.AlineToRow, RobotActions.NULL},
-                        {RobotActions.MoveN, 3, 0.7},
-                        {RobotActions.MoveS, 5, 0.2},
-                        {RobotActions.MoveN, 5, 0.3},
+                        {RobotActions.MoveN, 1, 0.7},
+                        {RobotActions.MoveS, 6, 0.2},
+                        {RobotActions.MoveN, 2, 0.3},
                         {RobotActions.Turn, 90}};
             }
         }
@@ -188,23 +194,27 @@ public class OmniAutonomous extends LinearOpMode{
                         {RobotActions.Read_Pictograph, RobotActions.NULL},
                         {RobotActions.KnockOffJewel, RobotActions.NULL},
                         {RobotActions.MoveS, 22, 0.4},
-                        {RobotActions.MoveE, 7, 0.4},
-                        {RobotActions.MoveS, 6, 0.2},
+                        {RobotActions.MoveE, 5, 0.4},
+                        {RobotActions.MoveS, 6, 0.4},
                         {RobotActions.Turn, 0},
+                        {RobotActions.MoveN, 0.8, 0.2},
                         {RobotActions.AlineToRow, RobotActions.NULL},
+                        {RobotActions.MoveN, 1, 0.2},
+                        {RobotActions.MoveS, 6, 0.2},
                         {RobotActions.MoveN, 2, 0.5},
-                        {RobotActions.MoveS, 3, 0.2},
-                        {RobotActions.MoveN, 4, 0.5},
                         {RobotActions.Turn, 270}};
             }else{
                 PROGRAM = new double[][]{
                         {RobotActions.Read_Pictograph, RobotActions.NULL},
                         {RobotActions.KnockOffJewel, RobotActions.NULL},
-                        {RobotActions.MoveN, 20, 0.4},
-                        {RobotActions.Turn, 90},
-                        {RobotActions.MoveS, 7, 0.1},
-                        {RobotActions.Turn, 90},
-                        {RobotActions.AlineToRow, RobotActions.NULL}};
+                        {RobotActions.MoveN, 20, 0.5},
+                        {RobotActions.Turn, 270},
+                        {RobotActions.MoveS, 9, 0.4},
+                        {RobotActions.ResetGyro, RobotActions.NULL},
+                        {RobotActions.MoveN, 0.8, 0.2},
+                        {RobotActions.MoveE, 4, 0.1},
+                        {RobotActions.AlineToRow, RobotActions.NULL},
+                        {RobotActions.MoveN, 1, 0.7}};
             }
         }
     }
@@ -242,9 +252,15 @@ public class OmniAutonomous extends LinearOpMode{
             }else if(PROGRAM[LineInProgram][0] == RobotActions.Turn){
                 Omni.driveMotors.Turn((int)PROGRAM[LineInProgram][1]);
             }else if(PROGRAM[LineInProgram][0] == RobotActions.Read_Pictograph){
-                KeyColumn = readPictograph(true, true);
+                new Thread(new Runnable() {
+                    public void run() {
+                        KeyColumn = readPictograph(true, true);
+                    }
+                }).start();
             }else if(PROGRAM[LineInProgram][0] == RobotActions.AlineToRow){
-                Omni.ScoreAGlyph(KeyColumn, COLOR, PositionOnField);
+                Omni.ScoreAGlyph(KeyColumn, COLOR);
+            }else if(PROGRAM[LineInProgram][0] == RobotActions.ResetGyro){
+                Omni.sensors.ResetGyro();
             }
         }
     }

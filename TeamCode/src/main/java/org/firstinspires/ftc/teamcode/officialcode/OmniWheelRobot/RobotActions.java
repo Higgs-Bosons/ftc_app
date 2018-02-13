@@ -13,6 +13,7 @@ public class RobotActions {
     public final static int MoveSW = 1010;
     public final static int Turn = 1011;
     public final static int AlineToRow = 1012;
+    public final static int ResetGyro = 1013;
 
     public final static int NULL = 0;
 }
