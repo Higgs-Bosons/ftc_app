@@ -32,11 +32,16 @@ public class OmniAutonomous extends LinearOpMode{
         Thread programedMissionThread = new Thread(PROGRAM);
         programedMissionThread.start();
         while(opModeIsActive()) {
-            telemetry.addData("Vuforia",readPictograph(false, false));
+            telemetry.addData("count",OmniWheelRobot.count);
             telemetry.addData("Red    ",Omni.sensors.ReadColor(RED));
             telemetry.addData("Blue   ",Omni.sensors.ReadColor(BLUE));
             telemetry.addData("Gyro   ",Omni.sensors.ReadGyro());
-            telemetry.addData("Light  ",Omni.sensors.getReflectedLight());telemetry.update();
+            telemetry.addData("Light  ",Omni.sensors.getReflectedLight());
+            telemetry.addData("RF  ",Omni.driveMotors.GetMotor(Constants.RightFront).getCurrentPosition());
+            telemetry.addData("RB  ",Omni.driveMotors.GetMotor(Constants.RightBack).getCurrentPosition());
+            telemetry.addData("LF  ",Omni.driveMotors.GetMotor(Constants.LeftFront).getCurrentPosition());
+            telemetry.addData("LB  ",Omni.driveMotors.GetMotor(Constants.LeftBack).getCurrentPosition());
+            telemetry.update();
         }
         programedMissionThread.interrupt();
     }
@@ -126,37 +131,40 @@ public class OmniAutonomous extends LinearOpMode{
     }
 
     //------{WRITING THE PROGRAM}-----------------------------------------------------------------------
-    private void GatherInfo(){
-        telemetry.addData("Alliance Color",COLOR);
-        telemetry.addData("POSITION ON FIELD", PositionOnField);telemetry.update();
-        telemetry.addData("WHEN FINISHED ", "PRESS Y");
-        boolean HasPosition = false;
-        boolean HasColor = false;
-        boolean ALL_INFO = false;
-        while(!gamepad1.y){
-            if(gamepad1.x){
-                COLOR = BLUE;
+    private void GatherInfo(){                                                           //Gather info is when we put in the info about color and placement.
+        telemetry.addData("Alliance Color",COLOR);                               //We display:   WHEN FINISHED:PRESS Y
+        telemetry.addData("Position on Field", PositionOnField);                 //              Alliance Color:(the color)
+        telemetry.addData("WHEN FINISHED ", "PRESS Y");                    //             Position on Field:(the position)
+        telemetry.update();
+        boolean HasPosition = false;                                                     //HasPosition is false until we put in a position.
+        boolean HasColor = false;                                                        //HasColor is false until we put in a color.
+        boolean ALL_INFO = false;                                                        //ALL_INFO is equal to (HasColor && HasPosition)
+        while(!gamepad1.y){                                                              //We loop until we press the 'Y' button.
+            if(gamepad1.x){                                                              // If we  press the 'X', which is blue, it sets the COLOR variable
+                COLOR = BLUE;                                                            // to BLUE, and HasColor is set to true.
                 HasColor = true;
-            }else if(gamepad1.b){
+            }else if(gamepad1.b){                                                        //If we press the 'B', which is red, it sets the COLOR variable
+                COLOR = RED;                                                             // to RED, and HasColor is set to true.
                 HasColor = true;
-                COLOR = RED;
             }
 
-            if(gamepad1.dpad_right){
-                PositionOnField = "RIGHT";
+            if(gamepad1.dpad_right){                                                     //If we press the right on the dpad, we set the PositionOnField
+                PositionOnField = "RIGHT";                                               // to "RIGHT", and HasPosition to true;
                 HasPosition = true;
-            }else if(gamepad1.dpad_left){
-                PositionOnField = "LEFT";
+            }else if(gamepad1.dpad_left){                                                //If we press the right on the dpad, we set the PositionOnField
+                PositionOnField = "LEFT";                                                // to "LEFT", and HasPosition to true;
                 HasPosition = true;
             }
-            telemetry.addData("Alliance Color",COLOR);
-            telemetry.addData("POSITION ON FIELD", PositionOnField);telemetry.update();
-            telemetry.addData("WHEN FINISHED ", "PRESS Y");
-            if(HasPosition && HasColor && !ALL_INFO){
-                AppUtil.getInstance().showToast(UILocation.BOTH,"Ready To Run! :-)");
-                ALL_INFO = true;
+            telemetry.addData("WHEN FINISHED ", "PRESS Y");                //We display:   WHEN FINISHED:PRESS Y
+            telemetry.addData("Alliance Color",COLOR);                           //              Alliance Color:(the color)
+            telemetry.addData("POSITION ON FIELD", PositionOnField);             //              Position on Field:(the position)
+            telemetry.update();
+            if(HasPosition && HasColor && !ALL_INFO){                                    //If both HasPosition and HasColor are true, and ALL_INFO is false,
+                AppUtil.getInstance().showToast(UILocation.BOTH,                         // We display a Toast saying that it has all the information.
+                        "Ready To Run! :-)");
+                ALL_INFO = true;                                                         //It then sets ALL_INFO to true, so the if would be called again.
             }
-        }
+        }                                                                                //Then the call returns.
     }
     private void WriteProgram(){
         if(PositionOnField.equals("LEFT")){
@@ -252,11 +260,7 @@ public class OmniAutonomous extends LinearOpMode{
             }else if(PROGRAM[LineInProgram][0] == RobotActions.Turn){
                 Omni.driveMotors.Turn((int)PROGRAM[LineInProgram][1]);
             }else if(PROGRAM[LineInProgram][0] == RobotActions.Read_Pictograph){
-                new Thread(new Runnable() {
-                    public void run() {
-                        KeyColumn = readPictograph(true, true);
-                    }
-                }).start();
+                new Thread(new Runnable(){public void run(){KeyColumn = readPictograph(true, true);}}).start();
             }else if(PROGRAM[LineInProgram][0] == RobotActions.AlineToRow){
                 Omni.ScoreAGlyph(KeyColumn, COLOR);
             }else if(PROGRAM[LineInProgram][0] == RobotActions.ResetGyro){

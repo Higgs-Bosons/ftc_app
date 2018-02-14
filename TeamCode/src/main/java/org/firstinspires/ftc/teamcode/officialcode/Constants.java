@@ -21,6 +21,11 @@ public class Constants {
     public static final String SlideRetracter = "Slide Retracter";
     public static final String Conveyor = "CONVEYOR";
 
+    public static final String RightFront = "RightFront";
+    public static final String LeftFront = "LeftFront";
+    public static final String RightBack = "RightBack";
+    public static final String LeftBack = "LeftBack";
+
     public final static int Wheel_Diameter = 4; // INCHES
     public final static int Motor_Tick_Per_Rotation = 1150;
 

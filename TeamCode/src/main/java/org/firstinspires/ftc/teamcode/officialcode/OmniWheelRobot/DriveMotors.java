@@ -5,7 +5,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import org.firstinspires.ftc.teamcode.officialcode.Autonomus.OmniAutonomous;
 import org.firstinspires.ftc.teamcode.officialcode.Constants;
 
-public class DriveMotors {
+public class DriveMotors extends Constants{
     private DcMotor RF;
     private DcMotor RB;
     private DcMotor LF;
@@ -29,11 +29,11 @@ public class DriveMotors {
         double Y = Direction.getY();
         boolean keepLooping = true;
         int averageTicks;
-        ResetEncoders();
         float RFPower = (float) ((X+Y)*Power);
         float RBPower = (float) ((Y-X)*Power);
         float LFPower = (float) ((Y-X)*Power);
         float LBPower = (float) ((X+Y)*Power);
+        ResetEncoders();
         TurnMotorsOn(LFPower,RFPower, LBPower, RBPower);
         while (keepLooping){
             averageTicks = ((Math.abs(RF.getCurrentPosition()) + Math.abs(RB.getCurrentPosition())
@@ -43,7 +43,6 @@ public class DriveMotors {
         STOP();
 
     }
-
     public void Turn(int whereToTurnTo){
         int counter = 0;
         double power= 0.6;
@@ -76,6 +75,15 @@ public class DriveMotors {
         this.LF.setPower(0.0);
         this.RF.setPower(0.0);
         }
+    public DcMotor GetMotor(String Motor){
+        switch (Motor) {
+            case RightBack:return RB;
+            case RightFront:return RF;
+            case LeftBack:return LB;
+            default:return LF;
+        }
+    }
+
 
 //-------{TOOLS}------------------------------------------------------------------------------------
     private void ResetEncoders(){

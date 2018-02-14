@@ -13,7 +13,7 @@ public class OmniWheelRobot extends Constants{  //This is the class we made to h
     public AttachmentMotors attachmentMotors;   //This controls all the motors used for attachments.
     private int ROW = 1;                        //This stores the target Cryptobox column.
     private double Direction = 0.15;             //Stores which direction we need to scan.
-
+    public static int count = 0;
 //------------{OmniWheelRobot}--------------------------------------------------------------------------------------------------------------------------
     public OmniWheelRobot(){}//Empty
     //In here we pass all of the Attachment Motors, we can't use hardwareMap in here.
@@ -37,11 +37,7 @@ public class OmniWheelRobot extends Constants{  //This is the class we made to h
 //-------------{Tools}------------------------------------------------------------------------------------------------------------------------------------
     //Here is just a Thread.sleep, but is in a try/catch block. by using it, we can make our code more concise.
     public void Pause(int Duration){
-        try{
-            Thread.sleep(Duration);
-        }catch (Exception ignore){
-
-        }
+        try{Thread.sleep(Duration);}catch(Exception ignore){}
     }
 
 //------------{Pre-programed tasks}-----------------------------------------------------------------------------------------------------------------------
@@ -111,7 +107,7 @@ public class OmniWheelRobot extends Constants{  //This is the class we made to h
         dropOff();                                                           //And finally dropOff() to drop in the glyph.
     }
     private void alignRow(int row){
-        int OldReading;                                                              //Stores the previous reading.
+        int OldReading;//Stores the previous reading.
         if(Direction < 0){                                                           //If Direction is less than 0, which means that we are on team red,
             this.driveMotors.Move(W, 3, 0.1);                    // we move 3 inches to the left, to make sure we see the first
         }else{                                                                       // column. If we are on blue, we move the other way, also to
@@ -122,12 +118,13 @@ public class OmniWheelRobot extends Constants{  //This is the class we made to h
         OldReading = this.sensors.getReflectedLight();                               //OldReading is set to the current reflected light reading.
         for(int LOOP = row; LOOP != 0;LOOP--){                                       //We then loop till we have looped the number of times row is.
             while(OldReading + 35 > this.sensors.getReflectedLight())                //We wait until the current reading is greater than the OldReading
-            {OldReading = this.sensors.getReflectedLight();}                         // plus 35. If it is not, OldReading is set to the current reading.
+            {OldReading = this.sensors.getReflectedLight();count++;}                         // plus 35. If it is not, OldReading is set to the current reading.
             while(OldReading - 35 < this.sensors.getReflectedLight())                //We then wait for the current reading to go back down, still setting
-            {OldReading = this.sensors.getReflectedLight();}                         // the OldReading to the current reading.
+            {OldReading = this.sensors.getReflectedLight();count++;}                         // the OldReading to the current reading.
             OldReading = this.sensors.getReflectedLight();                           //We then set OldReading to the current reading, an decreases LOOP
         }                                                                            // (in the for loop).
-        this.driveMotors.STOP();                                                     //Finally we stop the driveMotors.
+        this.driveMotors.STOP();
+        AppUtil.getInstance().showToast(UILocation.BOTH, count+"");//Finally we stop the driveMotors.
     }
     private void fineTune(){
         this.driveMotors.Turn(0);                                   //We now turn to 0, two times for more accuracy.
@@ -144,7 +141,7 @@ public class OmniWheelRobot extends Constants{  //This is the class we made to h
         this.driveMotors.Move(N, 3, 0.3);                     // and move forward to give the glyph we are going to drop room to land
         this.driveMotors.Turn(0);                                   // flat. An turn back to 0.
     }
-    private void dropOff(){
+    private void dropOff() {
         this.attachmentMotors.getMotor(Conveyor).setPower(-0.5);  //We power the ConveyorBelt, turning it.
         this.Pause(4000);                                //Pause 4 seconds (4000 milliseconds).
         this.attachmentMotors.getMotor(Conveyor).setPower(0);     //We stop the motor.
