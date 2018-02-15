@@ -45,17 +45,17 @@ public class DriveMotors extends Constants{
     }
     public void Turn(int whereToTurnTo){
         int counter = 0;
-        double power= 0.6;
+        double power = 0.6;
         boolean WhichWay = WhichWayToTurn(whereToTurnTo, (int) readGyro());
         while(HowFar(whereToTurnTo, (int) readGyro()) >= 50) {
             if(!WhichWay){this.TurnMotorsOn(power,-power,power,-power);}else{this.TurnMotorsOn(-power,power,-power,power);}
         }
         WhichWay = WhichWayToTurn(whereToTurnTo, (int) readGyro());
-        power = 0.4;
+        power = 0.5;
         while (HowFar(whereToTurnTo, (int) readGyro()) >= 25){
             if(!WhichWay){this.TurnMotorsOn(power,-power,power,-power);}else{this.TurnMotorsOn(-power,power,-power,power);}
         }
-        power = 0.1;
+        power = 0.4;
         WhichWay = WhichWayToTurn(whereToTurnTo, (int) readGyro());
         while (HowFar(whereToTurnTo, (int) readGyro()) >= 2.5) {
             if(counter == 25){WhichWay = WhichWayToTurn(whereToTurnTo, (int) readGyro());counter = 0;}else{counter++;}

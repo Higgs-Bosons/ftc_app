@@ -10,11 +10,6 @@ import org.firstinspires.ftc.teamcode.officialcode.OmniWheelRobot.*;
 import static org.firstinspires.ftc.teamcode.officialcode.Constants.*;
 import static org.firstinspires.ftc.teamcode.officialcode.Constants.RML;
 
-//Open Controls:
-//DRIVER:
-//X, ALL TRIGGERS + BUMPERS
-
-
 @TeleOp(name = "TeleOp", group = "Beacon")
 public class OmniTeleOp extends LinearOpMode {
     private OmniWheelRobot Omni;

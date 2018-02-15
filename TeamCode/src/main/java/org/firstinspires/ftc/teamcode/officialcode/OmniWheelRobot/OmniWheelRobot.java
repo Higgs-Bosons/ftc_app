@@ -109,11 +109,10 @@ public class OmniWheelRobot extends Constants{  //This is the class we made to h
     private void alignRow(int row){
         int OldReading;//Stores the previous reading.
         if(Direction < 0){                                                           //If Direction is less than 0, which means that we are on team red,
-            this.driveMotors.Move(W, 3, 0.1);                    // we move 3 inches to the left, to make sure we see the first
+            this.driveMotors.Move(W, 1, 0.1);                    // we move 3 inches to the left, to make sure we see the first
         }else{                                                                       // column. If we are on blue, we move the other way, also to
             this.driveMotors.Move(E, 2.5, 0.1);                  // make sure we see the first column.
         }
-        this.driveMotors.Turn(0);                                      //We turn to 0, to make sure we are parallel to the wall.
         this.driveMotors.TurnMotorsOn(Direction, -Direction,-Direction, Direction);  //We then slow move across the Cryptobox.
         OldReading = this.sensors.getReflectedLight();                               //OldReading is set to the current reflected light reading.
         for(int LOOP = row; LOOP != 0;LOOP--){                                       //We then loop till we have looped the number of times row is.
@@ -130,16 +129,16 @@ public class OmniWheelRobot extends Constants{  //This is the class we made to h
         this.driveMotors.Turn(0);                                   //We now turn to 0, two times for more accuracy.
         this.driveMotors.Turn(0);
         int OldReading = this.sensors.getReflectedLight();                        //OldReading is set to the current reflected light intensity.
-        this.driveMotors.Move(E, 2, 0.2);                     //We move 3 inches to the left (East, we are backwards).
+        this.driveMotors.Move(E, 1, 0.2);                     //We move 3 inches to the left (East, we are backwards).
         this.driveMotors.TurnMotorsOn(0.1, -0.1,  //Then we start moving slowly to the right.
                 -0.1, 0.1);
         while(OldReading + 50 > this.sensors.getReflectedLight())                 //We wait for the current reading till we se a "spike" (the current
         {OldReading = this.sensors.getReflectedLight();}                          // reading is 50 more than OldReading). While it is a no, we set the
-        this.driveMotors.Turn(0);                                           // OldReading to the current reading.
+        while(OldReading - 50 < this.sensors.getReflectedLight())                    // OldReading to the current reading.
+        {OldReading = this.sensors.getReflectedLight();}
         this.driveMotors.Turn(0);                                    //We now turn to 0, two times for more accuracy.
         this.driveMotors.Move(S, 4, 0.3);                     //Then back up to make sure we are straight,
-        this.driveMotors.Move(N, 3, 0.3);                     // and move forward to give the glyph we are going to drop room to land
-        this.driveMotors.Turn(0);                                   // flat. An turn back to 0.
+        this.driveMotors.Move(N, 3, 0.3);                     // and move forward to give the glyph we are going to drop room to land flat.
     }
     private void dropOff() {
         this.attachmentMotors.getMotor(Conveyor).setPower(-0.5);  //We power the ConveyorBelt, turning it.
