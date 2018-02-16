@@ -13,55 +13,63 @@ import org.firstinspires.ftc.teamcode.officialcode.OmniWheelRobot.*;
 import static org.firstinspires.ftc.teamcode.officialcode.Constants.*;
 
 @Autonomous(name = "Autonomous Omni", group = "Program")
-public class OmniAutonomous extends LinearOpMode{
+public class OmniAutonomous extends LinearOpMode{                                     // This is our Autonomous program
     //-------{VARIABLES}--------------------------------------------------------------------------------
-    public static OmniWheelRobot Omni;
-    private String COLOR ="NULL";
-    private String PositionOnField = "NULL";
-    private String KeyColumn = "RIGHT";
-    private double[][] PROGRAM;
-    private VuforiaTrackables relicTrackables;
+    public static OmniWheelRobot Omni;                                                //This is our robot object that controls everything.
+    private String COLOR ="NULL";                                                     //This stores the Alliance Color
+    private String PositionOnField = "NULL";                                          //This stores the Position on the field
+    private String KeyColumn = "RIGHT";                                               //This stores the Key Column.
+    private double[][] PROGRAM;                                                       //We use the double array to create a "program" that we later read.
+    private VuforiaTrackables relicTrackables;                                        //We uses these to rea the pictograph.
     private VuforiaTrackable relicTemplate;
 
     //-------{STARTING OF THE PROGRAM}------------------------------------------------------------------
-    public void runOpMode() throws InterruptedException {
-        initialize();
-        waitForStart();
-        relicTrackables.activate();
-        Runnable PROGRAM = new runProgram();
-        Thread programedMissionThread = new Thread(PROGRAM);
-        programedMissionThread.start();
-        while(opModeIsActive()) {
-            telemetry.addData("Vuforia",readPictograph(false,false));
-            telemetry.addData("Red    ",Omni.sensors.ReadColor(RED));
-            telemetry.addData("Blue   ",Omni.sensors.ReadColor(BLUE));
-            telemetry.addData("Gyro   ",Omni.sensors.ReadGyro());
-            telemetry.addData("Light  ",Omni.sensors.getReflectedLight());
-            telemetry.addData("RF  ",Omni.driveMotors.GetMotor(Constants.RightFront).getCurrentPosition());
-            telemetry.addData("RB  ",Omni.driveMotors.GetMotor(Constants.RightBack).getCurrentPosition());
-            telemetry.addData("LF  ",Omni.driveMotors.GetMotor(Constants.LeftFront).getCurrentPosition());
-            telemetry.addData("LB  ",Omni.driveMotors.GetMotor(Constants.LeftBack).getCurrentPosition());
+    public void runOpMode() throws InterruptedException {                             //When we start our program, it runs this code first>
+        initialize();                                                                 //First we initialize the robot.
+        waitForStart();                                                               //We wait for the start button to be pressed.
+        relicTrackables.activate();                                                   //We activate the relicTrackables, causing the robot to start
+        Runnable PROGRAM = new runProgram();                                          // searching for the pictograph. We then make a Runnable then
+        Thread programedMissionThread = new Thread(PROGRAM);                          // turn it into a thread, and start it. We make a thread object
+        programedMissionThread.start();                                               // so later we can stop it.
+        while(opModeIsActive()) {                                                     //While the opMode is running, we display this info:
+            telemetry.addData("Vuforia",KeyColumn);                           //    Vuforia: 'the key column'
+            telemetry.addData("Red    ",Omni.sensors.ReadColor(RED));         //    Red    : 'the light sensor's red reading'
+            telemetry.addData("Blue   ",Omni.sensors.ReadColor(BLUE));        //    Blue   : 'the light sensor's blue reading'
+            telemetry.addData("Gyro   ",Omni.sensors.ReadGyro());             //    Gyro   : 'the gyro reading'
+            telemetry.addData("Light  ",Omni.sensors.getReflectedLight());    //    Light  : 'the optical distance sensors reading'
+            telemetry.addData("RF     ",Omni.driveMotors.                     //    RF     : 'the right front motor's encoder'
+                    GetMotor(Constants.RightFront).getCurrentPosition());             //    RB     : 'the right back motor's encoder'
+            telemetry.addData("RB     ",Omni.driveMotors.                     //    LF     : 'the left front motor's encoder'
+                    GetMotor(Constants.RightBack).getCurrentPosition());              //    LB     : 'the left back motor's encoder'
+            telemetry.addData("LF     ",Omni.driveMotors.
+                    GetMotor(Constants.LeftFront).getCurrentPosition());
+            telemetry.addData("LB     ",Omni.driveMotors.
+                    GetMotor(Constants.LeftBack).getCurrentPosition());
             telemetry.update();
         }
-        programedMissionThread.interrupt();
+        programedMissionThread.interrupt();                                           //If you ever stop the opMode, it stops the thread, stopping the robot.
     }
 
     //-------{INITIALIZE PHASE}-------------------------------------------------------------------------
     private void initialize(){
-        GatherInfo();
+        GatherInfo();                                                                //We call GatherInfo(), receiving the robot's color an position.
         telemetry.clearAll();
-        telemetry.addData("STATUS "," INITIALIZING");telemetry.update();
-        Omni = new OmniWheelRobot();
-        initializeSensors();
-        initializeServos();
-        initializeMotors();
-        initializeVuforia();
-        WriteProgram();
-        telemetry.clearAll();
-        telemetry.addData("STATUS "," READY TO RUN! :-)");telemetry.update();
+        telemetry.addData("STATUS "," INITIALIZING");                  //Then displays: "STATUS : INITIALIZING"
+        telemetry.update();
+        Omni = new OmniWheelRobot();                                                 //Initializes Omni, and then initializes the rest.
+        initializeSensors();                                                         //This initializes the sensors.
+        initializeServos();                                                          //This initializes the servos.
+        initializeMotors();                                                          //This initializes the motors.
+        initializeVuforia();                                                         //This initializes Vuforia.
+        WriteProgram();                                                              //Using the info gathered by GatherInfo, the robot writes a program
+        telemetry.clearAll();                                                        // for that position/color.
+        telemetry.addData("STATUS "," READY TO RUN! :-)");             //Then displays "STATUS : READY TO RUN :-)"
+        telemetry.update();
     }
-    private void initializeVuforia(){
-        int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
+    private void initializeVuforia(){                                                 // This initializes everything that deals with Vuforia
+        int cameraMonitorViewId = hardwareMap.appContext.getResources().
+                getIdentifier("cameraMonitorViewId", "id",
+                        hardwareMap.appContext.getPackageName());
         VuforiaLocalizer.Parameters parameters = new VuforiaLocalizer.Parameters(cameraMonitorViewId);
         parameters.vuforiaLicenseKey = Constants.VUFORIA_KEY;
         parameters.cameraDirection = VuforiaLocalizer.CameraDirection.BACK;
@@ -71,8 +79,8 @@ public class OmniAutonomous extends LinearOpMode{
         relicTemplate = relicTrackables.get(0);
         relicTemplate.setName("relicVuMarkTemplate");
     }
-    private void initializeMotors(){
-        DcMotor Left_Front = hardwareMap.dcMotor.get("LF");
+    private void initializeMotors(){                                                  //This initializes everything all the motors, and then passes
+        DcMotor Left_Front = hardwareMap.dcMotor.get("LF");                           // to Omni.
         DcMotor Right_Front = hardwareMap.dcMotor.get("RF");
         DcMotor Left_Back = hardwareMap.dcMotor.get("LB");
         DcMotor Right_Back = hardwareMap.dcMotor.get("RB");
@@ -99,7 +107,7 @@ public class OmniAutonomous extends LinearOpMode{
 
         Omni.GiveAttachmentMotors(ArmLifter, Conveyor, SlideExtender, SlideRetracter);
     }
-    private void initializeServos(){
+    private void initializeServos(){                                                  // This initializes all the servos and passes them to Omni.
         Servo FishTailLifter = hardwareMap.servo.get("FishTailLifter");
         Servo FishTailSwinger = hardwareMap.servo.get("FishTailSwinger");
         Servo GrabberOne = hardwareMap.servo.get("GrabberOne");
@@ -113,7 +121,7 @@ public class OmniAutonomous extends LinearOpMode{
 
 
     }
-    private void initializeSensors(){
+    private void initializeSensors(){                                                 // This initializes all the sensors and passes them to Omni.
         ColorSensor SuperNitron9000 = hardwareMap.colorSensor.get("SuperNitron9000");
         OpticalDistanceSensor LIGHT = hardwareMap.opticalDistanceSensor.get("Light");
         BNO055IMU imu;
@@ -166,123 +174,112 @@ public class OmniAutonomous extends LinearOpMode{
             }
         }                                                                                //Then the call returns.
     }
-    private void WriteProgram(){
-        if(PositionOnField.equals("LEFT")){
-            if(COLOR.equals(RED)){
-                PROGRAM = new double[][]{
-                        {RobotActions.Read_Pictograph, RobotActions.NULL},
-                        {RobotActions.KnockOffJewel, RobotActions.NULL},
-                        {RobotActions.MoveS, 12, 0.5},
-                        {RobotActions.Turn, 270},
-                        {RobotActions.MoveS, 8, 0.6},
-                        {RobotActions.MoveN, 0.4, 0.2},
-                        {RobotActions.AlineToRow, RobotActions.NULL},
-                        {RobotActions.MoveN, 1, 0.7}};
+    private void WriteProgram(){                                                      //This is where we write the program for the autonomous.
+        if(PositionOnField.equals("LEFT")){                                           //If we are on the left, it goes here.
+            if(COLOR.equals(RED)){                                                    //If we are on the red alliance, this becomes our program.
+                PROGRAM = new double[][]{                                             //PROGRAM is assigned value, which later the robot preforms.
+                        {RobotActions.Read_Pictograph},                               //First we read the pictograph,
+                        {RobotActions.KnockOffJewel},                                 // Next knockoff the Jewel of the opposing alliance.
+                        {RobotActions.MoveS, 12, 0.5},                                // Move south 12 inches of the balancing stone at 0.5 power.
+                        {RobotActions.Turn, 270},                                     // Turn to face 270 degrees,
+                        {RobotActions.MoveS, 8, 0.6},                                 // Back up into cryptobox,
+                        {RobotActions.MoveN, 0.4, 0.2},                               // and move forward 0.4 inches from the cryptobox.
+                        {RobotActions.AlineToRow},                                    // Then we call the ScoreAGlyph method in the OmniWheelRobot class.
+                        {RobotActions.MoveN, 1, 0.7}};                                // And move forward so we aren't touching the glyph.
             }else{
-                PROGRAM = new double[][]{
-                        {RobotActions.Read_Pictograph, RobotActions.NULL},
-                        {RobotActions.KnockOffJewel, RobotActions.NULL},
-                        {RobotActions.MoveN, 20, 0.5},
-                        {RobotActions.Turn, 180},
-                        {RobotActions.MoveW, 0.5, 0.4},
-                        {RobotActions.MoveS, 6, 0.6},
-                        {RobotActions.MoveN, 0.2, 0.2},
-                        {RobotActions.AlineToRow, RobotActions.NULL},
-                        {RobotActions.MoveN, 1, 0.6},
-                        {RobotActions.Turn, 90}};
+                PROGRAM = new double[][]{                                             //If we are on the left and on blue, we set up this program.
+                        {RobotActions.Read_Pictograph},                               //First we read the pictograph,
+                        {RobotActions.KnockOffJewel},                                 // Next knockoff the Jewel of the opposing alliance.
+                        {RobotActions.MoveN, 20, 0.5},                                // Move north off the balance stone,
+                        {RobotActions.Turn, 180},                                     // Turn around (180 degrees),
+                        {RobotActions.MoveW, 0.5, 0.4},                               // Move west a little (0.5 inches),
+                        {RobotActions.MoveS, 6, 0.6},                                 // Back up into the cryptobox, straighting ourselves,
+                        {RobotActions.MoveN, 0.2, 0.2},                               // and move forward 0.2 inches away from the cryptobox.
+                        {RobotActions.AlineToRow},                                    // Then we call the ScoreAGlyph method in the OmniWheelRobot class.
+                        {RobotActions.MoveN, 1, 0.6},                                 // And move forward so we aren't touching the glyph,
+                        {RobotActions.Turn, 90}};                                     // Lastly, we turn to face north according to the driver perspective.
             }
         }
-        if(PositionOnField.equals("RIGHT")){
-            if(COLOR.equals(RED)){
+        if(PositionOnField.equals("RIGHT")){                                          //If we are on the right, it goes here.
+            if(COLOR.equals(RED)){                                                    // If on alliance red, we create this program:
                 PROGRAM = new double[][]{
-                        {RobotActions.Read_Pictograph, RobotActions.NULL},
-                        {RobotActions.KnockOffJewel, RobotActions.NULL},
-                        {RobotActions.MoveS, 14, 0.5},
-                        {RobotActions.MoveE, 6, 0.4},
-                        {RobotActions.MoveS, 20, 0.6},
-                        {RobotActions.MoveN, 0.2, 0.2},
-                        {RobotActions.AlineToRow, RobotActions.NULL},
-                        {RobotActions.MoveN, 2, 0.5},
-                        {RobotActions.Turn, 270}};
+                        {RobotActions.Read_Pictograph},                               //First we read the pictograph,
+                        {RobotActions.KnockOffJewel},                                 // Next knockoff the Jewel of the opposing alliance.
+                        {RobotActions.MoveS, 14, 0.5},                                // Move south of the balancing stone at 0.5 power.
+                        {RobotActions.MoveE, 6, 0.4},                                 // Then move east 6 inches,
+                        {RobotActions.MoveS, 20, 0.6},                                // Back up into the cryptobox,
+                        {RobotActions.MoveN, 0.2, 0.2},                               // And move forward off of it.
+                        {RobotActions.AlineToRow},                                    // Then we call the ScoreAGlyph method in the OmniWheelRobot class.
+                        {RobotActions.MoveN, 2, 0.5},                                 // And move forward so we aren't touching the glyph,
+                        {RobotActions.Turn, 270}};                                    // And turn to face north. according to the drivers perspective.
             }else{
-                PROGRAM = new double[][]{
-                        {RobotActions.Read_Pictograph, RobotActions.NULL},
-                        {RobotActions.KnockOffJewel, RobotActions.NULL},
-                        {RobotActions.MoveN, 12, 0.5},
-                        {RobotActions.Turn, 270},
-                        {RobotActions.MoveS, 8, 0.6},
-                        {RobotActions.MoveN, 0.2, 0.2},
-                        {RobotActions.AlineToRow, RobotActions.NULL},
-                        {RobotActions.MoveN, 1, 0.7}};
+                PROGRAM = new double[][]{                                             //If we are on the blue alliance, we run this program:
+                        {RobotActions.Read_Pictograph},                               //First we read the pictograph,
+                        {RobotActions.KnockOffJewel},                                 // Next knockoff the Jewel of the opposing alliance.
+                        {RobotActions.MoveN, 12, 0.5},                                // Then we move north off the balancing stone,
+                        {RobotActions.Turn, 270},                                     // Turn to 270 degrees,
+                        {RobotActions.MoveS, 8, 0.6},                                 // Back up into the cryptobox,
+                        {RobotActions.MoveN, 0.2, 0.2},                               // And move forward off of it.
+                        {RobotActions.AlineToRow},                                    // Then we call the ScoreAGlyph method in the OmniWheelRobot class.
+                        {RobotActions.MoveN, 1, 0.7}};                                // And move forward so we aren't touching the glyph.
             }
         }
     }
 
     //------{READING THE PROGRAM}-----------------------------------------------------------------------
-    private class runProgram implements Runnable{
+    private class runProgram implements Runnable{                                 //We call this program to run the program the robot just wrote.
         public void run(){
-            new ServoSetup().moveServos();
-            ReadProgram();
-            requestOpModeStop();
+            new ServoSetup().moveServos();                                        //First we call the Thread ServoSetup, moving servos into their correct
+            ReadProgram();                                                        //positions. The we call ReadProgram(), which reads the PROGRAM array.
+            requestOpModeStop();                                                  // Finally, it stops the opMode.
         }
     }
-    public class ServoSetup implements Runnable{
+    public class ServoSetup implements Runnable{                                      //We use this to move servos around to their correct position.
         public void run() {
-            Omni.servos.getServo(Servos.Lifter).setPosition(0.3);
-            Omni.servos.getServo(Servos.GrabberOne).setPosition(0);
-            Omni.Pause(2000);
-            Omni.servos.getServo(RML).setPosition(1);
-            Omni.Pause(2000);
-            Omni.servos.getServo(Servos.GrabberOne).setPosition(1);
+            Omni.servos.getServo(Servos.Lifter).setPosition(0.3);                     //First we raise the linear servo a little,
+            Omni.servos.getServo(Servos.GrabberOne).setPosition(0);                   // Move a grabber servo out of the way,
+            Omni.Pause(2000);                                                // Wait for it to move,
+            Omni.servos.getServo(RML).setPosition(1);                                 // Lifter up the relic grabber arm,
+            Omni.Pause(2000);                                                // Wait fo it to move,
+            Omni.servos.getServo(Servos.GrabberOne).setPosition(1);                   // And move the grabber servo back.
         }
         void moveServos(){
-            new Thread(this).start();
+            new Thread(this).start();                                        //When we call this method, it starts the run() method.
         }
     }
-    private void ReadProgram(){
-        for(int LineInProgram = 0; LineInProgram <= PROGRAM.length-1;LineInProgram++){
-            if(PROGRAM[LineInProgram][0] == RobotActions.KnockOffJewel){
-                Omni.KnockOffJewel(COLOR);
-            }else if(PROGRAM[LineInProgram][0] == RobotActions.MoveN) {
-                Omni.driveMotors.Move(N, PROGRAM[LineInProgram][1], PROGRAM[LineInProgram][2]);
-            }else if(PROGRAM[LineInProgram][0] == RobotActions.MoveS) {
-                Omni.driveMotors.Move(S, PROGRAM[LineInProgram][1], PROGRAM[LineInProgram][2]);
-            }else if(PROGRAM[LineInProgram][0] == RobotActions.MoveE) {
-                Omni.driveMotors.Move(E, PROGRAM[LineInProgram][1], PROGRAM[LineInProgram][2]);
-            }else if(PROGRAM[LineInProgram][0] == RobotActions.MoveW) {
-                Omni.driveMotors.Move(W, PROGRAM[LineInProgram][1], PROGRAM[LineInProgram][2]);
-            }else if(PROGRAM[LineInProgram][0] == RobotActions.Turn){
-                Omni.driveMotors.Turn((int) PROGRAM[LineInProgram][1]);
-            }else if(PROGRAM[LineInProgram][0] == RobotActions.MoveNW) {
-                Omni.driveMotors.Move(NW, PROGRAM[LineInProgram][1], PROGRAM[LineInProgram][2]);
-            }else if(PROGRAM[LineInProgram][0] == RobotActions.MoveSW) {
-                Omni.driveMotors.Move(SW, PROGRAM[LineInProgram][1], PROGRAM[LineInProgram][2]);
-            }else if(PROGRAM[LineInProgram][0] == RobotActions.MoveNE) {
-                Omni.driveMotors.Move(NE, PROGRAM[LineInProgram][1], PROGRAM[LineInProgram][2]);
-            }else if(PROGRAM[LineInProgram][0] == RobotActions.MoveSE) {
-                Omni.driveMotors.Move(SE, PROGRAM[LineInProgram][1], PROGRAM[LineInProgram][2]);
-            }else if(PROGRAM[LineInProgram][0] == RobotActions.Turn){
-                Omni.driveMotors.Turn((int)PROGRAM[LineInProgram][1]);
-            }else if(PROGRAM[LineInProgram][0] == RobotActions.Read_Pictograph){
-                new Thread(new Runnable(){public void run(){KeyColumn = readPictograph(true, true);}}).start();
-            }else if(PROGRAM[LineInProgram][0] == RobotActions.AlineToRow){
-                Omni.ScoreAGlyph(KeyColumn, COLOR);
-            }else if(PROGRAM[LineInProgram][0] == RobotActions.ResetGyro){
+    private void ReadProgram(){                                                                  //When we call this, the robot reads the PROGRAM array, and
+        for(int LineInProgram = 0; LineInProgram <= PROGRAM.length-1;LineInProgram++){           // preforms the actions. It loops through the entire array.
+            if(PROGRAM[LineInProgram][0] == RobotActions.KnockOffJewel){                         //If the first double equals KnockOffJewel, we knock
+                Omni.KnockOffJewel(COLOR);                                                       // off the jewel.
+            }else if(PROGRAM[LineInProgram][0] == RobotActions.MoveN) {                          //If it is MoveN, we pass info to the DriveMotor
+                Omni.driveMotors.Move(N, PROGRAM[LineInProgram][1], PROGRAM[LineInProgram][2]);  // class and it moves the robot north.
+            }else if(PROGRAM[LineInProgram][0] == RobotActions.MoveS) {                          //If it is MoveS, we pass info to the DriveMotor
+                Omni.driveMotors.Move(S, PROGRAM[LineInProgram][1], PROGRAM[LineInProgram][2]);  // class and it moves the robot south.
+            }else if(PROGRAM[LineInProgram][0] == RobotActions.MoveE) {                          //If it is MoveE, we pass info to the DriveMotor
+                Omni.driveMotors.Move(E, PROGRAM[LineInProgram][1], PROGRAM[LineInProgram][2]);  // class and it moves the robot east.
+            }else if(PROGRAM[LineInProgram][0] == RobotActions.MoveW) {                          //If it is MoveW, we pass info to the DriveMotor
+                Omni.driveMotors.Move(W, PROGRAM[LineInProgram][1], PROGRAM[LineInProgram][2]);  // class and it moves the robot west.
+            }else if(PROGRAM[LineInProgram][0] == RobotActions.Turn){                            //If it is Turn, we pass info to the DriveMotor
+                Omni.driveMotors.Turn((int) PROGRAM[LineInProgram][1]);                          // class and it turns the robot.
+            }else if(PROGRAM[LineInProgram][0] == RobotActions.Read_Pictograph){                 //If it is Read_Pictograph, we start a Threa that loops until we
+                new Thread(new Runnable(){public void run(){KeyColumn =                          // see the pictograph and stores the key column in the KeyColumn
+                        readPictograph();}}).start();                // variable.
+            }else if(PROGRAM[LineInProgram][0] == RobotActions.AlineToRow){                      //If it is AlineToRow, we call the ScoreAGlyph method in the
+                Omni.ScoreAGlyph(KeyColumn, COLOR);                                              // OmniWheelRobot class.
+            }else if(PROGRAM[LineInProgram][0] == RobotActions.ResetGyro){                       //If it is ResetGyro, we reset the gyro.
                 Omni.sensors.ResetGyro();
             }
         }
     }
 
     //------{TOOLS}-------------------------------------------------------------------------------------
-    private String readPictograph(boolean MakeAToast, boolean LOOP){
-        RelicRecoveryVuMark vuMark = RelicRecoveryVuMark.from(relicTemplate);
-        if(LOOP){
-            while(vuMark.toString().equals("UNKNOWN")){vuMark = RelicRecoveryVuMark.from(relicTemplate);}
+    private String readPictograph(){                                                  //This method we use to find out the key column.
+        RelicRecoveryVuMark vuMark = RelicRecoveryVuMark.from(relicTemplate);         // First we initialize the vuMark.
+        while(vuMark.toString().equals("UNKNOWN")){                                   // We keep repeating until the Robot sees something.
+            vuMark = RelicRecoveryVuMark.from(relicTemplate);                         // If we don't see anything, we scan again.
         }
-        if(MakeAToast){
-            String ToastText = "KEY COLUMN: " + vuMark.toString();
-            AppUtil.getInstance().showToast(UILocation.BOTH,ToastText);
-        }
-        return vuMark.toString();
+        String ToastText = "KEY COLUMN: " + vuMark.toString();                        //When then display the key column in a toast that says:
+        AppUtil.getInstance().showToast(UILocation.BOTH,ToastText);                   //   KEY COLUMN: 'the key column.
+        return vuMark.toString();                                                     //We then return the key column as a string.
     }
 }
