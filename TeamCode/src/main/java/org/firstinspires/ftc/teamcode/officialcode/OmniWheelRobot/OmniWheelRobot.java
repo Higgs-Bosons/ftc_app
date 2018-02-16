@@ -13,7 +13,7 @@ public class OmniWheelRobot extends Constants{  //This is the class we made to h
     public AttachmentMotors attachmentMotors;   //This controls all the motors used for attachments.
     private int ROW = 1;                        //This stores the target Cryptobox column.
     private double Direction = 0.15;             //Stores which direction we need to scan.
-    public static int count = 0;
+    private static int count = 0;
 //------------{OmniWheelRobot}--------------------------------------------------------------------------------------------------------------------------
     public OmniWheelRobot(){}//Empty
     //In here we pass all of the Attachment Motors, we can't use hardwareMap in here.
@@ -126,8 +126,6 @@ public class OmniWheelRobot extends Constants{  //This is the class we made to h
         AppUtil.getInstance().showToast(UILocation.BOTH, count+"");//Finally we stop the driveMotors.
     }
     private void fineTune(){
-        this.driveMotors.Turn(0);                                   //We now turn to 0, two times for more accuracy.
-        this.driveMotors.Turn(0);
         int OldReading = this.sensors.getReflectedLight();                        //OldReading is set to the current reflected light intensity.
         this.driveMotors.Move(E, 1, 0.2);                     //We move 3 inches to the left (East, we are backwards).
         this.driveMotors.TurnMotorsOn(0.1, -0.1,  //Then we start moving slowly to the right.
@@ -136,7 +134,6 @@ public class OmniWheelRobot extends Constants{  //This is the class we made to h
         {OldReading = this.sensors.getReflectedLight();}                          // reading is 50 more than OldReading). While it is a no, we set the
         while(OldReading - 50 < this.sensors.getReflectedLight())                    // OldReading to the current reading.
         {OldReading = this.sensors.getReflectedLight();}
-        this.driveMotors.Turn(0);                                    //We now turn to 0, two times for more accuracy.
         this.driveMotors.Move(S, 4, 0.3);                     //Then back up to make sure we are straight,
         this.driveMotors.Move(N, 3, 0.3);                     // and move forward to give the glyph we are going to drop room to land flat.
     }

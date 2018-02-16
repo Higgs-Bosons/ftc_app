@@ -172,10 +172,9 @@ public class OmniAutonomous extends LinearOpMode{
                 PROGRAM = new double[][]{
                         {RobotActions.Read_Pictograph, RobotActions.NULL},
                         {RobotActions.KnockOffJewel, RobotActions.NULL},
-                        {RobotActions.MoveS, 15, 0.5},
+                        {RobotActions.MoveS, 12, 0.5},
                         {RobotActions.Turn, 270},
-                        {RobotActions.MoveS, 7, 0.4},
-                        {RobotActions.ResetGyro, RobotActions.NULL},
+                        {RobotActions.MoveS, 8, 0.6},
                         {RobotActions.MoveN, 0.4, 0.2},
                         {RobotActions.AlineToRow, RobotActions.NULL},
                         {RobotActions.MoveN, 1, 0.7}};
@@ -183,14 +182,13 @@ public class OmniAutonomous extends LinearOpMode{
                 PROGRAM = new double[][]{
                         {RobotActions.Read_Pictograph, RobotActions.NULL},
                         {RobotActions.KnockOffJewel, RobotActions.NULL},
-                        {RobotActions.MoveN, 20, 0.6},
+                        {RobotActions.MoveN, 20, 0.5},
                         {RobotActions.Turn, 180},
-                        {RobotActions.MoveW, 0.5, 0.3},
-                        {RobotActions.MoveS, 6, 0.4},
-                        {RobotActions.ResetGyro, RobotActions.NULL},
-                        {RobotActions.MoveN, 0.4, 0.2},
+                        {RobotActions.MoveW, 0.5, 0.4},
+                        {RobotActions.MoveS, 6, 0.6},
+                        {RobotActions.MoveN, 0.2, 0.2},
                         {RobotActions.AlineToRow, RobotActions.NULL},
-                        {RobotActions.MoveN, 2, 0.3},
+                        {RobotActions.MoveN, 1, 0.6},
                         {RobotActions.Turn, 90}};
             }
         }
@@ -199,11 +197,10 @@ public class OmniAutonomous extends LinearOpMode{
                 PROGRAM = new double[][]{
                         {RobotActions.Read_Pictograph, RobotActions.NULL},
                         {RobotActions.KnockOffJewel, RobotActions.NULL},
-                        {RobotActions.MoveS, 22, 0.4},
-                        {RobotActions.MoveE, 5, 0.4},
-                        {RobotActions.MoveS, 6, 0.4},
-                        {RobotActions.Turn, 0},
-                        {RobotActions.MoveN, 0.4, 0.2},
+                        {RobotActions.MoveS, 14, 0.5},
+                        {RobotActions.MoveE, 6, 0.4},
+                        {RobotActions.MoveS, 20, 0.6},
+                        {RobotActions.MoveN, 0.2, 0.2},
                         {RobotActions.AlineToRow, RobotActions.NULL},
                         {RobotActions.MoveN, 2, 0.5},
                         {RobotActions.Turn, 270}};
@@ -211,12 +208,10 @@ public class OmniAutonomous extends LinearOpMode{
                 PROGRAM = new double[][]{
                         {RobotActions.Read_Pictograph, RobotActions.NULL},
                         {RobotActions.KnockOffJewel, RobotActions.NULL},
-                        {RobotActions.MoveN, 20, 0.5},
+                        {RobotActions.MoveN, 12, 0.5},
                         {RobotActions.Turn, 270},
-                        {RobotActions.MoveS, 9, 0.4},
-                        {RobotActions.ResetGyro, RobotActions.NULL},
-                        {RobotActions.MoveN, 0.4, 0.2},
-                        {RobotActions.MoveE, 4, 0.1},
+                        {RobotActions.MoveS, 8, 0.6},
+                        {RobotActions.MoveN, 0.2, 0.2},
                         {RobotActions.AlineToRow, RobotActions.NULL},
                         {RobotActions.MoveN, 1, 0.7}};
             }
@@ -235,9 +230,9 @@ public class OmniAutonomous extends LinearOpMode{
         public void run() {
             Omni.servos.getServo(Servos.Lifter).setPosition(0.3);
             Omni.servos.getServo(Servos.GrabberOne).setPosition(0);
-            Omni.Pause(1000);
+            Omni.Pause(2000);
             Omni.servos.getServo(RML).setPosition(1);
-            Omni.Pause(1000);
+            Omni.Pause(2000);
             Omni.servos.getServo(Servos.GrabberOne).setPosition(1);
         }
         void moveServos(){

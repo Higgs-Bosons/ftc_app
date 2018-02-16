@@ -55,7 +55,7 @@ public class DriveMotors extends Constants{
         while (HowFar(whereToTurnTo, (int) readGyro()) >= 25){
             if(!WhichWay){this.TurnMotorsOn(power,-power,power,-power);}else{this.TurnMotorsOn(-power,power,-power,power);}
         }
-        power = 0.4;
+        power = 0.2;
         WhichWay = WhichWayToTurn(whereToTurnTo, (int) readGyro());
         while (HowFar(whereToTurnTo, (int) readGyro()) >= 2.5) {
             if(counter == 25){WhichWay = WhichWayToTurn(whereToTurnTo, (int) readGyro());counter = 0;}else{counter++;}
@@ -106,20 +106,20 @@ public class DriveMotors extends Constants{
         int counterTwo = 0;
         boolean LOOP = true;
         while(LOOP){
-        VirtualDegrees ++;
-        counterOne ++;
-        if(VirtualDegrees == 361){VirtualDegrees = 0;}
-        if(VirtualDegrees == -1) {VirtualDegrees = 360;}
-        LOOP = !(Math.abs(VirtualDegrees - Target) <= 2.5);
+            VirtualDegrees ++;
+            counterOne ++;
+            if(VirtualDegrees == 361){VirtualDegrees = 0;}
+            if(VirtualDegrees == -1) {VirtualDegrees = 360;}
+            LOOP = !(Math.abs(VirtualDegrees - Target) <= 2.5);
         }
         LOOP = true;
         VirtualDegrees = Gyro;
         while(LOOP){
-        VirtualDegrees --;
-        counterTwo ++;
-        if(VirtualDegrees == 361){VirtualDegrees = 0;}
-        if(VirtualDegrees == -1) {VirtualDegrees = 360;}
-        LOOP = !(Math.abs(VirtualDegrees - Target) <= 2.5);
+            VirtualDegrees --;
+            counterTwo ++;
+            if(VirtualDegrees == 361){VirtualDegrees = 0;}
+            if(VirtualDegrees == -1) {VirtualDegrees = 360;}
+            LOOP = !(Math.abs(VirtualDegrees - Target) <= 2.5);
         }
         return counterOne > counterTwo;
     }
