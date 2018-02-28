@@ -11,10 +11,6 @@ public class Constants {
     public final static RobotDirection S = new RobotDirection(0,1);
     public final static RobotDirection E = new RobotDirection(1,0);
     public final static RobotDirection W = new RobotDirection(-1,0);
-    public final static RobotDirection NW = new RobotDirection(-0.8,-0.8);
-    public final static RobotDirection SW = new RobotDirection(-0.8,0.8);
-    public final static RobotDirection NE = new RobotDirection(0.8,-0.8);
-    public final static RobotDirection SE = new RobotDirection(0.8,0.8);
 
     public static final String ArmLifter = "ARM LIFTER";
     public static final String SlideExtender = "Slide Extender";
