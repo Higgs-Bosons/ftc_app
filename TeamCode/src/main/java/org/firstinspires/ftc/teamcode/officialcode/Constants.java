@@ -24,7 +24,7 @@ public class Constants {
 
     public final static int Wheel_Diameter = 4; // INCHES
     public final static int Motor_Tick_Per_Rotation = 1150;
-//changing another comment
+//WHIT WAZ HERE!!!
     public static final String FishTailLifter = "Fish Tail Lifter";
     public static final String FishTailSwinger = "Fish Tail Swinger";
     public static final String GrabberOne = "GrabberOne";

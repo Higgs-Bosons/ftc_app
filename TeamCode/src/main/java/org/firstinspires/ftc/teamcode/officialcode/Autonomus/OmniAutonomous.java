@@ -22,6 +22,7 @@ public class OmniAutonomous extends LinearOpMode{                               
     private double[][] PROGRAM;                                                       //We use the double array to create a "program" that we later read.
     private VuforiaTrackables relicTrackables;                                        //We uses these to rea the pictograph.
     private VuforiaTrackable relicTemplate;
+    public static Thread programedMissionThread;
 
     //-------{STARTING OF THE PROGRAM}------------------------------------------------------------------
     public void runOpMode() throws InterruptedException {                             //When we start our program, it runs this code first>
@@ -29,7 +30,7 @@ public class OmniAutonomous extends LinearOpMode{                               
         waitForStart();                                                               //We wait for the start button to be pressed.
         relicTrackables.activate();                                                   //We activate the relicTrackables, causing the robot to start
         Runnable PROGRAM = new runProgram();                                          // searching for the pictograph. We then make a Runnable then
-        Thread programedMissionThread = new Thread(PROGRAM);                          // turn it into a thread, and start it. We make a thread object
+        programedMissionThread = new Thread(PROGRAM);                          // turn it into a thread, and start it. We make a thread object
         programedMissionThread.start();                                               // so later we can stop it.
         while(opModeIsActive()) {                                                     //While the opMode is running, we display this info:
             telemetry.addData("Vuforia",KeyColumn);                           //    Vuforia: 'the key column'
@@ -182,22 +183,24 @@ public class OmniAutonomous extends LinearOpMode{                               
                         {RobotActions.KnockOffJewel},                                 // Next knockoff the Jewel of the opposing alliance.
                         {RobotActions.MoveS, 12, 0.5},                                // Move south 12 inches of the balancing stone at 0.5 power.
                         {RobotActions.Turn, 270},                                     // Turn to face 270 degrees,
-                        {RobotActions.MoveS, 8, 0.6},                                 // Back up into cryptobox,
-                        {RobotActions.MoveN, 0.4, 0.2},                               // and move forward 0.4 inches from the cryptobox.
-                        {RobotActions.AlineToRow},                                    // Then we call the ScoreAGlyph method in the OmniWheelRobot class.
-                        {RobotActions.MoveN, 1, 0.7}};                                // And move forward so we aren't touching the glyph.
+                        {RobotActions.MoveS, 8, 0.6},
+                        {RobotActions.MoveN, 3, 0.2},
+                        {RobotActions.DropGlyph}};                                // Back up into cryptobox,
+
             }else{
                 PROGRAM = new double[][]{                                             //If we are on the left and on blue, we set up this program.
                         {RobotActions.Read_Pictograph},                               //First we read the pictograph,
                         {RobotActions.KnockOffJewel},                                 // Next knockoff the Jewel of the opposing alliance.
-                        {RobotActions.MoveN, 20, 0.5},                                // Move north off the balance stone,
+                        {RobotActions.MoveN, 14, 0.5},                                // Move north off the balance stone,
                         {RobotActions.Turn, 180},                                     // Turn around (180 degrees),
-                        {RobotActions.MoveW, 0.5, 0.4},                               // Move west a little (0.5 inches),
-                        {RobotActions.MoveS, 6, 0.6},                                 // Back up into the cryptobox, straighting ourselves,
-                        {RobotActions.MoveN, 0.2, 0.2},                               // and move forward 0.2 inches away from the cryptobox.
-                        {RobotActions.AlineToRow},                                    // Then we call the ScoreAGlyph method in the OmniWheelRobot class.
-                        {RobotActions.MoveN, 1, 0.6},                                 // And move forward so we aren't touching the glyph,
-                        {RobotActions.Turn, 90}};                                     // Lastly, we turn to face north according to the driver perspective.
+                        {RobotActions.MoveW, 5.5, 0.4},                               // Move west a little (0.5 inches),
+                        {RobotActions.MoveS, 20, 0.6},
+                        {RobotActions.MoveN, 3, 0.2},
+                        {RobotActions.DropGlyph},
+                        {RobotActions.MoveN, 1, 1.0},
+                        {RobotActions.MoveS, 5, 1.0},
+                        {RobotActions.MoveN, 1, 0.6}};// Back up into the cryptobox, straighting ourselves,
+
             }
         }
         if(PositionOnField.equals("RIGHT")){                                          //If we are on the right, it goes here.
@@ -206,22 +209,23 @@ public class OmniAutonomous extends LinearOpMode{                               
                         {RobotActions.Read_Pictograph},                               //First we read the pictograph,
                         {RobotActions.KnockOffJewel},                                 // Next knockoff the Jewel of the opposing alliance.
                         {RobotActions.MoveS, 14, 0.5},                                // Move south of the balancing stone at 0.5 power.
-                        {RobotActions.MoveE, 6, 0.4},                                 // Then move east 6 inches,
+                        {RobotActions.MoveE, 8, 0.4},                                 // Then move east 6 inches,
                         {RobotActions.MoveS, 20, 0.6},                                // Back up into the cryptobox,
-                        {RobotActions.MoveN, 0.2, 0.2},                               // And move forward off of it.
-                        {RobotActions.AlineToRow},                                    // Then we call the ScoreAGlyph method in the OmniWheelRobot class.
-                        {RobotActions.MoveN, 2, 0.5},                                 // And move forward so we aren't touching the glyph,
-                        {RobotActions.Turn, 270}};                                    // And turn to face north. according to the drivers perspective.
+                        {RobotActions.MoveN, 3, 0.2},                               // And move forward off of it.
+                        {RobotActions.DropGlyph},
+                        {RobotActions.MoveN, 1, 1.0},
+                        {RobotActions.MoveS, 5, 1.0},
+                        {RobotActions.MoveN, 1, 0.6}};// Then we call the ScoreAGlyph method in the OmniWheelRobot class.
             }else{
                 PROGRAM = new double[][]{                                             //If we are on the blue alliance, we run this program:
                         {RobotActions.Read_Pictograph},                               //First we read the pictograph,
                         {RobotActions.KnockOffJewel},                                 // Next knockoff the Jewel of the opposing alliance.
                         {RobotActions.MoveN, 12, 0.5},                                // Then we move north off the balancing stone,
                         {RobotActions.Turn, 270},                                     // Turn to 270 degrees,
-                        {RobotActions.MoveS, 8, 0.6},                                 // Back up into the cryptobox,
-                        {RobotActions.MoveN, 0.2, 0.2},                               // And move forward off of it.
-                        {RobotActions.AlineToRow},                                    // Then we call the ScoreAGlyph method in the OmniWheelRobot class.
-                        {RobotActions.MoveN, 1, 0.7}};                                // And move forward so we aren't touching the glyph.
+                        {RobotActions.MoveS, 8, 0.6},
+                        {RobotActions.MoveN, 3, 0.2},
+                        {RobotActions.DropGlyph}};                                // Back up into the cryptobox,
+
             }
         }
     }
@@ -229,11 +233,13 @@ public class OmniAutonomous extends LinearOpMode{                               
     //------{READING THE PROGRAM}-----------------------------------------------------------------------
     private class runProgram implements Runnable{                                 //We call this program to run the program the robot just wrote.
         public void run(){
-            new ServoSetup().moveServos();                                        //First we call the Thread ServoSetup, moving servos into their correct
+           // new ServoSetup().moveServos();                                        //First we call the Thread ServoSetup, moving servos into their correct
+            Omni.servos.getServo(Lifter).setPosition(0.3);
             ReadProgram();                                                        //positions. The we call ReadProgram(), which reads the PROGRAM array.
             requestOpModeStop();                                                  // Finally, it stops the opMode.
         }
     }
+    /**
     public class ServoSetup implements Runnable{                                      //We use this to move servos around to their correct position.
         public void run() {
             Omni.servos.getServo(Servos.Lifter).setPosition(0.3);                     //First we raise the linear servo a little,
@@ -246,7 +252,7 @@ public class OmniAutonomous extends LinearOpMode{                               
         void moveServos(){
             new Thread(this).start();                                        //When we call this method, it starts the run() method.
         }
-    }
+    }*/
     private void ReadProgram(){                                                                  //When we call this, the robot reads the PROGRAM array, and
         for(int LineInProgram = 0; LineInProgram <= PROGRAM.length-1;LineInProgram++){           // preforms the actions. It loops through the entire array.
             if(PROGRAM[LineInProgram][0] == RobotActions.KnockOffJewel){                         //If the first double equals KnockOffJewel, we knock
@@ -268,6 +274,10 @@ public class OmniAutonomous extends LinearOpMode{                               
                 Omni.ScoreAGlyph(KeyColumn, COLOR);                                              // OmniWheelRobot class.
             }else if(PROGRAM[LineInProgram][0] == RobotActions.ResetGyro){                       //If it is ResetGyro, we reset the gyro.
                 Omni.sensors.ResetGyro();
+            }else if(PROGRAM[LineInProgram][0] == RobotActions.DropGlyph){
+                Omni.attachmentMotors.getMotor(Conveyor).setPower(-0.7);  //We power the ConveyorBelt, turning it.
+                Omni.Pause(4000);                                //Pause 4 seconds (4000 milliseconds).
+                Omni.attachmentMotors.getMotor(Conveyor).setPower(0);     //We stop the motor.
             }
         }
     }

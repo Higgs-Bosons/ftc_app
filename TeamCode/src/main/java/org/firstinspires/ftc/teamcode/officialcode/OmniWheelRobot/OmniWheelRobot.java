@@ -4,6 +4,8 @@ import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.robotcore.hardware.*;
 import org.firstinspires.ftc.robotcore.internal.system.AppUtil;
 import org.firstinspires.ftc.robotcore.internal.ui.UILocation;
+import org.firstinspires.ftc.teamcode.officialcode.Autonomus.OmniAutonomous;
+import org.firstinspires.ftc.teamcode.officialcode.Autonomus.OmniGlyph;
 import org.firstinspires.ftc.teamcode.officialcode.Constants;
 
 public class OmniWheelRobot extends Constants{  //This is the class we made to handle all the hardware.
@@ -102,6 +104,7 @@ public class OmniWheelRobot extends Constants{  //This is the class we made to h
             if(KeyColumn.equals("CENTER")){ROW = 2;}
             if(KeyColumn.equals("RIGHT")) {ROW = 3;}
         }
+        new killThread().start();
         alignRow(ROW);                                                       //Then we pass ROW to alignRow(), which aligns us to the correct column.
         fineTune();                                                          //Then we run fineTune() to align precisely to the column
         dropOff();                                                           //And finally dropOff() to drop in the glyph.
@@ -138,8 +141,26 @@ public class OmniWheelRobot extends Constants{  //This is the class we made to h
         this.driveMotors.Move(N, 3, 0.3);                     // and move forward to give the glyph we are going to drop room to land flat.
     }
     private void dropOff() {
-        this.attachmentMotors.getMotor(Conveyor).setPower(-0.5);  //We power the ConveyorBelt, turning it.
+        this.attachmentMotors.getMotor(Conveyor).setPower(-0.7);  //We power the ConveyorBelt, turning it.
         this.Pause(4000);                                //Pause 4 seconds (4000 milliseconds).
         this.attachmentMotors.getMotor(Conveyor).setPower(0);     //We stop the motor.
+    }
+    private class killThread implements Runnable{
+        boolean firstTime = true;
+        public void run() {
+            while(!OmniGlyph.programedMissionThread.isInterrupted()){
+                if (count >= 100){
+                    OmniGlyph.programedMissionThread.interrupt();
+                    if(firstTime){
+                        firstTime = false;
+                        AppUtil.getInstance().showToast(UILocation.BOTH, ""+ OmniGlyph.programedMissionThread.isInterrupted());
+                    }
+                    OmniGlyph.Omni.driveMotors.STOP();
+                }
+            }
+        }
+        void start(){
+            new Thread(this).start();
+        }
     }
 }

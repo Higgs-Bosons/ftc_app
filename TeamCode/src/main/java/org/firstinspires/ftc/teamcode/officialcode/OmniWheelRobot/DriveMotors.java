@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.officialcode.OmniWheelRobot;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
 import org.firstinspires.ftc.teamcode.officialcode.Autonomus.OmniAutonomous;
+import org.firstinspires.ftc.teamcode.officialcode.Autonomus.OmniGlyph;
 import org.firstinspires.ftc.teamcode.officialcode.Constants;
 
 public class DriveMotors extends Constants{
@@ -63,6 +64,17 @@ public class DriveMotors extends Constants{
         }
         STOP();
     }
+    public void XTurn(int whereToTurnTo){
+        double power = 0.6;
+        for(int count = 1; count !=3; count++){
+            boolean WhichWay = WhichWayToTurn(whereToTurnTo, (int) XReadGyro());
+            while(HowFar(whereToTurnTo, (int) XReadGyro()) >= 50) {
+                if(!WhichWay){this.TurnMotorsOn(power,-power,power,-power);}else{this.TurnMotorsOn(-power,power,-power,power);}
+            }
+            power-=0.2;
+        }
+        STOP();
+    }
     public void TurnMotorsOn(double PowerToLeftFront, double PowerToRightFront, double PowerToLeftBack, double PowerToRightBack){
         this.LF.setPower(PowerToLeftFront);
         this.RF.setPower(PowerToRightFront);
@@ -83,7 +95,51 @@ public class DriveMotors extends Constants{
             default:return LF;
         }
     }
+    public void XMove(Constants.RobotDirection Direction, double DistanceInches, double Power){
+        int DistanceTicks = (int) (DistanceInches / (Math.PI * Constants.Wheel_Diameter) * Constants.Motor_Tick_Per_Rotation);
+        double MaxPower = Power;
+        double X = Direction.getX();
+        double Y = Direction.getY();
+        boolean keepLooping = true;
+        int averageTicks;
+        float RFPower;
+        float RBPower;
+        float LFPower;
+        float LBPower;
+        ResetEncoders();
+        rampUp(Power, (int)(((DistanceTicks)/10000)*Power), Direction);
+        while (keepLooping){
+            Power = (DistanceTicks / 276000);
+            if(Power > MaxPower){Power = MaxPower;}
+            if(Power < 0.1){Power = 0.1;}
+            RFPower = (float) ((X+Y)*Power);
+            RBPower = (float) ((Y-X)*Power);
+            LFPower = (float) ((Y-X)*Power);
+            LBPower = (float) ((X+Y)*Power);
+            TurnMotorsOn(LFPower,RFPower, LBPower, RBPower);
+            averageTicks = ((Math.abs(RF.getCurrentPosition()) + Math.abs(RB.getCurrentPosition())
+                    + Math.abs(LF.getCurrentPosition()) + Math.abs(LB.getCurrentPosition()))/4);
+            keepLooping = ((Math.abs(averageTicks)) <= (Math.abs(DistanceTicks)));
+        }
+        STOP();
 
+    }
+    private void rampUp(double finalPower, int speed, RobotDirection Direction){
+        double X = Direction.getX();
+        double Y = Direction.getY();
+        float RFPower;
+        float RBPower;
+        float LFPower;
+        float LBPower;
+        for (int Power = 0; Power < finalPower; Power+=speed/1000){
+            RFPower = (float) ((X+Y)*Power);
+            RBPower = (float) ((Y-X)*Power);
+            LFPower = (float) ((Y-X)*Power);
+            LBPower = (float) ((X+Y)*Power);
+            TurnMotorsOn(LFPower,RFPower, LBPower, RBPower);
+            try{Thread.sleep(50);}catch(Exception ignore){}
+        }
+    }
 
 //-------{TOOLS}------------------------------------------------------------------------------------
     private void ResetEncoders(){
@@ -97,6 +153,9 @@ public class DriveMotors extends Constants{
         this.RB.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         this.LB.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         }
+    private float XReadGyro(){
+        return OmniGlyph.Omni.sensors.ReadGyro();
+    }
     private float readGyro(){
         return OmniAutonomous.Omni.sensors.ReadGyro();
     }
