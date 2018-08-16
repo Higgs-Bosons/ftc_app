@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.officialcode.Testers;
 import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.util.Log;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
@@ -23,6 +24,7 @@ public class CameraTester extends LinearOpMode{
                 Camera.turnOffCameraLight();
             }
             bitmap = Camera.getPicture();
+            Log.d("Running", "Working.. ------------------------------------------");
         }
         Camera.close();
     }

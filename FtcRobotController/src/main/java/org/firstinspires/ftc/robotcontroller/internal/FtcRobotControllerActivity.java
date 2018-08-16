@@ -52,6 +52,7 @@ import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.webkit.WebView;
+import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -90,6 +91,7 @@ import com.qualcomm.robotcore.util.RobotLog;
 import com.qualcomm.robotcore.wifi.NetworkConnectionFactory;
 import com.qualcomm.robotcore.wifi.NetworkType;
 import com.qualcomm.robotcore.wifi.WifiDirectAssistant;
+import com.vuforia.ar.pl.Camera1_Preview;
 
 import org.firstinspires.ftc.ftccommon.external.SoundPlayingRobotMonitor;
 import org.firstinspires.ftc.ftccommon.internal.FtcRobotControllerWatchdogService;
@@ -143,6 +145,7 @@ public class FtcRobotControllerActivity extends Activity
   protected TextView textOpMode;
   protected TextView textErrorMessage;
   protected ImmersiveMode immersion;
+  protected static FrameLayout preview;
 
   protected UpdateUI updateUI;
   protected Dimmer dimmer;
@@ -161,7 +164,6 @@ public class FtcRobotControllerActivity extends Activity
     }
 
   }
-
   protected ServiceConnection connection = new ServiceConnection() {
     @Override
     public void onServiceConnected(ComponentName name, IBinder service) {
@@ -175,8 +177,6 @@ public class FtcRobotControllerActivity extends Activity
       controllerService = null;
     }
   };
-
-  @Override
   protected void onNewIntent(Intent intent) {
     super.onNewIntent(intent);
 
@@ -212,8 +212,6 @@ public class FtcRobotControllerActivity extends Activity
       }
     }
   }
-
-  @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     RobotLog.onApplicationStart();  // robustify against onCreate() following onDestroy() but using the same app instance, which apparently does happen
@@ -305,6 +303,8 @@ public class FtcRobotControllerActivity extends Activity
     ServiceController.startService(FtcRobotControllerWatchdogService.class);
     bindToService();
     logPackageVersions();
+
+    preview = (FrameLayout) findViewById(R.id.frameLayout);
   }
 
   protected UpdateUI createUpdateUI() {
@@ -314,14 +314,11 @@ public class FtcRobotControllerActivity extends Activity
     result.setTextViews(textNetworkConnectionStatus, textRobotStatus, textGamepad, textOpMode, textErrorMessage, textDeviceName);
     return result;
   }
-
   protected UpdateUI.Callback createUICallback(UpdateUI updateUI) {
     UpdateUI.Callback result = updateUI.new Callback();
     result.setStateMonitor(new SoundPlayingRobotMonitor());
     return result;
   }
-
-  @Override
   protected void onStart() {
     super.onStart();
     RobotLog.vv(TAG, "onStart()");
@@ -342,14 +339,10 @@ public class FtcRobotControllerActivity extends Activity
       }
     });
   }
-
-  @Override
   protected void onResume() {
     super.onResume();
     RobotLog.vv(TAG, "onResume()");
   }
-
-  @Override
   protected void onPause() {
     super.onPause();
     RobotLog.vv(TAG, "onPause()");
@@ -357,16 +350,12 @@ public class FtcRobotControllerActivity extends Activity
       programmingModeController.stopProgrammingMode();
     }
   }
-
-  @Override
   protected void onStop() {
     // Note: this gets called even when the configuration editor is launched. That is, it gets
     // called surprisingly often. So, we don't actually do much here.
     super.onStop();
     RobotLog.vv(TAG, "onStop()");
   }
-
-  @Override
   protected void onDestroy() {
     super.onDestroy();
     RobotLog.vv(TAG, "onDestroy()");
@@ -385,20 +374,25 @@ public class FtcRobotControllerActivity extends Activity
     preferencesHelper.getSharedPreferences().unregisterOnSharedPreferenceChangeListener(sharedPreferencesListener);
     RobotLog.cancelWriteLogcatToDisk();
   }
-
+  protected class SharedPreferencesListener implements SharedPreferences.OnSharedPreferenceChangeListener {
+          @Override
+          public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+              if (key.equals(context.getString(R.string.pref_app_theme))) {
+                  ThemedActivity.restartForAppThemeChange(getTag(), getString(R.string.appThemeChangeRestartNotifyRC));
+              }
+          }
+      }
   protected void bindToService() {
     readNetworkType();
     Intent intent = new Intent(this, FtcRobotControllerService.class);
     intent.putExtra(NetworkConnectionFactory.NETWORK_CONNECTION_TYPE, networkType);
     bindService(intent, connection, Context.BIND_AUTO_CREATE);
   }
-
   protected void unbindFromService() {
     if (controllerService != null) {
       unbindService(connection);
     }
   }
-
   protected void logPackageVersions() {
     RobotLog.logBuildConfig(com.qualcomm.ftcrobotcontroller.BuildConfig.class);
     RobotLog.logBuildConfig(com.qualcomm.robotcore.BuildConfig.class);
@@ -407,7 +401,6 @@ public class FtcRobotControllerActivity extends Activity
     RobotLog.logBuildConfig(com.google.blocks.BuildConfig.class);
     RobotLog.logBuildConfig(org.firstinspires.inspection.BuildConfig.class);
   }
-
   protected void readNetworkType() {
 
     // The code here used to defer to the value found in a configuration file
@@ -423,8 +416,6 @@ public class FtcRobotControllerActivity extends Activity
     // update the app_settings
     preferencesHelper.writeStringPrefIfDifferent(context.getString(R.string.pref_network_connection_type), networkType.toString());
   }
-
-  @Override
   public void onWindowFocusChanged(boolean hasFocus){
     super.onWindowFocusChanged(hasFocus);
     // When the window loses focus (e.g., the action overflow is shown),
@@ -439,15 +430,10 @@ public class FtcRobotControllerActivity extends Activity
       immersion.cancelSystemUIHide();
     }
   }
-
-
-  @Override
   public boolean onCreateOptionsMenu(Menu menu) {
     getMenuInflater().inflate(R.menu.ftc_robot_controller, menu);
     return true;
   }
-
-  @Override
   public boolean onOptionsItemSelected(MenuItem item) {
     int id = item.getItemId();
 
@@ -510,14 +496,10 @@ public class FtcRobotControllerActivity extends Activity
 
    return super.onOptionsItemSelected(item);
   }
-
-  @Override
   public void onConfigurationChanged(Configuration newConfig) {
     super.onConfigurationChanged(newConfig);
     // don't destroy assets on screen rotation
   }
-
-  @Override
   protected void onActivityResult(int request, int result, Intent intent) {
     if (request == REQUEST_CONFIG_WIFI_CHANNEL) {
       if (result == RESULT_OK) {
@@ -530,7 +512,6 @@ public class FtcRobotControllerActivity extends Activity
       cfgFileMgr.getActiveConfigAndUpdateUI();
     }
   }
-
   public void onServiceBind(final FtcRobotControllerService service) {
     RobotLog.vv(FtcRobotControllerService.TAG, "%s.controllerService=bound", TAG);
     controllerService = service;
@@ -550,7 +531,6 @@ public class FtcRobotControllerActivity extends Activity
       }
     });
   }
-
   private void updateUIAndRequestRobotSetup() {
     if (controllerService != null) {
       callback.networkConnectionUpdate(controllerService.getNetworkConnectionStatus());
@@ -558,7 +538,6 @@ public class FtcRobotControllerActivity extends Activity
       requestRobotSetup();
     }
   }
-
   private void requestRobotSetup() {
     if (controllerService == null) return;
 
@@ -583,15 +562,12 @@ public class FtcRobotControllerActivity extends Activity
 
     passReceivedUsbAttachmentsToEventLoop();
   }
-
   protected OpModeRegister createOpModeRegister() {
     return new FtcOpModeRegister();
   }
-
   private void shutdownRobot() {
     if (controllerService != null) controllerService.shutdownRobot();
   }
-
   private void requestRobotRestart() {
     AppUtil.getInstance().showToast(UILocation.BOTH, AppUtil.getDefContext().getString(R.string.toastRestartingRobot));
     //
@@ -600,7 +576,6 @@ public class FtcRobotControllerActivity extends Activity
     //
     AppUtil.getInstance().showToast(UILocation.BOTH, AppUtil.getDefContext().getString(R.string.toastRestartRobotComplete));
   }
-
   protected void hittingMenuButtonBrightensScreen() {
     ActionBar actionBar = getActionBar();
     if (actionBar != null) {
@@ -614,12 +589,8 @@ public class FtcRobotControllerActivity extends Activity
       });
     }
   }
-
-  protected class SharedPreferencesListener implements SharedPreferences.OnSharedPreferenceChangeListener {
-    @Override public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-      if (key.equals(context.getString(R.string.pref_app_theme))) {
-        ThemedActivity.restartForAppThemeChange(getTag(), getString(R.string.appThemeChangeRestartNotifyRC));
-      }
-    }
+  public static FrameLayout getCameraPreview(){
+      return preview;
   }
+
 }

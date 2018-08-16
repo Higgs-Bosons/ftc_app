@@ -14,6 +14,8 @@ import android.widget.FrameLayout;
 import org.firstinspires.ftc.robotcontroller.internal.FtcRobotControllerActivity;
 import org.firstinspires.ftc.robotcore.internal.system.AppUtil;
 import org.firstinspires.ftc.robotcore.internal.ui.UILocation;
+import org.firstinspires.ftc.teamcode.officialcode.Tools;
+
 import java.io.IOException;
 import java.util.List;
 
@@ -78,7 +80,8 @@ public class HiggsCamera{
                 Ready = false;
                 Log.d("STARTED ","IT");
                 camera.takePicture(null, null, mPicture);
-            }catch (Exception ignore){Log.d("ERROR","ERROR!");}
+            }catch (Exception ignore){
+                Tools.showToast("Crashed");}
             while(!tookIt){Log.d("Camera","Waiting for Camera to take picture.");}
             pictureBitmap = BitmapFactory.decodeByteArray(pictureByte,0,pictureByte.length);
         }
