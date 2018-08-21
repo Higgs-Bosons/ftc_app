@@ -12,6 +12,7 @@ import static org.firstinspires.ftc.teamcode.officialcode.Constants.RML;
 
 @TeleOp(name = "TeleOp", group = "Beacon")
 public class OmniTeleOp extends LinearOpMode {
+
     private OmniWheelRobot Omni;
     private boolean GrabbingGlyph = false;
     private boolean GrabbingRelic = false;
@@ -189,54 +190,48 @@ public class OmniTeleOp extends LinearOpMode {
             while(this.gamepad1.x){}
             LimitedMovement = !LimitedMovement;
         }
-        if(LimitedMovement){
-            if(ALL >= 0.6){
-                double speed;
-                double x = gamepad1.left_stick_x;
-                double y = gamepad1.left_stick_y;
-                if(Math.abs(x) >= Math.abs(y)){
-                    y = 0;
-                }
-                if(Math.abs(x) <= Math.abs(y)){
-                    x = 0;
-                }
-                if(!Slow){speed = 0.8;}else{speed = 0.4;}
-                float RFPower = (float) ((x + y)*speed);
-                float RBPower = (float) ((y - x)*speed);
-                float LFPower = (float) ((y - x)*speed);
-                float LBPower = (float) ((x + y)*speed);
-                if(Math.abs(gamepad1.right_stick_x) >= 0.1) {
-                    LBPower = (float)  ((gamepad1.right_stick_x)* -speed);
-                    LFPower = (float)  ((gamepad1.right_stick_x)* -speed);
-                    RBPower = (float) ((-gamepad1.right_stick_x)* -speed);
-                    RFPower = (float) ((-gamepad1.right_stick_x)* -speed);
-                }
-                Omni.driveMotors.TurnMotorsOn(LFPower,RFPower, LBPower, RBPower);
-            }else{
-                Omni.driveMotors.TurnMotorsOn(0,0,0,0);
-            }
-        }else {
-            if(ALL >= 0.6){
-                double speed;
 
-                if(!Slow){speed = 0.8;}else{speed = 0.4;}
-                float RFPower = (float) ((gamepad1.left_stick_x + gamepad1.left_stick_y)*speed);
-                float RBPower = (float) ((gamepad1.left_stick_y - gamepad1.left_stick_x)*speed);
-                float LFPower = (float) ((gamepad1.left_stick_y - gamepad1.left_stick_x)*speed);
-                float LBPower = (float) ((gamepad1.left_stick_x + gamepad1.left_stick_y)*speed);
-                if(Math.abs(gamepad1.right_stick_x) >= 0.1) {
-                    LBPower = (float)  ((gamepad1.right_stick_x)* -speed);
-                    LFPower = (float)  ((gamepad1.right_stick_x)* -speed);
-                    RBPower = (float) ((-gamepad1.right_stick_x)* -speed);
-                    RFPower = (float) ((-gamepad1.right_stick_x)* -speed);
-                }
-                Omni.driveMotors.TurnMotorsOn(LFPower,RFPower, LBPower, RBPower);
-            }else{
-                Omni.driveMotors.TurnMotorsOn(0,0,0,0);
-            }
+        if ((Math.abs(gamepad1.left_stick_x) + Math.abs(gamepad1.left_stick_y) + Math.abs(gamepad1.right_stick_x)) > 0.1) {
+            double[] motorPowers = getMotorPowers();
+            Omni.driveMotors.TurnMotorsOn(motorPowers[1],motorPowers[3],motorPowers[0],motorPowers[2]);
+        }else{
+            Omni.driveMotors.STOP();
         }
 
+
+
     }
+    private double[] getMotorPowers(){
+        double ALL = (Math.abs(gamepad1.left_stick_x) + Math.abs(gamepad1.left_stick_y) + Math.abs(gamepad1.right_stick_x));
+        double[] motorPowers = new double[4];
+        if(ALL >= 0.6){
+            motorPowers[0] = ((gamepad1.left_stick_x + gamepad1.left_stick_y));
+            motorPowers[1] = ((gamepad1.left_stick_y - gamepad1.left_stick_x));
+            motorPowers[2] = ((gamepad1.left_stick_y - gamepad1.left_stick_x));
+            motorPowers[3] = ((gamepad1.left_stick_x + gamepad1.left_stick_y));
+        }
+
+        if(Math.abs(gamepad1.right_stick_x) >= 0.1) {
+            motorPowers[0] = ((gamepad1.right_stick_x )+motorPowers[0])/2;
+            motorPowers[1] = ((gamepad1.right_stick_x )+motorPowers[1])/2;
+            motorPowers[2] = ((-gamepad1.right_stick_x)+motorPowers[2])/2;
+            motorPowers[3] = ((-gamepad1.right_stick_x)+motorPowers[3])/2;
+        }
+
+        if(Slow){
+            motorPowers[0] *=0.4;
+            motorPowers[1] *=0.4;
+            motorPowers[2] *=0.4;
+            motorPowers[3] *=0.4;
+        }else{
+            motorPowers[0] *=0.8;
+            motorPowers[1] *=0.8;
+            motorPowers[2] *=0.8;
+            motorPowers[3] *=0.8;
+        }
+        return motorPowers;
+    }
+
     private void Check_Grabber(){
         if(this.gamepad2.a){
             if(GrabbingGlyph){
