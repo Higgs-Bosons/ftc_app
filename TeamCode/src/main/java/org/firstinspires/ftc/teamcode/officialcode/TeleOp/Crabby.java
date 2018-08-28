@@ -20,38 +20,49 @@ public class Crabby extends LinearOpMode{
     public void runOpMode(){
         initializeMotors();
         waitForStart();
-        while(opModeIsActive()){move();}
+        while(opModeIsActive()){moveCrab();}
     }
-    private void move(){
+    private void moveCrab(){
         double RFpower;
         double RBpower;
         double LFpower;
         double LBpower;
 
+        int count = 0;
 
+        double stick1X = gamepad1.left_stick_x;
+        double stick1Y = gamepad1.left_stick_y;
+        double stick2X = gamepad1.right_stick_x;
 
-        RFpower =  (gamepad1.left_stick_y + gamepad1.left_stick_x)/2;
-        RBpower =  (gamepad1.left_stick_y - gamepad1.left_stick_x)/2;
-        LFpower = -(gamepad1.left_stick_y - gamepad1.left_stick_x)/2;
-        LBpower = -(gamepad1.left_stick_y + gamepad1.left_stick_x)/2;
+        if(gamepad1.left_stick_y == 0){
+            count++;
+        }
+        if(gamepad1.left_stick_x == 0){
+            count++;
+        }
+        if(gamepad1.right_stick_x == 0){
+            count++;
+        }
 
-        RFpower = (RFpower+gamepad1.right_stick_x)/2;
-        RBpower = (RBpower+gamepad1.right_stick_x)/2;
-        LFpower = (LFpower+gamepad1.right_stick_x)/2;
-        LBpower = (LBpower+gamepad1.right_stick_x)/2;
+        RFpower =  (stick1Y + stick1X)/2;
+        RBpower =  (stick1Y - stick1X)/2;
+        LFpower = -(stick1Y - stick1X)/2;
+        LBpower = -(stick1Y + stick1X)/2;
+
+        RFpower = (RFpower+stick2X)/2;
+        RBpower = (RBpower+stick2X)/2;
+        LFpower = (LFpower+stick2X)/2;
+        LBpower = (LBpower+stick2X)/2;
+
+        RFpower *=4;
+        RBpower *=4;
+        LFpower *=4;
+        LBpower *=4;
 
         RF.setPower(RFpower);
         RB.setPower(RBpower);
         LF.setPower(LFpower);
         LB.setPower(LBpower);
-
-        telemetry.addData("RF",RFpower);
-        telemetry.addData("RB",RBpower);
-        telemetry.addData("LF",LFpower);
-        telemetry.addData("LB",LBpower);
-        telemetry.update();
-
-
     }
 
 }
