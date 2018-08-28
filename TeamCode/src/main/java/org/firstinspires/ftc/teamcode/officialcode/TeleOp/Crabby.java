@@ -28,10 +28,10 @@ public class Crabby extends LinearOpMode{
         double LFpower;
         double LBpower;
 
-        RFpower = (gamepad1.left_stick_x+gamepad1.left_stick_y)/2;
-        RBpower = (gamepad1.left_stick_x+gamepad1.left_stick_y)/2;
-        LFpower = -(gamepad1.left_stick_x+gamepad1.left_stick_y)/2;
-        LBpower = -(gamepad1.left_stick_x+gamepad1.left_stick_y)/2;
+        RFpower = (gamepad1.left_stick_x  - gamepad1.left_stick_y)/2;
+        RBpower = (gamepad1.left_stick_x  - gamepad1.left_stick_y)/2;
+        LFpower = -(gamepad1.left_stick_x - gamepad1.left_stick_y)/2;
+        LBpower = -(gamepad1.left_stick_x - gamepad1.left_stick_y)/2;
 
         RF.setPower(RFpower);
         RB.setPower(RBpower);
