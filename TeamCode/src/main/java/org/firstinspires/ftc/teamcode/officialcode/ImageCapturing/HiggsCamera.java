@@ -40,7 +40,7 @@ public class HiggsCamera{
             public void run(){
                 while(camera == null){camera = openFrontFacingCamera();}
                 CameraPreview = new CameraPreview(AppUtil.getDefContext(), camera);
-                previewHolder = FtcRobotControllerActivity.getCameraPreview();
+                // previewHolder = FtcRobotControllerActivity.getCameraPreview();
                 previewHolder.setVisibility(View.VISIBLE);
                 previewHolder.addView(CameraPreview);
                 Camera.Parameters params= camera.getParameters();
