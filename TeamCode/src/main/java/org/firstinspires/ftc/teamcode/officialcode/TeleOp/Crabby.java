@@ -22,18 +22,27 @@ public class Crabby extends LinearOpMode{
     public void runOpMode(){
         initializeMotors();
         waitForStart();
-        while(opModeIsActive())
+        while(opModeIsActive()){
+            telemetry.addData("Tanked: ", tanked);
+            telemetry.update();
+
             if (!tanked)
                 moveCrab();
             else
                 moveTank();
+        }
     }
 
     public void moveTank() {
-        if (gamepad1.a)
-            tanked = false;
-        else {
-            double left = gamepad1.left_stick_y;
+        telemetry.addData("Mode: ", "Tank");
+        
+        if (gamepad1.a) {
+            while (gamepad1.a) {
+                tanked = false;
+            }
+
+        }else {
+            double left = -gamepad1.left_stick_y;
             double right = gamepad1.right_stick_y;
 
             LF.setPower(left);
@@ -44,9 +53,11 @@ public class Crabby extends LinearOpMode{
     }
 
     private void moveCrab(){
-        if (gamepad1.a)
-            tanked = true;
-        else {
+        if (gamepad1.a) {
+            while (gamepad1.a) {
+                tanked = true;
+            }
+        }else {
             double RFpower;
             double RBpower;
             double LFpower;
