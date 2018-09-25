@@ -10,8 +10,6 @@ public class HiggsCameraAayush extends LinearOpMode{
     public void runOpMode() throws InterruptedException {
         waitForStart();
 
-
-
         while (opModeIsActive()) {
 
         }
