@@ -55,6 +55,7 @@ import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.webkit.WebView;
+import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.PopupMenu;
@@ -167,7 +168,7 @@ public class FtcRobotControllerActivity extends Activity
   protected WifiMuteStateMachine wifiMuteStateMachine;
   protected MotionDetection motionDetection;
 
-  private View VIEW;
+  private FrameLayout frameLayout;
 
   protected class RobotRestarter implements Restarter {
 
@@ -338,7 +339,7 @@ public class FtcRobotControllerActivity extends Activity
     if (preferencesHelper.readBoolean(getString(R.string.pref_wifi_automute), false)) {
       initWifiMute(true);
     }
-    VIEW = (View) findViewById(R.id.VIEW);
+    frameLayout = (FrameLayout) findViewById(R.id.FrameLayout);
   }
 
   protected UpdateUI createUpdateUI() {
@@ -716,8 +717,8 @@ public class FtcRobotControllerActivity extends Activity
       wifiMuteStateMachine.consumeEvent(WifiMuteEvent.USER_ACTIVITY);
     }
   }
-  public View getVIEW(){
-    return VIEW;
+  public FrameLayout getFrameLayout(){
+    return frameLayout;
   }
 
 }

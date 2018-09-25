@@ -120,22 +120,18 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
       android:text="" />
 
     <FrameLayout
-      android:layout_width="match_parent"
-      android:layout_height="wrap_content"
-      android:layout_below="@+id/textOpMode"
-      android:layout_above="@+id/textGamepad1">
+        android:id="@+id/FrameLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/textGamepad1"
+        android:layout_below="@+id/textOpMode">
 
       <LinearLayout
           android:id="@+id/cameraMonitorViewId"
           android:layout_width="match_parent"
           android:layout_height="match_parent"
-          android:orientation="vertical"
-          >
+          android:orientation="vertical">
 
-        <View
-            android:id="@+id/VIEW"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
       </LinearLayout>
 
       <!-- When visible, the error message will overlay and thus partially
@@ -143,13 +139,14 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
            allow for a bigger camera monitor view in the common case when the
            error is not in fact present
         -->
-        <TextView style="@style/FtcTextViewStyleBold"
-            android:id="@+id/textErrorMessage"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text=""
-            android:visibility="invisible"
-            android:textColor="?attr/textMediumDark" />
+      <TextView
+          android:id="@+id/textErrorMessage"
+          style="@style/FtcTextViewStyleBold"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:text=""
+          android:textColor="?attr/textMediumDark"
+          android:visibility="invisible" />
 
     </FrameLayout>
 
