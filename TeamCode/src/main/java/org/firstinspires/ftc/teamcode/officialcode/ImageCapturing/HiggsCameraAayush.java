@@ -12,7 +12,7 @@ public class HiggsCameraAayush extends LinearOpMode{
         Camera camera = new Camera();
         Canvas canvas = new Canvas();
 
-
+        camera.applyToCanvas(canvas);
 
     }
 
