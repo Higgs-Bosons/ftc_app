@@ -53,6 +53,7 @@ import android.support.annotation.StringRes;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
+import android.view.TextureView;
 import android.view.View;
 import android.webkit.WebView;
 import android.widget.FrameLayout;
@@ -169,6 +170,7 @@ public class FtcRobotControllerActivity extends Activity
   protected MotionDetection motionDetection;
 
   private FrameLayout frameLayout;
+  private TextureView CameraTexture;
 
   protected class RobotRestarter implements Restarter {
 
@@ -340,6 +342,7 @@ public class FtcRobotControllerActivity extends Activity
       initWifiMute(true);
     }
     frameLayout = (FrameLayout) findViewById(R.id.FrameLayout);
+    CameraTexture = (TextureView) findViewById(R.id.CameraTexture);
   }
 
   protected UpdateUI createUpdateUI() {
@@ -720,5 +723,7 @@ public class FtcRobotControllerActivity extends Activity
   public FrameLayout getFrameLayout(){
     return frameLayout;
   }
-
+  public TextureView getTextureView(){
+      return CameraTexture;
+  }
 }
