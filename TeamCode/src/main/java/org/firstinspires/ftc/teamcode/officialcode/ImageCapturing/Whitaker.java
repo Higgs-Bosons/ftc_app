@@ -45,6 +45,8 @@ public class Whitaker extends LinearOpMode {
     public void runOpMode() throws InterruptedException {
 
         waitForStart();
+        Looper.myLooper().quit();
+        Looper.prepare();
         Tools.wait(1000);
         textureView = (new FtcRobotControllerActivity()).getTextureView();
 
