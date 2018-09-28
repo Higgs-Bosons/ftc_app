@@ -20,6 +20,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.robotcontroller.internal.FtcRobotControllerActivity;
 import org.firstinspires.ftc.robotcore.internal.system.AppUtil;
+import org.firstinspires.ftc.teamcode.officialcode.Tools;
 
 import java.util.Collections;
 
@@ -44,7 +45,9 @@ public class Whitaker extends LinearOpMode {
     public void runOpMode() throws InterruptedException {
 
         waitForStart();
+        Tools.wait(1000);
         textureView = (new FtcRobotControllerActivity()).getTextureView();
+
 
         cameraManager = (CameraManager) AppUtil.getDefContext().getSystemService(Context.CAMERA_SERVICE);
         cameraFacing = CameraCharacteristics.LENS_FACING_BACK;
@@ -90,10 +93,10 @@ public class Whitaker extends LinearOpMode {
                 Whitaker.this.cameraDevice = null;
             }
         };
-       // cameraManager = (CameraManager) AppUtil.getDefContext().getSystemService(Context.CAMERA_SERVICE);
+        cameraManager = (CameraManager) AppUtil.getDefContext().getSystemService(Context.CAMERA_SERVICE);
         openBackgroundThread();
         while (opModeIsActive());
-        //StopCameraStuff();
+        StopCameraStuff();
 
 
     }
