@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.officialcode.ImageCapturing;
 
+<<<<<<< Updated upstream
 
 import android.annotation.TargetApi;
 import android.content.Context;
@@ -25,6 +26,11 @@ import org.firstinspires.ftc.teamcode.officialcode.Tools;
 import java.util.Collections;
 
 
+=======
+import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+
+>>>>>>> Stashed changes
 @Autonomous(name = "Camera-Whitaker", group = "Tester")
 public class Whitaker extends LinearOpMode {
     private CameraManager cameraManager;
@@ -43,6 +49,7 @@ public class Whitaker extends LinearOpMode {
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     public void runOpMode() throws InterruptedException {
+<<<<<<< Updated upstream
 
         waitForStart();
         Looper.myLooper().quit();
@@ -151,6 +158,9 @@ public class Whitaker extends LinearOpMode {
             cameraDevice.close();
             cameraDevice = null;
         }
+=======
+        
+>>>>>>> Stashed changes
     }
 
     private void closeBackgroundThread() {
