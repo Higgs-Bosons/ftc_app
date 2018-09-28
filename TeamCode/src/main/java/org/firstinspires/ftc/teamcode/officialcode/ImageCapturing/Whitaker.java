@@ -42,7 +42,7 @@ public class Whitaker extends LinearOpMode {
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     public void runOpMode() throws InterruptedException {
         waitForStart();
-        textureView = (new FtcRobotControllerActivity()).getTextureView();
+        textureView = FtcRobotControllerActivity.getTextureView();
 
         cameraManager = (CameraManager) AppUtil.getDefContext().getSystemService(Context.CAMERA_SERVICE);
         cameraFacing = CameraCharacteristics.LENS_FACING_BACK;

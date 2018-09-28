@@ -170,7 +170,7 @@ public class FtcRobotControllerActivity extends Activity
   protected MotionDetection motionDetection;
 
   private FrameLayout frameLayout;
-  private TextureView CameraTexture;
+  private static TextureView CameraTexture;
 
   protected class RobotRestarter implements Restarter {
 
@@ -723,8 +723,7 @@ public class FtcRobotControllerActivity extends Activity
   public FrameLayout getFrameLayout(){
     return frameLayout;
   }
-  public TextureView getTextureView(){
-      try{Thread.sleep(1000);}catch (Exception ignore){}
+  public static TextureView getTextureView(){
       return CameraTexture;
   }
 }
