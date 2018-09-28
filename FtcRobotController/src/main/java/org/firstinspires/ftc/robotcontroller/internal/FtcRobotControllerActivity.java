@@ -724,6 +724,7 @@ public class FtcRobotControllerActivity extends Activity
     return frameLayout;
   }
   public TextureView getTextureView(){
+      try{Thread.sleep(1000);}catch (Exception ignore){}
       return CameraTexture;
   }
 }
