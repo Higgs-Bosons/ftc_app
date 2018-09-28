@@ -8,6 +8,8 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 public class Crabby extends LinearOpMode {
     private DcMotor LF, RF, LB, RB;
 
+    boolean slowed = false;
+
     boolean tanked = false;
     String mode = "Crab";
 
@@ -25,104 +27,104 @@ public class Crabby extends LinearOpMode {
         waitForStart();
 
         while (opModeIsActive()) {
-            telemetry.addData("Tanked: ", tanked);
-            telemetry.update();
 
-            if (!tanked)
+            if (!tanked) {
+                mode = "Crab";
 
-                while (opModeIsActive())
+                moveCrab();
+            } else {
+                mode = "Tank";
+                moveTank();
 
-                    if (!tanked) {
-                        mode = "Crab";
-
-                        moveCrab();
-                    } else {
-                        mode = "Tank";
-                        moveTank();
-
-                    }
+            }
         }
 
 
 
     }
     public void moveTank(){
-        telemetry.addData("Mode: ", mode);
+        telemetry.addData("Movement Mode: ", mode);
+        telemetry.addData("Slowed: ", slowed);
         telemetry.update();
 
-        if (gamepad1.a) {
-            while (gamepad1.a)
-                tanked = false;
-        } else {
+        while (gamepad1.a)
+            tanked = false;
+        while (gamepad1.b)
+            slowed = !slowed;
 
-            double left = -gamepad1.left_stick_y;
-            double right = gamepad1.right_stick_y;
+        double left;
+        double right;
 
-            LF.setPower(left);
-            LB.setPower(left);
-            RF.setPower(right);
-            RB.setPower(right);
+        if (!slowed) {
+            left = -gamepad1.left_stick_y;
+            telemetry.addData("Left Power", left);
+            telemetry.update();
+            right = gamepad1.right_stick_y;
         }
+        else {
+            left = -gamepad1.left_stick_y/2;
+            telemetry.addData("Left Power", left);
+            telemetry.update();
+            right = (gamepad1.right_stick_y)/2;
+        }
+
+        LF.setPower(left);
+        LB.setPower(left);
+        RF.setPower(right);
+        RB.setPower(right);
+
     }
 
     private void moveCrab () {
 
-        if (gamepad1.a) {
-            while (gamepad1.a) {
-                tanked = true;
-            }
-        } else {
+        while (gamepad1.a)
+            tanked = true;
+        while (gamepad1.b)
+            slowed = !slowed;
 
-            telemetry.addData("Mode: ", mode);
-            telemetry.update();
+        telemetry.addData("Movement Mode: ", mode);
+        telemetry.addData("Slowed: ", slowed);
+        telemetry.update();
 
-            if (gamepad1.a) {
-                while (gamepad1.a)
-                    tanked = true;
-            } else {
+        double RFpower;
+        double RBpower;
+        double LFpower;
+        double LBpower;
 
-                double RFpower;
-                double RBpower;
-                double LFpower;
-                double LBpower;
+        double stick1X;
+        double stick1Y;
+        double stick2X;
 
-                int count = 0;
+        if (!slowed) {
+            stick1X = gamepad1.left_stick_x;
+            stick1Y = gamepad1.left_stick_y;
+            stick2X = gamepad1.right_stick_x;
+        }
+        else {
+            stick1X = gamepad1.left_stick_x / 2;
+            stick1Y = gamepad1.left_stick_y / 2;
+            stick2X = gamepad1.right_stick_x / 2;
+        }
 
-                double stick1X = gamepad1.left_stick_x;
-                double stick1Y = gamepad1.left_stick_y;
-                double stick2X = gamepad1.right_stick_x;
+        RFpower = (stick1Y + stick1X) / 2;
+        RBpower = (stick1Y - stick1X) / 2;
+        LFpower = -(stick1Y - stick1X) / 2;
+        LBpower = -(stick1Y + stick1X) / 2;
 
-                if (gamepad1.left_stick_y == 0) {
-                    count++;
-                }
-                if (gamepad1.left_stick_x == 0) {
-                    count++;
-                }
-                if (gamepad1.right_stick_x == 0) {
-                    count++;
-                }
+        RFpower = (RFpower + stick2X) / 2;
+        RBpower = (RBpower + stick2X) / 2;
+        LFpower = (LFpower + stick2X) / 2;
+        LBpower = (LBpower + stick2X) / 2;
 
-                RFpower = (stick1Y + stick1X) / 2;
-                RBpower = (stick1Y - stick1X) / 2;
-                LFpower = -(stick1Y - stick1X) / 2;
-                LBpower = -(stick1Y + stick1X) / 2;
+        RFpower *= 4;
+        RBpower *= 4;
+        LFpower *= 4;
+        LBpower *= 4;
 
-                RFpower = (RFpower + stick2X) / 2;
-                RBpower = (RBpower + stick2X) / 2;
-                LFpower = (LFpower + stick2X) / 2;
-                LBpower = (LBpower + stick2X) / 2;
-
-                RFpower *= 4;
-                RBpower *= 4;
-                LFpower *= 4;
-                LBpower *= 4;
-
-                RF.setPower(RFpower);
-                RB.setPower(RBpower);
-                LF.setPower(LFpower);
-                LB.setPower(LBpower);
-            }
+        RF.setPower(RFpower);
+        RB.setPower(RBpower);
+        LF.setPower(LFpower);
+        LB.setPower(LBpower);
         }
 
     }
-}
