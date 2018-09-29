@@ -19,7 +19,6 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.robotcontroller.internal.FtcRobotControllerActivity;
 import org.firstinspires.ftc.robotcore.internal.system.AppUtil;
-import org.firstinspires.ftc.teamcode.officialcode.Tools;
 
 import java.util.Collections;
 
@@ -50,8 +49,7 @@ public class Whitaker extends LinearOpMode {
         surfaceTextureListener = new TextureView.SurfaceTextureListener() {
             @Override
             public void onSurfaceTextureAvailable(SurfaceTexture surfaceTexture, int width, int height) {
-                setUpCamera();
-                openCamera();
+
             }
 
             @Override
@@ -69,6 +67,7 @@ public class Whitaker extends LinearOpMode {
 
             }
         };
+
         stateCallback = new CameraDevice.StateCallback() {
             @Override
             public void onOpened(@NonNull CameraDevice cameraDevice) {
@@ -88,11 +87,17 @@ public class Whitaker extends LinearOpMode {
                 Whitaker.this.cameraDevice = null;
             }
         };
+
         cameraManager = (CameraManager) AppUtil.getDefContext().getSystemService(Context.CAMERA_SERVICE);
         openBackgroundThread();
+
+        setUpCamera();
+        openCamera();
+
         while (opModeIsActive());
         StopCameraStuff();
     }
+
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     private void setUpCamera() {
         try {
