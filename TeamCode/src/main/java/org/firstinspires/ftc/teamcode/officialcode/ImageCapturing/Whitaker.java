@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.officialcode.ImageCapturing;
 
 import android.annotation.TargetApi;
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.graphics.SurfaceTexture;
 import android.hardware.camera2.*;
 import android.hardware.camera2.params.StreamConfigurationMap;
@@ -67,7 +68,6 @@ public class Whitaker extends LinearOpMode {
 
             }
         };
-
         stateCallback = new CameraDevice.StateCallback() {
             @Override
             public void onOpened(@NonNull CameraDevice cameraDevice) {
@@ -87,6 +87,7 @@ public class Whitaker extends LinearOpMode {
                 Whitaker.this.cameraDevice = null;
             }
         };
+        textureView.setSurfaceTextureListener(surfaceTextureListener);
 
         cameraManager = (CameraManager) AppUtil.getDefContext().getSystemService(Context.CAMERA_SERVICE);
         openBackgroundThread();
