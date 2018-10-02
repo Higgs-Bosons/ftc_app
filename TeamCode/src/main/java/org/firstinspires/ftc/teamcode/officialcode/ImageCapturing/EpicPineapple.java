@@ -1,5 +1,4 @@
 package org.firstinspires.ftc.teamcode.officialcode.ImageCapturing;
-
 import android.annotation.TargetApi;
 import android.content.Context;
 import android.graphics.*;
@@ -10,14 +9,13 @@ import android.support.annotation.NonNull;
 import android.util.Size;
 import android.view.*;
 
-
 import org.firstinspires.ftc.robotcontroller.internal.FtcRobotControllerActivity;
 import org.firstinspires.ftc.robotcore.internal.system.AppUtil;
 
 import java.util.Collections;
 
 @TargetApi(Build.VERSION_CODES.LOLLIPOP)
-public class ThePineapple{
+public class EpicPineapple{
     private CameraManager cameraManager;
     private int cameraFacing;
     private String cameraId;
@@ -31,7 +29,7 @@ public class ThePineapple{
     private CaptureRequest captureRequest;
     private CameraCaptureSession cameraCaptureSession;
 
-    public ThePineapple(){
+    public EpicPineapple(){
         cameraManager = (CameraManager) AppUtil.getDefContext().getSystemService(Context.CAMERA_SERVICE);
         cameraFacing = CameraCharacteristics.LENS_FACING_BACK;
 
@@ -45,14 +43,23 @@ public class ThePineapple{
 
         setUpCamera();
     }
-    public void openThePineapple(){
+    public void openEpicPineapple(){
         openCamera();
     }
 
-    public void closeThePineapple(){
+    public void closeEpicPineapple(){
         closeBackgroundThread();
         closeCamera();
     }
+    public Bitmap getWhatIAmSeeing(){
+        return textureView.getBitmap();
+    }
+    public void setZoom(){
+        
+    }
+
+
+
 
     private TextureView.SurfaceTextureListener getSurfaceTextureListener(){
         return new TextureView.SurfaceTextureListener() {
@@ -81,27 +88,23 @@ public class ThePineapple{
         return new CameraDevice.StateCallback() {
             @Override
             public void onOpened(@NonNull CameraDevice cameraDevice) {
-                ThePineapple.this.cameraDevice = cameraDevice;
+                EpicPineapple.this.cameraDevice = cameraDevice;
                 createPreviewSession();
             }
 
             @Override
             public void onDisconnected(@NonNull CameraDevice cameraDevice) {
                 cameraDevice.close();
-                ThePineapple.this.cameraDevice = null;
+                EpicPineapple.this.cameraDevice = null;
             }
 
             @Override
             public void onError(@NonNull CameraDevice cameraDevice, int error) {
                 cameraDevice.close();
-                ThePineapple.this.cameraDevice = null;
+                EpicPineapple.this.cameraDevice = null;
             }
         };
     }
-
-
-
-
     private void setUpCamera() {
         try {
             for (String cameraId : cameraManager.getCameraIdList()) {
@@ -168,8 +171,8 @@ public class ThePineapple{
 
                             try {
                                 captureRequest = captureRequestBuilder.build();
-                                ThePineapple.this.cameraCaptureSession = cameraCaptureSession;
-                                ThePineapple.this.cameraCaptureSession.setRepeatingRequest(captureRequest,
+                                EpicPineapple.this.cameraCaptureSession = cameraCaptureSession;
+                                EpicPineapple.this.cameraCaptureSession.setRepeatingRequest(captureRequest,
                                         null, backgroundHandler);
                             } catch (CameraAccessException e) {
                                 e.printStackTrace();

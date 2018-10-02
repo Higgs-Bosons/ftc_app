@@ -6,23 +6,19 @@ import android.util.Log;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
+import org.firstinspires.ftc.teamcode.officialcode.ImageCapturing.EpicPineapple;
+
 @Autonomous(name = "Camera Tester", group = "Tester")
 public class CameraTester extends LinearOpMode{
-    // HiggsCamera Camera = new HiggsCamera();
-    @Override
+    EpicPineapple thePineapple;
+    Bitmap picture;
     public void runOpMode() throws InterruptedException {
-        // Camera.open();
+        thePineapple = new EpicPineapple();
         waitForStart();
-        // Bitmap bitmap = Camera.getPicture();
+        thePineapple.openEpicPineapple();
         while(opModeIsActive()){
-            // if(Color.blue(bitmap.getPixel(1,1)) > Color.red(bitmap.getPixel(1,1))){
-                // Camera.turnOnCameraLight();
-            }// else{
-                // Camera.turnOffCameraLight();
-            }
-            // bitmap = Camera.getPicture();
-            // Log.d("Running", "Working.. ------------------------------------------");
+           picture = thePineapple.getWhatIAmSeeing();
         }
-        // Camera.close();
-   // }
-//}
+        thePineapple.closeEpicPineapple();
+   }
+}
