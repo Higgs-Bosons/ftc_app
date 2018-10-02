@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.officialcode.ImageCapturing;
 import android.annotation.TargetApi;
 import android.content.Context;
 import android.graphics.*;
+import android.hardware.Camera;
 import android.hardware.camera2.*;
 import android.hardware.camera2.params.StreamConfigurationMap;
 import android.os.*;
@@ -54,10 +55,6 @@ public class EpicPineapple{
     public Bitmap getWhatIAmSeeing(){
         return textureView.getBitmap();
     }
-    public void setZoom(){
-        
-    }
-
 
 
 
