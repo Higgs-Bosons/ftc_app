@@ -17,7 +17,7 @@ import java.util.Collections;
 
 @TargetApi(Build.VERSION_CODES.LOLLIPOP)
 public class EpicPineapple{
-    final int RECENT_FRAME = 0;
+    public static final int RECENT_FRAME = 0;
 
     private CameraManager cameraManager;
     private int cameraFacing;
