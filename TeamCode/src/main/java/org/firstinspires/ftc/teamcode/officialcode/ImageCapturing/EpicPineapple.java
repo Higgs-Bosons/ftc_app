@@ -94,13 +94,11 @@ public class EpicPineapple{
         closeBackgroundThread();
         closeCamera();
 
-        Canvas blank = textureView.lockCanvas();
         Paint paint = new Paint();
         paint.setColor(Color.WHITE);
-        blank.drawPoint(0,0, paint);
-        blank.drawText("hello", 10, 10, paint);
+        Canvas blank = textureView.lockCanvas();
+        blank.drawCircle(50,50,1000, paint);
         textureView.unlockCanvasAndPost(blank);
-        textureView.postInvalidate();
     }
     public Bitmap getWhatIAmSeeing(){
         return textureView.getBitmap();
