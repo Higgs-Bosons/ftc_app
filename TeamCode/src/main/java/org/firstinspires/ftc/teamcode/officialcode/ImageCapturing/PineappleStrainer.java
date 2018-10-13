@@ -4,49 +4,40 @@ import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.util.Log;
 
+import java.util.ArrayList;
+
 public class PineappleStrainer {
 
 
     class PineappleJuice {
-        int[] x, y, width, height, reliability;
+        ArrayList<Integer> X = new ArrayList<Integer>();
+        ArrayList<Integer> Y = new ArrayList<Integer>();
+        ArrayList<Integer> width = new ArrayList<Integer>();
+        ArrayList<Integer> height = new ArrayList<Integer>();
+        ArrayList<Integer> reliability = new ArrayList<Integer>();
         public PineappleJuice() {}
+        public PineappleJuice(int x, int y, int width, int height, int reliability) {
+            this.X.add(x);
+            this.Y.add(y);
+            this.width.add(width);
+            this.height.add(height);
+            this.reliability.add(reliability);
+        }
 
-        public int[] getX() {
-            return x;
+        public Object[] getX() { return this.X.toArray(); }
+        public Object[] getY() { return this.Y.toArray(); }
+        public Object[] getWidth() { return this.width.toArray(); }
+        public Object[] getHeight() { return this.height.toArray(); }
+        public Object[] getReliability() {
+            return this.reliability.toArray();
         }
-        public int[] getY() {
-            return y;
-        }
-        public int[] getWidth() {
-            return width;
-        }
-        public int[] getHeight() {
-            return height;
-        }
-        public int[] getReliability() {
-            return reliability;
-        }
-        public void setAll(int[] x, int[] y, int[] width, int[] height, int[] reliability) {
-            this.x = x;
-            this.y = y;
-            this.width = width;
-            this.height = height;
-            this.reliability =  reliability;
-        }
-        public void setX(int[] x) {
-            this.x = x;
-        }
-        public void setY(int[] y) {
-            this.y = y;
-        }
-        public void setWidth(int[] width) {
-            this.width = width;
-        }
-        public void setHeight(int[] height) {
-            this.height = height;
-        }
-        public void setReliability(int[] reliability) {
-            this.reliability = reliability;
+
+        public void addAll(int x, int y, int width, int height, int reliability) {
+            this.X.add(x);
+            this.Y.add(y);
+            this.width.add(width);
+            this.height.add(height);
+            this.reliability.add(reliability);
         }
     }
 
@@ -91,10 +82,10 @@ public class PineappleStrainer {
 
         String OneLine = "";
         for(int Y = 0; Y < cords[0].length; Y ++) {
-            for (int X = 0; X < cords.length; X++) {
-                if(cords[X][Y]){
-                    OneLine +="o";
-                }else{
+            for (boolean[] cord : cords) {
+                if (cord[Y]) {
+                    OneLine += "o";
+                } else {
                     OneLine += " ";
                 }
             }
