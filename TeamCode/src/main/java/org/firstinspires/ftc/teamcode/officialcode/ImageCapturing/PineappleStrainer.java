@@ -10,7 +10,8 @@ public class PineappleStrainer {
 
 
     class PineappleJuice {
-        private int[] x, y, width, height, reliability;
+        int[] x, y, width, height, reliability;
+        public PineappleJuice() {}
 
         public int[] getX() {
             return x;
@@ -54,7 +55,7 @@ public class PineappleStrainer {
     public void findYellowCube(Bitmap picture){
         int MostYellow = 0;
         int PixelColor;
-        int currentPixelYellow
+        int currentPixelYellow;
         long start = System.currentTimeMillis();
 
         int[] Xcords = {0};
