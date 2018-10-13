@@ -55,10 +55,10 @@ public class EpicPineapple{
 
         // Filling the Array
         frames = new Bitmap[10];
-        for(int counter = 0; counter < 11; counter++){
+        for(int counter = 0; counter < 10; counter++){
             frames[counter] = getWhatIAmSeeing();
         }
-        
+
         openCamera();
         new Thread(new Runnable() {
             public void run() {
@@ -67,7 +67,7 @@ public class EpicPineapple{
                 while(PineappleIsActive){
                     newFrame = getWhatIAmSeeing();
                     oldFrames = frames;
-                    System.arraycopy(oldFrames, 1, frames, 2, 10);
+                    System.arraycopy(oldFrames, 1, frames, 2, 9);
                     frames[0] = newFrame;
                     youHaveMostRecentFrame = false;
                 }
