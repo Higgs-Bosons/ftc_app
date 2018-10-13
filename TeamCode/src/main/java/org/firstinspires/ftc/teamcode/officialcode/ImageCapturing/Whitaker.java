@@ -32,7 +32,6 @@ public class Whitaker extends LinearOpMode {
     private String cameraId;
     private HandlerThread backgroundThread;
     private  Handler backgroundHandler;
-    private TextureView.SurfaceTextureListener surfaceTextureListener;
     private Size previewSize;
     private  CameraDevice.StateCallback stateCallback;
     private CameraDevice cameraDevice;
@@ -49,7 +48,7 @@ public class Whitaker extends LinearOpMode {
         cameraManager = (CameraManager) AppUtil.getDefContext().getSystemService(Context.CAMERA_SERVICE);
         cameraFacing = CameraCharacteristics.LENS_FACING_BACK;
 
-        surfaceTextureListener = new TextureView.SurfaceTextureListener() {
+        TextureView.SurfaceTextureListener surfaceTextureListener = new TextureView.SurfaceTextureListener() {
             @Override
             public void onSurfaceTextureAvailable(SurfaceTexture surfaceTexture, int width, int height) {
 

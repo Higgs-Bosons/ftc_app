@@ -52,16 +52,18 @@ public class EpicPineapple{
     }
     public void openEpicPineapple(){
         PineappleIsActive = true;
+
+        // Filling the Array
+        frames = new Bitmap[10];
+        for(int counter = 0; counter < 11; counter++){
+            frames[counter] = getWhatIAmSeeing();
+        }
+        
         openCamera();
         new Thread(new Runnable() {
             public void run() {
-                frames = new Bitmap[10];
-                Bitmap[] oldFrames = new Bitmap[10];
+                Bitmap[] oldFrames;
                 Bitmap newFrame;
-                // Filling the Array
-                for(int counter = 0; counter < 11; counter++){
-                    frames[counter] = getWhatIAmSeeing();
-                }
                 while(PineappleIsActive){
                     newFrame = getWhatIAmSeeing();
                     oldFrames = frames;
@@ -96,7 +98,7 @@ public class EpicPineapple{
         textureView.unlockCanvasAndPost(blank);
         textureView.postInvalidate();
     }
-    public Bitmap getWhatIAmSeeing(){
+    private Bitmap getWhatIAmSeeing(){
         return textureView.getBitmap();
     }
 
