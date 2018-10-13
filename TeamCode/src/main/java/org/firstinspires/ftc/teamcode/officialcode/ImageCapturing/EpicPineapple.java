@@ -1,8 +1,8 @@
 package org.firstinspires.ftc.teamcode.officialcode.ImageCapturing;
+
 import android.annotation.TargetApi;
 import android.content.Context;
 import android.graphics.*;
-import android.hardware.Camera;
 import android.hardware.camera2.*;
 import android.hardware.camera2.params.StreamConfigurationMap;
 import android.os.*;
@@ -45,10 +45,13 @@ public class EpicPineapple{
 
         textureView = FtcRobotControllerActivity.getTextureView();
         textureView.setSurfaceTextureListener(surfaceTextureListener);
+        textureView.setScaleX(1.0f);
+        textureView.setScaleY(1.0f);
 
         openBackgroundThread();
 
         setUpCamera();
+        openCamera();
     }
     public void openEpicPineapple(){
         PineappleIsActive = true;
@@ -60,7 +63,7 @@ public class EpicPineapple{
         }
 
 
-        openCamera();
+
         new Thread(new Runnable() {
             public void run() {
 
@@ -69,9 +72,7 @@ public class EpicPineapple{
                 while(PineappleIsActive){
                      newFrame = getWhatIAmSeeing();
                      oldFrames = frames;
-                     for(int counter  = 0; counter<9; counter++){
-                         frames[counter+1] = oldFrames[counter];
-                     }
+                     System.arraycopy(oldFrames, 0, frames, 1, 9);
                      frames[0] = newFrame;
                      youHaveMostRecentFrame = false;
                 }
@@ -87,25 +88,20 @@ public class EpicPineapple{
         youHaveMostRecentFrame = (whichOne == 0);
         return frames[whichOne];
     }
-
-
     public void closeEpicPineapple(){
         PineappleIsActive = false;
         closeBackgroundThread();
         closeCamera();
-
-        Paint paint = new Paint();
-        paint.setColor(Color.WHITE);
-        Canvas blank = textureView.lockCanvas();
-        blank.drawCircle(50,50,1000, paint);
-        textureView.unlockCanvasAndPost(blank);
+        clearScreen();
     }
-    public Bitmap getWhatIAmSeeing(){
+    
+    private Bitmap getWhatIAmSeeing(){
         return textureView.getBitmap();
     }
-
-
-
+    private void clearScreen(){
+        textureView.setScaleX(0);
+        textureView.setScaleY(0);
+    }
     private TextureView.SurfaceTextureListener getSurfaceTextureListener(){
         return new TextureView.SurfaceTextureListener() {
             @Override

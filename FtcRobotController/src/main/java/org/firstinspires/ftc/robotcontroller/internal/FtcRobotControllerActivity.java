@@ -343,6 +343,8 @@ public class FtcRobotControllerActivity extends Activity
     }
     frameLayout = (FrameLayout) findViewById(R.id.FrameLayout);
     CameraTexture = (TextureView) findViewById(R.id.CameraTexture);
+    CameraTexture.setScaleX(0);
+    CameraTexture.setScaleY(0);
   }
 
   protected UpdateUI createUpdateUI() {
