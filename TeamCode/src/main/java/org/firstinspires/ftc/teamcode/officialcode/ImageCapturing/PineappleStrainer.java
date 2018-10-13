@@ -7,11 +7,55 @@ import android.util.Log;
 import java.util.Arrays;
 
 public class PineappleStrainer {
+
+
+    class PineappleJuice {
+        private int[] x, y, width, height, reliability;
+
+        public int[] getX() {
+            return x;
+        }
+        public int[] getY() {
+            return y;
+        }
+        public int[] getWidth() {
+            return width;
+        }
+        public int[] getHeight() {
+            return height;
+        }
+        public int[] getReliability() {
+            return reliability;
+        }
+        public void setAll(int[] x, int[] y, int[] width, int[] height, int[] reliability) {
+            this.x = x;
+            this.y = y;
+            this.width = width;
+            this.height = height;
+            this.reliability =  reliability;
+        }
+        public void setX(int[] x) {
+            this.x = x;
+        }
+        public void setY(int[] y) {
+            this.y = y;
+        }
+        public void setWidth(int[] width) {
+            this.width = width;
+        }
+        public void setHeight(int[] height) {
+            this.height = height;
+        }
+        public void setReliability(int[] reliability) {
+            this.reliability = reliability;
+        }
+    }
+
     public void findYellowCube(Bitmap picture){
-        long start = System.currentTimeMillis();
         int MostYellow = 0;
         int PixelColor;
-        int currentPixelYellow;
+        int currentPixelYellow
+        long start = System.currentTimeMillis();
 
         int[] Xcords = {0};
         int[] Ycords = {0};
