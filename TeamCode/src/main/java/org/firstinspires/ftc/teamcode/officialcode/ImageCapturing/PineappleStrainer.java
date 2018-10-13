@@ -4,13 +4,12 @@ import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.util.Log;
 
-import java.util.Arrays;
-
 public class PineappleStrainer {
 
 
     class PineappleJuice {
-        private int[] x, y, width, height, reliability;
+        int[] x, y, width, height, reliability;
+        public PineappleJuice() {}
 
         public int[] getX() {
             return x;
@@ -55,8 +54,10 @@ public class PineappleStrainer {
         int MostYellow = 0;
         int PixelColor;
         int currentPixelYellow;
+
         int PictureHeight = picture.getHeight();
         int PictureWidth  = picture.getWidth();
+
         long start = System.currentTimeMillis();
 
 
@@ -68,15 +69,17 @@ public class PineappleStrainer {
             }
         }
 
-        boolean[][] cords = new boolean[PictureHeight/5][PictureWidth/5];
-        for(int X = 0; X < picture.getWidth()/5; X ++) {
-            for (int Y = 0; Y < picture.getHeight() / 5; Y++) {
+        boolean[][] cords = new boolean[PictureWidth/5+1][PictureHeight/5+1];
+        Log.d("Length",PictureWidth/5+"");
+        Log.d("Height",PictureHeight/5+"");
+        for(int X = 0; X < PictureWidth/5; X ++) {
+            for (int Y = 0; Y < PictureHeight/5; Y++) {
                  cords[X][Y] = false;
             }
         }
 
-        for(int X = 0; X < picture.getWidth(); X += 5){
-            for(int Y = 0; Y < picture.getHeight(); Y += 5){
+        for(int X = 0; X < PictureWidth; X += 5){
+            for(int Y = 0; Y < PictureHeight; Y += 5){
                 PixelColor = picture.getPixel(X,Y);
                 currentPixelYellow = ((int) ((Color.red(PixelColor)+Color.green(PixelColor))/5.1));
                 if((currentPixelYellow) > (MostYellow - 10)){
@@ -85,14 +88,18 @@ public class PineappleStrainer {
             }
         }
 
-        for(int X = 0; X < cords.length; X++){
-            for(int Y = 0; X < cords[0].length; X++){
+
+        String OneLine = "";
+        for(int Y = 0; Y < cords[0].length; Y ++) {
+            for (int X = 0; X < cords.length; X++) {
                 if(cords[X][Y]){
-                    
+                    OneLine +="o";
+                }else{
+                    OneLine += " ";
                 }
             }
+            Log.d("Results:", OneLine);
         }
-
         long finish =  System.currentTimeMillis();
 
 
