@@ -17,6 +17,8 @@ import java.util.Collections;
 
 @TargetApi(Build.VERSION_CODES.LOLLIPOP)
 public class EpicPineapple{
+    final int RECENT_FRAME = 0;
+
     private CameraManager cameraManager;
     private int cameraFacing;
     private String cameraId;
@@ -29,6 +31,10 @@ public class EpicPineapple{
     private  CaptureRequest.Builder captureRequestBuilder;
     private CaptureRequest captureRequest;
     private CameraCaptureSession cameraCaptureSession;
+
+    private Bitmap[] frames;
+    boolean PineappleIsActive;
+    boolean youHaveMostRecentFrame;
 
     public EpicPineapple(){
         cameraManager = (CameraManager) AppUtil.getDefContext().getSystemService(Context.CAMERA_SERVICE);
@@ -46,7 +52,35 @@ public class EpicPineapple{
     }
     public void openEpicPineapple(){
         openCamera();
+        new Thread(new Runnable() {
+            public void run() {
+                frames = new Bitmap[10];
+                Bitmap[] oldFrames = new Bitmap[10];
+                Bitmap newFrame;
+                // Filling the Array
+                for(int counter = 0; counter < 11; counter++){
+                    frames[counter] = getWhatIAmSeeing();
+                }
+                while(PineappleIsActive){
+                    newFrame = getWhatIAmSeeing();
+                    oldFrames = frames;
+                    System.arraycopy(oldFrames, 1, frames, 2, 10);
+                    frames[0] = newFrame;
+                    youHaveMostRecentFrame = false;
+                }
+            }
+        }).start();
+
     }
+
+    public boolean doIHaveMostRecentFrame(){
+        return youHaveMostRecentFrame;
+    }
+    public Bitmap getFrame(int whichOne){
+        youHaveMostRecentFrame = (whichOne == 0);
+        return frames[whichOne];
+    }
+
 
     public void closeEpicPineapple(){
         Canvas blank = new Canvas();
