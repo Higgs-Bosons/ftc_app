@@ -7,7 +7,6 @@ import android.hardware.camera2.*;
 import android.hardware.camera2.params.StreamConfigurationMap;
 import android.os.*;
 import android.support.annotation.NonNull;
-import android.util.Size;
 import android.view.*;
 
 import org.firstinspires.ftc.robotcontroller.internal.FtcRobotControllerActivity;
@@ -16,26 +15,9 @@ import org.firstinspires.ftc.robotcore.internal.system.AppUtil;
 import java.util.Collections;
 
 @TargetApi(Build.VERSION_CODES.LOLLIPOP)
-public class EpicPineapple{
-    public static final int RECENT_FRAME = 0;
+public class EpicPineapple extends EpicPineappleObjects{
 
-    private CameraManager cameraManager;
-    private int cameraFacing;
-    private String cameraId;
-    private HandlerThread backgroundThread;
-    private  Handler backgroundHandler;
-    private Size previewSize;
-    private  CameraDevice.StateCallback stateCallback;
-    private CameraDevice cameraDevice;
-    private  TextureView textureView;
-    private  CaptureRequest.Builder captureRequestBuilder;
-    private CaptureRequest captureRequest;
-    private CameraCaptureSession cameraCaptureSession;
-
-    private Bitmap[] frames;
-    private boolean PineappleIsActive;
-    private boolean youHaveMostRecentFrame;
-
+//-----{INITIALIZING}------------------------------------------------------------------------------
     public EpicPineapple(){
         cameraManager = (CameraManager) AppUtil.getDefContext().getSystemService(Context.CAMERA_SERVICE);
         cameraFacing = CameraCharacteristics.LENS_FACING_BACK;
@@ -81,6 +63,31 @@ public class EpicPineapple{
 
     }
 
+    private void openCamera() {
+        try {
+            cameraManager.openCamera(cameraId, stateCallback, backgroundHandler);
+        } catch (CameraAccessException e) {
+            e.printStackTrace();
+        }
+    }
+    private void setUpCamera() {
+        try {
+            for (String cameraId : cameraManager.getCameraIdList()) {
+                CameraCharacteristics cameraCharacteristics =
+                        cameraManager.getCameraCharacteristics(cameraId);
+                if (cameraCharacteristics.get(CameraCharacteristics.LENS_FACING) == cameraFacing) {
+                    StreamConfigurationMap streamConfigurationMap = cameraCharacteristics.get(
+                            CameraCharacteristics.SCALER_STREAM_CONFIGURATION_MAP);
+                    previewSize = streamConfigurationMap.getOutputSizes(SurfaceTexture.class)[0];
+                    this.cameraId = cameraId;
+                }
+            }
+        } catch (CameraAccessException | NullPointerException e) {
+            e.printStackTrace();
+        }
+    }
+
+    //-----{GETTING FRAMES}----------------------------------------------------------------------------
     public boolean doIHaveMostRecentFrame(){
         return youHaveMostRecentFrame;
     }
@@ -88,20 +95,44 @@ public class EpicPineapple{
         youHaveMostRecentFrame = (whichOne == 0);
         return frames[whichOne];
     }
+    private Bitmap getWhatIAmSeeing(){
+        return textureView.getBitmap();
+    }
+
+
+//-----{CLOSING}-----------------------------------------------------------------------------------
     public void closeEpicPineapple(){
         PineappleIsActive = false;
         closeBackgroundThread();
         closeCamera();
         clearScreen();
     }
-    
-    private Bitmap getWhatIAmSeeing(){
-        return textureView.getBitmap();
+    private void closeCamera() {
+        if (cameraCaptureSession != null) {
+            cameraCaptureSession.close();
+            cameraCaptureSession = null;
+        }
+
+        if (cameraDevice != null) {
+            cameraDevice.close();
+            cameraDevice = null;
+        }
+    }
+    private void closeBackgroundThread() {
+
+        if (backgroundHandler != null) {
+            backgroundThread.quitSafely();
+            backgroundThread = null;
+            backgroundHandler = null;
+        }
     }
     private void clearScreen(){
         textureView.setScaleX(0);
         textureView.setScaleY(0);
     }
+
+
+//-----{PREVIEW SETUP}-----------------------------------------------------------------------------
     private TextureView.SurfaceTextureListener getSurfaceTextureListener(){
         return new TextureView.SurfaceTextureListener() {
             @Override
@@ -146,54 +177,6 @@ public class EpicPineapple{
             }
         };
     }
-    private void setUpCamera() {
-        try {
-            for (String cameraId : cameraManager.getCameraIdList()) {
-                CameraCharacteristics cameraCharacteristics =
-                        cameraManager.getCameraCharacteristics(cameraId);
-                if (cameraCharacteristics.get(CameraCharacteristics.LENS_FACING) == cameraFacing) {
-                    StreamConfigurationMap streamConfigurationMap = cameraCharacteristics.get(
-                            CameraCharacteristics.SCALER_STREAM_CONFIGURATION_MAP);
-                    previewSize = streamConfigurationMap.getOutputSizes(SurfaceTexture.class)[0];
-                    this.cameraId = cameraId;
-                }
-            }
-        } catch (CameraAccessException | NullPointerException e) {
-            e.printStackTrace();
-        }
-    }
-    private void openCamera() {
-        try {
-            cameraManager.openCamera(cameraId, stateCallback, backgroundHandler);
-        } catch (CameraAccessException e) {
-            e.printStackTrace();
-        }
-    }
-    private void openBackgroundThread() {
-        Looper.prepare();
-        backgroundThread = new HandlerThread("camera_background_thread");
-        backgroundThread.start();
-        backgroundHandler = new Handler(backgroundThread.getLooper());
-    }
-    private void closeCamera() {
-        if (cameraCaptureSession != null) {
-            cameraCaptureSession.close();
-            cameraCaptureSession = null;
-        }
-
-        if (cameraDevice != null) {
-            cameraDevice.close();
-            cameraDevice = null;
-        }
-    }
-    private void closeBackgroundThread() {
-
-        if (backgroundHandler != null) {
-            backgroundThread.quitSafely();
-            backgroundThread = null;
-            backgroundHandler = null;
-        }
-    }
     private void createPreviewSession() {
         try {
             SurfaceTexture surfaceTexture = textureView.getSurfaceTexture();
@@ -229,5 +212,11 @@ public class EpicPineapple{
         } catch (CameraAccessException e) {
             e.printStackTrace();
         }
+    }
+    private void openBackgroundThread() {
+        Looper.prepare();
+        backgroundThread = new HandlerThread("camera_background_thread");
+        backgroundThread.start();
+        backgroundHandler = new Handler(backgroundThread.getLooper());
     }
 }
