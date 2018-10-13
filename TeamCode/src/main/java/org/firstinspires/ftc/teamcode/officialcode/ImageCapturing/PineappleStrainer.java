@@ -4,51 +4,55 @@ import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.util.Log;
 
-import java.util.Arrays;
+import java.util.ArrayList;
 
 public class PineappleStrainer {
 
 
     class PineappleJuice {
-        int[] x, y, width, height, reliability;
+        ArrayList<Integer> X = new ArrayList<Integer>();
+        ArrayList<Integer> Y = new ArrayList<Integer>();
+        ArrayList<Integer> width = new ArrayList<Integer>();
+        ArrayList<Integer> height = new ArrayList<Integer>();
+        ArrayList<Integer> reliability = new ArrayList<Integer>();
         public PineappleJuice() {}
+        public PineappleJuice(int x, int y, int width, int height, int reliability) {
+            this.X.add(x);
+            this.Y.add(y);
+            this.width.add(width);
+            this.height.add(height);
+            this.reliability.add(reliability);
+        }
 
-        public int[] getX() {
-            return x;
+        public Object[] getX() { return this.X.toArray(); }
+        public Object[] getY() { return this.Y.toArray(); }
+        public Object[] getWidth() { return this.width.toArray(); }
+        public Object[] getHeight() { return this.height.toArray(); }
+        public Object[] getReliability() {
+            return this.reliability.toArray();
         }
-        public int[] getY() {
-            return y;
+
+        public void setAll(int x, int y, int width, int height, int reliability) {
+            this.X.add(x);
+            this.Y.add(y);
+            this.width.add(width);
+            this.height.add(height);
+            this.reliability.add(reliability);
         }
-        public int[] getWidth() {
-            return width;
+        public void setX(int x) {
+            this.X.add(x);
         }
-        public int[] getHeight() {
-            return height;
+        public void setY(int y) {
+            this.Y.add(y);
         }
-        public int[] getReliability() {
-            return reliability;
+        public void setWidth(int width) {
+            this.width.add(width);
         }
-        public void setAll(int[] x, int[] y, int[] width, int[] height, int[] reliability) {
-            this.x = x;
-            this.y = y;
-            this.width = width;
-            this.height = height;
-            this.reliability =  reliability;
+        public void setHeight(int height) {
+            this.height.add(height);
         }
-        public void setX(int[] x) {
-            this.x = x;
-        }
-        public void setY(int[] y) {
-            this.y = y;
-        }
-        public void setWidth(int[] width) {
-            this.width = width;
-        }
-        public void setHeight(int[] height) {
-            this.height = height;
-        }
-        public void setReliability(int[] reliability) {
-            this.reliability = reliability;
+        public void setReliability(int reliability) {
+            this.reliability.add(reliability);
         }
     }
 
