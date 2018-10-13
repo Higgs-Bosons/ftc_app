@@ -16,7 +16,7 @@ public class CameraTester extends LinearOpMode{
         waitForStart();
         thePineapple.openEpicPineapple();
         while(opModeIsActive()){
-           picture = thePineapple.getWhatIAmSeeing();
+           picture = thePineapple.getFrame(EpicPineapple.RECENT_FRAME);
            telemetry.addData("Pixel Red", Color.red(picture.getPixel(1,1)));
            telemetry.update();
         }
