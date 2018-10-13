@@ -54,13 +54,12 @@ public class PineappleStrainer {
     public void findYellowCube(Bitmap picture){
         int MostYellow = 0;
         int PixelColor;
-        int currentPixelYellow
+        int currentPixelYellow;
+        int PictureHeight = picture.getHeight();
+        int PictureWidth  = picture.getWidth();
         long start = System.currentTimeMillis();
 
-        int[] Xcords = {0};
-        int[] Ycords = {0};
-        int[] oldXcords;
-        int[] oldYcords;
+
         for(int X = 0; X < picture.getWidth(); X += 10){
             for(int Y = 0; Y < picture.getHeight(); Y += 10){
                PixelColor = picture.getPixel(X,Y);
@@ -68,35 +67,30 @@ public class PineappleStrainer {
                MostYellow = (MostYellow < currentPixelYellow && (Color.blue(PixelColor) < 50)) ? currentPixelYellow : MostYellow;
             }
         }
-        for(int X = 5; X < picture.getWidth(); X += 10){
-            for(int Y = 5; Y < picture.getHeight(); Y += 10){
+
+        boolean[][] cords = new boolean[PictureHeight/5][PictureWidth/5];
+        for(int X = 0; X < picture.getWidth()/5; X ++) {
+            for (int Y = 0; Y < picture.getHeight() / 5; Y++) {
+                 cords[X][Y] = false;
+            }
+        }
+
+        for(int X = 0; X < picture.getWidth(); X += 5){
+            for(int Y = 0; Y < picture.getHeight(); Y += 5){
                 PixelColor = picture.getPixel(X,Y);
                 currentPixelYellow = ((int) ((Color.red(PixelColor)+Color.green(PixelColor))/5.1));
                 if((currentPixelYellow) > (MostYellow - 10)){
-                    oldXcords = Xcords;
-                    oldYcords = Ycords;
-                    Xcords = new int[oldXcords.length+1];
-                    Ycords = new int[oldYcords.length+1];
-
-                    System.arraycopy(oldXcords, 0, Xcords, 1, oldXcords.length);
-                    System.arraycopy(oldYcords, 0, Ycords, 1, oldYcords.length);
-
-                    Xcords[0] = X;
-                    Ycords[0] = Y;
+                    cords[X/5][Y/5] = true;
                 }
             }
         }
 
-        int[] numInARow = new int[picture.getHeight()/5];
-        for(int c=0;c<numInARow.length;c++){numInARow[c]=0;}
-        Log.d("Length",Xcords.length+"");
-        for(int counter = 0; counter < Xcords.length; counter++){
-            for(int Xcounter = 0; Xcounter < (Xcords.length/5)-1; Xcounter++){
-                if(Xcords[counter] == (Xcords[counter+Xcounter]-5)){
-                    numInARow[counter]++;
+        for(int X = 0; X < cords.length; X++){
+            for(int Y = 0; X < cords[0].length; X++){
+                if(cords[X][Y]){
+                    
                 }
             }
-            Log.d("Number of Items in Row"+counter,numInARow[counter]+"");
         }
 
         long finish =  System.currentTimeMillis();
