@@ -67,7 +67,7 @@ public class EpicPineapple{
                 while(PineappleIsActive){
                     newFrame = getWhatIAmSeeing();
                     oldFrames = frames;
-                    System.arraycopy(oldFrames, 1, frames, 2, 9);
+                    System.arraycopy(oldFrames, 1, frames, 2, 10);
                     frames[0] = newFrame;
                     youHaveMostRecentFrame = false;
                 }
