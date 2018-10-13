@@ -5,7 +5,6 @@ import android.graphics.Color;
 import android.util.Log;
 
 import java.util.ArrayList;
-
 public class PineappleStrainer {
 
 
@@ -32,13 +31,14 @@ public class PineappleStrainer {
             return this.reliability.toArray();
         }
 
-        public void addAll(int x, int y, int width, int height, int reliability) {
+        public void AddSpot(int x, int y, int width, int height, int reliability) {
             this.X.add(x);
             this.Y.add(y);
             this.width.add(width);
             this.height.add(height);
             this.reliability.add(reliability);
         }
+
     }
 
     public void findYellowCube(Bitmap picture){
@@ -79,19 +79,20 @@ public class PineappleStrainer {
             }
         }
 
-
-        String OneLine = "";
+        long finish =  System.currentTimeMillis();
+        StringBuilder OneLine = new StringBuilder();
         for(int Y = 0; Y < cords[0].length; Y ++) {
-            for (boolean[] cord : cords) {
-                if (cord[Y]) {
-                    OneLine += "o";
-                } else {
-                    OneLine += " ";
+            for (int X = 0; X < cords.length; X++) {
+                if(cords[X][Y]){
+                    OneLine.append("o");
+                }else{
+                    OneLine.append(" ");
                 }
             }
-            Log.d("Results:", OneLine);
+            Log.d("Results", OneLine.toString());
+            OneLine = new StringBuilder("|");
         }
-        long finish =  System.currentTimeMillis();
+
 
 
         Log.d("Time", (finish - start)+" mls");
