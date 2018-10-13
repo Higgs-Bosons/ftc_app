@@ -49,8 +49,13 @@ public class EpicPineapple{
     }
 
     public void closeEpicPineapple(){
+        Canvas blank = new Canvas();
+        blank.drawRGB(0, 0, 0);
+
         closeBackgroundThread();
         closeCamera();
+
+        textureView.draw(blank);
     }
     public Bitmap getWhatIAmSeeing(){
         return textureView.getBitmap();
