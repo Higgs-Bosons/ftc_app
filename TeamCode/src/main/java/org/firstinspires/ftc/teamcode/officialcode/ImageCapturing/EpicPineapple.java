@@ -33,8 +33,8 @@ public class EpicPineapple{
     private CameraCaptureSession cameraCaptureSession;
 
     private Bitmap[] frames;
-    boolean PineappleIsActive;
-    boolean youHaveMostRecentFrame;
+    private boolean PineappleIsActive;
+    private boolean youHaveMostRecentFrame;
 
     public EpicPineapple(){
         cameraManager = (CameraManager) AppUtil.getDefContext().getSystemService(Context.CAMERA_SERVICE);
@@ -51,6 +51,7 @@ public class EpicPineapple{
         setUpCamera();
     }
     public void openEpicPineapple(){
+        PineappleIsActive = true;
         openCamera();
         new Thread(new Runnable() {
             public void run() {
@@ -83,7 +84,7 @@ public class EpicPineapple{
 
 
     public void closeEpicPineapple(){
-
+        PineappleIsActive = false;
         closeBackgroundThread();
         closeCamera();
 
