@@ -16,12 +16,16 @@ public class CameraTester extends LinearOpMode {
     @Override
     public void runOpMode(){
         thePineapple = new EpicPineapple();
-        waitForStart();
-        thePineapple.openEpicPineapple();
         pineappleStrainer = new PineappleStrainer();
+        waitForStart();
 
+        thePineapple.openEpicPineapple();
+
+
+        long start =  System.currentTimeMillis();
         picture = thePineapple.getFrame(EpicPineapple.RECENT_FRAME);
-        pineappleStrainer.findYellowCube(picture);
+        pineappleStrainer.findYellowCube(picture,start);
+
         while (opModeIsActive()){
 
         }

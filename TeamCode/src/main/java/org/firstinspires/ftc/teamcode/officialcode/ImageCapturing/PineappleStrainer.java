@@ -4,9 +4,11 @@ import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.util.Log;
 
+import java.util.Arrays;
+
 public class PineappleStrainer {
-    public void findYellowCube(Bitmap picture){
-        long start =  System.currentTimeMillis();
+    public void findYellowCube(Bitmap picture, float start){
+
         int MostYellow = 0;
         int PixelColor;
         int currentPixelYellow;
@@ -29,24 +31,23 @@ public class PineappleStrainer {
                 if((currentPixelYellow) > (MostYellow - 10)){
                     oldXcords = Xcords;
                     oldYcords = Ycords;
-                    System.arraycopy(oldXcords, 0, Xcords, 1, oldXcords.length-1);
-                    System.arraycopy(oldYcords, 0, Ycords, 1, oldYcords.length-1);
+                    Xcords = new int[oldXcords.length+1];
+                    Ycords = new int[oldYcords.length+1];
+
+                    System.arraycopy(oldXcords, 0, Xcords, 1, oldXcords.length);
+                    System.arraycopy(oldYcords, 0, Ycords, 1, oldYcords.length);
+
                     Xcords[0] = X;
                     Ycords[0] = Y;
                 }
             }
         }
-
-
-
-
-
         long finish =  System.currentTimeMillis();
         Log.d("Time", (finish - start)+" mls");
+        Log.d("Length",Xcords.length+"");
 
-        for(int counter = 0; counter < Xcords.length; counter ++){
-            Log.d("Xcords","["+Xcords[counter]+"]");
-        }
+        Log.d("X", Arrays.toString(Xcords));
+        Log.d("Y", Arrays.toString(Ycords));
     }
 
 }
