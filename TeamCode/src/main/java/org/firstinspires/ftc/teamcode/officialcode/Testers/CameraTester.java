@@ -1,24 +1,28 @@
 package org.firstinspires.ftc.teamcode.officialcode.Testers;
 import android.graphics.Bitmap;
-import android.graphics.Color;
-import android.graphics.Matrix;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.teamcode.officialcode.ImageCapturing.EpicPineapple;
+import org.firstinspires.ftc.teamcode.officialcode.ImageCapturing.PineappleStrainer;
 
 @Autonomous(name = "Camera Tester", group = "Tester")
 public class CameraTester extends LinearOpMode {
     EpicPineapple thePineapple;
     Bitmap picture;
+    PineappleStrainer pineappleStrainer;
 
-    public void runOpMode() throws InterruptedException {
+    @Override
+    public void runOpMode(){
         thePineapple = new EpicPineapple();
         waitForStart();
         thePineapple.openEpicPineapple();
-        while (opModeIsActive()) {
-            picture = thePineapple.getFrame(EpicPineapple.RECENT_FRAME);
+        pineappleStrainer = new PineappleStrainer();
+
+        picture = thePineapple.getFrame(EpicPineapple.RECENT_FRAME);
+        pineappleStrainer.findYellowCube(picture);
+        while (opModeIsActive()){
 
         }
         thePineapple.closeEpicPineapple();

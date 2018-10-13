@@ -83,7 +83,7 @@ public class EpicPineapple extends EpicPineappleObjects{
         }
     }
 
-    //-----{GETTING FRAMES}----------------------------------------------------------------------------
+//-----{GETTING FRAMES}----------------------------------------------------------------------------
     public boolean doIHaveMostRecentFrame(){
         return youHaveMostRecentFrame;
     }
@@ -92,13 +92,13 @@ public class EpicPineapple extends EpicPineappleObjects{
         return frames[whichOne];
     }
     private Bitmap getWhatIAmSeeing(){
-        return resizeBitmap(textureView.getBitmap());
+        return resizeBitmap(textureView.getBitmap(), 4);
     }
-    private Bitmap resizeBitmap(Bitmap bm) {
+    private Bitmap resizeBitmap(Bitmap bm, int amount) {
+        float toScale = (1.0f/amount);
         Matrix matrix = new Matrix();
-        matrix.postScale(0.5f, 0.5f);
-        return Bitmap.createBitmap(
-                bm, 0, 0, 656, 864, matrix, false);
+        matrix.postScale(toScale, toScale);
+        return Bitmap.createBitmap(bm, 0, 0, 656, 864, matrix, false);
     }
 
 //-----{CLOSING}-----------------------------------------------------------------------------------
