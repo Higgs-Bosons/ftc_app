@@ -19,29 +19,11 @@ public class CameraTester extends LinearOpMode {
         thePineapple.openEpicPineapple();
         while (opModeIsActive()) {
             picture = thePineapple.getFrame(EpicPineapple.RECENT_FRAME);
-            Bitmap small = getResizedBitmap(picture, 100, 100);
-            Bitmap pixelated = getResizedBitmap(small, picture.getWidth(), picture.getHeight());
-
-            telemetry.addData("Pixel Red", Color.red(picture.getPixel(1, 1)));
-            telemetry.update();
+            
         }
         thePineapple.closeEpicPineapple();
     }
 
 
-    public Bitmap getResizedBitmap(Bitmap bm, int newWidth, int newHeight) {
-        int width = bm.getWidth();
-        int height = bm.getHeight();
-        float scaleWidth = ((float) newWidth) / width;
-        float scaleHeight = ((float) newHeight) / height;
-        // CREATE A MATRIX FOR THE MANIPULATION
-        Matrix matrix = new Matrix();
-        // RESIZE THE BIT MAP
-        matrix.postScale(scaleWidth, scaleHeight);
 
-        // "RECREATE" THE NEW BITMAP
-        Bitmap resizedBitmap = Bitmap.createBitmap(
-                bm, 0, 0, width, height, matrix, false);
-        return resizedBitmap;
-    }
 }

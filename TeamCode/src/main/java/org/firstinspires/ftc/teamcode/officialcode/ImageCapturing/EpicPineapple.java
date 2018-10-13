@@ -43,12 +43,8 @@ public class EpicPineapple extends EpicPineappleObjects{
         for(int counter = 0; counter < 10; counter++){
             frames[counter] = getWhatIAmSeeing();
         }
-
-
-
         new Thread(new Runnable() {
             public void run() {
-
                 Bitmap[] oldFrames;
                 Bitmap newFrame;
                 while(PineappleIsActive){
@@ -96,9 +92,14 @@ public class EpicPineapple extends EpicPineappleObjects{
         return frames[whichOne];
     }
     private Bitmap getWhatIAmSeeing(){
-        return textureView.getBitmap();
+        return resizeBitmap(textureView.getBitmap());
     }
-
+    private Bitmap resizeBitmap(Bitmap bm) {
+        Matrix matrix = new Matrix();
+        matrix.postScale(0.5f, 0.5f);
+        return Bitmap.createBitmap(
+                bm, 0, 0, 656, 864, matrix, false);
+    }
 
 //-----{CLOSING}-----------------------------------------------------------------------------------
     public void closeEpicPineapple(){
