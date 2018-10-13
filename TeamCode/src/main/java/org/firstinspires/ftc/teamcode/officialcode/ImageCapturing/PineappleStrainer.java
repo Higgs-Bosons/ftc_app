@@ -7,8 +7,8 @@ import android.util.Log;
 import java.util.Arrays;
 
 public class PineappleStrainer {
-    public void findYellowCube(Bitmap picture, float start){
-
+    public void findYellowCube(Bitmap picture){
+        long start = System.currentTimeMillis();
         int MostYellow = 0;
         int PixelColor;
         int currentPixelYellow;
@@ -42,12 +42,24 @@ public class PineappleStrainer {
                 }
             }
         }
-        long finish =  System.currentTimeMillis();
-        Log.d("Time", (finish - start)+" mls");
-        Log.d("Length",Xcords.length+"");
 
-        Log.d("X", Arrays.toString(Xcords));
-        Log.d("Y", Arrays.toString(Ycords));
+        int[] numInARow = new int[picture.getHeight()/5];
+        for(int c=0;c<numInARow.length;c++){numInARow[c]=0;}
+        Log.d("Length",Xcords.length+"");
+        for(int counter = 0; counter < Xcords.length; counter++){
+            for(int Xcounter = 0; Xcounter < (Xcords.length/5)-1; Xcounter++){
+                if(Xcords[counter] == (Xcords[counter+Xcounter]-5)){
+                    numInARow[counter]++;
+                }
+            }
+            Log.d("Number of Items in Row"+counter,numInARow[counter]+"");
+        }
+
+        long finish =  System.currentTimeMillis();
+
+
+        Log.d("Time", (finish - start)+" mls");
+
     }
 
 }
