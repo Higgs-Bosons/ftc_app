@@ -19,7 +19,7 @@ public class CameraTester extends LinearOpMode {
         thePineapple.openEpicPineapple();
         while (opModeIsActive()) {
             picture = thePineapple.getFrame(EpicPineapple.RECENT_FRAME);
-            
+
         }
         thePineapple.closeEpicPineapple();
     }
