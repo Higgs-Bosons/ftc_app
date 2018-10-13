@@ -83,13 +83,17 @@ public class EpicPineapple{
 
 
     public void closeEpicPineapple(){
-        Canvas blank = new Canvas();
-        blank.drawRGB(0, 0, 0);
 
         closeBackgroundThread();
         closeCamera();
 
-        textureView.draw(blank);
+        Canvas blank = textureView.lockCanvas();
+        Paint paint = new Paint();
+        paint.setColor(Color.WHITE);
+        blank.drawPoint(0,0, paint);
+        blank.drawText("hello", 10, 10, paint);
+        textureView.unlockCanvasAndPost(blank);
+        textureView.postInvalidate();
     }
     public Bitmap getWhatIAmSeeing(){
         return textureView.getBitmap();
@@ -182,6 +186,7 @@ public class EpicPineapple{
         }
     }
     private void closeBackgroundThread() {
+
         if (backgroundHandler != null) {
             backgroundThread.quitSafely();
             backgroundThread = null;
