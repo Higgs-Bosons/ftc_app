@@ -5,6 +5,8 @@ import android.graphics.Color;
 import android.util.Log;
 
 import java.util.ArrayList;
+import java.util.Random;
+
 public class PineappleStrainer {
 
 
@@ -42,6 +44,7 @@ public class PineappleStrainer {
     }
 
     public void findYellowCube(Bitmap picture){
+        final int PRECISION = 5;
         int MostYellow = 0;
         int PixelColor;
         int currentPixelYellow;
@@ -60,36 +63,34 @@ public class PineappleStrainer {
             }
         }
 
-        boolean[][] cords = new boolean[PictureWidth/5+1][PictureHeight/5+1];
-        Log.d("Length",PictureWidth/5+"");
-        Log.d("Height",PictureHeight/5+"");
-        for(int X = 0; X < PictureWidth/5; X ++) {
-            for (int Y = 0; Y < PictureHeight/5; Y++) {
+        boolean[][] cords = new boolean[PictureWidth/PRECISION+1][PictureHeight/PRECISION+1];
+
+        for(int X = 0; X < PictureWidth/PRECISION; X ++) {
+            for (int Y = 0; Y < PictureHeight/PRECISION; Y++) {
                  cords[X][Y] = false;
             }
         }
 
-        for(int X = 0; X < PictureWidth; X += 5){
-            for(int Y = 0; Y < PictureHeight; Y += 5){
+        for(int X = 0; X < PictureWidth; X += PRECISION){
+            for(int Y = 0; Y < PictureHeight; Y += PRECISION){
                 PixelColor = picture.getPixel(X,Y);
                 currentPixelYellow = ((int) ((Color.red(PixelColor)+Color.green(PixelColor))/5.1));
-                if((currentPixelYellow) > (MostYellow - 10)){
-                    cords[X/5][Y/5] = true;
-                }
+                cords[X/PRECISION][Y/PRECISION] = ((currentPixelYellow) > (MostYellow * 0.9));
             }
         }
-
+        boolean RandomThingy = true;
         long finish =  System.currentTimeMillis();
         StringBuilder OneLine = new StringBuilder();
         for(int Y = 0; Y < cords[0].length; Y ++) {
             for (int X = 0; X < cords.length; X++) {
                 if(cords[X][Y]){
-                    OneLine.append("o");
+                    OneLine.append("||");
                 }else{
-                    OneLine.append(" ");
+                    OneLine.append("  ");
                 }
             }
-            Log.d("Results", OneLine.toString());
+            Log.d((RandomThingy+" "+!RandomThingy), OneLine.toString());
+            RandomThingy = !RandomThingy;
             OneLine = new StringBuilder("|");
         }
 
