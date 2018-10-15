@@ -5,19 +5,18 @@ import android.graphics.Color;
 import android.util.Log;
 
 import java.util.ArrayList;
-import java.util.Random;
 
 public class PineappleStrainer {
 
 
-    class PineappleJuice {
+    class PineappleChunks {
         ArrayList<Integer> X = new ArrayList<Integer>();
         ArrayList<Integer> Y = new ArrayList<Integer>();
         ArrayList<Integer> width = new ArrayList<Integer>();
         ArrayList<Integer> height = new ArrayList<Integer>();
         ArrayList<Integer> reliability = new ArrayList<Integer>();
-        public PineappleJuice() {}
-        public PineappleJuice(int x, int y, int width, int height, int reliability) {
+        public PineappleChunks() {}
+        public PineappleChunks(int x, int y, int width, int height, int reliability) {
             this.X.add(x);
             this.Y.add(y);
             this.width.add(width);
@@ -43,8 +42,8 @@ public class PineappleStrainer {
 
     }
 
-    public void findYellowCube(Bitmap picture){
-        final int PRECISION = 5;
+    public void findYellowCube(Bitmap picture, int precision){
+        int PRECISION = (picture.getHeight()*(100/precision));
         int MostYellow = 0;
         int PixelColor;
         int currentPixelYellow;
@@ -79,13 +78,17 @@ public class PineappleStrainer {
             }
         }
         boolean RandomThingy = true;
+
+
         long finish =  System.currentTimeMillis();
+
+
         StringBuilder OneLine = new StringBuilder();
         for(int Y = 0; Y < cords[0].length; Y ++) {
-            for (int X = 0; X < cords.length; X++) {
-                if(cords[X][Y]){
-                    OneLine.append("||");
-                }else{
+            for (boolean[] cord : cords) {
+                if (cord[Y]) {
+                    OneLine.append("[]");
+                } else {
                     OneLine.append("  ");
                 }
             }
