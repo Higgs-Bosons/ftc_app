@@ -59,9 +59,9 @@ public class PineappleStrainer {
 
         for(int X = 0; X < picture.getWidth(); X += 10){
             for(int Y = 0; Y < picture.getHeight(); Y += 10){
-               PixelColor = picture.getPixel(X,Y);
-               currentPixelYellow = ((int) ((Color.red(PixelColor)+Color.green(PixelColor))/5.1));
-               MostYellow = (MostYellow < currentPixelYellow && (Color.blue(PixelColor) < 50)) ? currentPixelYellow : MostYellow;
+                PixelColor = picture.getPixel(X,Y);
+                currentPixelYellow = ((int) ((Color.red(PixelColor)+Color.green(PixelColor))/5.1));
+                MostYellow = (MostYellow < currentPixelYellow && (Color.blue(PixelColor) < 50)) ? currentPixelYellow : MostYellow;
             }
         }
 
@@ -69,7 +69,7 @@ public class PineappleStrainer {
 
         for(int X = 0; X < PictureWidth/PRECISION; X ++) {
             for (int Y = 0; Y < PictureHeight/PRECISION; Y++) {
-                 cords[X][Y] = false;
+                cords[X][Y] = false;
             }
         }
 
