@@ -4,6 +4,8 @@ import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.util.Log;
 
+import org.firstinspires.ftc.teamcode.officialcode.Tools;
+
 import java.util.ArrayList;
 
 public class PineappleStrainer {
@@ -86,6 +88,8 @@ public class PineappleStrainer {
             }
         }
 
+
+
         for(int Y = 0; Y < cords[0].length; Y ++) {
             for(int X = 0; X < cords.length; X++){
                 if(cords[X][Y] && !alreadyFound[X][Y]){
@@ -95,7 +99,7 @@ public class PineappleStrainer {
                     int UpY    = Y;
                     int DownY  = Y;
                     boolean stillFoundSome = false;
-                    for(int counterY = 0; counterY < cords[0].length; counterY++){
+                    for(int counterY = Y; counterY < cords[0].length; counterY++){
                         DownY = counterY;
                         for(int counterX = X; counterX >= 0; counterX--){
                             if(cords[counterX][counterY] && !alreadyFound[counterX][counterY]){
@@ -121,7 +125,7 @@ public class PineappleStrainer {
                         }
                         if(!stillFoundSome){counterY = cords[0].length + 10;}
                     }
-                    if(size > 10){
+                    if(size > 300){
                         Log.d("FOUND ONE!------------ ","-)");
                         Log.d("Size", size+"");
                         Log.d("LeftX", LeftX+"");
@@ -134,6 +138,7 @@ public class PineappleStrainer {
         }
 
         long finish =  System.currentTimeMillis();
+
 
         boolean RandomThingy = true;
         StringBuilder OneLine = new StringBuilder();
@@ -151,7 +156,9 @@ public class PineappleStrainer {
         }
 
 
+
         Log.d("Time", (finish - start)+" mls");
+        Tools.showToast("I'm a pineapple!");
 
     }
 }
