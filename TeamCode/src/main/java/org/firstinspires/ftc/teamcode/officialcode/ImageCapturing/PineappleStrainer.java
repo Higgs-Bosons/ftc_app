@@ -4,6 +4,9 @@ import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.util.Log;
 
+import org.firstinspires.ftc.robotcore.internal.system.AppUtil;
+import org.firstinspires.ftc.teamcode.officialcode.Tools;
+
 import java.util.ArrayList;
 
 public class PineappleStrainer {
@@ -97,10 +100,11 @@ public class PineappleStrainer {
                     boolean stillFoundSome = false;
                     for(int counterY = 0; counterY < cords[0].length; counterY++){
                         DownY = counterY;
+
                         for(int counterX = X; counterX >= 0; counterX--){
                             if(cords[counterX][counterY] && !alreadyFound[counterX][counterY]){
                                 size++;
-                                LeftX = (counterX > LeftX) ? counterX : LeftX;
+                                LeftX = (counterX > LeftX) ?  LeftX : counterX;
                                 stillFoundSome = true;
                                 alreadyFound[counterX][counterY] = true;
                             }else{
@@ -108,10 +112,10 @@ public class PineappleStrainer {
                             }
 
                         }
-                        for(int counterX = X; counterX <= cords.length; counterX++){
+                        for(int counterX = X; counterX < cords.length; counterX++){
                             if(cords[counterX][counterY] && !alreadyFound[counterX][counterY]){
                                 size++;
-                                RightX = (counterX > RightX) ? counterX : RightX;
+                                RightX = (counterX > RightX) ?  RightX: counterX;
                                 stillFoundSome = true;
                                 alreadyFound[counterX][counterY] = true;
                             }else{
@@ -152,6 +156,7 @@ public class PineappleStrainer {
 
 
         Log.d("Time", (finish - start)+" mls");
+        Tools.showToast("DONE!!");
 
     }
 }
