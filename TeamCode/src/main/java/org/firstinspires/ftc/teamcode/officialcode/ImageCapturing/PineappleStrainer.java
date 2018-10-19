@@ -4,90 +4,81 @@ import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.util.Log;
 
-import org.firstinspires.ftc.robotcore.internal.system.AppUtil;
 import org.firstinspires.ftc.teamcode.officialcode.Tools;
 
 import java.util.ArrayList;
 
 public class PineappleStrainer {
-
-
-    class PineappleChunks {
-        ArrayList<Integer> X = new ArrayList<Integer>();
-        ArrayList<Integer> Y = new ArrayList<Integer>();
-        ArrayList<Integer> width = new ArrayList<Integer>();
-        ArrayList<Integer> height = new ArrayList<Integer>();
-        ArrayList<Integer> reliability = new ArrayList<Integer>();
-        public PineappleChunks() {}
-        public PineappleChunks(int x, int y, int width, int height, int reliability) {
-            this.X.add(x);
-            this.Y.add(y);
-            this.width.add(width);
-            this.height.add(height);
-            this.reliability.add(reliability);
-        }
-
-        public Object[] getX() { return this.X.toArray(); }
-        public Object[] getY() { return this.Y.toArray(); }
-        public Object[] getWidth() { return this.width.toArray(); }
-        public Object[] getHeight() { return this.height.toArray(); }
-        public Object[] getReliability() {
-            return this.reliability.toArray();
-        }
-
-        public void AddSpot(int x, int y, int width, int height, int reliability) {
-            this.X.add(x);
-            this.Y.add(y);
-            this.width.add(width);
-            this.height.add(height);
-            this.reliability.add(reliability);
-        }
-
+    private int PictureWidth, PictureHeight,precision, contrast;
+    private Bitmap picture;
+    
+    public PineappleStrainer(Bitmap picture, int precision, int contrast){
+        this.picture = picture;
+        this.precision = precision;
+        this.PictureHeight = picture.getHeight();
+        this.PictureWidth = picture.getWidth();
+        this.precision = ((int) ((picture.getHeight()*((100.0-precision)/100.0))+1));
+        this.contrast = contrast;
     }
 
-    public void findYellowCube(Bitmap picture, int precision){
-        int PRECISION = ((int) ((picture.getHeight()*((100.0-precision)/100.0))+1));
-        int MostYellow = 0;
+    private boolean isTheColorCloser(int colorInQuestion, int currentClosest, int colorToFind){
+
+        int offRed =   Math.abs(Color.red(colorInQuestion) - Color.red(colorToFind));
+        int offGreen = Math.abs(Color.green(colorInQuestion) - Color.green(colorToFind));
+        int offBlue =  Math.abs(Color.blue(colorInQuestion) - Color.blue(colorToFind));
+        int offTotal = offRed + offBlue + offGreen;
+
+        int offRed2 =   Math.abs(Color.red(currentClosest) - Color.red(colorToFind));
+        int offGreen2 = Math.abs(Color.green(currentClosest) - Color.green(colorToFind));
+        int offBlue2 =  Math.abs(Color.blue(currentClosest) - Color.blue(colorToFind));
+        int offTotal2 = offRed2 + offBlue2 + offGreen2;
+
+        return (offTotal < offTotal2);
+    }
+    private boolean[][] findColorPixels(int colorToFind){
+        boolean[][] cords = getFilledArray((PictureWidth/precision+1),(PictureHeight/precision+1));
         int PixelColor;
-        int currentPixelYellow;
-
-        int PictureHeight = picture.getHeight();
-        int PictureWidth  = picture.getWidth();
-
-        long start = System.currentTimeMillis();
-
+        int closestColor = 0;
 
         for(int X = 0; X < picture.getWidth(); X += 10){
             for(int Y = 0; Y < picture.getHeight(); Y += 10){
                 PixelColor = picture.getPixel(X,Y);
-                currentPixelYellow = ((int) ((Color.red(PixelColor)+Color.green(PixelColor))/5.1));
-                MostYellow = (MostYellow < currentPixelYellow && (Color.blue(PixelColor) < 50)) ? currentPixelYellow : MostYellow;
+
+                if(isTheColorCloser(PixelColor, closestColor, colorToFind))
+                    closestColor = PixelColor;
             }
         }
 
-        boolean[][] cords = new boolean[PictureWidth/PRECISION+1][PictureHeight/PRECISION+1];
-
-        for(int X = 0; X < PictureWidth/PRECISION; X ++) {
-            for (int Y = 0; Y < PictureHeight/PRECISION; Y++) {
-                cords[X][Y] = false;
-            }
-        }
-
-        for(int X = 0; X < PictureWidth; X += PRECISION){
-            for(int Y = 0; Y < PictureHeight; Y += PRECISION){
+        for(int X = 0; X < PictureWidth; X += precision){
+            for(int Y = 0; Y < PictureHeight; Y += precision){
                 PixelColor = picture.getPixel(X,Y);
-                currentPixelYellow = ((int) ((Color.red(PixelColor)+Color.green(PixelColor))/5.1));
-                cords[X/PRECISION][Y/PRECISION] = ((currentPixelYellow) > (MostYellow * 0.9));
+                cords[X/precision][Y/precision] = isCloseEnough(PixelColor, closestColor);
             }
         }
-
-        boolean[][] alreadyFound = new boolean[PictureWidth/PRECISION+1][PictureHeight/PRECISION+1];
-
-        for(int X = 0; X < PictureWidth/PRECISION; X ++) {
-            for (int Y = 0; Y < PictureHeight/PRECISION; Y++) {
-                alreadyFound[X][Y] = false;
+        return cords;
+    }
+    private boolean isCloseEnough(int ColorToTest, int ColorBase){
+        int offRed =   Math.abs(Color.red(ColorToTest) - Color.red(ColorBase));
+        int offGreen = Math.abs(Color.green(ColorToTest) - Color.green(ColorBase));
+        int offBlue =  Math.abs(Color.blue(ColorToTest) - Color.blue(ColorBase));
+        int offTotal = offRed + offBlue + offGreen;
+        return (offTotal < (255 * (100/(101-contrast))));
+    }
+    
+    private boolean[][] getFilledArray(int size1, int size2){
+        boolean[][] toReturn = new boolean[size1][size2];
+        for(int X = 0; X < size1; X ++) {
+            for (int Y = 0; Y < size2; Y++) {
+                toReturn[X][Y] = false;
             }
         }
+        return  toReturn;
+    }
+    public void findColoredObject(int colorToFind){
+        long start = System.currentTimeMillis();
+
+        boolean[][] cords = findColorPixels(colorToFind);
+        boolean[][] alreadyFound = getFilledArray((PictureWidth/precision+1),(PictureHeight/precision+1));
 
         for(int Y = 0; Y < cords[0].length; Y ++) {
             for(int X = 0; X < cords.length; X++){
@@ -95,7 +86,6 @@ public class PineappleStrainer {
                     int size = 0;
                     int LeftX  = X;
                     int RightX = X;
-                    int UpY    = Y;
                     int DownY  = Y;
                     boolean stillFoundSome = false;
                     for(int counterY = 0; counterY < cords[0].length; counterY++){
@@ -130,7 +120,7 @@ public class PineappleStrainer {
                         Log.d("Size", size+"");
                         Log.d("LeftX", LeftX+"");
                         Log.d("RightX", RightX+"");
-                        Log.d("UpY", UpY+"");
+                        Log.d("UpY", Y +"");
                         Log.d("DownY", DownY+"");
                     }
                 }
@@ -139,6 +129,11 @@ public class PineappleStrainer {
 
         long finish =  System.currentTimeMillis();
 
+        showCordsArray(cords);
+        Log.d("Time", (finish - start)+" mls");
+        Tools.showToast("DONE!!");
+    }
+    private void showCordsArray(boolean[][] cords){
         boolean RandomThingy = true;
         StringBuilder OneLine = new StringBuilder();
         for(int Y = 0; Y < cords[0].length; Y ++) {
@@ -149,14 +144,47 @@ public class PineappleStrainer {
                     OneLine.append("  ");
                 }
             }
-            Log.d((RandomThingy+" "+!RandomThingy), OneLine.toString());
+            Log.d((RandomThingy+" "+!RandomThingy), OneLine.toString()+ "|");
             RandomThingy = !RandomThingy;
-            OneLine = new StringBuilder("|");
+            OneLine = new StringBuilder(" |");
+        }
+    }
+
+
+    class PineappleChunks {
+        ArrayList<Integer> X = new ArrayList<Integer>();
+        ArrayList<Integer> Y = new ArrayList<Integer>();
+        ArrayList<Integer> Z = new ArrayList<Integer>();
+        ArrayList<Integer> width = new ArrayList<Integer>();
+        ArrayList<Integer> height = new ArrayList<Integer>();
+        ArrayList<Integer> reliability = new ArrayList<Integer>();
+        public PineappleChunks() {}
+        public PineappleChunks(int x, int y, int z, int width, int height, int reliability) {
+            this.X.add(x);
+            this.Y.add(y);
+            this.Z.add(z);
+            this.width.add(width);
+            this.height.add(height);
+            this.reliability.add(reliability);
         }
 
+        public Object[] getX() { return this.X.toArray(); }
+        public Object[] getY() { return this.Y.toArray(); }
+        public Object[] getZ() { return this.Z.toArray(); }
+        public Object[] getWidth() { return this.width.toArray(); }
+        public Object[] getHeight() { return this.height.toArray(); }
+        public Object[] getReliability() {
+            return this.reliability.toArray();
+        }
 
-        Log.d("Time", (finish - start)+" mls");
-        Tools.showToast("DONE!!");
+        public void AddSpot(int x, int y, int z, int width, int height, int reliability) {
+            this.X.add(x);
+            this.Y.add(y);
+            this.Z.add(z);
+            this.width.add(width);
+            this.height.add(height);
+            this.reliability.add(reliability);
+        }
 
     }
 }

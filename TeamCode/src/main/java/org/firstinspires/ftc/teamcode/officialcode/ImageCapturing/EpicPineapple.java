@@ -83,6 +83,9 @@ public class EpicPineapple extends EpicPineappleObjects{
         }
     }
 
+    public void setPrecision(int toSetTo){
+        precision = (frames[RECENT_FRAME].getHeight() / ((100/toSetTo)+1));
+    }
 //-----{GETTING FRAMES}----------------------------------------------------------------------------
     public boolean doIHaveMostRecentFrame(){
         return youHaveMostRecentFrame;
@@ -92,10 +95,10 @@ public class EpicPineapple extends EpicPineappleObjects{
         return frames[whichOne];
     }
     private Bitmap getWhatIAmSeeing(){
-        return resizeBitmap(textureView.getBitmap(), 4);
+        return resizeBitmap(textureView.getBitmap());
     }
-    private Bitmap resizeBitmap(Bitmap bm, int amount) {
-        float toScale = (1.0f/amount);
+    private Bitmap resizeBitmap(Bitmap bm) {
+        float toScale = (1.0f/precision);
         Matrix matrix = new Matrix();
         matrix.postScale(toScale, toScale);
         return Bitmap.createBitmap(bm, 0, 0, 656, 864, matrix, false);

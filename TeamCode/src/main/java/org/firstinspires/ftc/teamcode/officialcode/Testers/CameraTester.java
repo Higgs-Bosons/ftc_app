@@ -1,6 +1,6 @@
 package org.firstinspires.ftc.teamcode.officialcode.Testers;
 import android.graphics.Bitmap;
-import android.util.Log;
+import android.graphics.Color;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
@@ -17,13 +17,16 @@ public class CameraTester extends LinearOpMode {
     @Override
     public void runOpMode(){
         thePineapple = new EpicPineapple();
-        pineappleStrainer = new PineappleStrainer();
+
         waitForStart();
 
         thePineapple.openEpicPineapple();
+        thePineapple.setPrecision(100);
 
         picture = thePineapple.getFrame(EpicPineapple.RECENT_FRAME);
-        pineappleStrainer.findYellowCube(picture, 100);
+
+        pineappleStrainer = new PineappleStrainer(picture, 95, 25);
+        pineappleStrainer.findColoredObject(Color.rgb(250,200, 0));
 
         while (opModeIsActive()){
 

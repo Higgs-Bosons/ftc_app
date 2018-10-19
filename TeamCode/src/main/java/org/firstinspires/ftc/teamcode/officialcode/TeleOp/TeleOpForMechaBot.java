@@ -1,19 +1,19 @@
 package org.firstinspires.ftc.teamcode.officialcode.TeleOp;
 
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
-// pineapple
-
-@TeleOp(name = "CRABBY", group = "TeleOp")
-public class Crabby extends LinearOpMode {
+@TeleOp(name = "TeleOp", group = "TeleOp")
+public class TeleOpForMechaBot extends LinearOpMode {
     private DcMotor LF, RF, LB, RB;
 
-    boolean slowed = false;
+    private boolean slowed = false;
 
-    boolean tanked = false;
-    String mode = "Crab";
+    private boolean tanked = false;
+    private String mode = "Crab";
 
     //INITIALIZATION:
     private void initializeMotors() {
@@ -21,6 +21,11 @@ public class Crabby extends LinearOpMode {
         LB = hardwareMap.dcMotor.get("LB");
         RF = hardwareMap.dcMotor.get("RF");
         RB = hardwareMap.dcMotor.get("RB");
+
+        LF.setDirection(DcMotorSimple.Direction.REVERSE);
+        LB.setDirection(DcMotorSimple.Direction.REVERSE);
+        RB.setDirection(DcMotorSimple.Direction.REVERSE);
+
     }
 
     //SET-UP AND LOOPS:
@@ -32,7 +37,6 @@ public class Crabby extends LinearOpMode {
 
             if (!tanked) {
                 mode = "Crab";
-
                 moveCrab();
             } else {
                 mode = "Tank";
@@ -44,7 +48,7 @@ public class Crabby extends LinearOpMode {
 
 
     }
-    public void moveTank(){
+    private void moveTank(){
         telemetry.addData("Movement Mode: ", mode);
         telemetry.addData("Slowed: ", slowed);
         telemetry.update();
@@ -59,14 +63,10 @@ public class Crabby extends LinearOpMode {
 
         if (!slowed) {
             left = -gamepad1.left_stick_y;
-            telemetry.addData("Left Power", left);
-            telemetry.update();
             right = gamepad1.right_stick_y;
         }
         else {
             left = -gamepad1.left_stick_y/2;
-            telemetry.addData("Left Power", left);
-            telemetry.update();
             right = (gamepad1.right_stick_y)/2;
         }
 
@@ -127,6 +127,6 @@ public class Crabby extends LinearOpMode {
         RB.setPower(RBpower);
         LF.setPower(LFpower);
         LB.setPower(LBpower);
-        }
-
     }
+
+}
