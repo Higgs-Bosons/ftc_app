@@ -1,8 +1,11 @@
 package org.firstinspires.ftc.teamcode.officialcode.ImageCapturing;
 
-import java.util.ArrayList;
+import android.util.Log;
 
-public class PineappleChunks {
+import java.util.ArrayList;
+import java.util.Arrays;
+
+class PineappleChunks {
 
     final int X = 0;
     final int Y = 1;
@@ -55,14 +58,41 @@ public class PineappleChunks {
             numberOfChunks --;
     }
     int getBiggerChunkSize(){
-        int previous = 0;
+        int[] sortedArray = new int[size.size()];
+
         for(int counter = 0; counter < size.size(); counter++){
-            if(size.get(counter) > (previous*3)){
-               return size.get(counter);
+            sortedArray[counter] = size.get(counter);
+        }
+        sortedArray = sortArray(sortedArray);
+
+        int previous = sortedArray[0];
+        for(int counter = 0; counter < sortedArray.length; counter++){
+            if(sortedArray[counter] > (previous * 2)){
+               return sortedArray[counter];
             }
+            previous = sortedArray[counter];
+            Log.d("Stuff: counter",counter+"; arrayValue"+sortedArray[counter]);
         }
 
         return -1;
+    }
+    public static int[] sortArray(int[] nonSortedArray){
+        int[] sortedArray = new int[nonSortedArray.length];
+        int temp;
+        for (int i = 0; i <= nonSortedArray.length; i++)
+        {
+            for (int j = i+1; j < nonSortedArray.length; j++)
+            {
+                if (nonSortedArray[i] > nonSortedArray[j])
+                {
+                    temp = nonSortedArray[i];
+                    nonSortedArray[i] = nonSortedArray[j];
+                    nonSortedArray[j] = temp;
+                    sortedArray = nonSortedArray;
+                }
+            }
+        }
+        return sortedArray;
     }
     int[] getChunk(int spotNum){
             int[] returnArray = new int[7];
