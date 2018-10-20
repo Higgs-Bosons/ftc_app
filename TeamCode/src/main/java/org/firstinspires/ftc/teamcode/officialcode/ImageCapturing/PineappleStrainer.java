@@ -91,9 +91,9 @@ public class PineappleStrainer {
                     int RightX = X;
                     int DownY  = Y;
                     boolean stillFoundSome = false;
-                    for(int counterY = Y; counterY < cords[0].length && numOfWhiteSpots <= NUMBER_OF_WHITE_SPOTS; counterY++){
+                    for(int counterY = Y; counterY < cords[0].length; counterY++){
                         numOfWhiteSpots = 0;
-                        for(int counterX = X; counterX >= 0; counterX--){
+                        for(int counterX = X; counterX >= 0  && numOfWhiteSpots <= NUMBER_OF_WHITE_SPOTS; counterX--){
                             if((cords[counterX][counterY] && !alreadyFound[counterX][counterY]) ){
                                 size++;
                                 LeftX = (counterX > LeftX) ?  LeftX : counterX;
@@ -120,14 +120,26 @@ public class PineappleStrainer {
                         }
                         if(!stillFoundSome){counterY = cords[0].length + 10;}// This kills it
                     }
-                    int width = (RightX-LeftX)+1;
-                    int height = (DownY-Y)+1;
-                    int x = (X + (width/2));
-                    int y = (Y + (height/2));
-                    int z = 0;
+                    Log.d("Size", size+"");
+                    if(size > 3){
 
-                    int reliability = 0;
-                    pineappleChunks.addChunk(x,y,z,width,height,size,reliability);
+                        int width = (RightX-LeftX)+1;
+                        int height = (DownY-Y)+1;
+                        int x = (X + (width/2));
+                        int y = (Y + (height/2));
+                        int z = 0;
+
+                        int reliability = 0;
+
+                        Log.d("FOUND ONE!------------ ","-)");
+                        Log.d("Size", size+"");
+                        Log.d("X", x+"");
+                        Log.d("Y", y+"");
+                        Log.d("width", width +"");
+                        Log.d("height", height+"");
+
+                        pineappleChunks.addChunk(x,y,z,width,height,size,reliability);
+                    }
                 }
             }
         }
@@ -142,7 +154,7 @@ public class PineappleStrainer {
         Log.d("I FOUND ", pineappleChunks.numberOfChunks + " cubes.");
 
         long finish =  System.currentTimeMillis();
-        //showCordsArray(cords);
+        showCordsArray(cords);
         Log.w("BiggerSize", bigger+"");
         Log.w("Time", (finish - start)+" mls");
         Tools.showToast("DONE!!");

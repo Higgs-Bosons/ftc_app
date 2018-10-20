@@ -4,6 +4,7 @@ import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 
 class PineappleChunks {
 
@@ -36,6 +37,7 @@ class PineappleChunks {
         this.reliability.add(reliability);
 
         this.numberOfChunks = 1;
+
         this.averageChunkSize += size;
     }
     void addChunk(int x, int y, int z, int width, int height, int size, int reliability){
@@ -48,10 +50,12 @@ class PineappleChunks {
         this.reliability.add(reliability);
 
         this.numberOfChunks++;
+
         this.averageChunkSize += size;
     }
     void removeChunk(int spotNum){
         this.averageChunkSize -= this.size.get(spotNum);
+
         this.x.remove(spotNum);
         this.y.remove(spotNum);
         this.z.remove(spotNum);
@@ -63,10 +67,14 @@ class PineappleChunks {
 
     }
     int getBiggerChunkSize() {
-        int average = averageChunkSize / width.size();
-        for(int counter = size.size()-1; counter >= 0; counter++){
-            if(size.get(counter) > (average + 10)){
-                return size.get(counter);
+        ArrayList<Integer> sizeCopy = size;
+        Collections.sort(sizeCopy);
+        int average = (averageChunkSize / (numberOfChunks + 1)+averageChunkSize);
+        Log.w("AVCS", averageChunkSize + "-----------------------------------------------------------");
+        Log.w("NOC", numberOfChunks + "-----------------------------------------------------------");
+        for(int counter = sizeCopy.size()-1; counter >= 0; counter--){
+            if(sizeCopy.get(counter) > (average + 10)){
+                return sizeCopy.get(counter);
             }
         }
         return average;
