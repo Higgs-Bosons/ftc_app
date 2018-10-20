@@ -152,39 +152,64 @@ public class PineappleStrainer {
 
 
     class PineappleChunks {
-        ArrayList<Integer> X = new ArrayList<Integer>();
-        ArrayList<Integer> Y = new ArrayList<Integer>();
-        ArrayList<Integer> Z = new ArrayList<Integer>();
-        ArrayList<Integer> width = new ArrayList<Integer>();
-        ArrayList<Integer> height = new ArrayList<Integer>();
-        ArrayList<Integer> reliability = new ArrayList<Integer>();
-        public PineappleChunks() {}
-        public PineappleChunks(int x, int y, int z, int width, int height, int reliability) {
+        ArrayList<Integer> X = new ArrayList<>();
+        ArrayList<Integer> Y = new ArrayList<>();
+        ArrayList<Integer> Z = new ArrayList<>();
+        ArrayList<Integer> width = new ArrayList<>();
+        ArrayList<Integer> height = new ArrayList<>();
+        ArrayList<Integer> size = new ArrayList<>();
+        ArrayList<Integer> reliability = new ArrayList<>();
+        int biggerChunkSize = 0;
+        boolean FirstItem = true;
+
+        public PineappleChunks(){}
+        public PineappleChunks(int x, int y, int z, int width, int height, int size, int reliability){
+            this.X.add(x);
+            this.Y.add(y);
+            this.Z.add(z);
+            this.width.add(width);
+            this.height.add(height);
+            this.size.add(size);
+            this.reliability.add(reliability);
+
+            biggerChunkSize = 0;
+            FirstItem = false;
+        }
+        public void addChunk(int x, int y, int z, int width, int height, int reliability){
             this.X.add(x);
             this.Y.add(y);
             this.Z.add(z);
             this.width.add(width);
             this.height.add(height);
             this.reliability.add(reliability);
-        }
 
-        public Object[] getX() { return this.X.toArray(); }
-        public Object[] getY() { return this.Y.toArray(); }
-        public Object[] getZ() { return this.Z.toArray(); }
-        public Object[] getWidth() { return this.width.toArray(); }
-        public Object[] getHeight() { return this.height.toArray(); }
-        public Object[] getReliability() {
-            return this.reliability.toArray();
-        }
+            if(FirstItem){
+                FirstItem = false;
+                biggerChunkSize = 0;
+            }
 
-        public void AddSpot(int x, int y, int z, int width, int height, int reliability) {
-            this.X.add(x);
-            this.Y.add(y);
-            this.Z.add(z);
-            this.width.add(width);
-            this.height.add(height);
-            this.reliability.add(reliability);
         }
+        public void removeChunk(int spotNum){
+            this.X.remove(spotNum);
+            this.Y.remove(spotNum);
+            this.Z.remove(spotNum);
+            this.width.remove(spotNum);
+            this.height.remove(spotNum);
+            this.reliability.remove(spotNum);
+        }
+        public int getBiggerChunkSize(){
+            return biggerChunkSize;
+        }
+        public int[] getChunk(int spotNum){
+            int[] returnArray = new int[6];
+            returnArray[0] = this.X.get(spotNum);
+            returnArray[1] = this.Y.get(spotNum);
+            returnArray[2] = this.Z.get(spotNum);
+            returnArray[3] = this.width.get(spotNum);
+            returnArray[4] = this.height.get(spotNum);
+            returnArray[5] = this.reliability.get(spotNum);
 
+            return returnArray;
+        }
     }
 }
