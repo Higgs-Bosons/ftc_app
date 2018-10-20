@@ -24,75 +24,67 @@ class PineappleChunks {
     private ArrayList<Integer> reliability = new ArrayList<>();
      
     int numberOfChunks = 0;
+    private int averageChunkSize = 0;
     PineappleChunks(){}
     PineappleChunks(int x, int y, int z, int width, int height, int size, int reliability){
-            this.x.add(x);
-            this.y.add(y);
-            this.z.add(z);
-            this.width.add(width);
-            this.height.add(height);
-            this.size.add(size);
-            this.reliability.add(reliability);
+        this.x.add(x);
+        this.y.add(y);
+        this.z.add(z);
+        this.width.add(width);
+        this.height.add(height);
+        this.size.add(size);
+        this.reliability.add(reliability);
 
-            numberOfChunks = 1;
-        }
-    void addChunk(int x, int y, int z, int width, int height, int size, int reliability){
-            this.x.add(x);
-            this.y.add(y);
-            this.z.add(z);
-            this.width.add(width);
-            this.height.add(height);
-            this.size.add(size);
-            this.reliability.add(reliability);
-
-            numberOfChunks++;
-        }
-    void removeChunk(int spotNum){
-            this.x.remove(spotNum);
-            this.y.remove(spotNum);
-            this.z.remove(spotNum);
-            this.width.remove(spotNum);
-            this.height.remove(spotNum);
-            this.size.remove(spotNum);
-            this.reliability.remove(spotNum);
-            numberOfChunks --;
+        this.numberOfChunks = 1;
+        this.averageChunkSize += size;
     }
-    int getBiggerChunkSize(){
-        int[] sortedArray = new int[size.size()];
+    void addChunk(int x, int y, int z, int width, int height, int size, int reliability){
+        this.x.add(x);
+        this.y.add(y);
+        this.z.add(z);
+        this.width.add(width);
+        this.height.add(height);
+        this.size.add(size);
+        this.reliability.add(reliability);
 
-        for(int counter = 0; counter < size.size(); counter++){
-            sortedArray[counter] = size.get(counter);
+        this.numberOfChunks++;
+        this.averageChunkSize += size;
+    }
+    void removeChunk(int spotNum){
+        this.averageChunkSize -= this.size.get(spotNum);
+        this.x.remove(spotNum);
+        this.y.remove(spotNum);
+        this.z.remove(spotNum);
+        this.width.remove(spotNum);
+        this.height.remove(spotNum);
+        this.size.remove(spotNum);
+        this.reliability.remove(spotNum);
+        this.numberOfChunks --;
+
+    }
+    int getBiggerChunkSize() {
+        int[] sortedArray = new int[this.numberOfChunks];
+        int average = (this.averageChunkSize/numberOfChunks);
+        Log.i("Average", average+"");
+
+        for (int counter = 0; counter < this.numberOfChunks; counter++) {
+            sortedArray[counter] = this.size.get(counter);
+            Log.d("TAG", sortedArray[counter]+"");
         }
-        sortedArray = sortArray(sortedArray);
+        Arrays.sort(sortedArray);
+
+
 
         int previous = sortedArray[0];
-        for(int counter = 0; counter < sortedArray.length; counter++){
-            if(sortedArray[counter] > (previous * 2)){
-               return sortedArray[counter];
+        for (int counter = sortedArray.length - 1; counter >= 0; counter--) {
+            if ((sortedArray[counter] > (previous * 2)) && (sortedArray[counter] > average)){
+                Log.d("FOUND ONE ", "-)");
+                return sortedArray[counter];
             }
             previous = sortedArray[counter];
-            Log.d("Stuff: counter",counter+"; arrayValue"+sortedArray[counter]);
+            Log.d("Stuff: counter", counter + "; arrayValue: " + sortedArray[counter]);
         }
-
         return -1;
-    }
-    public static int[] sortArray(int[] nonSortedArray){
-        int[] sortedArray = new int[nonSortedArray.length];
-        int temp;
-        for (int i = 0; i <= nonSortedArray.length; i++)
-        {
-            for (int j = i+1; j < nonSortedArray.length; j++)
-            {
-                if (nonSortedArray[i] > nonSortedArray[j])
-                {
-                    temp = nonSortedArray[i];
-                    nonSortedArray[i] = nonSortedArray[j];
-                    nonSortedArray[j] = temp;
-                    sortedArray = nonSortedArray;
-                }
-            }
-        }
-        return sortedArray;
     }
     int[] getChunk(int spotNum){
             int[] returnArray = new int[7];
