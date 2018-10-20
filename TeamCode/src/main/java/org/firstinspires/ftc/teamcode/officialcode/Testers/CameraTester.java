@@ -24,13 +24,9 @@ public class CameraTester extends LinearOpMode {
         thePineapple.setPrecision(100);
 
         picture = thePineapple.getFrame(EpicPineapple.RECENT_FRAME);
-<<<<<<< HEAD
 
         pineappleStrainer = new PineappleStrainer(picture, 95, 25);
         pineappleStrainer.findColoredObject(Color.rgb(250,200, 0));
-=======
-        pineappleStrainer.findYellowCube(picture, 100);
->>>>>>> adb00eb1df705bc227d9b10de1a7bb479b0d184c
 
         while (opModeIsActive()){
 

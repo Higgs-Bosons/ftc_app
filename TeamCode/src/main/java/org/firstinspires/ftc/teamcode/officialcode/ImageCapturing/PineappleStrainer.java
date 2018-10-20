@@ -6,8 +6,6 @@ import android.util.Log;
 
 import org.firstinspires.ftc.teamcode.officialcode.Tools;
 
-import java.util.ArrayList;
-
 public class PineappleStrainer {
     private int PictureWidth, PictureHeight,precision, contrast;
     private Bitmap picture;
@@ -62,7 +60,7 @@ public class PineappleStrainer {
         int offGreen = Math.abs(Color.green(ColorToTest) - Color.green(ColorBase));
         int offBlue =  Math.abs(Color.blue(ColorToTest) - Color.blue(ColorBase));
         int offTotal = offRed + offBlue + offGreen;
-        return (offTotal < (255 * (100/(101-contrast))));
+        return (offTotal < contrast);
     }
     
     private boolean[][] getFilledArray(int size1, int size2){
@@ -76,6 +74,7 @@ public class PineappleStrainer {
     }
     public void findColoredObject(int colorToFind){
         long start = System.currentTimeMillis();
+        PineappleChunks pineappleChunks = new PineappleChunks();
 
         boolean[][] cords = findColorPixels(colorToFind);
         boolean[][] alreadyFound = getFilledArray((PictureWidth/precision+1),(PictureHeight/precision+1));
@@ -117,29 +116,33 @@ public class PineappleStrainer {
                         }
                         if(!stillFoundSome){counterY = cords[0].length + 10;}
                     }
+                    int width = (RightX-LeftX);
+                    int height = (DownY-Y);
+                    int x = (X + (width/2));
+                    int y = (Y + (height/2));
+                    int z = 0;
+
+                    int reliability = 0;
+                    pineappleChunks.addChunk(x,y,z,width,height,size,reliability);
+
                     if(size > 300){
                         Log.d("FOUND ONE!------------ ","-)");
                         Log.d("Size", size+"");
-                        Log.d("LeftX", LeftX+"");
-                        Log.d("RightX", RightX+"");
-                        Log.d("UpY", Y +"");
-                        Log.d("DownY", DownY+"");
+                        Log.d("X", x+"");
+                        Log.d("Y", y+"");
+                        Log.d("width", width +"");
+                        Log.d("height", height+"");
                     }
                 }
             }
         }
 
         long finish =  System.currentTimeMillis();
-
-<<<<<<< HEAD
         showCordsArray(cords);
         Log.d("Time", (finish - start)+" mls");
         Tools.showToast("DONE!!");
     }
     private void showCordsArray(boolean[][] cords){
-=======
-
->>>>>>> adb00eb1df705bc227d9b10de1a7bb479b0d184c
         boolean RandomThingy = true;
         StringBuilder OneLine = new StringBuilder();
         for(int Y = 0; Y < cords[0].length; Y ++) {
@@ -156,74 +159,4 @@ public class PineappleStrainer {
         }
     }
 
-
-<<<<<<< HEAD
-    class PineappleChunks {
-        ArrayList<Integer> X = new ArrayList<>();
-        ArrayList<Integer> Y = new ArrayList<>();
-        ArrayList<Integer> Z = new ArrayList<>();
-        ArrayList<Integer> width = new ArrayList<>();
-        ArrayList<Integer> height = new ArrayList<>();
-        ArrayList<Integer> size = new ArrayList<>();
-        ArrayList<Integer> reliability = new ArrayList<>();
-        int biggerChunkSize = 0;
-        boolean FirstItem = true;
-
-        public PineappleChunks(){}
-        public PineappleChunks(int x, int y, int z, int width, int height, int size, int reliability){
-            this.X.add(x);
-            this.Y.add(y);
-            this.Z.add(z);
-            this.width.add(width);
-            this.height.add(height);
-            this.size.add(size);
-            this.reliability.add(reliability);
-
-            biggerChunkSize = 0;
-            FirstItem = false;
-        }
-        public void addChunk(int x, int y, int z, int width, int height, int size, int reliability){
-            this.X.add(x);
-            this.Y.add(y);
-            this.Z.add(z);
-            this.width.add(width);
-            this.height.add(height);
-            this.size.add(size);
-            this.reliability.add(reliability);
-
-            if(FirstItem){
-                FirstItem = false;
-                biggerChunkSize = 0;
-            }
-=======
-
-        Log.d("Time", (finish - start)+" mls");
-        Tools.showToast("I'm a pineapple!");
->>>>>>> adb00eb1df705bc227d9b10de1a7bb479b0d184c
-
-        }
-        public void removeChunk(int spotNum){
-            this.X.remove(spotNum);
-            this.Y.remove(spotNum);
-            this.Z.remove(spotNum);
-            this.width.remove(spotNum);
-            this.height.remove(spotNum);
-            this.size.remove(spotNum);
-            this.reliability.remove(spotNum);
-        }
-        public int getBiggerChunkSize(){
-            return biggerChunkSize;
-        }
-        public int[] getChunk(int spotNum){
-            int[] returnArray = new int[6];
-            returnArray[0] = this.X.get(spotNum);
-            returnArray[1] = this.Y.get(spotNum);
-            returnArray[2] = this.Z.get(spotNum);
-            returnArray[3] = this.width.get(spotNum);
-            returnArray[4] = this.height.get(spotNum);
-            returnArray[5] = this.reliability.get(spotNum);
-
-            return returnArray;
-        }
-    }
 }
