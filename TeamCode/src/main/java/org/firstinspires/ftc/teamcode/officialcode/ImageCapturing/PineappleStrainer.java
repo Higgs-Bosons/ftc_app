@@ -73,7 +73,8 @@ public class PineappleStrainer {
         return  toReturn;
     }
     public void findColoredObject(int colorToFind){
-        final int NUMEBER_OF_WHITE_SPOTS = 3;
+        final int NUMBER_OF_WHITE_SPOTS = 3;
+
         long start = System.currentTimeMillis();
         PineappleChunks pineappleChunks = new PineappleChunks();
 
@@ -90,56 +91,54 @@ public class PineappleStrainer {
                     int RightX = X;
                     int DownY  = Y;
                     boolean stillFoundSome = false;
-                    for(int counterY = Y; counterY < cords[0].length; counterY++){
-                        DownY = counterY;
-
+                    for(int counterY = Y; counterY < cords[0].length && numOfWhiteSpots <= NUMBER_OF_WHITE_SPOTS; counterY++){
                         numOfWhiteSpots = 0;
                         for(int counterX = X; counterX >= 0; counterX--){
-                            if((cords[counterX][counterY] && !alreadyFound[counterX][counterY]) || numOfWhiteSpots < NUMEBER_OF_WHITE_SPOTS){
+                            if((cords[counterX][counterY] && !alreadyFound[counterX][counterY]) ){
                                 size++;
                                 LeftX = (counterX > LeftX) ?  LeftX : counterX;
                                 stillFoundSome = true;
                                 alreadyFound[counterX][counterY] = true;
+                                DownY = counterY;
                             }else{
-                                counterX = -1;
                                 numOfWhiteSpots ++;
                             }
 
                         }
 
                         numOfWhiteSpots = 0;
-                        for(int counterX = X; counterX < cords.length; counterX++){
-                            if((cords[counterX][counterY] && !alreadyFound[counterX][counterY]) || numOfWhiteSpots < NUMEBER_OF_WHITE_SPOTS){
+                        for(int counterX = X; counterX < cords.length && numOfWhiteSpots <= NUMBER_OF_WHITE_SPOTS; counterX++){
+                            if((cords[counterX][counterY] && !alreadyFound[counterX][counterY])){
                                 size++;
-                                RightX = (counterX > RightX) ?  RightX: counterX;
+                                RightX = (counterX < RightX) ?  RightX : counterX;
                                 stillFoundSome = true;
                                 alreadyFound[counterX][counterY] = true;
+                                DownY = counterY;
                             }else{
-                                counterX = cords.length+10;
                                 numOfWhiteSpots ++;
-
                             }
                         }
                         if(!stillFoundSome){counterY = cords[0].length + 10;}// This kills it
                     }
-                    int width = (RightX-LeftX);
-                    int height = (DownY-Y);
+                    int width = (RightX-LeftX)+1;
+                    int height = (DownY-Y)+1;
                     int x = (X + (width/2));
                     int y = (Y + (height/2));
                     int z = 0;
 
                     int reliability = 0;
                     pineappleChunks.addChunk(x,y,z,width,height,size,reliability);
-                    Log.d("FOUND ONE!------------ ","-)");
-                    Log.d("Size", size+"");
-                    Log.d("X", x+"");
-                    Log.d("Y", y+"");
-                    Log.d("width", width +"");
-                    Log.d("height", height+"");
-
                 }
             }
         }
+
+        for(int counter = 0; counter < pineappleChunks.numberOfChunks;counter ++){
+            if(pineappleChunks.getChunk(counter)[pineappleChunks.SIZE] < pineappleChunks.getBiggerChunkSize()){
+                pineappleChunks.removeChunk(counter);
+                counter--;
+            }
+        }
+
         long finish =  System.currentTimeMillis();
         showCordsArray(cords);
         Log.d("BiggerSize", pineappleChunks.getBiggerChunkSize()+"");
