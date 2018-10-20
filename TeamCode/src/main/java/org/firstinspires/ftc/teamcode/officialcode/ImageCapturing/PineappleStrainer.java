@@ -80,6 +80,8 @@ public class PineappleStrainer {
         boolean[][] cords = findColorPixels(colorToFind);
         boolean[][] alreadyFound = getFilledArray((PictureWidth/precision+1),(PictureHeight/precision+1));
 
+
+
         for(int Y = 0; Y < cords[0].length; Y ++) {
             for(int X = 0; X < cords.length; X++){
                 if(cords[X][Y] && !alreadyFound[X][Y]){
@@ -88,7 +90,7 @@ public class PineappleStrainer {
                     int RightX = X;
                     int DownY  = Y;
                     boolean stillFoundSome = false;
-                    for(int counterY = 0; counterY < cords[0].length; counterY++){
+                    for(int counterY = Y; counterY < cords[0].length; counterY++){
                         DownY = counterY;
 
                         for(int counterX = X; counterX >= 0; counterX--){
@@ -115,7 +117,7 @@ public class PineappleStrainer {
                         }
                         if(!stillFoundSome){counterY = cords[0].length + 10;}
                     }
-                    if(size > 10){
+                    if(size > 300){
                         Log.d("FOUND ONE!------------ ","-)");
                         Log.d("Size", size+"");
                         Log.d("LeftX", LeftX+"");
@@ -129,11 +131,15 @@ public class PineappleStrainer {
 
         long finish =  System.currentTimeMillis();
 
+<<<<<<< HEAD
         showCordsArray(cords);
         Log.d("Time", (finish - start)+" mls");
         Tools.showToast("DONE!!");
     }
     private void showCordsArray(boolean[][] cords){
+=======
+
+>>>>>>> adb00eb1df705bc227d9b10de1a7bb479b0d184c
         boolean RandomThingy = true;
         StringBuilder OneLine = new StringBuilder();
         for(int Y = 0; Y < cords[0].length; Y ++) {
@@ -151,6 +157,7 @@ public class PineappleStrainer {
     }
 
 
+<<<<<<< HEAD
     class PineappleChunks {
         ArrayList<Integer> X = new ArrayList<>();
         ArrayList<Integer> Y = new ArrayList<>();
@@ -188,6 +195,11 @@ public class PineappleStrainer {
                 FirstItem = false;
                 biggerChunkSize = 0;
             }
+=======
+
+        Log.d("Time", (finish - start)+" mls");
+        Tools.showToast("I'm a pineapple!");
+>>>>>>> adb00eb1df705bc227d9b10de1a7bb479b0d184c
 
         }
         public void removeChunk(int spotNum){
