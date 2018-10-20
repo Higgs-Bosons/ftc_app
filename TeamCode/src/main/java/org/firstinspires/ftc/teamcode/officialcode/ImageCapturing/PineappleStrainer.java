@@ -73,6 +73,7 @@ public class PineappleStrainer {
         return  toReturn;
     }
     public void findColoredObject(int colorToFind){
+        final int NUMEBER_OF_WHITE_SPOTS = 3;
         long start = System.currentTimeMillis();
         PineappleChunks pineappleChunks = new PineappleChunks();
 
@@ -80,7 +81,7 @@ public class PineappleStrainer {
         boolean[][] alreadyFound = getFilledArray((PictureWidth/precision+1),(PictureHeight/precision+1));
 
 
-
+        int numOfWhiteSpots  =0;
         for(int Y = 0; Y < cords[0].length; Y ++) {
             for(int X = 0; X < cords.length; X++){
                 if(cords[X][Y] && !alreadyFound[X][Y]){
@@ -92,29 +93,34 @@ public class PineappleStrainer {
                     for(int counterY = Y; counterY < cords[0].length; counterY++){
                         DownY = counterY;
 
+                        numOfWhiteSpots = 0;
                         for(int counterX = X; counterX >= 0; counterX--){
-                            if(cords[counterX][counterY] && !alreadyFound[counterX][counterY]){
+                            if((cords[counterX][counterY] && !alreadyFound[counterX][counterY]) || numOfWhiteSpots < NUMEBER_OF_WHITE_SPOTS){
                                 size++;
                                 LeftX = (counterX > LeftX) ?  LeftX : counterX;
                                 stillFoundSome = true;
                                 alreadyFound[counterX][counterY] = true;
                             }else{
                                 counterX = -1;
+                                numOfWhiteSpots ++;
                             }
 
                         }
+
+                        numOfWhiteSpots = 0;
                         for(int counterX = X; counterX < cords.length; counterX++){
-                            if(cords[counterX][counterY] && !alreadyFound[counterX][counterY]){
+                            if((cords[counterX][counterY] && !alreadyFound[counterX][counterY]) || numOfWhiteSpots < NUMEBER_OF_WHITE_SPOTS){
                                 size++;
                                 RightX = (counterX > RightX) ?  RightX: counterX;
                                 stillFoundSome = true;
                                 alreadyFound[counterX][counterY] = true;
                             }else{
                                 counterX = cords.length+10;
+                                numOfWhiteSpots ++;
 
                             }
                         }
-                        if(!stillFoundSome){counterY = cords[0].length + 10;}
+                        if(!stillFoundSome){counterY = cords[0].length + 10;}// This kills it
                     }
                     int width = (RightX-LeftX);
                     int height = (DownY-Y);
@@ -124,21 +130,19 @@ public class PineappleStrainer {
 
                     int reliability = 0;
                     pineappleChunks.addChunk(x,y,z,width,height,size,reliability);
+                    Log.d("FOUND ONE!------------ ","-)");
+                    Log.d("Size", size+"");
+                    Log.d("X", x+"");
+                    Log.d("Y", y+"");
+                    Log.d("width", width +"");
+                    Log.d("height", height+"");
 
-                    if(size > 300){
-                        Log.d("FOUND ONE!------------ ","-)");
-                        Log.d("Size", size+"");
-                        Log.d("X", x+"");
-                        Log.d("Y", y+"");
-                        Log.d("width", width +"");
-                        Log.d("height", height+"");
-                    }
                 }
             }
         }
-
         long finish =  System.currentTimeMillis();
         showCordsArray(cords);
+        Log.d("BiggerSize", pineappleChunks.getBiggerChunkSize()+"");
         Log.d("Time", (finish - start)+" mls");
         Tools.showToast("DONE!!");
     }
