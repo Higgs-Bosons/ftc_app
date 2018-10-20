@@ -63,28 +63,13 @@ class PineappleChunks {
 
     }
     int getBiggerChunkSize() {
-        int[] sortedArray = new int[this.numberOfChunks];
-        int average = (this.averageChunkSize/numberOfChunks);
-        Log.i("Average", average+"");
-
-        for (int counter = 0; counter < this.numberOfChunks; counter++) {
-            sortedArray[counter] = this.size.get(counter);
-            Log.d("TAG", sortedArray[counter]+"");
-        }
-        Arrays.sort(sortedArray);
-
-
-
-        int previous = sortedArray[0];
-        for (int counter = sortedArray.length - 1; counter >= 0; counter--) {
-            if ((sortedArray[counter] > (previous * 2)) && (sortedArray[counter] > average)){
-                Log.d("FOUND ONE ", "-)");
-                return sortedArray[counter];
+        int average = averageChunkSize / width.size();
+        for(int counter = size.size()-1; counter >= 0; counter++){
+            if(size.get(counter) > (average + 10)){
+                return size.get(counter);
             }
-            previous = sortedArray[counter];
-            Log.d("Stuff: counter", counter + "; arrayValue: " + sortedArray[counter]);
         }
-        return -1;
+        return average;
     }
     int[] getChunk(int spotNum){
             int[] returnArray = new int[7];

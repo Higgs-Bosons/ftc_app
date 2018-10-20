@@ -132,8 +132,9 @@ public class PineappleStrainer {
             }
         }
 
+        int bigger = pineappleChunks.getBiggerChunkSize();
         for(int counter = 0; counter < pineappleChunks.numberOfChunks;counter ++){
-            if(pineappleChunks.getChunk(counter)[pineappleChunks.SIZE] < pineappleChunks.getBiggerChunkSize()){
+            if(pineappleChunks.getChunk(counter)[pineappleChunks.SIZE] < bigger){
                 pineappleChunks.removeChunk(counter);
                 counter--;
             }
@@ -142,8 +143,8 @@ public class PineappleStrainer {
 
         long finish =  System.currentTimeMillis();
         //showCordsArray(cords);
-        Log.d("BiggerSize", pineappleChunks.getBiggerChunkSize()+"");
-        Log.d("Time", (finish - start)+" mls");
+        Log.w("BiggerSize", bigger+"");
+        Log.w("Time", (finish - start)+" mls");
         Tools.showToast("DONE!!");
     }
     private void showCordsArray(boolean[][] cords){

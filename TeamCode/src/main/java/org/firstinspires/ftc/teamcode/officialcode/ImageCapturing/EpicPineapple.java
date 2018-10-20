@@ -118,6 +118,7 @@ public class EpicPineapple extends EpicPineappleObjects{
         }
 
         if (cameraDevice != null) {
+
             cameraDevice.close();
             cameraDevice = null;
         }
