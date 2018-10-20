@@ -16,7 +16,7 @@ public class PineappleStrainer {
         this.PictureHeight = picture.getHeight();
         this.PictureWidth = picture.getWidth();
         this.precision = ((int) ((picture.getHeight()*((100.0-precision)/100.0))+1));
-        this.contrast = contrast;
+        this.contrast = (int) ((-7.65*contrast)+765);
     }
 
     private boolean isTheColorCloser(int colorInQuestion, int currentClosest, int colorToFind){
@@ -82,7 +82,7 @@ public class PineappleStrainer {
         boolean[][] alreadyFound = getFilledArray((PictureWidth/precision+1),(PictureHeight/precision+1));
 
 
-        int numOfWhiteSpots  =0;
+        int numOfWhiteSpots;
         for(int Y = 0; Y < cords[0].length; Y ++) {
             for(int X = 0; X < cords.length; X++){
                 if(cords[X][Y] && !alreadyFound[X][Y]){
@@ -120,7 +120,6 @@ public class PineappleStrainer {
                         }
                         if(!stillFoundSome){counterY = cords[0].length + 10;}// This kills it
                     }
-                    Log.d("Size", size+"");
                     if(size > 3){
 
                         int width = (RightX-LeftX)+1;
@@ -130,20 +129,12 @@ public class PineappleStrainer {
                         int z = 0;
 
                         int reliability = 0;
-
-                        Log.d("FOUND ONE!------------ ","-)");
-                        Log.d("Size", size+"");
-                        Log.d("X", x+"");
-                        Log.d("Y", y+"");
-                        Log.d("width", width +"");
-                        Log.d("height", height+"");
-
                         pineappleChunks.addChunk(x,y,z,width,height,size,reliability);
                     }
                 }
             }
         }
-
+        showCordsArray(cords);
         int bigger = pineappleChunks.getBiggerChunkSize();
         for(int counter = 0; counter < pineappleChunks.numberOfChunks;counter ++){
             if(pineappleChunks.getChunk(counter)[pineappleChunks.SIZE] < bigger){
@@ -151,13 +142,10 @@ public class PineappleStrainer {
                 counter--;
             }
         }
-        Log.d("I FOUND ", pineappleChunks.numberOfChunks + " cubes.");
-
         long finish =  System.currentTimeMillis();
-        showCordsArray(cords);
-        Log.w("BiggerSize", bigger+"");
-        Log.w("Time", (finish - start)+" mls");
-        Tools.showToast("DONE!!");
+
+        Tools.showToast("I found " + pineappleChunks.numberOfChunks + " cube(s). " +
+                "\n It took " + (finish - start) + " mls");
     }
     private void showCordsArray(boolean[][] cords){
         boolean RandomThingy = true;
