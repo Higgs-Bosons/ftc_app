@@ -4,13 +4,13 @@ import java.util.ArrayList;
 
 public class PineappleChunks {
 
-    public final int X = 0;
-    public final int Y = 1;
-    public final int Z = 2;
-    public final int WIDTH = 3;
-    public final int HEIGHT = 4;
-    public final int SIZE = 5;
-    public final int RELIABILITY = 6;
+    final int X = 0;
+    final int Y = 1;
+    final int Z = 2;
+    final int WIDTH = 3;
+    final int HEIGHT = 4;
+    final int SIZE = 5;
+    final int RELIABILITY = 6;
      
     private ArrayList<Integer> x = new ArrayList<>();
     private ArrayList<Integer> y= new ArrayList<>();
@@ -19,12 +19,10 @@ public class PineappleChunks {
     private ArrayList<Integer> height = new ArrayList<>();
     private ArrayList<Integer> size = new ArrayList<>();
     private ArrayList<Integer> reliability = new ArrayList<>();
-    private int averageChunkSize = 0;
-    private boolean FirstItem = true;
      
     int numberOfChunks = 0;
-    public PineappleChunks(){}
-    public PineappleChunks(int x, int y, int z, int width, int height, int size, int reliability){
+    PineappleChunks(){}
+    PineappleChunks(int x, int y, int z, int width, int height, int size, int reliability){
             this.x.add(x);
             this.y.add(y);
             this.z.add(z);
@@ -33,11 +31,9 @@ public class PineappleChunks {
             this.size.add(size);
             this.reliability.add(reliability);
 
-            averageChunkSize = size;
-            FirstItem = false;
             numberOfChunks = 1;
         }
-    public void addChunk(int x, int y, int z, int width, int height, int size, int reliability){
+    void addChunk(int x, int y, int z, int width, int height, int size, int reliability){
             this.x.add(x);
             this.y.add(y);
             this.z.add(z);
@@ -46,15 +42,9 @@ public class PineappleChunks {
             this.size.add(size);
             this.reliability.add(reliability);
 
-            if(FirstItem){
-                FirstItem = false;
-                averageChunkSize = size;
-            }else{
-                averageChunkSize += size;
-            }
             numberOfChunks++;
         }
-    public void removeChunk(int spotNum){
+    void removeChunk(int spotNum){
             this.x.remove(spotNum);
             this.y.remove(spotNum);
             this.z.remove(spotNum);
@@ -63,19 +53,18 @@ public class PineappleChunks {
             this.size.remove(spotNum);
             this.reliability.remove(spotNum);
             numberOfChunks --;
-        }
-    public int getBiggerChunkSize(){
-            int average = averageChunkSize / width.size();
-
-            for(int counter = 0; counter < size.size(); counter++){
-                if(size.get(counter) > (average + 10)){
-                    return size.get(counter);
-                }
+    }
+    int getBiggerChunkSize(){
+        int previous = 0;
+        for(int counter = 0; counter < size.size(); counter++){
+            if(size.get(counter) > (previous*3)){
+               return size.get(counter);
             }
-
-            return average;
         }
-    public int[] getChunk(int spotNum){
+
+        return -1;
+    }
+    int[] getChunk(int spotNum){
             int[] returnArray = new int[7];
             returnArray[0] = this.x.get(spotNum);
             returnArray[1] = this.y.get(spotNum);

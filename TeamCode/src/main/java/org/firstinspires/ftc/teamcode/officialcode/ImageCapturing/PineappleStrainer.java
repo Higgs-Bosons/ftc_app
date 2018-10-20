@@ -138,9 +138,10 @@ public class PineappleStrainer {
                 counter--;
             }
         }
+        Log.d("I FOUND ", pineappleChunks.numberOfChunks + " cubes.");
 
         long finish =  System.currentTimeMillis();
-        showCordsArray(cords);
+        //showCordsArray(cords);
         Log.d("BiggerSize", pineappleChunks.getBiggerChunkSize()+"");
         Log.d("Time", (finish - start)+" mls");
         Tools.showToast("DONE!!");
