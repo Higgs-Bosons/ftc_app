@@ -175,12 +175,13 @@ public class PineappleStrainer {
             biggerChunkSize = 0;
             FirstItem = false;
         }
-        public void addChunk(int x, int y, int z, int width, int height, int reliability){
+        public void addChunk(int x, int y, int z, int width, int height, int size, int reliability){
             this.X.add(x);
             this.Y.add(y);
             this.Z.add(z);
             this.width.add(width);
             this.height.add(height);
+            this.size.add(size);
             this.reliability.add(reliability);
 
             if(FirstItem){
@@ -195,6 +196,7 @@ public class PineappleStrainer {
             this.Z.remove(spotNum);
             this.width.remove(spotNum);
             this.height.remove(spotNum);
+            this.size.remove(spotNum);
             this.reliability.remove(spotNum);
         }
         public int getBiggerChunkSize(){
