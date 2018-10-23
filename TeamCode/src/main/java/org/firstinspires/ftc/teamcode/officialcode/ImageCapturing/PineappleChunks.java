@@ -1,9 +1,6 @@
 package org.firstinspires.ftc.teamcode.officialcode.ImageCapturing;
 
-import android.util.Log;
-
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 
 class PineappleChunks {
@@ -67,15 +64,7 @@ class PineappleChunks {
 
     }
     int getBiggerChunkSize() {
-        ArrayList<Integer> sizeCopy = this.size;
-        Collections.sort(sizeCopy);
-        int average = (averageChunkSize/(numberOfChunks+1));
-        for(int counter = 0; counter < sizeCopy.size(); counter++){
-            if(sizeCopy.get(counter) > (average)){
-                return sizeCopy.get(counter) - 1;
-            }
-        }
-        return average;
+        return (averageChunkSize/(numberOfChunks+1));
     }
 
     int[] getChunk(int spotNum){

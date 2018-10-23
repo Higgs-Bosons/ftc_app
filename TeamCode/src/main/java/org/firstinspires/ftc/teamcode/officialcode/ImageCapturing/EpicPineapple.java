@@ -27,13 +27,12 @@ public class EpicPineapple extends EpicPineappleObjects{
 
         textureView = FtcRobotControllerActivity.getTextureView();
         textureView.setSurfaceTextureListener(surfaceTextureListener);
-        textureView.setScaleX(1.0f);
-        textureView.setScaleY(1.0f);
 
         openBackgroundThread();
 
         setUpCamera();
         openCamera();
+        showPreview();
     }
     public void openEpicPineapple(){
         PineappleIsActive = true;
@@ -83,9 +82,6 @@ public class EpicPineapple extends EpicPineappleObjects{
         }
     }
 
-    public void setPrecision(int toSetTo){
-        precision = (frames[RECENT_FRAME].getHeight() / ((100/toSetTo)+1));
-    }
 //-----{GETTING FRAMES}----------------------------------------------------------------------------
     public boolean doIHaveMostRecentFrame(){
         return youHaveMostRecentFrame;
@@ -95,13 +91,7 @@ public class EpicPineapple extends EpicPineappleObjects{
         return frames[whichOne];
     }
     private Bitmap getWhatIAmSeeing(){
-        return resizeBitmap(textureView.getBitmap());
-    }
-    private Bitmap resizeBitmap(Bitmap bm) {
-        float toScale = (1.0f/precision);
-        Matrix matrix = new Matrix();
-        matrix.postScale(toScale, toScale);
-        return Bitmap.createBitmap(bm, 0, 0, 656, 864, matrix, false);
+        return textureView.getBitmap();
     }
 
 //-----{CLOSING}-----------------------------------------------------------------------------------
@@ -109,7 +99,7 @@ public class EpicPineapple extends EpicPineappleObjects{
         PineappleIsActive = false;
         closeBackgroundThread();
         closeCamera();
-        clearScreen();
+        hidePreview();
     }
     private void closeCamera() {
         if (cameraCaptureSession != null) {
@@ -131,11 +121,14 @@ public class EpicPineapple extends EpicPineappleObjects{
             backgroundHandler = null;
         }
     }
-    private void clearScreen(){
+    public void hidePreview(){
         textureView.setScaleX(0);
         textureView.setScaleY(0);
     }
-
+    public void showPreview(){
+        textureView.setScaleX(1);
+        textureView.setScaleY(1);
+    }
 
 //-----{PREVIEW SETUP}-----------------------------------------------------------------------------
     private TextureView.SurfaceTextureListener getSurfaceTextureListener(){

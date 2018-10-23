@@ -29,5 +29,4 @@ public class EpicPineappleObjects {
     int cameraFacing;
     boolean PineappleIsActive;
     boolean youHaveMostRecentFrame;
-    int precision = 4;
 }

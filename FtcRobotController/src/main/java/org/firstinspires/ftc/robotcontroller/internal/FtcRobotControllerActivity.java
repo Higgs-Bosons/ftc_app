@@ -50,6 +50,8 @@ import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.annotation.StringRes;
+import android.text.method.MovementMethod;
+import android.text.method.ScrollingMovementMethod;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
@@ -60,6 +62,7 @@ import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.PopupMenu;
+import android.widget.Scroller;
 import android.widget.TextView;
 
 import com.google.blocks.ftcrobotcontroller.BlocksActivity;
@@ -169,8 +172,8 @@ public class FtcRobotControllerActivity extends Activity
   protected WifiMuteStateMachine wifiMuteStateMachine;
   protected MotionDetection motionDetection;
 
-  private FrameLayout frameLayout;
-  private static TextureView CameraTexture;
+  public static TextureView CameraTexture;
+  public static TextView displayText;
 
   protected class RobotRestarter implements Restarter {
 
@@ -341,10 +344,14 @@ public class FtcRobotControllerActivity extends Activity
     if (preferencesHelper.readBoolean(getString(R.string.pref_wifi_automute), false)) {
       initWifiMute(true);
     }
-    frameLayout = (FrameLayout) findViewById(R.id.FrameLayout);
     CameraTexture = (TextureView) findViewById(R.id.CameraTexture);
     CameraTexture.setScaleX(0);
     CameraTexture.setScaleY(0);
+
+    displayText = (TextView) findViewById(R.id.display);
+    displayText.setScaleX(0);
+    displayText.setScaleY(0);
+    displayText.setMovementMethod(new ScrollingMovementMethod());
   }
 
   protected UpdateUI createUpdateUI() {
@@ -722,10 +729,13 @@ public class FtcRobotControllerActivity extends Activity
       wifiMuteStateMachine.consumeEvent(WifiMuteEvent.USER_ACTIVITY);
     }
   }
-  public FrameLayout getFrameLayout(){
-    return frameLayout;
-  }
   public static TextureView getTextureView(){
       return CameraTexture;
+  }
+  public static void setTextDisplay(String text){
+      displayText.setText(text);
+      displayText.setScaleY(1);
+      displayText.setScaleX(1);
+     return;
   }
 }

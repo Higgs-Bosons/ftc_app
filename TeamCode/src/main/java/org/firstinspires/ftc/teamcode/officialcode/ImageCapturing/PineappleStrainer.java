@@ -4,19 +4,23 @@ import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.util.Log;
 
+import org.firstinspires.ftc.robotcontroller.internal.FtcRobotControllerActivity;
+import org.firstinspires.ftc.robotcore.internal.system.AppUtil;
 import org.firstinspires.ftc.teamcode.officialcode.Tools;
 
 public class PineappleStrainer {
     private int PictureWidth, PictureHeight,precision, contrast;
     private Bitmap picture;
+    private StringBuilder toDisplay = new StringBuilder();
+    private EpicPineapple epicPineapple;
     
-    public PineappleStrainer(Bitmap picture, int precision, int contrast){
+    public PineappleStrainer(Bitmap picture, int contrast, int precision){
         this.picture = picture;
-        this.precision = precision;
         this.PictureHeight = picture.getHeight();
         this.PictureWidth = picture.getWidth();
-        this.precision = ((int) ((picture.getHeight()*((100.0-precision)/100.0))+1));
+        this.precision = precision;
         this.contrast = (int) ((-7.65*contrast)+765);
+        this.epicPineapple = epicPineapple;
     }
 
     private boolean isTheColorCloser(int colorInQuestion, int currentClosest, int colorToFind){
@@ -34,7 +38,7 @@ public class PineappleStrainer {
         return (offTotal < offTotal2);
     }
     private boolean[][] findColorPixels(int colorToFind){
-        boolean[][] cords = getFilledArray((PictureWidth/precision+1),(PictureHeight/precision+1));
+        boolean[][] cords = getFilledArray((PictureWidth*precision),(PictureHeight*precision));
         int PixelColor;
         int closestColor = 0;
 
@@ -79,7 +83,7 @@ public class PineappleStrainer {
         PineappleChunks pineappleChunks = new PineappleChunks();
 
         boolean[][] cords = findColorPixels(colorToFind);
-        boolean[][] alreadyFound = getFilledArray((PictureWidth/precision+1),(PictureHeight/precision+1));
+        boolean[][] alreadyFound = getFilledArray((PictureWidth*precision),(PictureWidth*precision));
 
 
         int numOfWhiteSpots;
@@ -149,6 +153,7 @@ public class PineappleStrainer {
     }
     private void showCordsArray(boolean[][] cords){
         boolean RandomThingy = true;
+
         StringBuilder OneLine = new StringBuilder();
         for(int Y = 0; Y < cords[0].length; Y ++) {
             for (boolean[] cord : cords) {
@@ -159,9 +164,18 @@ public class PineappleStrainer {
                 }
             }
             Log.d((RandomThingy+" "+!RandomThingy), OneLine.toString()+ "|");
+            toDisplay.append(OneLine).append("\n");
             RandomThingy = !RandomThingy;
             OneLine = new StringBuilder(" |");
         }
-    }
+        AppUtil.getInstance().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                FtcRobotControllerActivity.setTextDisplay(toDisplay.toString());
+                epicPineapple.hidePreview();
 
+            }
+        });
+
+    }
 }
