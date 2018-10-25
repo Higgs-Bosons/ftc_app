@@ -13,6 +13,7 @@ public class PineappleStrainer {
     private Bitmap picture;
     private StringBuilder toDisplay = new StringBuilder();
     private EpicPineapple epicPineapple;
+    private boolean didIFindACloseEnoughColor = true;
     
     public PineappleStrainer(Bitmap picture, int contrast, int precision, EpicPineapple epicPineapple){
         this.picture = picture;
@@ -51,6 +52,14 @@ public class PineappleStrainer {
             }
         }
 
+        if(Math.abs(Color.blue(closestColor) - Color.blue(colorToFind)) >= 5){
+            if(Math.abs(Color.red(closestColor) - Color.red(colorToFind)) >= 5){
+                if(Math.abs(Color.green(closestColor) - Color.green(colorToFind)) >= 5){
+                    didIFindACloseEnoughColor = false;
+                }
+            }
+        }
+
         for(int X = 0; X < PictureWidth; X += precision){
             for(int Y = 0; Y < PictureHeight; Y += precision){
                 PixelColor = picture.getPixel(X,Y);
@@ -83,6 +92,12 @@ public class PineappleStrainer {
         PineappleChunks pineappleChunks = new PineappleChunks();
 
         boolean[][] cords = findColorPixels(colorToFind);
+
+        if(!didIFindACloseEnoughColor){
+            Tools.showToast("NO COLOR FOUND");
+            return;
+        }
+
         boolean[][] alreadyFound = getFilledArray((PictureWidth*precision),(PictureWidth*precision));
 
 
