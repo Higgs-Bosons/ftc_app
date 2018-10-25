@@ -14,7 +14,7 @@ public class PineappleStrainer {
     private StringBuilder toDisplay = new StringBuilder();
     private EpicPineapple epicPineapple;
     
-    public PineappleStrainer(Bitmap picture, int contrast, int precision){
+    public PineappleStrainer(Bitmap picture, int contrast, int precision, EpicPineapple epicPineapple){
         this.picture = picture;
         this.PictureHeight = picture.getHeight();
         this.PictureWidth = picture.getWidth();
