@@ -42,20 +42,6 @@ public class EpicPineapple extends EpicPineappleObjects{
         for(int counter = 0; counter < 10; counter++){
             frames[counter] = getWhatIAmSeeing();
         }
-        new Thread(new Runnable() {
-            public void run() {
-                Bitmap[] oldFrames;
-                Bitmap newFrame;
-                while(PineappleIsActive){
-                     newFrame = getWhatIAmSeeing();
-                     oldFrames = frames;
-                     System.arraycopy(oldFrames, 0, frames, 1, 9);
-                     frames[0] = newFrame;
-                     youHaveMostRecentFrame = false;
-                }
-            }
-        }).start();
-
     }
 
     private void openCamera() {
@@ -87,8 +73,7 @@ public class EpicPineapple extends EpicPineappleObjects{
         return youHaveMostRecentFrame;
     }
     public Bitmap getFrame(int whichOne){
-        youHaveMostRecentFrame = (whichOne == 0);
-        return frames[whichOne];
+        return getWhatIAmSeeing();
     }
     private Bitmap getWhatIAmSeeing(){
         return textureView.getBitmap();
