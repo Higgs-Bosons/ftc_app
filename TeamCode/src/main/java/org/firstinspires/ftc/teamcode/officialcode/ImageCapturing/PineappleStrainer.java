@@ -19,7 +19,7 @@ public class PineappleStrainer {
         this.picture = picture;
         this.PictureHeight = picture.getHeight();
         this.PictureWidth = picture.getWidth();
-        this.precision = precision;
+        this.precision = 100/precision;
         this.contrast = (int) ((-7.65*contrast)+765);
         this.epicPineapple = epicPineapple;
     }
