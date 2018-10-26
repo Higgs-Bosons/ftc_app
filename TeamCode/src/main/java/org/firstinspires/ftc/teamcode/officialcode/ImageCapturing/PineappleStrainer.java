@@ -9,7 +9,8 @@ import org.firstinspires.ftc.robotcore.internal.system.AppUtil;
 import org.firstinspires.ftc.teamcode.officialcode.Tools;
 
 public class PineappleStrainer {
-    private int PictureWidth, PictureHeight,precision, contrast;
+    private int PictureWidth, PictureHeight, contrast;
+    private double precision;
     private Bitmap picture;
     private StringBuilder toDisplay = new StringBuilder();
     private EpicPineapple epicPineapple;
@@ -19,7 +20,7 @@ public class PineappleStrainer {
         this.picture = picture;
         this.PictureHeight = picture.getHeight();
         this.PictureWidth = picture.getWidth();
-        this.precision = 100/precision;
+        this.precision = precision/100.0;
         this.contrast = (int) ((-7.65*contrast)+765);
         this.epicPineapple = epicPineapple;
     }
@@ -39,7 +40,7 @@ public class PineappleStrainer {
         return (offTotal < offTotal2);
     }
     private boolean[][] findColorPixels(int colorToFind){
-        boolean[][] cords = getFilledArray((PictureWidth*precision),(PictureHeight*precision));
+        boolean[][] cords = getFilledArray((int) (PictureWidth*precision),(int) (PictureHeight*precision));
         int PixelColor;
         int closestColor = 0;
 
@@ -52,9 +53,9 @@ public class PineappleStrainer {
             }
         }
 
-        if(Math.abs(Color.blue(closestColor) - Color.blue(colorToFind)) >= 5){
-            if(Math.abs(Color.red(closestColor) - Color.red(colorToFind)) >= 5){
-                if(Math.abs(Color.green(closestColor) - Color.green(colorToFind)) >= 5){
+        if(Math.abs(Color.blue(closestColor) - Color.blue(colorToFind)) >= 25){
+            if(Math.abs(Color.red(closestColor) - Color.red(colorToFind)) >= 25){
+                if(Math.abs(Color.green(closestColor) - Color.green(colorToFind)) >= 25){
                     didIFindACloseEnoughColor = false;
                 }
             }
@@ -63,9 +64,10 @@ public class PineappleStrainer {
         for(int X = 0; X < PictureWidth; X += precision){
             for(int Y = 0; Y < PictureHeight; Y += precision){
                 PixelColor = picture.getPixel(X,Y);
-                cords[X/precision][Y/precision] = isCloseEnough(PixelColor, closestColor);
+                cords[(int) (X/precision)][(int) (Y/precision)] = isCloseEnough(PixelColor, closestColor);
             }
         }
+        Tools.showToast("Got this far 1");
         return cords;
     }
     private boolean isCloseEnough(int ColorToTest, int ColorBase){
@@ -98,7 +100,7 @@ public class PineappleStrainer {
             return;
         }
 
-        boolean[][] alreadyFound = getFilledArray((PictureWidth*precision),(PictureWidth*precision));
+        boolean[][] alreadyFound = getFilledArray((int) (PictureWidth*precision),(int) (PictureWidth*precision));
 
 
         int numOfWhiteSpots;
