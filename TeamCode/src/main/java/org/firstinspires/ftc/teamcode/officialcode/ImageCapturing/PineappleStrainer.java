@@ -9,8 +9,7 @@ import org.firstinspires.ftc.robotcore.internal.system.AppUtil;
 import org.firstinspires.ftc.teamcode.officialcode.Tools;
 
 public class PineappleStrainer {
-    private int PictureWidth, PictureHeight, contrast;
-    private double precision;
+    private int PictureWidth, PictureHeight, contrast, precision;
     private Bitmap picture;
     private StringBuilder toDisplay = new StringBuilder();
     private EpicPineapple epicPineapple;
@@ -20,87 +19,28 @@ public class PineappleStrainer {
         this.picture = picture;
         this.PictureHeight = picture.getHeight();
         this.PictureWidth = picture.getWidth();
-        this.precision = precision/100.0;
+        this.precision = (int) (precision/100.0)*PictureWidth;
         this.contrast = (int) ((-7.65*contrast)+765);
         this.epicPineapple = epicPineapple;
     }
 
-    private boolean isTheColorCloser(int colorInQuestion, int currentClosest, int colorToFind){
+    public PineappleChunks findColoredObject(int colorToFind){
 
-        int offRed =   Math.abs(Color.red(colorInQuestion) - Color.red(colorToFind));
-        int offGreen = Math.abs(Color.green(colorInQuestion) - Color.green(colorToFind));
-        int offBlue =  Math.abs(Color.blue(colorInQuestion) - Color.blue(colorToFind));
-        int offTotal = offRed + offBlue + offGreen;
-
-        int offRed2 =   Math.abs(Color.red(currentClosest) - Color.red(colorToFind));
-        int offGreen2 = Math.abs(Color.green(currentClosest) - Color.green(colorToFind));
-        int offBlue2 =  Math.abs(Color.blue(currentClosest) - Color.blue(colorToFind));
-        int offTotal2 = offRed2 + offBlue2 + offGreen2;
-
-        return (offTotal < offTotal2);
-    }
-    private boolean[][] findColorPixels(int colorToFind){
-        boolean[][] cords = getFilledArray((int) (PictureWidth*precision),(int) (PictureHeight*precision));
-        int PixelColor;
-        int closestColor = 0;
-
-        for(int X = 0; X < picture.getWidth(); X += 10){
-            for(int Y = 0; Y < picture.getHeight(); Y += 10){
-                PixelColor = picture.getPixel(X,Y);
-
-                if(isTheColorCloser(PixelColor, closestColor, colorToFind))
-                    closestColor = PixelColor;
-            }
-        }
-
-        if(Math.abs(Color.blue(closestColor) - Color.blue(colorToFind)) >= 25){
-            if(Math.abs(Color.red(closestColor) - Color.red(colorToFind)) >= 25){
-                if(Math.abs(Color.green(closestColor) - Color.green(colorToFind)) >= 25){
-                    didIFindACloseEnoughColor = false;
-                }
-            }
-        }
-
-        for(int X = 0; X < PictureWidth; X += precision){
-            for(int Y = 0; Y < PictureHeight; Y += precision){
-                PixelColor = picture.getPixel(X,Y);
-                cords[(int) (X/precision)][(int) (Y/precision)] = isCloseEnough(PixelColor, closestColor);
-            }
-        }
-        Tools.showToast("Got this far 1");
-        return cords;
-    }
-    private boolean isCloseEnough(int ColorToTest, int ColorBase){
-        int offRed =   Math.abs(Color.red(ColorToTest) - Color.red(ColorBase));
-        int offGreen = Math.abs(Color.green(ColorToTest) - Color.green(ColorBase));
-        int offBlue =  Math.abs(Color.blue(ColorToTest) - Color.blue(ColorBase));
-        int offTotal = offRed + offBlue + offGreen;
-        return (offTotal < contrast);
-    }
-    
-    private boolean[][] getFilledArray(int size1, int size2){
-        boolean[][] toReturn = new boolean[size1][size2];
-        for(int X = 0; X < size1; X ++) {
-            for (int Y = 0; Y < size2; Y++) {
-                toReturn[X][Y] = false;
-            }
-        }
-        return  toReturn;
-    }
-    public void findColoredObject(int colorToFind){
-        final int NUMBER_OF_WHITE_SPOTS = 3;
 
         long start = System.currentTimeMillis();
         PineappleChunks pineappleChunks = new PineappleChunks();
 
         boolean[][] cords = findColorPixels(colorToFind);
 
+
+
+        final int NUMBER_OF_WHITE_SPOTS = 3;
         if(!didIFindACloseEnoughColor){
             Tools.showToast("NO COLOR FOUND");
-            return;
+            return null;
         }
 
-        boolean[][] alreadyFound = getFilledArray((int) (PictureWidth*precision),(int) (PictureWidth*precision));
+        boolean[][] alreadyFound = getFilledArray(precision,precision);
 
 
         int numOfWhiteSpots;
@@ -167,7 +107,77 @@ public class PineappleStrainer {
 
         Tools.showToast("I found " + pineappleChunks.numberOfChunks + " cube(s). " +
                 "\n It took " + (finish - start) + " mls");
+
+        return pineappleChunks;
     }
+
+
+    private boolean isTheColorCloser(int colorInQuestion, int currentClosest, int colorToFind){
+
+        int offRed =   Math.abs(Color.red(colorInQuestion) - Color.red(colorToFind));
+        int offGreen = Math.abs(Color.green(colorInQuestion) - Color.green(colorToFind));
+        int offBlue =  Math.abs(Color.blue(colorInQuestion) - Color.blue(colorToFind));
+        int offTotal = offRed + offBlue + offGreen;
+
+        int offRed2 =   Math.abs(Color.red(currentClosest) - Color.red(colorToFind));
+        int offGreen2 = Math.abs(Color.green(currentClosest) - Color.green(colorToFind));
+        int offBlue2 =  Math.abs(Color.blue(currentClosest) - Color.blue(colorToFind));
+        int offTotal2 = offRed2 + offBlue2 + offGreen2;
+
+        return (offTotal < offTotal2);
+    }
+    private boolean[][] findColorPixels(int colorToFind){
+        boolean[][] cords = getFilledArray(precision,precision);
+        int PixelColor;
+        int closestColor = 0;
+
+        for(int X = 0; X < picture.getWidth(); X += 10){
+            for(int Y = 0; Y < picture.getHeight(); Y += 10){
+                PixelColor = picture.getPixel(X,Y);
+
+                if(isTheColorCloser(PixelColor, closestColor, colorToFind))
+                    closestColor = PixelColor;
+            }
+        }
+
+
+        if(Math.abs(Color.blue(closestColor) - Color.blue(colorToFind)) >= 25){
+            if(Math.abs(Color.red(closestColor) - Color.red(colorToFind)) >= 25){
+                if(Math.abs(Color.green(closestColor) - Color.green(colorToFind)) >= 25){
+                    didIFindACloseEnoughColor = false;
+                }
+            }
+        }
+
+
+
+        for(int X = 0; X < PictureWidth; X += precision){
+            for(int Y = 0; Y < PictureHeight; Y += precision){
+                PixelColor = picture.getPixel(X,Y);
+                cords[X/precision][Y/precision] = isCloseEnough(PixelColor, closestColor);
+            }
+        }
+        Tools.showToast("Got this far 1");
+        return cords;
+    }
+    private boolean isCloseEnough(int ColorToTest, int ColorBase){
+        int offRed =   Math.abs(Color.red(ColorToTest) - Color.red(ColorBase));
+        int offGreen = Math.abs(Color.green(ColorToTest) - Color.green(ColorBase));
+        int offBlue =  Math.abs(Color.blue(ColorToTest) - Color.blue(ColorBase));
+        int offTotal = offRed + offBlue + offGreen;
+        return (offTotal < contrast);
+    }
+    
+    private boolean[][] getFilledArray(int size1, int size2){
+        boolean[][] toReturn = new boolean[size1][size2];
+        for(int X = 0; X < size1; X ++) {
+            for (int Y = 0; Y < size2; Y++) {
+                toReturn[X][Y] = false;
+            }
+        }
+        return  toReturn;
+    }
+
     private void showCordsArray(boolean[][] cords){
         boolean RandomThingy = true;
 
