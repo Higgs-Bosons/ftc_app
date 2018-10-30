@@ -90,11 +90,11 @@ public class EpicPineapple extends EpicPineappleObjects{
             backgroundHandler = null;
         }
     }
-    public void hidePreview(){
+    void hidePreview(){
         textureView.setScaleX(0);
         textureView.setScaleY(0);
     }
-    public void showPreview(){
+    void showPreview(){
         textureView.setScaleX(1);
         textureView.setScaleY(1);
     }
