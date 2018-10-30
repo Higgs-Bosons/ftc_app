@@ -7,6 +7,7 @@ import android.util.Log;
 import org.firstinspires.ftc.robotcontroller.internal.FtcRobotControllerActivity;
 import org.firstinspires.ftc.robotcore.internal.system.AppUtil;
 import org.firstinspires.ftc.teamcode.officialcode.Tools;
+import org.xml.sax.helpers.XMLFilterImpl;
 
 public class PineappleStrainer {
     private int PictureWidth, PictureHeight, contrast, precision;
@@ -19,7 +20,7 @@ public class PineappleStrainer {
         this.picture = picture;
         this.PictureHeight = picture.getHeight();
         this.PictureWidth = picture.getWidth();
-        this.precision = (int) (precision/100.0)*PictureWidth;
+        this.precision = (int) ((precision/100.0)*PictureWidth);
         this.contrast = (int) ((-7.65*contrast)+765);
         this.epicPineapple = epicPineapple;
     }
@@ -41,7 +42,6 @@ public class PineappleStrainer {
         }
 
         boolean[][] alreadyFound = getFilledArray(precision,precision);
-
 
         int numOfWhiteSpots;
         for(int Y = 0; Y < cords[0].length; Y ++) {
@@ -150,14 +150,12 @@ public class PineappleStrainer {
         }
 
 
-
         for(int X = 0; X < PictureWidth; X += precision){
             for(int Y = 0; Y < PictureHeight; Y += precision){
                 PixelColor = picture.getPixel(X,Y);
                 cords[X/precision][Y/precision] = isCloseEnough(PixelColor, closestColor);
             }
         }
-        Tools.showToast("Got this far 1");
         return cords;
     }
     private boolean isCloseEnough(int ColorToTest, int ColorBase){
@@ -181,7 +179,7 @@ public class PineappleStrainer {
     private void showCordsArray(boolean[][] cords){
         boolean RandomThingy = true;
 
-        StringBuilder OneLine = new StringBuilder();
+        StringBuilder OneLine = new StringBuilder(" |");
         for(int Y = 0; Y < cords[0].length; Y ++) {
             for (boolean[] cord : cords) {
                 if (cord[Y]) {
