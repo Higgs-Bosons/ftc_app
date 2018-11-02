@@ -5,13 +5,13 @@ import java.util.Collections;
 
 class PineappleChunks {
 
-    final int X = 0;
-    final int Y = 1;
-    final int Z = 2;
-    final int WIDTH = 3;
-    final int HEIGHT = 4;
-    final int SIZE = 5;
-    final int RELIABILITY = 6;
+    static final int X = 0;
+    static final int Y = 1;
+    static final int Z = 2;
+    static final int WIDTH = 3;
+    static final int HEIGHT = 4;
+    static final int SIZE = 5;
+    static final int RELIABILITY = 6;
      
     private ArrayList<Integer> x = new ArrayList<>();
     private ArrayList<Integer> y= new ArrayList<>();
