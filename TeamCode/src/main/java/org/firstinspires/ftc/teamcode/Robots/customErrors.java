@@ -1,6 +1,6 @@
 package org.firstinspires.ftc.teamcode.Robots;
 
-class customErrors {
+public class customErrors {
     public static class motorNotFoundException extends Exception{
         String motorName;
         @Override
