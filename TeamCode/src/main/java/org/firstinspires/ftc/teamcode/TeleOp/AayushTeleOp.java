@@ -10,7 +10,6 @@ import org.firstinspires.ftc.teamcode.Robots.customErrors;
 @TeleOp(name = "Aayush's TeleOp", group = "TeleOp")
 public class AayushTeleOp extends LinearOpMode {
 
-    private String mode = "Crab";
     private boolean slowed = false;
     private boolean tanked = false;
 
@@ -26,14 +25,15 @@ public class AayushTeleOp extends LinearOpMode {
 
         try {
             dt = new DriveTrain(motor.getDriveTrain());
-        } catch (customErrors.motorNotFoundException e) {
-            e.printStackTrace();
-        } catch (customErrors.duplicateTagException e) {
+        } catch (customErrors.motorNotFoundException | customErrors.duplicateTagException e) {
             e.printStackTrace();
         }
+        assert dt != null;
+
 
         waitForStart();
         while (opModeIsActive()) {
+            String mode;
             if (!tanked) {
                 mode = "Crab";
                 if (slowed)
