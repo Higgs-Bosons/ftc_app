@@ -22,12 +22,10 @@ public class CameraTester extends LinearOpMode {
 
         picture = thePineapple.getWhatIAmSeeing();
 
-        pineappleStrainer = new PineappleStrainer(picture, 10, 50, thePineapple);
+        pineappleStrainer = new PineappleStrainer(picture, 80, 78, thePineapple);
         pineappleStrainer.findColoredObject(Color.rgb(250,200, 0));
 
-        while (opModeIsActive()){
-
-        }
+        while (opModeIsActive()) {}
         thePineapple.closeEpicPineapple();
     }
 

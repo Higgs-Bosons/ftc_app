@@ -20,8 +20,8 @@ public class PineappleStrainer {
     public PineappleStrainer(Bitmap picture, int contrast, int precision, EpicPineapple epicPineapple){
         this.picture = picture;
         this.PictureHeight = picture.getHeight();
-        this.PictureWidth = picture.getWidth(); // -612
-        this.precision = ((100 - precision));
+        this.PictureWidth = picture.getWidth();
+        this.precision = (precision >= 100) ?  1 : 100 - precision;
         this.contrast = (int) ((-7.65*contrast)+765);
         this.epicPineapple = epicPineapple;
     }
@@ -57,7 +57,7 @@ public class PineappleStrainer {
                     for(int counterY = Y; counterY < cords[0].length; counterY++){
                         numOfWhiteSpots = 0;
                         for(int counterX = X; counterX >= 0  && numOfWhiteSpots <= NUMBER_OF_WHITE_SPOTS; counterX--){
-                            if((cords[counterX][counterY] && !alreadyFound[counterX][counterY]) ){
+                            if(cords[counterX][counterY] && !alreadyFound[counterX][counterY]){
                                 size++;
                                 LeftX = (counterX > LeftX) ?  LeftX : counterX;
                                 stillFoundSome = true;
@@ -71,7 +71,7 @@ public class PineappleStrainer {
 
                         numOfWhiteSpots = 0;
                         for(int counterX = X; counterX < cords.length && numOfWhiteSpots <= NUMBER_OF_WHITE_SPOTS; counterX++){
-                            if((cords[counterX][counterY] && !alreadyFound[counterX][counterY])){
+                            if(cords[counterX][counterY] && !alreadyFound[counterX][counterY]){
                                 size++;
                                 RightX = (counterX < RightX) ?  RightX : counterX;
                                 stillFoundSome = true;
@@ -147,12 +147,12 @@ public class PineappleStrainer {
         didIFindACloseEnoughColor = ((offBlue <= contrast/3) && (offRed <= contrast/3) && (offGreen <= contrast/3));
 
 
-        int PictureHeightTrun = (int) ((Math.floor(PictureHeight / 100.0))*100);
-        int PictureWidthTrun = (int) ((Math.floor(PictureWidth / 100.0))*100);
+        int PictureHeightTrun = (int) (Math.floor(PictureHeight / 100.0) *100);
+        int PictureWidthTrun = (int) (Math.floor(PictureWidth / 100.0) *100);
         for(int X = 0; X < PictureWidthTrun; X += precision){
             for(int Y = 0; Y < PictureHeightTrun; Y += precision){
                 PixelColor = picture.getPixel(X,Y);
-                cords[(X/precision)][(Y/precision)] = isCloseEnough(PixelColor, closestColor);
+                cords[X/precision][(Y/precision)] = isCloseEnough(PixelColor, closestColor);
             }
         }
         return cords;
@@ -171,7 +171,7 @@ public class PineappleStrainer {
                 toReturn[X][Y] = false;
             }
         }
-        return  toReturn;
+        return toReturn;
     }
     private void showCordsArray(boolean[][] cords){
         boolean RandomThingy = true;
