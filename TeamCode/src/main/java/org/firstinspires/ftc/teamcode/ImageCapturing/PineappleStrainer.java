@@ -9,8 +9,18 @@ import org.firstinspires.ftc.robotcontroller.internal.FtcRobotControllerActivity
 import org.firstinspires.ftc.robotcore.internal.system.AppUtil;
 import org.firstinspires.ftc.teamcode.Tools;
 
-import java.util.ArrayList;
 
+/*
+(Average in parentheses)
+precession: 80:
+15 cm - 156, 139, 140, 109, 108 (130.4)
+
+precession: 90:
+15 cm - 931, 768, 636, 553, 611 - 636 (42.4)
+
+precession: 100:
+15 cm - 58903, 77245, 33277, 54508 (55,973)
+*/
 
 public class PineappleStrainer {
     private int PictureWidth, PictureHeight, contrast, precision;
@@ -28,7 +38,7 @@ public class PineappleStrainer {
         this.epicPineapple = epicPineapple;
     }
 
-    public PineappleChunks findColoredObject(int colorToFind){
+    public PineappleChunks findColoredObject(int colorToFind, int sizeFrom15cm){
 
 
         long start = System.currentTimeMillis();
@@ -40,7 +50,8 @@ public class PineappleStrainer {
 
         final int NUMBER_OF_WHITE_SPOTS = 3;
         if(!didIFindACloseEnoughColor){
-            // Tools.showToast("NO COLOR FOUND");
+            Tools.showToast("NO COLOR FOUND");
+            showCordsArray(cords);
             Log.d("Results:", "NO COLOR");
             return null;
         }
@@ -91,7 +102,8 @@ public class PineappleStrainer {
                         int height = (DownY-Y)+1;
                         int x = (X + (width/2));
                         int y = (Y + (height/2));
-                        int z = 0;
+                        int z = ((sizeFrom15cm-size)/sizeFrom15cm)*-100;
+                        // Less than Expected: negative percent, Equal = 0,  More than Expected: positive percent
 
                         x = (int) ((x/(double) PictureWidth) * 100);
                         y = (int) ((y/(double) PictureHeight) * 100);
@@ -105,15 +117,17 @@ public class PineappleStrainer {
         showCordsArray(cords);
         int bigger = pineappleChunks.getBiggerChunkSize();
         for(int counter = 0; counter < pineappleChunks.numberOfChunks;counter ++){
-            if(pineappleChunks.getChunk(counter)[PineappleChunks.SIZE] < bigger){
+            if(pineappleChunks.getChunk(counter)[PineappleChunks.SIZE] <= bigger){
                 pineappleChunks.removeChunk(counter);
                 counter--;
             }
         }
         long finish =  System.currentTimeMillis();
 
+
+
         Tools.showToast("I found " + pineappleChunks.numberOfChunks + " cube(s). " +
-                "\n It took " + (finish - start) + " mls");
+                "\n It took " + (finish - start) + " mls.");
         return pineappleChunks;
     }
 
@@ -149,7 +163,7 @@ public class PineappleStrainer {
         int offBlue = Math.abs(Color.blue(closestColor) - Color.blue(colorToFind));
         int offRed = Math.abs(Color.red(closestColor) - Color.red(colorToFind));
         int offGreen = Math.abs(Color.green(closestColor) - Color.green(colorToFind));
-        didIFindACloseEnoughColor = ((offBlue <= contrast/3) && (offRed <= contrast/3) && (offGreen <= contrast/3));
+        didIFindACloseEnoughColor = ((offBlue <= contrast/2) && (offRed <= contrast/2) && (offGreen <= contrast/2));
 
 
         int PictureHeightTrun = (int) (Math.floor(PictureHeight / 100.0) *100);
@@ -178,8 +192,6 @@ public class PineappleStrainer {
         }
         return toReturn;
     }
-
-
     private void showCordsArray(boolean[][] cords){
         boolean RandomThingy = true;
 

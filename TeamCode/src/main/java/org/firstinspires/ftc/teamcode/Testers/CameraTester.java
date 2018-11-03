@@ -15,15 +15,17 @@ public class CameraTester extends LinearOpMode {
     PineappleStrainer pineappleStrainer;
 
     @Override
-    public void runOpMode(){
+    public void runOpMode() throws InterruptedException {
+
+
         thePineapple = new EpicPineapple();
 
         waitForStart();
 
         picture = thePineapple.getWhatIAmSeeing();
 
-        pineappleStrainer = new PineappleStrainer(picture, 80, 78, thePineapple);
-        pineappleStrainer.findColoredObject(Color.rgb(250,200, 0));
+        pineappleStrainer = new PineappleStrainer(picture, 80, 80, thePineapple);
+        pineappleStrainer.findColoredObject(Color.rgb(250,200, 0), 130);
 
         while (opModeIsActive()) {}
         thePineapple.closeEpicPineapple();

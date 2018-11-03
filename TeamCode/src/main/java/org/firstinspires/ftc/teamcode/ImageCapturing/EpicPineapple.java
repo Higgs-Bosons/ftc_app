@@ -23,7 +23,7 @@ public class EpicPineapple extends org.firstinspires.ftc.teamcode.ImageCapturing
         cameraFacing = CameraCharacteristics.LENS_FACING_BACK;
 
         TextureView.SurfaceTextureListener surfaceTextureListener = getSurfaceTextureListener();
-        stateCallback          = getStateCallback();
+        stateCallback = getStateCallback();
 
         textureView = FtcRobotControllerActivity.getTextureView();
         textureView.setSurfaceTextureListener(surfaceTextureListener);
