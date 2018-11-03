@@ -9,6 +9,8 @@ import org.firstinspires.ftc.robotcontroller.internal.FtcRobotControllerActivity
 import org.firstinspires.ftc.robotcore.internal.system.AppUtil;
 import org.firstinspires.ftc.teamcode.Tools;
 
+import java.util.ArrayList;
+
 
 public class PineappleStrainer {
     private int PictureWidth, PictureHeight, contrast, precision;
@@ -90,6 +92,9 @@ public class PineappleStrainer {
                         int x = (X + (width/2));
                         int y = (Y + (height/2));
                         int z = 0;
+
+                        x = (int) ((x/(double) PictureWidth) * 100);
+                        y = (int) ((y/(double) PictureHeight) * 100);
 
                         int reliability = 0;
                         pineappleChunks.addChunk(x,y,z,width,height,size,reliability);
@@ -173,6 +178,8 @@ public class PineappleStrainer {
         }
         return toReturn;
     }
+
+
     private void showCordsArray(boolean[][] cords){
         boolean RandomThingy = true;
 
