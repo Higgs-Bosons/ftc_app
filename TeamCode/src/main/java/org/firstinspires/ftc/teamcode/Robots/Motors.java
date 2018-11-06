@@ -13,27 +13,27 @@ import static org.firstinspires.ftc.teamcode.Constants.*;
 public class Motors extends LinearOpMode {
     // 2 = It CAN'T be repeated, 1 = it CAN be repeated
 
-    private DcMotor[] motors;
-    private String[]  motorNames;
-    private int[]     motorTags;
+    private DcMotor[]  motors;
+    private String[]   motorNames;
+    private MotorTag[] motorTags;
 
     public Motors() {
         this.motors = new DcMotor[0];
         this.motorNames = new String[0];
-        this.motorTags = new int[0];
+        this.motorTags = new MotorTag[0];
     }
-    public Motors(String motorName, @motorTags int motorTag){
+    public Motors(String motorName, MotorTag motorTag){
         this.motors = new DcMotor[1];
         this.motors[0] = (hardwareMap.dcMotor.get(motorName));
 
         this.motorNames = new String[1];
         this.motorNames[0] = motorName;
 
-        this.motorTags = new int[1];
+        this.motorTags = new MotorTag[1];
         this.motorTags[0] = motorTag;
 
     }
-    public void addAMotor(String motorName, @motorTags int motorTag){
+    public void addAMotor(String motorName, MotorTag motorTag){
         DcMotor[] oldMotorArray = this.motors;
         this.motors = new DcMotor[oldMotorArray.length + 1];
         System.arraycopy(oldMotorArray, 0, this.motors, 0, oldMotorArray.length);
@@ -44,8 +44,8 @@ public class Motors extends LinearOpMode {
         System.arraycopy(oldMotorNames, 0, this.motorNames, 0, oldMotorNames.length);
         this.motorNames[oldMotorNames.length-1] = (motorName);
 
-        int[] oldMotorTags = this.motorTags;
-        this.motorTags = new int[oldMotorTags.length + 1];
+        MotorTag[] oldMotorTags = this.motorTags;
+        this.motorTags = new MotorTag[oldMotorTags.length + 1];
         System.arraycopy(oldMotorTags, 0, this.motorTags, 0, oldMotorTags.length);
         this.motorTags[oldMotorTags.length-1] = (motorTag);
 
@@ -71,12 +71,12 @@ public class Motors extends LinearOpMode {
             throw new customErrors.motorNotFoundException(" #" + motorNumber);
         }
     }
-    public DcMotor getMotorByTag(@motorTags int tag) throws customErrors.motorNotFoundException, customErrors.duplicateTagException {
+    public DcMotor getMotorByTag(MotorTag tag) throws customErrors.motorNotFoundException, customErrors.duplicateTagException {
         int counter = 0;
         int motorNumber = 0;
-        for(int motorTag : motorTags){
+        for(MotorTag motorTag : motorTags){
             if(motorTag == tag){
-                if(!isTagRepeatable(motorTag) && motorNumber != 0){
+                if(!motorTag.canItBeRepeated() && motorNumber != 0){
                     throw new customErrors.duplicateTagException();
                 }
                 motorNumber = counter;
@@ -110,12 +110,12 @@ public class Motors extends LinearOpMode {
            return null;
         }
     }
-    public DcMotor getMotorByTag_Try(@motorTags int tag){
+    public DcMotor getMotorByTag_Try(MotorTag tag){
         int counter = 0;
         int motorNumber = 0;
-        for(int motorTag : motorTags){
+        for(MotorTag motorTag : motorTags){
             if(motorTag == tag){
-                if(!isTagRepeatable(motorTag) && motorNumber != 0){
+                if(!motorTag.canItBeRepeated() && motorNumber != 0){
                    return null;
                 }
                 motorNumber = counter;
@@ -179,20 +179,6 @@ public class Motors extends LinearOpMode {
         }
         return null;
     }
-
-    private boolean isTagRepeatable(int tag){
-        if(Math.floor(tag / 100) == 1){
-            return true;
-        }else if(Math.floor(tag / 100) == 2){
-            return false;
-        }
-        return false;
-    }
-
-
-    @IntDef({LEFT_BACK, LEFT_FRONT, RIGHT_BACK, RIGHT_FRONT, NO_TAG})
-    @Retention(RetentionPolicy.SOURCE)
-    @interface motorTags{}
 
     public void runOpMode(){
 
