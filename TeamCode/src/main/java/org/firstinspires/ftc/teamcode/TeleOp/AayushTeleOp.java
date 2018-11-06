@@ -25,16 +25,11 @@ public class AayushTeleOp extends LinearOpMode {
         motor.addAMotor("RF", RIGHT_FRONT);
         motor.addAMotor("LB", LEFT_BACK);
         motor.addAMotor("RB", RIGHT_BACK);
-        motor.getMotorByName_Try("RB").setDirection(DcMotorSimple.Direction.REVERSE);
-        motor.getMotorByName_Try("RF").setDirection(DcMotorSimple.Direction.REVERSE);
-        DriveTrain dt = null;
 
-        try {
-            dt = new DriveTrain(motor.getDriveTrain());
-        } catch (customErrors.motorNotFoundException | customErrors.duplicateTagException e) {
-            e.printStackTrace();
-        }
-        assert dt != null;
+        motor.getMotorByTag_Try(LEFT_BACK).setDirection(DcMotorSimple.Direction.REVERSE);
+        motor.getMotorByTag_Try(LEFT_FRONT).setDirection(DcMotorSimple.Direction.REVERSE);
+
+        DriveTrain dt = new DriveTrain(motor.getDriveTrain_Try());
 
 
         waitForStart();

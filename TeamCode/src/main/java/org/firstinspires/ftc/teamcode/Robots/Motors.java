@@ -19,6 +19,7 @@ public class Motors{
     private MotorTag[] motorTags;
     HardwareMap hardwareMap;
 
+
     public Motors(HardwareMap hardwareMap) {
         this.hardwareMap = hardwareMap;
         this.motors = new DcMotor[0];
@@ -38,20 +39,32 @@ public class Motors{
 
     }
     public void addAMotor(String motorName, MotorTag motorTag){
-        DcMotor[] oldMotorArray = this.motors;
-        this.motors = new DcMotor[oldMotorArray.length + 1];
-        System.arraycopy(oldMotorArray, 0, this.motors, 0, oldMotorArray.length);
-        this.motors[oldMotorArray.length-1] = (hardwareMap.dcMotor.get(motorName));
+        if(motorNames.length == 0){
+            this.motors = new DcMotor[1];
+            this.motors[0] = (hardwareMap.dcMotor.get(motorName));
 
-        String[] oldMotorNames = this.motorNames;
-        this.motorNames = new String[oldMotorNames.length + 1];
-        System.arraycopy(oldMotorNames, 0, this.motorNames, 0, oldMotorNames.length);
-        this.motorNames[oldMotorNames.length-1] = (motorName);
+            this.motorNames = new String[1];
+            this.motorNames[0] = motorName;
 
-        MotorTag[] oldMotorTags = this.motorTags;
-        this.motorTags = new MotorTag[oldMotorTags.length + 1];
-        System.arraycopy(oldMotorTags, 0, this.motorTags, 0, oldMotorTags.length);
-        this.motorTags[oldMotorTags.length-1] = (motorTag);
+            this.motorTags = new MotorTag[1];
+            this.motorTags[0] = motorTag;
+        }else{
+            DcMotor[] oldMotorArray = this.motors;
+            this.motors = new DcMotor[oldMotorArray.length + 1];
+            System.arraycopy(oldMotorArray, 0, this.motors, 0, oldMotorArray.length);
+            this.motors[oldMotorArray.length-1] = (hardwareMap.dcMotor.get(motorName));
+
+            String[] oldMotorNames = this.motorNames;
+            this.motorNames = new String[oldMotorNames.length + 1];
+            System.arraycopy(oldMotorNames, 0, this.motorNames, 0, oldMotorNames.length);
+            this.motorNames[oldMotorNames.length-1] = (motorName);
+
+            MotorTag[] oldMotorTags = this.motorTags;
+            this.motorTags = new MotorTag[oldMotorTags.length + 1];
+            System.arraycopy(oldMotorTags, 0, this.motorTags, 0, oldMotorTags.length);
+            this.motorTags[oldMotorTags.length-1] = (motorTag);
+        }
+
 
     }
     public DcMotor getMotorByName(String motorName) throws customErrors.motorNotFoundException {
@@ -124,12 +137,16 @@ public class Motors{
                 }
                 motorNumber = counter;
             }
-            if(counter == motorNames.length - 1){
-                return null;
-            }
+
             counter ++;
         }
+
+        if(counter == motorNames.length){
+            return null;
+        }
+
         return motors[motorNumber];
+
     }
 
     public  DcMotor[] getDriveTrain_Try() {
