@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.TeleOp;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
 import org.firstinspires.ftc.teamcode.Robots.DriveTrain;
 import org.firstinspires.ftc.teamcode.Robots.Motors;
@@ -24,7 +25,8 @@ public class AayushTeleOp extends LinearOpMode {
         motor.addAMotor("RF", RIGHT_FRONT);
         motor.addAMotor("LB", LEFT_BACK);
         motor.addAMotor("RB", RIGHT_BACK);
-
+        motor.getMotorByName_Try("RB").setDirection(DcMotorSimple.Direction.REVERSE);
+        motor.getMotorByName_Try("RF").setDirection(DcMotorSimple.Direction.REVERSE);
         DriveTrain dt = null;
 
         try {
