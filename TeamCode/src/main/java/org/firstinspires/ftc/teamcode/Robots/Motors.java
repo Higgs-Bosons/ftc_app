@@ -8,11 +8,11 @@ import java.lang.annotation.RetentionPolicy;
 
 public class Motors extends LinearOpMode {
     // 2 = It CAN'T be repeated, 1 = it CAN be repeated
-    static final int RIGHT_FRONT = 201;
-    static final int LEFT_BACK = 202;
-    static final int RIGHT_BACK = 203;
-    static final int LEFT_FRONT = 204;
-    static final int NO_TAG = 100;
+    public static final int RIGHT_FRONT = 201;
+    public static final int LEFT_BACK = 202;
+    public static final int RIGHT_BACK = 203;
+    public static final int LEFT_FRONT = 204;
+    public static final int NO_TAG = 100;
     
 
     private DcMotor[] motors;
@@ -128,6 +128,19 @@ public class Motors extends LinearOpMode {
             counter ++;
         }
         return motors[motorNumber];
+    }
+
+    public  DcMotor[] getDriveTrain_Try() {
+        try {
+            DcMotor[] returnArray =  new DcMotor[4];
+            returnArray[0] = getMotorByTag(LEFT_FRONT);
+            returnArray[1] = getMotorByTag(RIGHT_FRONT);
+            returnArray[2] = getMotorByTag(RIGHT_BACK);
+            returnArray[3] = getMotorByTag(LEFT_BACK);
+            return returnArray;
+        }
+        catch (customErrors.motorNotFoundException | customErrors.duplicateTagException ignore) {}
+        return null;
     }
 
     public DcMotor[] getDriveTrain() throws customErrors.motorNotFoundException, customErrors.duplicateTagException {
