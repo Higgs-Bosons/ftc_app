@@ -223,12 +223,19 @@ public class Motors extends LinearOpMode {
                 returnArray[2] = (hardwareMap.dcMotor.get("RIGHT BACK"));
                 returnArray[3] = (hardwareMap.dcMotor.get("LEFT BACK"));
                 break;
-                
+
             case FULL_NAME_WITH_UNDERSCORE_UPPERCASE:
                 returnArray[0] = (hardwareMap.dcMotor.get("LEFT_FRONT"));
                 returnArray[1] = (hardwareMap.dcMotor.get("RIGHT_FRONT"));
                 returnArray[2] = (hardwareMap.dcMotor.get("RIGHT_BACK"));
                 returnArray[3] = (hardwareMap.dcMotor.get("LEFT_BACK"));
+                break;
+
+            case FIRST_LETTER_WITH_SPACE_LOWERCASE:
+                returnArray[0] = (hardwareMap.dcMotor.get("l f"));
+                returnArray[1] = (hardwareMap.dcMotor.get("r f"));
+                returnArray[2] = (hardwareMap.dcMotor.get("r b"));
+                returnArray[3] = (hardwareMap.dcMotor.get("l b"));
                 break;
 
             default:
