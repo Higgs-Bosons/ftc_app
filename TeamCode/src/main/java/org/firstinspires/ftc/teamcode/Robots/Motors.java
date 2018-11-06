@@ -8,11 +8,15 @@ import java.lang.annotation.RetentionPolicy;
 
 public class Motors extends LinearOpMode {
     // 2 = It CAN'T be repeated, 1 = it CAN be repeated
-    static final int RIGHT_FRONT = 201;
-    static final int LEFT_BACK = 202;
-    static final int RIGHT_BACK = 203;
-    static final int LEFT_FRONT = 204;
-    static final int NO_TAG = 100;
+    public static final int RIGHT_FRONT = 201;
+    public static final int LEFT_BACK = 202;
+    public static final int RIGHT_BACK = 203;
+    public static final int LEFT_FRONT = 204;
+    public static final int NO_TAG = 100;
+
+    public static final String FIRST_LETTER_NO_SPACE = "Example: LF";
+    public static final String FULL_NAME_WITH_SPACE = "Example: Left Front";
+    public static final String FULL_NAME_NO_SPACE = "Example: LeftFront";
     
 
     private DcMotor[] motors;
@@ -140,6 +144,18 @@ public class Motors extends LinearOpMode {
         return returnArray;
 
     }
+    public DcMotor[] getAutoDriveTrain(String motorNameType){
+        if(motorNameType.equals(FIRST_LETTER_NO_SPACE)) {
+            DcMotor[] returnArray = new DcMotor[4];
+            returnArray[0] = (hardwareMap.dcMotor.get("LF"));
+            returnArray[1] = (hardwareMap.dcMotor.get("RF"));
+            returnArray[2] = (hardwareMap.dcMotor.get("RB"));
+            returnArray[3] = (hardwareMap.dcMotor.get("LB"));
+
+            return returnArray;
+        }
+        return null;
+    }
 
     private boolean isTagRepeatable(int tag){
         if(Math.floor(tag / 100) == 1){
@@ -149,6 +165,8 @@ public class Motors extends LinearOpMode {
         }
         return false;
     }
+
+
     @IntDef({LEFT_BACK, LEFT_FRONT, RIGHT_BACK, RIGHT_FRONT, NO_TAG})
     @Retention(RetentionPolicy.SOURCE)
     @interface motorTags{}
