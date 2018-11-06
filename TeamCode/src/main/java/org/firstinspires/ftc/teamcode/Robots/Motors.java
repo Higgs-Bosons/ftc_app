@@ -7,11 +7,12 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 
 public class Motors extends LinearOpMode {
-    public static final int LEFT_FRONT = 4;
-    public static final int RIGHT_FRONT = 1;
-    public static final int LEFT_BACK = 2;
-    public static final int RIGHT_BACK = 3;
-    public static final int NO_TAG = 0;
+    // 2 = It CAN'T be repeated, 1 = it CAN be repeated
+    static final int RIGHT_FRONT = 201;
+    static final int LEFT_BACK = 202;
+    static final int RIGHT_BACK = 203;
+    static final int LEFT_FRONT = 204;
+    static final int NO_TAG = 100;
     
 
     private DcMotor[] motors;
@@ -77,7 +78,7 @@ public class Motors extends LinearOpMode {
         int motorNumber = 0;
         for(int motorTag : motorTags){
             if(motorTag == tag){
-                if(motorNumber == 0 && tag != 0){
+                if(!isTagRepeatable(motorTag) && motorNumber != 0){
                     throw new customErrors.duplicateTagException();
                 }
                 motorNumber = counter;
@@ -89,6 +90,46 @@ public class Motors extends LinearOpMode {
         }
         return motors[motorNumber];
     }
+
+    public DcMotor getMotorByName_Try(String motorName){
+        int counter = 0;
+        int motorNumber = 0;
+        for(String arrayMotorName : motorNames){
+            if(arrayMotorName.equals(motorName)){
+                motorNumber = counter;
+            }
+            if(counter == motorNames.length-1){
+                return null;
+            }
+            counter ++;
+        }
+        return motors[motorNumber];
+    }
+    public DcMotor getMotorByNumber_Try(int motorNumber){
+        try{
+            return motors[motorNumber];
+        }catch (ArrayIndexOutOfBoundsException ignore){
+           return null;
+        }
+    }
+    public DcMotor getMotorByTag_Try(@motorTags int tag){
+        int counter = 0;
+        int motorNumber = 0;
+        for(int motorTag : motorTags){
+            if(motorTag == tag){
+                if(!isTagRepeatable(motorTag) && motorNumber != 0){
+                   return null;
+                }
+                motorNumber = counter;
+            }
+            if(counter == motorNames.length-1){
+                return null;
+            }
+            counter ++;
+        }
+        return motors[motorNumber];
+    }
+
     public DcMotor[] getDriveTrain() throws customErrors.motorNotFoundException, customErrors.duplicateTagException {
         DcMotor[] returnArray =  new DcMotor[4];
         returnArray[0] = getMotorByTag(LEFT_FRONT);
@@ -100,6 +141,14 @@ public class Motors extends LinearOpMode {
 
     }
 
+    private boolean isTagRepeatable(int tag){
+        if(Math.floor(tag / 100) == 1){
+            return true;
+        }else if(Math.floor(tag / 100) == 2){
+            return false;
+        }
+        return false;
+    }
     @IntDef({LEFT_BACK, LEFT_FRONT, RIGHT_BACK, RIGHT_FRONT, NO_TAG})
     @Retention(RetentionPolicy.SOURCE)
     @interface motorTags{}
