@@ -5,15 +5,17 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import org.firstinspires.ftc.teamcode.Robots.Motors;
 import org.firstinspires.ftc.teamcode.Robots.customErrors;
 
+import static org.firstinspires.ftc.teamcode.Constants.*;
+
 @TeleOp(name = "Motor Tester", group = "Tester")
 public class MotorTester extends LinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {
         Motors motors = new Motors();
-        motors.addAMotor("LF", Motors.NO_TAG);
-        motors.addAMotor("RF", Motors.NO_TAG);
-        motors.addAMotor("LB", Motors.NO_TAG);
-        motors.addAMotor("RB", Motors.NO_TAG);
+        motors.addAMotor("LF", NO_TAG);
+        motors.addAMotor("RF", NO_TAG);
+        motors.addAMotor("LB", NO_TAG);
+        motors.addAMotor("RB", NO_TAG);
 
         waitForStart();
         while (opModeIsActive()) {

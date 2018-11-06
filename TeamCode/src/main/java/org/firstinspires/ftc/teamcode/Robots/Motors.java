@@ -3,21 +3,15 @@ package org.firstinspires.ftc.teamcode.Robots;
 import android.support.annotation.IntDef;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
+
+
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 
+import static org.firstinspires.ftc.teamcode.Constants.*;
+
 public class Motors extends LinearOpMode {
     // 2 = It CAN'T be repeated, 1 = it CAN be repeated
-    public static final int RIGHT_FRONT = 201;
-    public static final int LEFT_BACK = 202;
-    public static final int RIGHT_BACK = 203;
-    public static final int LEFT_FRONT = 204;
-    public static final int NO_TAG = 100;
-
-    public static final String FIRST_LETTER_NO_SPACE = "Example: LF";
-    public static final String FULL_NAME_WITH_SPACE = "Example: Left Front";
-    public static final String FULL_NAME_NO_SPACE = "Example: LeftFront";
-    
 
     private DcMotor[] motors;
     private String[]  motorNames;
@@ -126,7 +120,7 @@ public class Motors extends LinearOpMode {
                 }
                 motorNumber = counter;
             }
-            if(counter == motorNames.length-1){
+            if(counter == motorNames.length - 1){
                 return null;
             }
             counter ++;
@@ -158,12 +152,28 @@ public class Motors extends LinearOpMode {
 
     }
     public DcMotor[] getAutoDriveTrain(String motorNameType){
+        DcMotor[] returnArray = new DcMotor[4];
         if(motorNameType.equals(FIRST_LETTER_NO_SPACE)) {
-            DcMotor[] returnArray = new DcMotor[4];
             returnArray[0] = (hardwareMap.dcMotor.get("LF"));
             returnArray[1] = (hardwareMap.dcMotor.get("RF"));
             returnArray[2] = (hardwareMap.dcMotor.get("RB"));
             returnArray[3] = (hardwareMap.dcMotor.get("LB"));
+
+            return returnArray;
+        }
+        else if (motorNameType.equals((FULL_NAME_NO_SPACE))) {
+            returnArray[0] = (hardwareMap.dcMotor.get("LeftFront"));
+            returnArray[1] = (hardwareMap.dcMotor.get("RightFront"));
+            returnArray[2] = (hardwareMap.dcMotor.get("RightBack"));
+            returnArray[3] = (hardwareMap.dcMotor.get("LeftBack"));
+
+            return returnArray;
+        }
+        else if (motorNameType.equals(FULL_NAME_WITH_SPACE)) {
+            returnArray[0] = (hardwareMap.dcMotor.get("Left Front"));
+            returnArray[1] = (hardwareMap.dcMotor.get("Right Front"));
+            returnArray[2] = (hardwareMap.dcMotor.get("Right Back"));
+            returnArray[3] = (hardwareMap.dcMotor.get("Left Back"));
 
             return returnArray;
         }

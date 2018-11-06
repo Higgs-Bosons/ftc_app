@@ -7,6 +7,8 @@ import org.firstinspires.ftc.teamcode.Robots.DriveTrain;
 import org.firstinspires.ftc.teamcode.Robots.Motors;
 import org.firstinspires.ftc.teamcode.Robots.customErrors;
 
+import static org.firstinspires.ftc.teamcode.Constants.*;
+
 @TeleOp(name = "Aayush's TeleOp", group = "TeleOp")
 public class AayushTeleOp extends LinearOpMode {
 
@@ -16,10 +18,10 @@ public class AayushTeleOp extends LinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {
         Motors motor = new Motors();
-        motor.addAMotor("LF", Motors.LEFT_FRONT);
-        motor.addAMotor("RF", Motors.RIGHT_FRONT);
-        motor.addAMotor("LB", Motors.LEFT_BACK);
-        motor.addAMotor("RB", Motors.RIGHT_BACK);
+        motor.addAMotor("LF", LEFT_FRONT);
+        motor.addAMotor("RF", RIGHT_FRONT);
+        motor.addAMotor("LB", LEFT_BACK);
+        motor.addAMotor("RB", RIGHT_BACK);
 
         DriveTrain dt = null;
 
