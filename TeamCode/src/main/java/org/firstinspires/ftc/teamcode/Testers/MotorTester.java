@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.Testers;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
+import org.firstinspires.ftc.teamcode.Robots.DriveTrain;
 import org.firstinspires.ftc.teamcode.Robots.Motors;
 import org.firstinspires.ftc.teamcode.Robots.customErrors;
 
@@ -10,43 +11,24 @@ import static org.firstinspires.ftc.teamcode.Constants.*;
 @TeleOp(name = "Motor Tester", group = "Tester")
 public class MotorTester extends LinearOpMode {
     @Override
-    public void runOpMode() throws InterruptedException {
+    public void runOpMode(){
         Motors motors = new Motors();
-        motors.addAMotor("LF", NO_TAG);
-        motors.addAMotor("RF", NO_TAG);
-        motors.addAMotor("LB", NO_TAG);
-        motors.addAMotor("RB", NO_TAG);
-
+        DriveTrain dt = new DriveTrain(motors.getAutoDriveTrain(FIRST_LETTER_NO_SPACE_UPPERCASE));
         waitForStart();
         while (opModeIsActive()) {
             while (gamepad1.a) {
-                try {
-                    motors.getMotorByName("LF").setPower(1);
-                } catch (customErrors.motorNotFoundException e) {
-                    e.printStackTrace();
-                }
+                dt.moveMotor(LEFT_FRONT, 1.0);
             }
             while (gamepad1.b) {
-                try {
-                    motors.getMotorByName("RF").setPower(1);
-                } catch (customErrors.motorNotFoundException e) {
-                    e.printStackTrace();
-                }
+                dt.moveMotor(RIGHT_FRONT, 1.0);
             }
             while (gamepad1.x) {
-                try {
-                    motors.getMotorByName("LB").setPower(1);
-                } catch (customErrors.motorNotFoundException e) {
-                    e.printStackTrace();
-                }
+               dt.moveMotor(LEFT_BACK, 1.0);
             }
             while (gamepad1.y) {
-                try {
-                    motors.getMotorByName("RB").setPower(1);
-                } catch (customErrors.motorNotFoundException e) {
-                    e.printStackTrace();
-                }
+                dt.moveMotor(RIGHT_BACK, 1.0);
             }
+            dt.stopRobot();
             telemetry.addData("A", "LF");
             telemetry.addData("B", "RF");
             telemetry.addData("X", "LB");

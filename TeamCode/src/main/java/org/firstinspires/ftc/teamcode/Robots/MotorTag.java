@@ -6,7 +6,7 @@ public class MotorTag {
         this.canBeRepeated = canBeRepeated;
 
     }
-    public boolean canItBeRepeated(){
+    boolean canItBeRepeated(){
         return canBeRepeated;
     }
 }

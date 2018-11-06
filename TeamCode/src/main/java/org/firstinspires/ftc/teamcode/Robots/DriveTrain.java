@@ -3,6 +3,10 @@ package org.firstinspires.ftc.teamcode.Robots;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Gamepad;
 
+import org.firstinspires.ftc.teamcode.Tools;
+
+import static org.firstinspires.ftc.teamcode.Constants.*;
+
 public class DriveTrain extends Robot{
     private DcMotor LeftFront, LeftBack, RightFront, RightBack;
     public DriveTrain(){}
@@ -61,5 +65,17 @@ public class DriveTrain extends Robot{
         LeftFront.setPower(LFpower);
         LeftBack.setPower(LBpower);
     }
-
+    public void moveMotor(MotorTag motorTag, double power){
+        if(motorTag == RIGHT_FRONT){
+            RightFront.setPower(power);
+        }else if(motorTag == LEFT_FRONT){
+            LeftFront.setPower(power);
+        }else if(motorTag == LEFT_BACK){
+            LeftBack.setPower(power);
+        }else if(motorTag == RIGHT_BACK){
+            RightBack.setPower(power);
+        }else{
+            Tools.showToast("Motor Tag Invalid. (Robots.DriveTrain.moveMotor");
+        }
+    }
 }
