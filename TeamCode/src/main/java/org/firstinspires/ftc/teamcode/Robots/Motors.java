@@ -134,6 +134,19 @@ public class Motors extends LinearOpMode {
         return motors[motorNumber];
     }
 
+    public  DcMotor[] getDriveTrain_Try() {
+        try {
+            DcMotor[] returnArray =  new DcMotor[4];
+            returnArray[0] = getMotorByTag(LEFT_FRONT);
+            returnArray[1] = getMotorByTag(RIGHT_FRONT);
+            returnArray[2] = getMotorByTag(RIGHT_BACK);
+            returnArray[3] = getMotorByTag(LEFT_BACK);
+            return returnArray;
+        }
+        catch (customErrors.motorNotFoundException | customErrors.duplicateTagException ignore) {}
+        return null;
+    }
+
     public DcMotor[] getDriveTrain() throws customErrors.motorNotFoundException, customErrors.duplicateTagException {
         DcMotor[] returnArray =  new DcMotor[4];
         returnArray[0] = getMotorByTag(LEFT_FRONT);
