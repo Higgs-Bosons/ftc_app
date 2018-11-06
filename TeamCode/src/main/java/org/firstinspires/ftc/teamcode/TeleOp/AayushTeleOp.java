@@ -55,6 +55,8 @@ public class AayushTeleOp extends LinearOpMode {
             telemetry.addData("Slowed: ", slowed);
             telemetry.update();
         }
+
+        dt.stopRobot();
     }
 
 }
