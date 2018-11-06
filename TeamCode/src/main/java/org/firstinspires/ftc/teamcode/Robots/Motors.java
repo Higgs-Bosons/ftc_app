@@ -177,6 +177,14 @@ public class Motors extends LinearOpMode {
 
             return returnArray;
         }
+        else if (motorNameType.equals(FULL_NAME_WITH_SPACE)) {
+            returnArray[0] = (hardwareMap.dcMotor.get("Left Front"));
+            returnArray[1] = (hardwareMap.dcMotor.get("Right Front"));
+            returnArray[2] = (hardwareMap.dcMotor.get("Right Back"));
+            returnArray[3] = (hardwareMap.dcMotor.get("Left Back"));
+
+            return returnArray;
+        }
         return null;
     }
 
