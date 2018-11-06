@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.Robots;
 import android.support.annotation.IntDef;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.HardwareMap;
 
 
 import java.lang.annotation.Retention;
@@ -10,19 +11,22 @@ import java.lang.annotation.RetentionPolicy;
 
 import static org.firstinspires.ftc.teamcode.Constants.*;
 
-public class Motors extends LinearOpMode {
+public class Motors{
     // 2 = It CAN'T be repeated, 1 = it CAN be repeated
 
     private DcMotor[]  motors;
     private String[]   motorNames;
     private MotorTag[] motorTags;
+    HardwareMap hardwareMap;
 
-    public Motors() {
+    public Motors(HardwareMap hardwareMap) {
+        this.hardwareMap = hardwareMap;
         this.motors = new DcMotor[0];
         this.motorNames = new String[0];
         this.motorTags = new MotorTag[0];
     }
-    public Motors(String motorName, MotorTag motorTag){
+    public Motors(String motorName, MotorTag motorTag, HardwareMap hardwareMap){
+        this.hardwareMap = hardwareMap;
         this.motors = new DcMotor[1];
         this.motors[0] = (hardwareMap.dcMotor.get(motorName));
 

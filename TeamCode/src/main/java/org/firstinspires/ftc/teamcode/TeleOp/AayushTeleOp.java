@@ -20,7 +20,7 @@ public class AayushTeleOp extends LinearOpMode {
     public void runOpMode() throws InterruptedException {
 
 
-        Motors motor = new Motors();
+        Motors motor = new Motors(hardwareMap);
         motor.addAMotor("LF", LEFT_FRONT);
         motor.addAMotor("RF", RIGHT_FRONT);
         motor.addAMotor("LB", LEFT_BACK);

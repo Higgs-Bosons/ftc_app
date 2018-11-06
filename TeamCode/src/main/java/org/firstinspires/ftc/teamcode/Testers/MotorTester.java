@@ -12,7 +12,7 @@ import static org.firstinspires.ftc.teamcode.Constants.*;
 public class MotorTester extends LinearOpMode {
     @Override
     public void runOpMode(){
-        Motors motors = new Motors();
+        Motors motors = new Motors(hardwareMap);
         DriveTrain dt = new DriveTrain(motors.getAutoDriveTrain(FIRST_LETTER_NO_SPACE_UPPERCASE));
         waitForStart();
         while (opModeIsActive()) {
