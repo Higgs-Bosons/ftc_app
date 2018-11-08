@@ -74,10 +74,11 @@ public class Motors{
             if(arrayMotorName.equals(motorName)){
                 motorNumber = counter;
             }
-            if(counter == motorNames.length-1){
-                throw new customErrors.motorNotFoundException(motorName);
-            }
+
             counter ++;
+        }
+        if(counter == motorNames.length-1){
+            throw new customErrors.motorNotFoundException(motorName);
         }
         return motors[motorNumber];
     }
@@ -113,10 +114,11 @@ public class Motors{
             if(arrayMotorName.equals(motorName)){
                 motorNumber = counter;
             }
-            if(counter == motorNames.length-1){
-                return null;
-            }
+
             counter ++;
+        }
+        if(counter == motorNames.length-1){
+            return null;
         }
         return motors[motorNumber];
     }
