@@ -1,12 +1,11 @@
 package org.firstinspires.ftc.teamcode.TeleOp;
 
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
-import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.eventloop.opmode.*;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
-// @TeleOp(name = "TeleOp", group = "TeleOp")
+@Disabled
+@TeleOp(name = "TeleOp", group = "TeleOp")
 public class TeleOpForMechaBot extends LinearOpMode {
     private DcMotor LF, RF, LB, RB;
 

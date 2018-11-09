@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.TeleOp;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
 import org.firstinspires.ftc.teamcode.Robots.DriveTrain;
@@ -17,22 +18,16 @@ public class AayushTeleOp extends LinearOpMode {
     private boolean tanked = false;
 
     @Override
-    public void runOpMode() throws InterruptedException {
+    public void runOpMode(){
 
 
         Motors motor = new Motors(hardwareMap);
-        motor.addAMotor("LF", LEFT_FRONT);
-        motor.addAMotor("RF", RIGHT_FRONT);
-        motor.addAMotor("LB", LEFT_BACK);
-        motor.addAMotor("RB", RIGHT_BACK);
-
-        motor.getMotorByTag_Try(LEFT_BACK).setDirection(DcMotorSimple.Direction.REVERSE);
-        motor.getMotorByTag_Try(LEFT_FRONT).setDirection(DcMotorSimple.Direction.REVERSE);
-
-        DriveTrain dt = new DriveTrain(motor.getDriveTrain_Try());
-
+        DriveTrain dt = new DriveTrain(motor.getAutoDriveTrain(FIRST_LETTER_NO_SPACE_UPPERCASE));
+        dt.setMotorDirection(REVERSE,FORWARDS,FORWARDS,REVERSE);
+        dt.setBreakOrCoast(DcMotor.ZeroPowerBehavior.BRAKE);
 
         waitForStart();
+
         while (opModeIsActive()) {
             String mode;
             if (!tanked) {

@@ -1,16 +1,21 @@
 package org.firstinspires.ftc.teamcode;
 
-import org.firstinspires.ftc.teamcode.Robots.MotorTag;
+import android.support.annotation.*;
+import java.lang.annotation.*;
 
 public class Constants {
-    //----{MOTOR TAGS}-----------------------------------------------------------------------------
-    public static final MotorTag RIGHT_FRONT = new MotorTag(false);
-    public static final MotorTag LEFT_BACK = new MotorTag(false);
-    public static final MotorTag RIGHT_BACK = new MotorTag(false);
-    public static final MotorTag LEFT_FRONT = new MotorTag(false);
-    public static final MotorTag NO_TAG = new MotorTag(false);
+//------{MOTOR TAGS}--------------------------------------------------------------------------------
+    public static final int RIGHT_FRONT = 201;
+    public static final int LEFT_BACK =   202;
+    public static final int RIGHT_BACK =  203;
+    public static final int LEFT_FRONT =  204;
+    public static final int NO_TAG =      100;
 
-    //----{MOTOR NAME CONFIGURATION}---------------------------------------------------------------
+//------{MOTOR DIRECTIONS}--------------------------------------------------------------------------
+    public static final int REVERSE = 0;
+    public static final int FORWARDS = 1;
+
+//------{MOTOR NAME CONFIGURATION}------------------------------------------------------------------
     public static final String FIRST_LETTER_NO_SPACE_UPPERCASE = "Example: LF";
     public static final String FIRST_LETTER_WITH_SPACE_UPPERCASE = "Example: L F";
     public static final String FIRST_LETTER_WITH_UNDERSCORE_UPPERCASE = "Example: L_F";
@@ -28,4 +33,21 @@ public class Constants {
     public static final String FULL_NAME_WITH_UNDERSCORE_UPPERCASE = "Example: LEFT_FRONT";
 
 
+//-------{@IntDef}----------------------------------------------------------------------------------
+    @IntDef({FORWARDS, REVERSE})
+    @Retention(RetentionPolicy.SOURCE)
+    public @interface MotorDirections{}
+
+
+    @IntDef({LEFT_FRONT,RIGHT_FRONT, RIGHT_BACK, LEFT_BACK})
+    @Retention(RetentionPolicy.SOURCE)
+    public @interface MotorTag{}
+
+//-------{@StringDef}-------------------------------------------------------------------------------
+    @StringDef({FIRST_LETTER_NO_SPACE_UPPERCASE, FIRST_LETTER_WITH_SPACE_UPPERCASE, FIRST_LETTER_WITH_UNDERSCORE_UPPERCASE,
+                FIRST_LETTER_NO_SPACE_LOWERCASE, FIRST_LETTER_WITH_SPACE_LOWERCASE, FIRST_LETTER_WITH_UNDERSCORE_LOWERCASE,
+                FULL_NAME_NO_SPACE_UPPERCASE,    FULL_NAME_WITH_SPACE_UPPERCASE,    FULL_NAME_WITH_UNDERSCORE_UPPERCASE,
+                FULL_NAME_NO_SPACE,              FULL_NAME_WITH_SPACE,              FULL_NAME_WITH_UNDERSCORE_UPPERCASE})
+    @Retention(RetentionPolicy.SOURCE)
+    public @interface MotorNameTypes{}
 }

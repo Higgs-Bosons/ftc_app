@@ -94,10 +94,7 @@ public class EpicPineapple extends org.firstinspires.ftc.teamcode.ImageCapturing
         textureView.setScaleX(0);
         textureView.setScaleY(0);
     }
-    void showPreview(){
-        textureView.setScaleX(1);
-        textureView.setScaleY(1);
-    }
+
 
 //-----{PREVIEW SETUP}-----------------------------------------------------------------------------
     private TextureView.SurfaceTextureListener getSurfaceTextureListener(){
@@ -185,5 +182,9 @@ public class EpicPineapple extends org.firstinspires.ftc.teamcode.ImageCapturing
         backgroundThread = new HandlerThread("camera_background_thread");
         backgroundThread.start();
         backgroundHandler = new Handler(backgroundThread.getLooper());
+    }
+    void showPreview(){
+        textureView.setScaleX(1);
+        textureView.setScaleY(1);
     }
 }

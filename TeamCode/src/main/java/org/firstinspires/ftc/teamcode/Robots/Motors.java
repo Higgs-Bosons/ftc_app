@@ -1,32 +1,26 @@
 package org.firstinspires.ftc.teamcode.Robots;
 
-import android.support.annotation.IntDef;
-import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
-
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
+import org.firstinspires.ftc.teamcode.Tools;
 
 import static org.firstinspires.ftc.teamcode.Constants.*;
 
 public class Motors{
-    // 2 = It CAN'T be repeated, 1 = it CAN be repeated
+    private DcMotor[]   motors;
+    private String[]    motorNames;
+    private int[]       motorTags;
+    private HardwareMap hardwareMap;
 
-    private DcMotor[]  motors;
-    private String[]   motorNames;
-    private MotorTag[] motorTags;
-    HardwareMap hardwareMap;
-
-
+//-------{INITIALIZING}-----------------------------------------------------------------------------
     public Motors(HardwareMap hardwareMap) {
         this.hardwareMap = hardwareMap;
         this.motors = new DcMotor[0];
         this.motorNames = new String[0];
-        this.motorTags = new MotorTag[0];
+        this.motorTags = new int[0];
     }
-    public Motors(String motorName, MotorTag motorTag, HardwareMap hardwareMap){
+    public Motors(String motorName,@MotorTag int motorTag, HardwareMap hardwareMap){
         this.hardwareMap = hardwareMap;
         this.motors = new DcMotor[1];
         this.motors[0] = (hardwareMap.dcMotor.get(motorName));
@@ -34,11 +28,24 @@ public class Motors{
         this.motorNames = new String[1];
         this.motorNames[0] = motorName;
 
-        this.motorTags = new MotorTag[1];
+        this.motorTags = new int[1];
         this.motorTags[0] = motorTag;
 
     }
-    public void addAMotor(String motorName, MotorTag motorTag){
+
+//-------{ADDING MOTORS}----------------------------------------------------------------------------
+    public void addAMotor(String motorName, @MotorTag int motorTag) throws Exception{
+        for(String motorNameFromList : motorNames){
+            if(motorNameFromList.equals(motorName)){
+                throw new customErrors.DuplicateNameException();
+            }
+        }
+        for(int motorTagFromList : motorTags){
+            if(motorTagFromList == motorTag && !Tools.isTagRepeatable(motorTag)){
+                throw new customErrors.DuplicateTagException();
+            }
+        }
+
         if(motorNames.length == 0){
             this.motors = new DcMotor[1];
             this.motors[0] = (hardwareMap.dcMotor.get(motorName));
@@ -46,7 +53,7 @@ public class Motors{
             this.motorNames = new String[1];
             this.motorNames[0] = motorName;
 
-            this.motorTags = new MotorTag[1];
+            this.motorTags = new int[1];
             this.motorTags[0] = motorTag;
         }else{
             DcMotor[] oldMotorArray = this.motors;
@@ -59,91 +66,49 @@ public class Motors{
             System.arraycopy(oldMotorNames, 0, this.motorNames, 0, oldMotorNames.length);
             this.motorNames[oldMotorNames.length-1] = (motorName);
 
-            MotorTag[] oldMotorTags = this.motorTags;
-            this.motorTags = new MotorTag[oldMotorTags.length + 1];
+            int[] oldMotorTags = this.motorTags;
+            this.motorTags = new int[oldMotorTags.length + 1];
             System.arraycopy(oldMotorTags, 0, this.motorTags, 0, oldMotorTags.length);
             this.motorTags[oldMotorTags.length-1] = (motorTag);
         }
 
 
     }
-    public DcMotor getMotorByName(String motorName) throws customErrors.motorNotFoundException {
+
+//-------{GETTING MOTORS}---------------------------------------------------------------------------
+    public DcMotor getMotorByName(String motorName){
         int counter = 0;
-        int motorNumber = 0;
         for(String arrayMotorName : motorNames){
             if(arrayMotorName.equals(motorName)){
-                motorNumber = counter;
+                return motors[counter];
             }
+
 
             counter ++;
         }
-        if(counter == motorNames.length-1){
-            throw new customErrors.motorNotFoundException(motorName);
-        }
-        return motors[motorNumber];
+        return null;
     }
-    public DcMotor getMotorByNumber(int motorNumber) throws customErrors.motorNotFoundException{
-        try{
-            return motors[motorNumber];
-        }catch (ArrayIndexOutOfBoundsException ignore){
-            throw new customErrors.motorNotFoundException(" #" + motorNumber);
-        }
-    }
-    public DcMotor getMotorByTag(MotorTag tag) throws customErrors.motorNotFoundException, customErrors.duplicateTagException {
-        int counter = 0;
-        int motorNumber = 0;
-        for(MotorTag motorTag : motorTags){
-            if(motorTag == tag){
-                if(!motorTag.canItBeRepeated() && motorNumber != 0){
-                    throw new customErrors.duplicateTagException();
-                }
-                motorNumber = counter;
-            }
-            if(counter == motorNames.length-1){
-                throw new customErrors.motorNotFoundException(" TAG: " + tag);
-            }
-            counter ++;
-        }
-        return motors[motorNumber];
-    }
-
-    public DcMotor getMotorByName_Try(String motorName){
-        int counter = 0;
-        int motorNumber = 0;
-        for(String arrayMotorName : motorNames){
-            if(arrayMotorName.equals(motorName)){
-                motorNumber = counter;
-            }
-
-            counter ++;
-        }
-        if(counter == motorNames.length-1){
-            return null;
-        }
-        return motors[motorNumber];
-    }
-    public DcMotor getMotorByNumber_Try(int motorNumber){
+    public DcMotor getMotorByNumber(int motorNumber){
         try{
             return motors[motorNumber];
         }catch (ArrayIndexOutOfBoundsException ignore){
            return null;
         }
     }
-    public DcMotor getMotorByTag_Try(MotorTag tag){
+    public DcMotor getMotorByTag(int tag){
         int counter = 0;
         int motorNumber = 0;
-        for(MotorTag motorTag : motorTags){
+        boolean foundTheMotor = false;
+        for(int motorTag : motorTags){
             if(motorTag == tag){
-                if(!motorTag.canItBeRepeated() && motorNumber != 0){
-                   return null;
-                }
+                foundTheMotor = true;
                 motorNumber = counter;
             }
 
             counter ++;
         }
-
-        if(counter == motorNames.length){
+        
+        if(!foundTheMotor){
             return null;
         }
 
@@ -151,30 +116,16 @@ public class Motors{
 
     }
 
-    public  DcMotor[] getDriveTrain_Try() {
-        try {
-            DcMotor[] returnArray =  new DcMotor[4];
-            returnArray[0] = getMotorByTag(LEFT_FRONT);
-            returnArray[1] = getMotorByTag(RIGHT_FRONT);
-            returnArray[2] = getMotorByTag(RIGHT_BACK);
-            returnArray[3] = getMotorByTag(LEFT_BACK);
-            return returnArray;
-        }
-        catch (customErrors.motorNotFoundException | customErrors.duplicateTagException ignore) {}
-        return null;
-    }
-
-    public DcMotor[] getDriveTrain() throws customErrors.motorNotFoundException, customErrors.duplicateTagException {
+//-------{GETTING DRIVE TRAINS}----------------------------------------------------------------------
+    public DcMotor[] getDriveTrain() {
         DcMotor[] returnArray =  new DcMotor[4];
         returnArray[0] = getMotorByTag(LEFT_FRONT);
         returnArray[1] = getMotorByTag(RIGHT_FRONT);
         returnArray[2] = getMotorByTag(RIGHT_BACK);
         returnArray[3] = getMotorByTag(LEFT_BACK);
-        
         return returnArray;
-
     }
-    public DcMotor[] getAutoDriveTrain(String motorNameType){
+    public DcMotor[] getAutoDriveTrain(@MotorNameTypes String motorNameType){
         DcMotor[] returnArray = new DcMotor[4];
         switch (motorNameType) {
             case FIRST_LETTER_NO_SPACE_UPPERCASE:
@@ -265,9 +216,5 @@ public class Motors{
                 return null;
         }
         return returnArray;
-    }
-
-    public void runOpMode(){
-
     }
 }
