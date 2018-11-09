@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.Robots;
+package org.firstinspires.ftc.teamcode.Robot;
 
 import com.qualcomm.robotcore.hardware.*;
 import org.firstinspires.ftc.teamcode.Tools;

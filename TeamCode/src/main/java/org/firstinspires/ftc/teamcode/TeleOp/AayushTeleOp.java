@@ -3,11 +3,9 @@ package org.firstinspires.ftc.teamcode.TeleOp;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
-import org.firstinspires.ftc.teamcode.Robots.DriveTrain;
-import org.firstinspires.ftc.teamcode.Robots.Motors;
-import org.firstinspires.ftc.teamcode.Robots.customErrors;
+import org.firstinspires.ftc.teamcode.Robot.DriveTrain;
+import org.firstinspires.ftc.teamcode.Robot.Motors;
 
 import static org.firstinspires.ftc.teamcode.Constants.*;
 
