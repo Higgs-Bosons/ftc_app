@@ -88,5 +88,16 @@ public class DriveTrain extends Robot{
         }
     }
 
+//-------{AUTONOMOUS}----------------------------------------------------------------------------------
+    public void moveRobotMilliseconds(double power, long millis) throws InterruptedException {
+        RightFront.setPower(power);
+        RightBack.setPower(power);
+        LeftFront.setPower(power);
+        LeftBack.setPower(power);
+
+        wait(millis);
+
+        stopRobot();
+    }
 
 }
