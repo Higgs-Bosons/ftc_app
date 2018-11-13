@@ -7,16 +7,16 @@ import java.util.Map;
 
 public class Sensors {
     private Map<String, ColorSensor> colorSensor;
-    private GyroSensor gyroSensor;
-    private TouchSensor touchSensor;
-    private UltrasonicSensor ultrasonicSensor;
-    private OpticalDistanceSensor opticalDistanceSensor;
-    private LightSensor lightSensor;
-    private IrSeekerSensor irSeekerSensor;
-    private AccelerationSensor accelerationSensor;
-    private CompassSensor compassSensor;
-    private VoltageSensor voltageSensor;
-    private BNO055IMU imu;
+    private Map<String, GyroSensor> gyroSensor;
+    private Map<String, TouchSensor> touchSensor;
+    private Map<String, UltrasonicSensor> ultrasonicSensor;
+    private Map<String, OpticalDistanceSensor> opticalDistanceSensor;
+    private Map<String, LightSensor> lightSensor;
+    private Map<String, IrSeekerSensor> irSeekerSensor;
+    private Map<String, AccelerationSensor> accelerationSensor;
+    private Map<String, CompassSensor> compassSensor;
+    private Map<String, VoltageSensor> voltageSensor;
+    private Map<String, BNO055IMU> imu;
 
     private HardwareMap hardwareMap;
 
