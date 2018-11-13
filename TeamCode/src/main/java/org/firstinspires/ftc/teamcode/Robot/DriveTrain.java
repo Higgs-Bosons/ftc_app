@@ -89,15 +89,136 @@ public class DriveTrain extends Robot{
     }
 
 //-------{AUTONOMOUS}----------------------------------------------------------------------------------
-    public void moveRobotMilliseconds(double power, long millis) throws InterruptedException {
-        RightFront.setPower(power);
-        RightBack.setPower(power);
-        LeftFront.setPower(power);
-        LeftBack.setPower(power);
+    public void driveAtHeader(double degrees, double power){
+        double LFPower = 0, RFPower = 0, RBPower = 0, LBPower = 0;
 
-        wait(millis);
+        while(degrees < 0)
+            degrees = 360 + degrees;
 
-        stopRobot();
+        if(degrees != 0)
+            degrees = (degrees % 360);
+
+        if(0 <= degrees && degrees < 90){
+            RFPower = power;
+            LBPower = power;
+            LFPower = power - ((degrees / 90)*2*power);
+            RBPower = power - ((degrees / 90)*2*power);
+        }else if(90 <= degrees && degrees < 180){
+            LFPower = -power;
+            RBPower = -power;
+            RFPower = power - (((degrees-90) / 90)*2*power);
+            LBPower = power - (((degrees-90) / 90)*2*power);
+        }else if(180 <= degrees && degrees < 270){
+            RFPower = -power;
+            LBPower = -power;
+            LFPower = -(power - (((degrees-180) / 90)*2*power));
+            RBPower = -(power - (((degrees-180) / 90)*2*power));
+        }else if(270 <= degrees && degrees < 360){
+            LFPower = power;
+            RBPower = power;
+            RFPower = -(power - (((degrees-90) / 90)*2*power));
+            LBPower = -(power - (((degrees-90) / 90)*2*power));
+        }
+
+        RightFront.setPower(RFPower);
+        RightBack.setPower(RBPower);
+        LeftFront.setPower(LFPower);
+        LeftBack.setPower(LBPower);
+    }
+    public void driveAtHeader(double degrees, double power, double spinPower){
+        double LFPower = 0, RFPower = 0, RBPower = 0, LBPower = 0;
+
+        while(degrees < 0)
+            degrees = 360 + degrees;
+
+        if(degrees != 0)
+            degrees = (degrees % 360);
+
+        if(0 <= degrees && degrees < 90){
+            RFPower = power;
+            LBPower = power;
+            LFPower = power - ((degrees / 90)*2*power);
+            RBPower = power - ((degrees / 90)*2*power);
+        }else if(90 <= degrees && degrees < 180){
+            LFPower = -power;
+            RBPower = -power;
+            RFPower = power - (((degrees-90) / 90)*2*power);
+            LBPower = power - (((degrees-90) / 90)*2*power);
+        }else if(180 <= degrees && degrees < 270){
+            RFPower = -power;
+            LBPower = -power;
+            LFPower = -(power - (((degrees-180) / 90)*2*power));
+            RBPower = -(power - (((degrees-180) / 90)*2*power));
+        }else if(270 <= degrees && degrees < 360){
+            LFPower = power;
+            RBPower = power;
+            RFPower = -(power - (((degrees-90) / 90)*2*power));
+            LBPower = -(power - (((degrees-90) / 90)*2*power));
+        }
+
+        RightFront.setPower((RFPower - spinPower)/2);
+        RightBack.setPower( (RBPower - spinPower)/2);
+        LeftFront.setPower( (LFPower + spinPower)/2);
+        LeftBack.setPower(  (LBPower + spinPower)/2);
+    }
+    public void spinRobot(double spinPower) {
+        RightFront.setPower(-spinPower);
+        RightBack.setPower(-spinPower);
+        LeftFront.setPower(spinPower);
+        LeftBack.setPower(spinPower);
+    }
+    public void moveDegrees(double direction, int degrees, double spin, double maxPower, double minPower, double precision){
+        final int RATIO_BILLY = 100000;
+        int averageDegrees;
+        double power = maxPower;
+        double spinPower = spin;
+        resetEncoders();
+        averageDegrees = (LeftFront.getCurrentPosition() + RightFront.getCurrentPosition()
+                + RightBack.getCurrentPosition() + LeftBack.getCurrentPosition())/4;
+        while(Math.abs(averageDegrees - degrees) <= precision){
+            driveAtHeader(direction,power,spinPower);
+
+            averageDegrees = (LeftFront.getCurrentPosition() + RightFront.getCurrentPosition()
+                    + RightBack.getCurrentPosition() + LeftBack.getCurrentPosition())/4;
+            power = ((degrees - averageDegrees)/RATIO_BILLY);
+            power = (power > maxPower) ? maxPower : power;
+            power = (power < minPower) ? minPower : power;
+
+            spin = (spin * (power / maxPower));
+        }
+    }
+    public void moveDegrees(double direction, int degrees, double maxPower, double minPower, double precision){
+        final int RATIO_BILLY = 100000;
+        int averageDegrees;
+        double power = maxPower;
+        resetEncoders();
+        averageDegrees = (LeftFront.getCurrentPosition() + RightFront.getCurrentPosition()
+                + RightBack.getCurrentPosition() + LeftBack.getCurrentPosition())/4;
+        while(Math.abs(averageDegrees - degrees) <= precision){
+            driveAtHeader(direction,power);
+
+            averageDegrees = (LeftFront.getCurrentPosition() + RightFront.getCurrentPosition()
+                    + RightBack.getCurrentPosition() + LeftBack.getCurrentPosition())/4;
+            power = ((degrees - averageDegrees)/RATIO_BILLY);
+            power = (power > maxPower) ? maxPower : power;
+            power = (power < minPower) ? minPower : power;
+        }
     }
 
+    private void resetEncoders(){
+        RightFront.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        LeftFront.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        RightBack.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        LeftBack.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
+        RightFront.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        LeftFront.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        RightBack.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        LeftBack.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+
+        // RightFront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        // LeftFront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        // RightBack.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        // LeftBack.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+    }
 }

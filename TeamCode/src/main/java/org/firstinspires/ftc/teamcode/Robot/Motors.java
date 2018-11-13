@@ -5,126 +5,62 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.teamcode.Tools;
 
-import static org.firstinspires.ftc.teamcode.Constants.*;
+import java.util.Hashtable;
+import java.util.Map;
 
-public class Motors{
-    private DcMotor[]   motors;
-    private String[]    motorNames;
-    private int[]       motorTags;
+import static org.firstinspires.ftc.teamcode.Constants.FIRST_LETTER_NO_SPACE_LOWERCASE;
+import static org.firstinspires.ftc.teamcode.Constants.FIRST_LETTER_NO_SPACE_UPPERCASE;
+import static org.firstinspires.ftc.teamcode.Constants.FIRST_LETTER_WITH_SPACE_LOWERCASE;
+import static org.firstinspires.ftc.teamcode.Constants.FIRST_LETTER_WITH_SPACE_UPPERCASE;
+import static org.firstinspires.ftc.teamcode.Constants.FIRST_LETTER_WITH_UNDERSCORE_LOWERCASE;
+import static org.firstinspires.ftc.teamcode.Constants.FIRST_LETTER_WITH_UNDERSCORE_UPPERCASE;
+import static org.firstinspires.ftc.teamcode.Constants.FULL_NAME_NO_SPACE;
+import static org.firstinspires.ftc.teamcode.Constants.FULL_NAME_NO_SPACE_UPPERCASE;
+import static org.firstinspires.ftc.teamcode.Constants.FULL_NAME_WITH_SPACE;
+import static org.firstinspires.ftc.teamcode.Constants.FULL_NAME_WITH_SPACE_UPPERCASE;
+import static org.firstinspires.ftc.teamcode.Constants.FULL_NAME_WITH_UNDERSCORE;
+import static org.firstinspires.ftc.teamcode.Constants.FULL_NAME_WITH_UNDERSCORE_UPPERCASE;
+import static org.firstinspires.ftc.teamcode.Constants.LEFT_BACK;
+import static org.firstinspires.ftc.teamcode.Constants.LEFT_FRONT;
+import static org.firstinspires.ftc.teamcode.Constants.MotorNameTypes;
+import static org.firstinspires.ftc.teamcode.Constants.MotorTag;
+import static org.firstinspires.ftc.teamcode.Constants.RIGHT_BACK;
+import static org.firstinspires.ftc.teamcode.Constants.RIGHT_FRONT;
+
+public class Motors {
     private HardwareMap hardwareMap;
+    private Map<String, DcMotor> motorsByName;
+    private Map<Integer, DcMotor> motorsByTag;
 
-//-------{INITIALIZING}-----------------------------------------------------------------------------
+    //-------{INITIALIZING}-----------------------------------------------------------------------------
     public Motors(HardwareMap hardwareMap) {
         this.hardwareMap = hardwareMap;
-        this.motors = new DcMotor[0];
-        this.motorNames = new String[0];
-        this.motorTags = new int[0];
-    }
-    public Motors(String motorName,@MotorTag int motorTag, HardwareMap hardwareMap){
-        this.hardwareMap = hardwareMap;
-        this.motors = new DcMotor[1];
-        this.motors[0] = (hardwareMap.dcMotor.get(motorName));
-
-        this.motorNames = new String[1];
-        this.motorNames[0] = motorName;
-
-        this.motorTags = new int[1];
-        this.motorTags[0] = motorTag;
-
+        this.motorsByName = new Hashtable<>();
+        this.motorsByTag = new Hashtable<>();
     }
 
-//-------{ADDING MOTORS}----------------------------------------------------------------------------
+    //-------{ADDING MOTORS}----------------------------------------------------------------------------
     public void addAMotor(String motorName, @MotorTag int motorTag) throws Exception{
-        for(String motorNameFromList : motorNames){
-            if(motorNameFromList.equals(motorName)){
-                throw new customErrors.DuplicateNameException();
-            }
+        if (this.motorsByName.containsKey(motorName)) {
+            throw new customErrors.DuplicateNameException();
         }
-        for(int motorTagFromList : motorTags){
-            if(motorTagFromList == motorTag && !Tools.isTagRepeatable(motorTag)){
-                throw new customErrors.DuplicateTagException();
-            }
+        if (this.motorsByTag.containsKey(motorTag) && !Tools.isTagRepeatable(motorTag)) {
+            throw new customErrors.DuplicateTagException();
         }
 
-        if(motorNames.length == 0){
-            this.motors = new DcMotor[1];
-            this.motors[0] = (hardwareMap.dcMotor.get(motorName));
-
-            this.motorNames = new String[1];
-            this.motorNames[0] = motorName;
-
-            this.motorTags = new int[1];
-            this.motorTags[0] = motorTag;
-        }else{
-            DcMotor[] oldMotorArray = this.motors;
-            this.motors = new DcMotor[oldMotorArray.length + 1];
-            System.arraycopy(oldMotorArray, 0, this.motors, 0, oldMotorArray.length);
-            this.motors[oldMotorArray.length-1] = (hardwareMap.dcMotor.get(motorName));
-
-            String[] oldMotorNames = this.motorNames;
-            this.motorNames = new String[oldMotorNames.length + 1];
-            System.arraycopy(oldMotorNames, 0, this.motorNames, 0, oldMotorNames.length);
-            this.motorNames[oldMotorNames.length-1] = (motorName);
-
-            int[] oldMotorTags = this.motorTags;
-            this.motorTags = new int[oldMotorTags.length + 1];
-            System.arraycopy(oldMotorTags, 0, this.motorTags, 0, oldMotorTags.length);
-            this.motorTags[oldMotorTags.length-1] = (motorTag);
-        }
-
-
+        this.motorsByName.put(motorName, hardwareMap.dcMotor.get(motorName));
+        this.motorsByTag.put(motorTag, hardwareMap.dcMotor.get(motorName));
     }
 
-//-------{GETTING MOTORS}---------------------------------------------------------------------------
+    //-------{GETTING MOTORS}---------------------------------------------------------------------------
     public DcMotor getMotorByName(String motorName){
-        int counter = 0;
-        for(String arrayMotorName : motorNames){
-            if(arrayMotorName.equals(motorName)){
-                return motors[counter];
-            }
-
-
-            counter ++;
-        }
-        return null;
+        return this.motorsByName.get(motorName);
     }
-    public DcMotor getMotorByNumber(int motorNumber){
-        try{
-            return motors[motorNumber];
-        }catch (ArrayIndexOutOfBoundsException ignore){
-           return null;
-        }
-    }
-    public DcMotor getMotorByTag(int tag){
-        int counter = 0;
-        int motorNumber = 0;
-        boolean foundTheMotor = false;
-        for(int motorTag : motorTags){
-            if(motorTag == tag){
-                foundTheMotor = true;
-                motorNumber = counter;
-            }
-
-            counter ++;
-        }
-        
-        if(!foundTheMotor){
-            return null;
-        }
-
-        return motors[motorNumber];
-
+    public DcMotor getMotorByTag(int tag) {
+        return this.motorsByTag.get(tag);
     }
 
-//-------{GETTING DRIVE TRAINS}----------------------------------------------------------------------
-    public DcMotor[] getDriveTrain() {
-        DcMotor[] returnArray =  new DcMotor[4];
-        returnArray[0] = getMotorByTag(LEFT_FRONT);
-        returnArray[1] = getMotorByTag(RIGHT_FRONT);
-        returnArray[2] = getMotorByTag(RIGHT_BACK);
-        returnArray[3] = getMotorByTag(LEFT_BACK);
-        return returnArray;
-    }
+    //-------{GETTING DRIVE TRAINS}----------------------------------------------------------------------
     public DcMotor[] getAutoDriveTrain(@MotorNameTypes String motorNameType){
         DcMotor[] returnArray = new DcMotor[4];
         switch (motorNameType) {
@@ -215,6 +151,14 @@ public class Motors{
             default:
                 return null;
         }
+        return returnArray;
+    }
+    public DcMotor[] getDriveTrain(){
+        DcMotor[] returnArray = new DcMotor[4];
+        returnArray[0] = getMotorByTag(LEFT_FRONT);
+        returnArray[1] = getMotorByTag(RIGHT_FRONT);
+        returnArray[2] = getMotorByTag(RIGHT_BACK);
+        returnArray[3] = getMotorByTag(LEFT_BACK);
         return returnArray;
     }
 }
