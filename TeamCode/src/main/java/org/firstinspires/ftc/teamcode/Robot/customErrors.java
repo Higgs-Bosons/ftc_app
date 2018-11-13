@@ -12,16 +12,8 @@ public class customErrors {
     public static class DuplicateNameException extends Exception{
         @Override
         public String getMessage(){
-            return "You tried to name a motor the same name as a previous motor. Please change the name.";
+            return "You tried to name a motor/sensor the same name as a previous motor/sensor. Please change the name.";
         }
         DuplicateNameException(){}
-    }
-    public static class DuplicateSensorException extends Exception{
-        @Override
-        public String getMessage(){
-            return "You tried to use a sensor that was already defined. Please use the already defined sensor instead of adding one.";
-        }
-        DuplicateSensorException() {
-        }
     }
 }
