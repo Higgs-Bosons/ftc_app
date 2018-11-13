@@ -15,10 +15,10 @@ import org.firstinspires.ftc.robotcore.internal.system.AppUtil;
 import java.util.Collections;
 
 @TargetApi(Build.VERSION_CODES.LOLLIPOP)
-public class EpicPineapple extends org.firstinspires.ftc.teamcode.ImageCapturing.EpicPineappleObjects {
+public class CanOfPineapple extends CanOfPineappleObjects {
 
 //-----{INITIALIZING}------------------------------------------------------------------------------
-    public EpicPineapple(){
+    public CanOfPineapple(){
         cameraManager = (CameraManager) AppUtil.getDefContext().getSystemService(Context.CAMERA_SERVICE);
         cameraFacing = CameraCharacteristics.LENS_FACING_BACK;
 
@@ -64,7 +64,7 @@ public class EpicPineapple extends org.firstinspires.ftc.teamcode.ImageCapturing
     }
 
 //-----{CLOSING}-----------------------------------------------------------------------------------
-    public void closeEpicPineapple(){
+    public void closeCanOfPineapple(){
         PineappleIsActive = false;
         closeBackgroundThread();
         closeCamera();
@@ -124,20 +124,20 @@ public class EpicPineapple extends org.firstinspires.ftc.teamcode.ImageCapturing
         return new CameraDevice.StateCallback() {
             @Override
             public void onOpened(@NonNull CameraDevice cameraDevice) {
-                EpicPineapple.this.cameraDevice = cameraDevice;
+                CanOfPineapple.this.cameraDevice = cameraDevice;
                 createPreviewSession();
             }
 
             @Override
             public void onDisconnected(@NonNull CameraDevice cameraDevice) {
                 cameraDevice.close();
-                EpicPineapple.this.cameraDevice = null;
+                CanOfPineapple.this.cameraDevice = null;
             }
 
             @Override
             public void onError(@NonNull CameraDevice cameraDevice, int error) {
                 cameraDevice.close();
-                EpicPineapple.this.cameraDevice = null;
+                CanOfPineapple.this.cameraDevice = null;
             }
         };
     }
@@ -160,8 +160,8 @@ public class EpicPineapple extends org.firstinspires.ftc.teamcode.ImageCapturing
 
                             try {
                                 captureRequest = captureRequestBuilder.build();
-                                EpicPineapple.this.cameraCaptureSession = cameraCaptureSession;
-                                EpicPineapple.this.cameraCaptureSession.setRepeatingRequest(captureRequest,
+                                CanOfPineapple.this.cameraCaptureSession = cameraCaptureSession;
+                                CanOfPineapple.this.cameraCaptureSession.setRepeatingRequest(captureRequest,
                                         null, backgroundHandler);
                             } catch (CameraAccessException e) {
                                 e.printStackTrace();

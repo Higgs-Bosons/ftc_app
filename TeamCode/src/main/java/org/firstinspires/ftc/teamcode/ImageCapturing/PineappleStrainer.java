@@ -26,10 +26,10 @@ public class PineappleStrainer {
     private int PictureWidth, PictureHeight, contrast, precision;
     private Bitmap picture;
     private StringBuilder toDisplay = new StringBuilder();
-    private EpicPineapple epicPineapple;
+    private CanOfPineapple epicPineapple;
     private boolean didIFindACloseEnoughColor = true;
 
-    public PineappleStrainer(Bitmap picture, int contrast, int precision, EpicPineapple epicPineapple){
+    public PineappleStrainer(Bitmap picture, int contrast, int precision, CanOfPineapple epicPineapple){
         this.picture = picture;
         this.PictureHeight = picture.getHeight();
         this.PictureWidth = picture.getWidth();
@@ -66,6 +66,7 @@ public class PineappleStrainer {
                     int LeftX  = X;
                     int RightX = X;
                     int DownY  = Y;
+                    int filledAmount = 0;
                     boolean stillFoundSome = false;
                     for(int counterY = Y; counterY < cords[0].length; counterY++){
                         numOfWhiteSpots = 0;
@@ -76,6 +77,7 @@ public class PineappleStrainer {
                                 stillFoundSome = true;
                                 alreadyFound[counterX][counterY] = true;
                                 DownY = counterY;
+                                filledAmount = (numOfWhiteSpots > 0) ? filledAmount + 1 : filledAmount;
                             }else{
                                 numOfWhiteSpots ++;
                             }
@@ -90,6 +92,7 @@ public class PineappleStrainer {
                                 stillFoundSome = true;
                                 alreadyFound[counterX][counterY] = true;
                                 DownY = counterY;
+                                filledAmount = (numOfWhiteSpots > 0) ? filledAmount + 1 : filledAmount;
                             }else{
                                 numOfWhiteSpots ++;
                             }
@@ -108,7 +111,14 @@ public class PineappleStrainer {
                         x = (int) ((x/(double) PictureWidth) * 100);
                         y = (int) ((y/(double) PictureHeight) * 100);
 
-                        int reliability = 0;
+                        int reliability = (100 - Math.abs(sizeFrom15cm - size));
+
+                        filledAmount = (filledAmount < 0) ? 0 : filledAmount;
+                        filledAmount = (filledAmount > 100) ? 0 : filledAmount;
+                        reliability = (reliability + filledAmount) / 2;
+                        reliability = (reliability < 0) ? 0 : reliability;
+                        reliability = (reliability > 100) ? 100 : reliability;
+
                         pineappleChunks.addChunk(x,y,z,width,height,size,reliability);
                     }
                 }

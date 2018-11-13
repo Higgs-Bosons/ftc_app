@@ -1,0 +1,28 @@
+
+
+     Table of Contents:
+ Line Number:   |   Topic:
+ ==========================
+    20          | CanOfPineapple
+
+
+
+
+
+
+
+
+
+
+
+
+
+----{CanOfPineapple}-------------------------------------------------------------------------------
+The CanOfPineapple image capturing is a system that we (Me and Aayush) made ourselves.
+The system has Five Simple Steps:
+
+1.) Create a CanOfPineapple
+2.) Get the image by calling getWhatIAmSeeing();
+3.) Create a PineappleStrainer Object passing it the picture
+4.) Call findColoredObject() passing it the needed methods
+4.) Get the pineappleChunks which can be used

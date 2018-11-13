@@ -5,30 +5,30 @@ import android.graphics.Color;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
-import org.firstinspires.ftc.teamcode.ImageCapturing.EpicPineapple;
+import org.firstinspires.ftc.teamcode.ImageCapturing.CanOfPineapple;
 import org.firstinspires.ftc.teamcode.ImageCapturing.PineappleStrainer;
 
 @Autonomous(name = "Camera Tester", group = "Tester")
 public class CameraTester extends LinearOpMode {
-    EpicPineapple thePineapple;
+    CanOfPineapple thePineappleCan;
     Bitmap picture;
     PineappleStrainer pineappleStrainer;
 
     @Override
-    public void runOpMode() throws InterruptedException {
+    public void runOpMode(){
 
 
-        thePineapple = new EpicPineapple();
+        thePineappleCan = new CanOfPineapple();
 
         waitForStart();
 
-        picture = thePineapple.getWhatIAmSeeing();
+        picture = thePineappleCan.getWhatIAmSeeing();
 
-        pineappleStrainer = new PineappleStrainer(picture, 80, 80, thePineapple);
+        pineappleStrainer = new PineappleStrainer(picture, 80, 80, thePineappleCan);
         pineappleStrainer.findColoredObject(Color.rgb(250,200, 0), 130);
 
         while (opModeIsActive()) {}
-        thePineapple.closeEpicPineapple();
+        thePineappleCan.closeCanOfPineapple();
     }
 
 

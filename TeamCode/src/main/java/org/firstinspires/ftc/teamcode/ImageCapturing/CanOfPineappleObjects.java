@@ -9,7 +9,7 @@ import android.os.HandlerThread;
 import android.util.Size;
 import android.view.TextureView;
 
-public class EpicPineappleObjects {
+public class CanOfPineappleObjects {
 
     CameraManager cameraManager;
     String cameraId;
