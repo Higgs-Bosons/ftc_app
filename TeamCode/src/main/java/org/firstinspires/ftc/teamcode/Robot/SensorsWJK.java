@@ -13,6 +13,8 @@ import com.qualcomm.robotcore.hardware.TouchSensor;
 import com.qualcomm.robotcore.hardware.UltrasonicSensor;
 import com.qualcomm.robotcore.hardware.VoltageSensor;
 
+import static org.firstinspires.ftc.teamcode.Constants.*;
+
 import java.util.Map;
 
 public class SensorsWJK {
@@ -33,6 +35,6 @@ public class SensorsWJK {
     public SensorsWJK(HardwareMap hardwareMap) {
         this.hardwareMap = hardwareMap;
     }
-
+    public void addSensor(String name, @SensorTypes int sensorType);
 
 }
