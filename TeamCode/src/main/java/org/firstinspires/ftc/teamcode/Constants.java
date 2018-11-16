@@ -47,18 +47,18 @@ public class Constants {
 
 //-------{@IntDef}----------------------------------------------------------------------------------
     @IntDef({FORWARDS, REVERSE})
-    @Retention(RetentionPolicy.SOURCE)
+    @Retention(RetentionPolicy.CLASS)
     public @interface MotorDirections{}
 
 
     @IntDef({LEFT_FRONT,RIGHT_FRONT, RIGHT_BACK, LEFT_BACK})
-    @Retention(RetentionPolicy.SOURCE)
+    @Retention(RetentionPolicy.CLASS)
     public @interface MotorTag{}
 
     @IntDef({COLOR_SENSOR, GYRO_SENSOR, TOUCH_SENSOR, ULTRASONIC_SENSOR,
     OPTICAL_DISTANCE_SENSOR, LIGHT_SENSOR, IR_SEEKER_SENSOR, IMU,
     ACCELERATION_SENSOR, COMPASS_SENSOR, VOLTAGE_SENSOR,})
-    @Retention(RetentionPolicy.SOURCE)
+    @Retention(RetentionPolicy.CLASS)
     public @interface SensorTypes{}
 
 //-------{@StringDef}-------------------------------------------------------------------------------
@@ -66,6 +66,6 @@ public class Constants {
                 FIRST_LETTER_NO_SPACE_LOWERCASE, FIRST_LETTER_WITH_SPACE_LOWERCASE, FIRST_LETTER_WITH_UNDERSCORE_LOWERCASE,
                 FULL_NAME_NO_SPACE_UPPERCASE,    FULL_NAME_WITH_SPACE_UPPERCASE,    FULL_NAME_WITH_UNDERSCORE_UPPERCASE,
                 FULL_NAME_NO_SPACE,              FULL_NAME_WITH_SPACE,              FULL_NAME_WITH_UNDERSCORE_UPPERCASE})
-    @Retention(RetentionPolicy.SOURCE)
+    @Retention(RetentionPolicy.CLASS)
     public @interface MotorNameTypes{}
 }
