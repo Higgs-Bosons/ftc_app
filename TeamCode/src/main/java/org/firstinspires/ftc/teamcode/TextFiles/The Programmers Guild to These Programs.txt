@@ -1,10 +1,11 @@
-
+Made by: Whitaker K. and Aayush V.
 
      Table of Contents:
  Line Number:   |   Topic:
  ==========================
     20          | CanOfPineapple
-
+    32          | Sensors
+    72          | Constants
 
 
 
@@ -18,7 +19,7 @@
 
 
 ----{CanOfPineapple}-------------------------------------------------------------------------------
-The CanOfPineapple image capturing is a system that we (Me and Aayush) made ourselves.
+The CanOfPineapple image capturing is a system that we made ourselves.
 The system has Five Simple Steps:
 
 1.) Create a CanOfPineapple
@@ -26,3 +27,62 @@ The system has Five Simple Steps:
 3.) Create a PineappleStrainer Object passing it the picture
 4.) Call findColoredObject() passing it the needed methods
 4.) Get the pineappleChunks which can be used
+
+
+----{Sensors}--------------------------------------------------------------------------------------
+The Sensors class is a system made to simply using all of the sensors for the robot.
+
+First, to initialize the system, do:
+Sensors someName = new Sensors(hardwareMap);
+where someName can be any name you want and hardwareMap being the hardwareMap gained from inside a runOpMode() in LinearOpMode.
+
+If auto-import doesn't do it, you may have to do import org.firstinspires.ftc.teamcode.Robot.Sensors; for the error to disappear.
+
+To add a sensor to the system, do:
+someName.addSensor(name, typeOfSensor);
+where someName is what you named the system, name is the name of the sensor, and typeOfSensor is the type of sensor (technically an int),
+which the names are defined in Constants.java under Sensor Types.
+
+To get a sensor, do:
+someName.get*Type of Sensor*(name);
+where someName is what you named the system, *Type of Sensor* is the type of sensor (use the autofill),
+and name is the name of the sensor.
+
+For example, sensorClass.getColorSensor("ColorSensor"); would get in a Sensors class constructed as sensorClass the
+Color Sensor that's named "ColorSensor" in the configuration in the app (as in in the app menu) itself.
+
+There are two special functions in the Sensors class that help better use the gyro sensor, or more specifically, the gyro sensor
+built in to the REV Robotics Hub.
+
+First, you should make sure you do someName.addSensor(name, IMU); (where someName is what you named the system, and
+name is the name of the hub), as this will make sure you have an IMU (the hub) for the special functions.
+
+One is as follows:
+someName.ResetIMUGyro(someName.getIMU(name));
+where someName is what you named the system, and name is the name of the hub.
+
+This will reset the built in gyro to the position the robot is facing. This can be very useful for controlling the robot.
+
+The other is:
+someName.ReadIMUGyro(someName.getIMU(name));
+where someName is what you named the system, and name is the name of the hub.
+
+This reads the hub's gyro and calulates it to a usable float for use.
+
+----{Constants}-------------------------------------------------------------------------------------
+Most of the time, you don't need to touch Constants. But in case you do, here are some things to note.
+
+Constants is basically a bunch of glorified variables, as in, there are basically variables usable for other programs that look
+cool. These variables are glorified via @InfDef, a thing built into Android Studio that allows a list of vars to be contained
+into one list for when you need them.
+
+If you need an example for how they are used, Sensors uses '@Constants.SensorTypes int sensorType' as part of the 'addSensor'
+function. It allows for a neat autocomplete of all of the vars in the SensorTypes list.
+
+If you look at the @IntDef section of Constants, you should get a good idea of how they are made into a list.
+Basically, something like @IntDef({LEFT_FRONT,RIGHT_FRONT, RIGHT_BACK, LEFT_BACK}) gets vars into a list,
+@Retention(RetentionPolicy.SOURCE) does... something important, and something like public @interface MotorTag{}
+allows for them to be used.
+
+If you ever want to use them, use import org.firstinspires.ftc.teamcode.Constants; to assign the list to a variable,
+and import static org.firstinspires.ftc.teamcode.Constants.*; allows you to use each variable individually.

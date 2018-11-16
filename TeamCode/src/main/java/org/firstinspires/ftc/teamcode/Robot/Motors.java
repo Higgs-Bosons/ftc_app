@@ -40,7 +40,7 @@ public class Motors {
     }
 
     //-------{ADDING MOTORS}----------------------------------------------------------------------------
-    public void addAMotor(String motorName, @MotorTag int motorTag) throws Exception{
+    public void addAMotor(String motorName, @MotorTag int motorTag) throws RuntimeException{
         if (this.motorsByName.containsKey(motorName)) {
             throw new customErrors.DuplicateNameException();
         }
