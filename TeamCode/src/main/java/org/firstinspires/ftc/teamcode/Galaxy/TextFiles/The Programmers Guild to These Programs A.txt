@@ -4,8 +4,8 @@ Made by: Whitaker K. and Aayush V.
  Line Number:   |   Topic:
  ==========================
     21          | CanOfPineapple
-    32          | Sensors
-    74          | Constants
+    32          | MacanumWheelRobot - v1.0
+    74          | Constants         - v1.0
 
 
 
@@ -29,22 +29,119 @@ Made by: Whitaker K. and Aayush V.
     5.) Get the pineappleChunks which can be used
 
 
+----{MacanumWheelRobot}------------------------------------
+    Last Edited 11/17/18
 
+    MacanumWheelRobot, to say the last, is the main way of using most of our systems of classes that
+    we have built. It contains an easy way of controlling all the motors, sensors, servos, and the
+    robot itself... suggesting your wheels are mecanum wheels, of course.
+
+
+
+    <Initializing>
+
+    Before you initialze, make sure you import these two in your class somewhere:
+    import static org.firstinspires.ftc.teamcode.Galaxy.Constants.*;
+    import org.firstinspires.ftc.teamcode.Galaxy.Robot.MecanumWheelRobot;
+
+    Then, to initialize the class, make sure you're in a function and do:
+    MecanumWheelRobot someName = new MecanumWheelRobot(hardwareMap, MotorNameType);
+
+    where someName is whatever name you want it to be, hardwareMap is the hardwareMap (you usually
+    don't need to change the name of this), and MotorNameType is how you named your variables (look
+    in Constants - MOTOR NAME CONFIGURATION to see some examples of this)
+
+    The next sections will be split into four: DriveTrain (controlling the whole robot), Motors,
+    Sensors, and Servos.
+
+
+
+
+    <DriveTrain>
+
+    This will mainly be a list of all the functions you can use and how to use them. There will be
+    subcatagories to help you navigate.
+
+    [Setting Stuff]
+
+    First off is setBreakOrCoast(). This allows you to change the behavior when stopping the robot.
+    Do you want to come to a full stop? Then you want to use DcMotor.ZeroPowerBehavior.BRAKE.
+    Do you want to slide smoothly to a stop? Then you want DcMotor.ZeroPowerBehavior.FLOAT.
+    An example of using this would be:
+    someName.setBreakOrCoast(DcMotor.ZeroPowerBehavior.BRAKE);
+    which would set the robot to fully stop.
+
+    Next up is setMotorDirection(). Sometimes, the motors may be backwards from the intended
+    direction due to how it was mounted on. This allows you to edit that, in the order of
+    Left Front, Right Front, Right Back, and then Left Back.
+    An example of using this would be:
+    someName.setMotorDirection(REVERSE,FORWARDS,FORWARDS,REVERSE);
+
+    [Driving]
+
+    First is stopRobot(). This can mostly be explained via its name; the robot will stop moving
+    its motors (and depending on setBreakOrCoast(), it will fully stop or slide a bit).
+    An example of using this would be:
+    someName.stopRobot().
+
+    Next up are two of them, driveByTank() (tank controls) and driveByJoystick() (left stick is
+    movement, right is turning). An example of using them is:
+    someName.driveByTank(gamepad1, 0.8);
+    which would use gamepad 1 for tank controls running at 0.8 speed. Speed can be anything between
+    0 and 1.
+
+    Finally, there's moveMotor(). This allows you to move every motor separately, making for easy
+    testing.
+    An example of using this would be:
+    someName.moveMotor(RIGHT_FRONT, 0.8);
+    which will move the motor with the tag RIGHT_FRONT (look at the motors section for more
+    information) at 0.8.
+
+    [Autonomous Movement]
+
+    There are only three functions you really need to know out of the four, moveDegrees(),
+    spinRobot(), and turnGyro().
+
+    moveDegrees() has 5-6 arguments, and it's honestly easier to explain them out.
+    direction is what direction you want to go to. 0 is North (of the robot), 90 is East, you know
+    the rest.
+    degrees is how many degrees you want the wheels to turn. 360 would be one wheel rotation.
+    spin allows you to do a curve. How much you want it to curve is up to experimentation.
+    maxPower and minPower are well, the maximum and minimum you want the power to be. It goes from
+    0-1.
+    Finally, precision is how off you can be when turning. The closer to 1, the more precise.
+
+    An example of using this would be:
+    someName.moveDegrees(90, 720, 0.3, 1, 0.1, 5);
+    which moves the robot east for 2 whole wheel rotations, spining the robot at 0.3,
+    the power being from 0.1 - 1, and it being 5 degrees loose.
+
+    spinRobot() is thankfully much easier to use. All you define is the power it should spin at
+    (which means you do have to stop the robot).
+    An example of this is:
+    someName.spinRobot(0.5);
+
+    Finally, there's turnGyro()
 
 ----{Constants}-------------------------------------------------------------------------------------
-    Most of the time, you don't need to touch Constants. But in case you do, here are some things to note.
+    Last Edited 11/17/18
 
-    Constants is basically a bunch of glorified variables, as in, there are basically variables usable for other programs that look
-    cool. These variables are glorified via @InfDef, a thing built into Android Studio that allows a list of vars to be contained
-    into one list for when you need them.
+    Most of the time, you don't need to touch Constants. But in case you do, here are some things to
+    note.
 
-    If you need an example for how they are used, Sensors uses '@Constants.SensorTypes int sensorType' as part of the 'addSensor'
-    function. It allows for a neat autocomplete of all of the vars in the SensorTypes list.
+    Constants is basically a bunch of glorified variables, as in, there are basically variables
+    usable for other programs that look cool. These variables are glorified via @InfDef, a thing
+    built into Android Studio that allows a list of vars to be contained into one list for when you
+    need them.
 
-    If you look at the @IntDef section of Constants, you should get a good idea of how they are made into a list.
-    Basically, something like @IntDef({LEFT_FRONT,RIGHT_FRONT, RIGHT_BACK, LEFT_BACK}) gets vars into a list,
-    @Retention(RetentionPolicy.SOURCE) does... something important, and something like public @interface MotorTag{}
-    allows for them to be used.
+    If you need an example for how they are used, Sensors uses '@Constants.SensorTypes int
+    sensorType' as part of the 'addSensor' function. It allows for a neat autocomplete of all of the
+    vars in the SensorTypes list.
 
-    If you ever want to use them, use import org.firstinspires.ftc.teamcode.Constants; to assign the list to a variable,
-    and import static org.firstinspires.ftc.teamcode.Constants.*; allows you to use each variable individually.
+    If you look at the @IntDef section of Constants, you should get a good idea of how they are
+    made into a list. Basically, something like
+    @IntDef({LEFT_FRONT,RIGHT_FRONT, RIGHT_BACK, LEFT_BACK}) gets vars into a list,
+    @Retention(RetentionPolicy.SOURCE) does... something important, and something like public
+    @interface MotorTag{} allows for them to be used.
+
+    If you ever want to use them, use import static org.firstinspires.ftc.teamcode.Constants.*;.

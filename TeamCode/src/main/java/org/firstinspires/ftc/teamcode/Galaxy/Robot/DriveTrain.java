@@ -69,13 +69,13 @@ public class DriveTrain {
         RightFront.setPower(right);
         RightBack.setPower(right);
     }
-    public void driveByJoystick(Gamepad gamePad, double speed){
+    public void driveByJoystick(Gamepad gamepad, double speed){
         double RFPower, RBPower, LFPower, LBPower;
         double stick1X, stick1Y, stick2X;
 
-        stick1X = gamePad.left_stick_x  * speed;
-        stick1Y = gamePad.left_stick_y  * speed;
-        stick2X = gamePad.right_stick_x * speed;
+        stick1X = gamepad.left_stick_x  * speed;
+        stick1Y = gamepad.left_stick_y  * speed;
+        stick2X = gamepad.right_stick_x * speed;
 
         RFPower =  (((stick1Y + stick1X) / 2)+stick2X)*2;
         RBPower = -(((stick1Y - stick1X) / 2)+stick2X)*2;
@@ -181,6 +181,7 @@ public class DriveTrain {
         int averageDegrees;
         double power = maxPower;
         double spinPower = spin;
+        degrees = (int) ((degrees / 1150.0) * 360);
         resetEncoders();
         averageDegrees = (LeftFront.getCurrentPosition() + RightFront.getCurrentPosition()
                 + RightBack.getCurrentPosition() + LeftBack.getCurrentPosition())/4;
@@ -200,6 +201,7 @@ public class DriveTrain {
         final int RATIO_BILLY = 100000;
         int averageDegrees;
         double power = maxPower;
+        degrees = (int) ((degrees / 1150.0) * 360);
         resetEncoders();
         averageDegrees = (LeftFront.getCurrentPosition() + RightFront.getCurrentPosition()
                 + RightBack.getCurrentPosition() + LeftBack.getCurrentPosition())/4;

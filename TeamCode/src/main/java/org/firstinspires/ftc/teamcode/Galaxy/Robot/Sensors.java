@@ -248,7 +248,7 @@ public class Sensors extends DriveTrain{
     private VoltageSensor getVoltageSensor(String name) {
         return this.voltageSensor.get(name);
     }
-    private BNO055IMU getIMU(String name) {
+    public BNO055IMU getIMU(String name) {
         return this.imu.get(name);
     }
 }
