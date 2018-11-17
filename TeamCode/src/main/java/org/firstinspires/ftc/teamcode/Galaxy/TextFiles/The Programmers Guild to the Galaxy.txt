@@ -8,6 +8,8 @@ Made by: Whitaker K. and Aayush V.
     74          | Constants ------ v1.0
 
 
+ Things in (),            friendly reminders of what section you are in
+ Thing surrounded by ==,   Notes a new topic
 
 
 
@@ -16,10 +18,14 @@ Made by: Whitaker K. and Aayush V.
 
 
 
-
-
-----{CanOfPineapple}-------------------------------------------------------------------------------          (CanOfPineapple)
+----{CanOfPineapple}-------------------------------------------------------------------------------     =CanOfPineapple - Intro=
     (11/17/2018 - Last Edit)
+
+    Topic         |  Line #
+    -------------------------
+    Setup         |   #47
+    Usage         |   #147
+    How it works  |   #211
 
     The CanOfPineapple image capturing is a system that we made ourselves.
         The system has Five Simple Steps:
@@ -38,7 +44,7 @@ Made by: Whitaker K. and Aayush V.
 
 
 
-    -----{Setting up the CanOfPineapple}-------------------
+    -----{Setting up the CanOfPineapple}-------------------                                             =CanOfPineapple - Setting up the CanOfPineapple=
 
     Step one: Add code to the base code.
     The first thing you need to do to set up the CanOfPineapple system is do some editing to the
@@ -50,7 +56,7 @@ Made by: Whitaker K. and Aayush V.
               android:id="@+id/display"
               android:layout_width="match_parent"
               android:layout_height="match_parent"
-              android:fontFamily="monospace"                                                                 (CanOfPineapple)
+              android:fontFamily="monospace"                                                            (CanOfPineapple - Setting up the CanOfPineapple)
               android:text="Text"
               android:textColor="@android:color/black"
               android:textSize="2sp" />
@@ -80,7 +86,7 @@ Made by: Whitaker K. and Aayush V.
 
             <TextView
                 android:id="@+id/display"
-                android:layout_width="match_parent"                                                          (CanOfPineapple)
+                android:layout_width="match_parent"                                                     (CanOfPineapple - Setting up the CanOfPineapple)
                 android:layout_height="match_parent"
                 android:fontFamily="monospace"
                 android:text="Text"
@@ -110,7 +116,7 @@ Made by: Whitaker K. and Aayush V.
          displayText.setText(text);
          displayText.setScaleY(1);
          displayText.setScaleX(1);
-        return;                                                                                              (CanOfPineapple)
+        return;                                                                                         CanOfPineapple - Setting up the CanOfPineapple)
      }
      // END
 
@@ -138,11 +144,11 @@ Made by: Whitaker K. and Aayush V.
 
 
 
-     -----{Using the CanOfPineapple:}----------------------
+     -----{Using the CanOfPineapple:}----------------------                                             =CanOfPineapple - Using the CanOfPineapple=
 
      Set up in your code:
      The CanOfPineapple system is easy to use. The best way to learn how to use the system is to
-     visualize the code system. The first thing you do is open the CanOfPineapple. Then you will             (CanOfPineapple)
+     visualize the code system. The first thing you do is open the CanOfPineapple. Then you will        (CanOfPineapple - Using the CanOfPineapple)
      take can, and put it through the strainer. Then you have captured the chunks, and then use them.
      To use the system you need 3 objects. The CanOfPineapple, a PineappleStrainer, and PineappleChunks.
      At the start of the program, declare and initialize the  CanOfPineapple object. Once you
@@ -172,7 +178,7 @@ Made by: Whitaker K. and Aayush V.
      3.) Z value which is a distance from camera approximation (Not very accurate)
      4.) Width of the object
      5.) Height of the object
-     6.) Size of the object (in pixels checked)                                                              (CanOfPineapple)
+     6.) Size of the object (in pixels checked)                                                         (CanOfPineapple - Using the CanOfPineapple)
      7.) Reliability of the object.
 
      The size is how many pixels are in the object that was found. If the image looked like this:
@@ -202,10 +208,71 @@ Made by: Whitaker K. and Aayush V.
 
 
 
-     -----{How it works}-----------------------------------
+     -----{How it works}-----------------------------------                                             =CanOfPineapple - How it works=
 
-     This part in unnecessary for those of you who just want to use the system, but I put it in so           (CanOfPineapple)
+     This part in unnecessary for those of you who just want to use the system, but I put it in so      (CanOfPineapple - How it works)
      you can make changes, fix problems, and update the code to make it more powerful.
+
+     The CanOfPineapple object initializes a camera, and to be honest, I don't really know how that
+     works, but it does. It displays a camera preview into a TextureView object. instead for actually
+     taking a picture with the camera, all that it does it get the Bitmap the TextureView is displaying.
+     This way is a LOT faster, but it gets a lower quality image, but that is fine, because we \
+     reduce the quality more for speed later.
+
+     The PineappleStrainer is a little bit more complex. I have previously made a green screen picture
+     editor in Eclipse using Java. The formulas are very similar. Here are the steps it takes:
+
+     1.) It finds the color of a pixel on the screen that is the closest to the inputted color.
+         For this set the program goes through the picture and compares the color a pixel with the
+         inputted color to find. If the color is closer, it saves that color as the closest color
+         then moves onto the next color until it has checked every pixel.
+
+     2.) It checks if the closest color is close enough.
+         If it didn't do this step, if it found no cube, it would compare the wrong colors later,
+         leading to it finding the "correct" color, which could be a totally different color. If the
+         closest color is not close enough, is exits the program and returns "No Cubes".
+
+     3.) It creates an array of the found color.
+         In this step the robot uses the closest color as the threshold. Then it compares the colors
+         to that color, and if they are close enough, it changes there spot in a 2D boolean array to
+         true. Each spot on the array is connected to a pixel The Bitmap is no longer used after
+         this step.
+
+     4.) Using the array, it looks for large chunks.
+         This set is the most confusing. The robot checks every block in the 2D array. If it is 'true',
+         then is checks if it has already looked there, thus keeping each chunk separate. Then it
+         Checks it there are any more 'true' spots in that line. Each time is finds another 'true'
+         it increments the size counter. Then it compares to see if that is the farthest left or
+         right 'true' on that blob. Once it hits 3 empty spots, it then move down one line and repeats.
+         After it moves down, it checks for any more 'true's. If there another 'true' down there, it    (CanOfPineapple - How it works)
+         records that as the lowest. After it cannot find any more 'true's, it then add the blob as
+         a PineappleChunk. It uses the left, right, up, and down values to get the width and height.
+         It then uses the left, up and width and height values to find the X and Y values. After it
+         goes through all the pixels, it moves on to step 5.
+
+     5.) It sorts the Pineapple Chunks.
+         The next step is to filter out a the to-small chunks. The robot find the average size for
+         the chunks. It then removes all the chunks that are smaller than that size, thus removing
+         any 1-3 pixel chunks. It then returns the Pineapple Chunks.
+
+     You then can use the Pineapple Chunks to find out how many chunks were found, and there cordinates.
+     The X and Y values a calculated to a scale of 0 - 100.
+
+
+
+     And that's all folks!
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
