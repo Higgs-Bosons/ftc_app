@@ -27,7 +27,7 @@ import static org.firstinspires.ftc.teamcode.Constants.MotorTag;
 import static org.firstinspires.ftc.teamcode.Constants.RIGHT_BACK;
 import static org.firstinspires.ftc.teamcode.Constants.RIGHT_FRONT;
 
-public class Motors {
+public class Motors{
     private HardwareMap hardwareMap;
     private Map<String, DcMotor> motorsByName;
     private Map<Integer, DcMotor> motorsByTag;

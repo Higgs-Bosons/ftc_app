@@ -5,7 +5,7 @@ import com.qualcomm.robotcore.hardware.*;
 import java.util.Hashtable;
 import java.util.Map;
 
-public class Servos {
+public class Servos{
     private Map<String, Servo> servos;
     private HardwareMap hardwareMap;
 

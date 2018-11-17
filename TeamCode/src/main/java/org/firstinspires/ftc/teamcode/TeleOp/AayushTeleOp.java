@@ -7,6 +7,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.teamcode.Robot.DriveTrain;
+import org.firstinspires.ftc.teamcode.Robot.MecanumWheelRobot;
 import org.firstinspires.ftc.teamcode.Robot.Motors;
 import org.firstinspires.ftc.teamcode.Robot.Sensors;
 import org.firstinspires.ftc.teamcode.Robot.Servos;
@@ -21,6 +22,8 @@ public class AayushTeleOp extends LinearOpMode{
 
     @Override
     public void runOpMode(){
+
+        MecanumWheelRobot mwr = new MecanumWheelRobot(hardwareMap, FIRST_LETTER_NO_SPACE_UPPERCASE);
 
         Motors motor = new Motors(hardwareMap);
 
