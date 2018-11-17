@@ -45,7 +45,20 @@ public class Constants {
     public static final int VOLTAGE_SENSOR = 10;
     public static final int IMU = 11;
 
-//-------{@IntDef}----------------------------------------------------------------------------------
+//-------{SENSOR READING TAG}-----------------------------------------------------------------------
+    //public static final int NO_TAG = -1; - You can use the variable NO_TAG for above (line 12)
+    public static final int COLOR_RED = 0;
+    public static final int COLOR_GREEN = 1;
+    public static final int COLOR_BLUE = 2;
+    public static final int COLOR_RGB = 3;
+    public static final int GYRO_X = 4;
+    public static final int GYRO_Y = 5;
+    public static final int GYRO_Z = 6;
+    public static final int TOUCH_VALUE = 7;
+    public static final int TOUCH_BOOLEAN = 8;
+
+
+    //-------{@IntDef}----------------------------------------------------------------------------------
     @IntDef({FORWARDS, REVERSE})
     @Retention(RetentionPolicy.CLASS)
     public @interface MotorDirections{}
