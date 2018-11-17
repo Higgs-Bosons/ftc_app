@@ -27,13 +27,14 @@ import static org.firstinspires.ftc.teamcode.Constants.MotorTag;
 import static org.firstinspires.ftc.teamcode.Constants.RIGHT_BACK;
 import static org.firstinspires.ftc.teamcode.Constants.RIGHT_FRONT;
 
-public class Motors{
+public class Motors extends Sensors{
     private HardwareMap hardwareMap;
     private Map<String, DcMotor> motorsByName;
     private Map<Integer, DcMotor> motorsByTag;
 
     //-------{INITIALIZING}-----------------------------------------------------------------------------
     public Motors(HardwareMap hardwareMap) {
+        super(hardwareMap);
         this.hardwareMap = hardwareMap;
         this.motorsByName = new Hashtable<>();
         this.motorsByTag = new Hashtable<>();

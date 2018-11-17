@@ -5,11 +5,12 @@ import com.qualcomm.robotcore.hardware.*;
 import java.util.Hashtable;
 import java.util.Map;
 
-public class Servos{
+public class Servos extends  Motors{
     private Map<String, Servo> servos;
     private HardwareMap hardwareMap;
 
     public Servos(HardwareMap hardwareMap){
+        super(hardwareMap);
         this.hardwareMap = hardwareMap;
         this.servos = new Hashtable<>();
     }

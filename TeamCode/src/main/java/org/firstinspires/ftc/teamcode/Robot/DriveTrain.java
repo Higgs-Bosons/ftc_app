@@ -13,12 +13,20 @@ public class DriveTrain {
     private DcMotor LeftFront, LeftBack, RightFront, RightBack;
 
 //-------{INITIALIZATION}---------------------------------------------------------------------------
+    public DriveTrain(){}
     public DriveTrain(DcMotor[] driveMotors){
         LeftFront = driveMotors[0];
         RightFront = driveMotors[1];
         RightBack = driveMotors[2];
         LeftBack = driveMotors[3];
     }
+    public void addMotors(DcMotor[] driveMotors){
+        LeftFront = driveMotors[0];
+        RightFront = driveMotors[1];
+        RightBack = driveMotors[2];
+        LeftBack = driveMotors[3];
+    }
+
 
 //-------{SETTING STUFF}----------------------------------------------------------------------------
     public void setBreakOrCoast(DcMotor.ZeroPowerBehavior zeroPowerBehavior){

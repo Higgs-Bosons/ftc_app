@@ -12,7 +12,7 @@ import java.util.Map;
 import org.firstinspires.ftc.teamcode.Constants;
 import static org.firstinspires.ftc.teamcode.Constants.*;
 
-public class Sensors {
+public class Sensors extends DriveTrain{
     private Map<String, String> sensorNameAndTypes;
     private Map<String, ColorSensor> colorSensor;
     private Map<String, GyroSensor> gyroSensor;
@@ -28,7 +28,6 @@ public class Sensors {
 
     private HardwareMap hardwareMap;
 
-    public Sensors(){}
     public Sensors(HardwareMap hardwareMap) {
         this.hardwareMap = hardwareMap;
         this.colorSensor = new Hashtable<>();
