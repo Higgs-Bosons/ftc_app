@@ -143,58 +143,82 @@ public class Sensors {
         return Values;
     }
     public float   readSensor(String sensorName, int readingTag){
-        float returnValue;
 
-        //-----{COLOR SENSOR}-----------------------------------------------------------------------
-        if(sensorNameAndTypes.get(sensorName).equals(COLOR_SENSOR + "")){
-            ColorSensor colorSensor = getColorSensor(sensorName);
-            if(readingTag == COLOR_RED)
-                return colorSensor.red();
-            else if(readingTag == COLOR_GREEN)
-                return colorSensor.green();
-            else if(readingTag == COLOR_BLUE)
-                return colorSensor.blue();
-            else
-                return Color.rgb(colorSensor.red(), colorSensor.green(), colorSensor.blue());
+        switch (sensorNameAndTypes.get(sensorName)) {
 
-         //-----{GYRO SENSOR}-----------------------------------------------------------------------
-        }else if(sensorNameAndTypes.get(sensorName).equals(GYRO_SENSOR + "")){
-            GyroSensor gyroSensor = getGyroSensor(sensorName);
-            if(readingTag == GYRO_X)
-                return gyroSensor.rawX();
-            else if(readingTag == GYRO_Y)
-                return gyroSensor.rawY();
-            else if(readingTag == GYRO_Z)
-                return gyroSensor.rawZ();
+            //-----{COLOR SENSOR}-------------------------------------------------------------------
+            case COLOR_SENSOR + "":
+                ColorSensor colorSensor = getColorSensor(sensorName);
+                if (readingTag == COLOR_RED)
+                    return colorSensor.red();
+                else if (readingTag == COLOR_GREEN)
+                    return colorSensor.green();
+                else if (readingTag == COLOR_BLUE)
+                    return colorSensor.blue();
+                else if (readingTag == COLOR_RGB)
+                    return Color.rgb(colorSensor.red(), colorSensor.green(), colorSensor.blue());
+                break;
 
-         //-----{TOUCH SENSOR}----------------------------------------------------------------------
-        }else if(sensorNameAndTypes.get(sensorName).equals(TOUCH_SENSOR + "")){
-            if(readingTag == TOUCH_VALUE)
-                return (float) getTouchSensor(sensorName).getValue();
-            if(readingTag == TOUCH_VALUE)
-                return (getTouchSensor(sensorName).isPressed()) ? 1 : 0;
+            //-----{GYRO SENSOR}--------------------------------------------------------------------
+            case GYRO_SENSOR + "":
+                if (readingTag == GYRO_X)
+                    return getGyroSensor(sensorName).rawX();
+                else if (readingTag == GYRO_Y)
+                    return getGyroSensor(sensorName).rawY();
+                else if (readingTag == GYRO_Z)
+                    return getGyroSensor(sensorName).rawZ();
+                break;
 
-         //-----{ULTRASONIC SENSOR}-----------------------------------------------------------------
-        }else if(sensorNameAndTypes.get(sensorName).equals(ULTRASONIC_SENSOR + "")){
-            return (float) getUltrasonicSensor(sensorName).getUltrasonicLevel();
+            //-----{TOUCH SENSOR}-------------------------------------------------------------------
+            case TOUCH_SENSOR + "":
+                if (readingTag == TOUCH_VALUE)
+                    return (float) getTouchSensor(sensorName).getValue();
+                else if (readingTag == TOUCH_BOOLEAN)
+                    return (getTouchSensor(sensorName).isPressed()) ? 1 : 0;
+                break;
 
-        //-----{OPTICAL DISTANCE SENSOR}------------------------------------------------------------
-        }else if(sensorNameAndTypes.get(sensorName).equals(OPTICAL_DISTANCE_SENSOR +"")){
-            return (float) getOpticalDistanceSensor(sensorName).getLightDetected();
+            //-----{ULTRASONIC SENSOR}--------------------------------------------------------------
+            case ULTRASONIC_SENSOR + "":
+                return (float) getUltrasonicSensor(sensorName).getUltrasonicLevel();
+
+            //-----{OPTICAL DISTANCE SENSOR}--------------------------------------------------------
+            case OPTICAL_DISTANCE_SENSOR + "":
+                return (float) getOpticalDistanceSensor(sensorName).getLightDetected();
 
 
-        //-----{OPTICAL DISTANCE SENSOR}------------------------------------------------------------
-        }else if(sensorNameAndTypes.get(sensorName).equals(LIGHT_SENSOR +"")){
-           return (float) getLightSensor(sensorName).getLightDetected();
+            //-----{LIGHT SENSOR}-------------------------------------------------------------------
+            case LIGHT_SENSOR + "":
+                return (float) getLightSensor(sensorName).getLightDetected();
+
+            //-----{IR SEEKER SENSOR}---------------------------------------------------------------
+            case IR_SEEKER_SENSOR + "":
+                if (readingTag == IR_SEEKER_ANGLE)
+                    return (float) getIrSeekerSensor(sensorName).getAngle();
+                else if (readingTag == IR_SEEKER_STRENGTH)
+                    return (float) getIrSeekerSensor(sensorName).getStrength();
+                break;
+
+            //-----{ACCELERATION SENSOR}------------------------------------------------------------
+            case ACCELERATION_SENSOR + "":
+                if (readingTag == ACCELERATION_X)
+                    return (float) getAccelerationSensor(sensorName).getAcceleration().xAccel;
+                else if (readingTag == ACCELERATION_Y)
+                    return (float) getAccelerationSensor(sensorName).getAcceleration().yAccel;
+                else if (readingTag == ACCELERATION_Z)
+                    return (float) getAccelerationSensor(sensorName).getAcceleration().zAccel;
+                break;
+
+            //-----{COMPASS SENSOR}-----------------------------------------------------------------
+            case COMPASS_SENSOR + "":
+                return (float) getCompassSensor(sensorName).getDirection();
+
+            //-----{VOLTAGE SENSOR}-----------------------------------------------------------------
+            case VOLTAGE_SENSOR + "":
+                return (float) getVoltageSensor(sensorName).getVoltage();
         }
 
-        else if(sensorNameAndTypes.get(sensorName).equals(IR_SEEKER_SENSOR +"")){
-            return (float) getIrSeekerSensor(sensorName).
-        }
-
+        return -1234567890;
     }
-
-
 
 //-------{GETTERS}----------------------------------------------------------------------------------
     private ColorSensor getColorSensor(String name) {

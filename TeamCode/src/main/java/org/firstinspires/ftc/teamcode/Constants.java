@@ -56,6 +56,11 @@ public class Constants {
     public static final int GYRO_Z = 6;
     public static final int TOUCH_VALUE = 7;
     public static final int TOUCH_BOOLEAN = 8;
+    public static final int IR_SEEKER_ANGLE = 9;
+    public static final int IR_SEEKER_STRENGTH = 10;
+    public static final int ACCELERATION_X = 11;
+    public static final int ACCELERATION_Y = 12;
+    public static final int ACCELERATION_Z = 13;
 
 
     //-------{@IntDef}----------------------------------------------------------------------------------
@@ -68,11 +73,19 @@ public class Constants {
     @Retention(RetentionPolicy.CLASS)
     public @interface MotorTag{}
 
+
     @IntDef({COLOR_SENSOR, GYRO_SENSOR, TOUCH_SENSOR, ULTRASONIC_SENSOR,
     OPTICAL_DISTANCE_SENSOR, LIGHT_SENSOR, IR_SEEKER_SENSOR, IMU,
     ACCELERATION_SENSOR, COMPASS_SENSOR, VOLTAGE_SENSOR,})
     @Retention(RetentionPolicy.CLASS)
     public @interface SensorTypes{}
+
+
+    @IntDef({ IR_SEEKER_ANGLE,     ACCELERATION_X,
+              IR_SEEKER_STRENGTH,  NO_TAG,            COLOR_RED, COLOR_GREEN,        COLOR_BLUE,
+              COLOR_RGB,              GYRO_X,             GYRO_Y,    GYRO_Z,             TOUCH_VALUE,      TOUCH_BOOLEAN,
+                              ACCELERATION_Y,
+            ACCELERATION_Z})
 
 //-------{@StringDef}-------------------------------------------------------------------------------
     @StringDef({FIRST_LETTER_NO_SPACE_UPPERCASE, FIRST_LETTER_WITH_SPACE_UPPERCASE, FIRST_LETTER_WITH_UNDERSCORE_UPPERCASE,
