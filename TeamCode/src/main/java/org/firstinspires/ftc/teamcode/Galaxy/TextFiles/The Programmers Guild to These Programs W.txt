@@ -165,7 +165,7 @@ Made by: Whitaker K. and Aayush V.
          [][][][][]  <- The size would be 17.
              [][]
 
-     Here is an example program that can detect yellow cubes: (There are alo some imports)
+     Here is an example program that can detect yellow cubes: (There are also some imports)
 
 
      @Autonomous(name = "Camera Tester", group = "Tester")

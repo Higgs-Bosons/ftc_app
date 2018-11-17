@@ -5,7 +5,7 @@ Made by: Whitaker K. and Aayush V.
  ==========================
     21          | CanOfPineapple
     32          | MacanumWheelRobot - v1.0
-    74          | Constants         - v1.0
+    184         | Constants         - v1.0
 
 
 
@@ -30,7 +30,7 @@ Made by: Whitaker K. and Aayush V.
 
 
 ----{MacanumWheelRobot}------------------------------------
-    Last Edited 11/17/18
+    (11/17/2018 - Last Edit)
 
     MacanumWheelRobot, to say the last, is the main way of using most of our systems of classes that
     we have built. It contains an easy way of controlling all the motors, sensors, servos, and the
@@ -62,7 +62,8 @@ Made by: Whitaker K. and Aayush V.
     This will mainly be a list of all the functions you can use and how to use them. There will be
     subcatagories to help you navigate.
 
-    [Setting Stuff]
+
+    [Settings]
 
     First off is setBreakOrCoast(). This allows you to change the behavior when stopping the robot.
     Do you want to come to a full stop? Then you want to use DcMotor.ZeroPowerBehavior.BRAKE.
@@ -76,6 +77,7 @@ Made by: Whitaker K. and Aayush V.
     Left Front, Right Front, Right Back, and then Left Back.
     An example of using this would be:
     someName.setMotorDirection(REVERSE,FORWARDS,FORWARDS,REVERSE);
+
 
     [Driving]
 
@@ -94,8 +96,9 @@ Made by: Whitaker K. and Aayush V.
     testing.
     An example of using this would be:
     someName.moveMotor(RIGHT_FRONT, 0.8);
-    which will move the motor with the tag RIGHT_FRONT (look at the motors section for more
-    information) at 0.8.
+    which will move the motor with the tag RIGHT_FRONT (there's a tag for each wheel,
+    in uppercase underscore format) at 0.8.
+
 
     [Autonomous Movement]
 
@@ -121,10 +124,65 @@ Made by: Whitaker K. and Aayush V.
     An example of this is:
     someName.spinRobot(0.5);
 
-    Finally, there's turnGyro()
+    Finally, there's turnGyro(). There are two arguments, toDegree and IMU.
+    toDegree is the degree you want to spin to (0's north, 90's east, etc.),
+    while the IMU is the control hub for the robot.
+    To get the IMU, first make sure you have added it on (explained in the Motors section), then
+    follow the example.
+    An example of this is:
+    someName.turnGyro(90, someName.getIMU("IMU"));
+    someName.getIMU("IMU"); gets an IMU called "IMU", fyi.
+
+
+
+
+    <Motors>
+    Next up on the list is the Motors.
+
+    First, to add a motor, do:
+    someName.addAMotor(name, tag);
+    name is well... the name of the motor defined in the robot config, and tag is for something
+    like RIGHT_FRONT (wheel motor), LEFT_BACK, etc. (if you don't need a tag, use NO_TAG).
+
+    To get a motor, there are two options, getMotorByName() and getMotorByTag().
+    getMotorByName() gets a motor by it's name (someName.getMotorByName("arm");), and
+    getMotorByTag() gets a motor by the tag you gave it, like
+    someName.getMotorByTag(RIGHT_FRONT);
+
+
+
+
+    <Sensors>
+    You add sensors largely how you added motors, like:
+    someName.addSensor(name, tag);
+    where name is the name of the sensor and tag's something like COLOR_SENSOR or IMU.
+
+    readSensor() is what gives you the values for the sensors.
+    sensorName is the name of the sensor, and readingTag is something like COLOR_RED, TOUCH_VALUE,
+    etc.
+    An example of this is:
+    someName.readSensor("gyro", GYRO_X);
+    It returns the value as a float, by the way.
+
+    For the IMU (the control hub), there are two functions for the Gyro built in it.
+    ResetIMUGyro(name) resets the gyro of the IMU (replace name with the name of the IMU).
+    ReadIMUGyro(name) returns a float array of the X, Y, and Z of the IMU gyro. Remember to replace
+    name with the name of the IMU.
+
+
+
+
+    <Servors>
+    This is probably the easiest out of them all.
+    You add servos largely how you added motors, like:
+    someName.addServo(name);
+    Notice how there's only the name to be added. You don't need a tag, unlike the other two.
+
+    moveServo(name, toMoveTo) is also rather simple. name is the name of the servo, and toMoveTo
+    is what degree you want the servo at.
 
 ----{Constants}-------------------------------------------------------------------------------------
-    Last Edited 11/17/18
+    (11/17/2018 - Last Edit)
 
     Most of the time, you don't need to touch Constants. But in case you do, here are some things to
     note.
