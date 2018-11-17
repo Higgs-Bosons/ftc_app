@@ -1,12 +1,12 @@
-package org.firstinspires.ftc.teamcode.Testers;
+package org.firstinspires.ftc.teamcode.Galaxy.Testers;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
-import org.firstinspires.ftc.teamcode.ImageCapturing.CanOfPineapple;
-import org.firstinspires.ftc.teamcode.ImageCapturing.PineappleStrainer;
+import org.firstinspires.ftc.teamcode.Galaxy.ImageCapturing.CanOfPineapple;
+import org.firstinspires.ftc.teamcode.Galaxy.ImageCapturing.PineappleStrainer;
 
 @Autonomous(name = "Camera Tester", group = "Tester")
 public class CameraTester extends LinearOpMode {

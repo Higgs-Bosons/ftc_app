@@ -1,7 +1,6 @@
-package org.firstinspires.ftc.teamcode.ImageCapturing;
+package org.firstinspires.ftc.teamcode.Galaxy.ImageCapturing;
 
 import java.util.ArrayList;
-import java.util.Collections;
 
 class PineappleChunks {
 

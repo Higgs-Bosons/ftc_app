@@ -1,31 +1,31 @@
-package org.firstinspires.ftc.teamcode.Robot;
+package org.firstinspires.ftc.teamcode.Galaxy.Robot;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
-import org.firstinspires.ftc.teamcode.Tools;
+import org.firstinspires.ftc.teamcode.Galaxy.Tools;
 
 import java.util.Hashtable;
 import java.util.Map;
 
-import static org.firstinspires.ftc.teamcode.Constants.FIRST_LETTER_NO_SPACE_LOWERCASE;
-import static org.firstinspires.ftc.teamcode.Constants.FIRST_LETTER_NO_SPACE_UPPERCASE;
-import static org.firstinspires.ftc.teamcode.Constants.FIRST_LETTER_WITH_SPACE_LOWERCASE;
-import static org.firstinspires.ftc.teamcode.Constants.FIRST_LETTER_WITH_SPACE_UPPERCASE;
-import static org.firstinspires.ftc.teamcode.Constants.FIRST_LETTER_WITH_UNDERSCORE_LOWERCASE;
-import static org.firstinspires.ftc.teamcode.Constants.FIRST_LETTER_WITH_UNDERSCORE_UPPERCASE;
-import static org.firstinspires.ftc.teamcode.Constants.FULL_NAME_NO_SPACE;
-import static org.firstinspires.ftc.teamcode.Constants.FULL_NAME_NO_SPACE_UPPERCASE;
-import static org.firstinspires.ftc.teamcode.Constants.FULL_NAME_WITH_SPACE;
-import static org.firstinspires.ftc.teamcode.Constants.FULL_NAME_WITH_SPACE_UPPERCASE;
-import static org.firstinspires.ftc.teamcode.Constants.FULL_NAME_WITH_UNDERSCORE;
-import static org.firstinspires.ftc.teamcode.Constants.FULL_NAME_WITH_UNDERSCORE_UPPERCASE;
-import static org.firstinspires.ftc.teamcode.Constants.LEFT_BACK;
-import static org.firstinspires.ftc.teamcode.Constants.LEFT_FRONT;
-import static org.firstinspires.ftc.teamcode.Constants.MotorNameTypes;
-import static org.firstinspires.ftc.teamcode.Constants.MotorTag;
-import static org.firstinspires.ftc.teamcode.Constants.RIGHT_BACK;
-import static org.firstinspires.ftc.teamcode.Constants.RIGHT_FRONT;
+import static org.firstinspires.ftc.teamcode.Galaxy.Constants.FIRST_LETTER_NO_SPACE_LOWERCASE;
+import static org.firstinspires.ftc.teamcode.Galaxy.Constants.FIRST_LETTER_NO_SPACE_UPPERCASE;
+import static org.firstinspires.ftc.teamcode.Galaxy.Constants.FIRST_LETTER_WITH_SPACE_LOWERCASE;
+import static org.firstinspires.ftc.teamcode.Galaxy.Constants.FIRST_LETTER_WITH_SPACE_UPPERCASE;
+import static org.firstinspires.ftc.teamcode.Galaxy.Constants.FIRST_LETTER_WITH_UNDERSCORE_LOWERCASE;
+import static org.firstinspires.ftc.teamcode.Galaxy.Constants.FIRST_LETTER_WITH_UNDERSCORE_UPPERCASE;
+import static org.firstinspires.ftc.teamcode.Galaxy.Constants.FULL_NAME_NO_SPACE;
+import static org.firstinspires.ftc.teamcode.Galaxy.Constants.FULL_NAME_NO_SPACE_UPPERCASE;
+import static org.firstinspires.ftc.teamcode.Galaxy.Constants.FULL_NAME_WITH_SPACE;
+import static org.firstinspires.ftc.teamcode.Galaxy.Constants.FULL_NAME_WITH_SPACE_UPPERCASE;
+import static org.firstinspires.ftc.teamcode.Galaxy.Constants.FULL_NAME_WITH_UNDERSCORE;
+import static org.firstinspires.ftc.teamcode.Galaxy.Constants.FULL_NAME_WITH_UNDERSCORE_UPPERCASE;
+import static org.firstinspires.ftc.teamcode.Galaxy.Constants.LEFT_BACK;
+import static org.firstinspires.ftc.teamcode.Galaxy.Constants.LEFT_FRONT;
+import static org.firstinspires.ftc.teamcode.Galaxy.Constants.MotorNameTypes;
+import static org.firstinspires.ftc.teamcode.Galaxy.Constants.MotorTag;
+import static org.firstinspires.ftc.teamcode.Galaxy.Constants.RIGHT_BACK;
+import static org.firstinspires.ftc.teamcode.Galaxy.Constants.RIGHT_FRONT;
 
 public class Motors extends Sensors{
     private HardwareMap hardwareMap;

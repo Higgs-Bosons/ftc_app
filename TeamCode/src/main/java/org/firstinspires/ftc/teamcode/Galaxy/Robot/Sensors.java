@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.Robot;
+package org.firstinspires.ftc.teamcode.Galaxy.Robot;
 
 import android.graphics.Color;
 
@@ -9,8 +9,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.*;
 import java.util.Hashtable;
 import java.util.Map;
 
-import org.firstinspires.ftc.teamcode.Constants;
-import static org.firstinspires.ftc.teamcode.Constants.*;
+import static org.firstinspires.ftc.teamcode.Galaxy.Constants.*;
 
 public class Sensors extends DriveTrain{
     private Map<String, String> sensorNameAndTypes;

@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.ImageCapturing;
+package org.firstinspires.ftc.teamcode.Galaxy.ImageCapturing;
 
 import android.graphics.Bitmap;
 import android.graphics.Color;
@@ -7,7 +7,7 @@ import android.util.Log;
 
 import org.firstinspires.ftc.robotcontroller.internal.FtcRobotControllerActivity;
 import org.firstinspires.ftc.robotcore.internal.system.AppUtil;
-import org.firstinspires.ftc.teamcode.Tools;
+import org.firstinspires.ftc.teamcode.Galaxy.Tools;
 
 
 /*

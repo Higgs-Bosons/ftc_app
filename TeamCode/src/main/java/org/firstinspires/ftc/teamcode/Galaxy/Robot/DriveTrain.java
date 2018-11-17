@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.Robot;
+package org.firstinspires.ftc.teamcode.Galaxy.Robot;
 
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.robotcore.hardware.*;
@@ -6,8 +6,8 @@ import com.qualcomm.robotcore.hardware.*;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
-import org.firstinspires.ftc.teamcode.Tools;
-import static org.firstinspires.ftc.teamcode.Constants.*;
+import org.firstinspires.ftc.teamcode.Galaxy.Tools;
+import static org.firstinspires.ftc.teamcode.Galaxy.Constants.*;
 
 public class DriveTrain {
     private DcMotor LeftFront, LeftBack, RightFront, RightBack;

@@ -1,19 +1,13 @@
-package org.firstinspires.ftc.teamcode.TeleOp;
+package org.firstinspires.ftc.teamcode.Galaxy.TeleOp;
 
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.Servo;
 
-import org.firstinspires.ftc.teamcode.Constants;
-import org.firstinspires.ftc.teamcode.Robot.DriveTrain;
-import org.firstinspires.ftc.teamcode.Robot.MecanumWheelRobot;
-import org.firstinspires.ftc.teamcode.Robot.Motors;
-import org.firstinspires.ftc.teamcode.Robot.Sensors;
-import org.firstinspires.ftc.teamcode.Robot.Servos;
+import org.firstinspires.ftc.teamcode.Galaxy.Robot.MecanumWheelRobot;
 
-import static org.firstinspires.ftc.teamcode.Constants.*;
+import static org.firstinspires.ftc.teamcode.Galaxy.Constants.*;
 
 @TeleOp(name = "Aayush's TeleOp", group = "TeleOp")
 public class AayushTeleOp extends LinearOpMode{

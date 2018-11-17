@@ -1,11 +1,11 @@
-package org.firstinspires.ftc.teamcode.Testers;
+package org.firstinspires.ftc.teamcode.Galaxy.Testers;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
-import org.firstinspires.ftc.teamcode.Robot.DriveTrain;
-import org.firstinspires.ftc.teamcode.Robot.Motors;
+import org.firstinspires.ftc.teamcode.Galaxy.Robot.DriveTrain;
+import org.firstinspires.ftc.teamcode.Galaxy.Robot.Motors;
 
-import static org.firstinspires.ftc.teamcode.Constants.*;
+import static org.firstinspires.ftc.teamcode.Galaxy.Constants.*;
 
 @TeleOp(name = "Motor Tester", group = "Tester")
 public class MotorTester extends LinearOpMode {
