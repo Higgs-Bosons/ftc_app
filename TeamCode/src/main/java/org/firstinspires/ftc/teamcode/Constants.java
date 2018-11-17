@@ -63,7 +63,7 @@ public class Constants {
     public static final int ACCELERATION_Z = 13;
 
 
-    //-------{@IntDef}----------------------------------------------------------------------------------
+//-------{@IntDef}----------------------------------------------------------------------------------
     @IntDef({FORWARDS, REVERSE})
     @Retention(RetentionPolicy.CLASS)
     public @interface MotorDirections{}
