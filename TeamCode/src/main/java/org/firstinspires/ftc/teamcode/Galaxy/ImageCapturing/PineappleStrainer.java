@@ -29,8 +29,7 @@ public class PineappleStrainer {
     private CanOfPineapple epicPineapple;
     private boolean didIFindACloseEnoughColor = true;
 
-    public PineappleStrainer(Bitmap picture, int contrast, int precision, CanOfPineapple epicPineapple){
-        this.picture = picture;
+    public PineappleStrainer(int contrast, int precision, CanOfPineapple epicPineapple){
         this.PictureHeight = picture.getHeight();
         this.PictureWidth = picture.getWidth();
         this.precision = (precision >= 100) ?  1 : 100 - precision;
@@ -38,8 +37,8 @@ public class PineappleStrainer {
         this.epicPineapple = epicPineapple;
     }
 
-    public PineappleChunks findColoredObject(int colorToFind, int sizeFrom15cm){
-
+    public PineappleChunks findColoredObject(Bitmap picture, int colorToFind, int sizeFrom15cm){
+        this.picture = picture;
 
         long start = System.currentTimeMillis();
         PineappleChunks pineappleChunks = new PineappleChunks();
