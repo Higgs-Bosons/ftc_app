@@ -81,11 +81,11 @@ public class Constants {
     public @interface SensorTypes{}
 
 
-    @IntDef({ IR_SEEKER_ANGLE,     ACCELERATION_X,
-              IR_SEEKER_STRENGTH,  NO_TAG,            COLOR_RED, COLOR_GREEN,        COLOR_BLUE,
-              COLOR_RGB,              GYRO_X,             GYRO_Y,    GYRO_Z,             TOUCH_VALUE,      TOUCH_BOOLEAN,
-                              ACCELERATION_Y,
-            ACCELERATION_Z})
+    @IntDef({ IR_SEEKER_ANGLE,     ACCELERATION_X,   GYRO_Z,   COLOR_RED,    TOUCH_BOOLEAN,
+              IR_SEEKER_STRENGTH,  ACCELERATION_Y,   GYRO_Y,   COLOR_BLUE,   TOUCH_VALUE,
+              COLOR_RGB,           ACCELERATION_Z,   GYRO_X,   COLOR_GREEN,  NO_TAG})
+    @Retention(RetentionPolicy.CLASS)
+    public @interface ReadingTags{}
 
 //-------{@StringDef}-------------------------------------------------------------------------------
     @StringDef({FIRST_LETTER_NO_SPACE_UPPERCASE, FIRST_LETTER_WITH_SPACE_UPPERCASE, FIRST_LETTER_WITH_UNDERSCORE_UPPERCASE,

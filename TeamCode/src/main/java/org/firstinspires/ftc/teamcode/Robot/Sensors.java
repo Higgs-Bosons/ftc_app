@@ -45,7 +45,7 @@ public class Sensors {
         this.sensorNameAndTypes = new Hashtable<>();
     }
 
-    public void addSensor(String name, @Constants.SensorTypes int sensorType) throws RuntimeException {
+    public void addSensor(String name, @SensorTypes int sensorType) throws RuntimeException {
         sensorNameAndTypes.put(name, sensorType+"");
         switch (sensorType) {
             case COLOR_SENSOR:
@@ -117,7 +117,6 @@ public class Sensors {
         }
     }
 
-
 //-------{IMU}--------------------------------------------------------------------------------------
     public void ResetIMUGyro(String IMUName) {
         BNO055IMU IMU = getIMU(IMUName);
@@ -142,7 +141,7 @@ public class Sensors {
 
         return Values;
     }
-    public float   readSensor(String sensorName, int readingTag){
+    public float   readSensor(String sensorName, @ReadingTags int readingTag){
 
         switch (sensorNameAndTypes.get(sensorName)) {
 
