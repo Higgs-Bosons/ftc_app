@@ -180,7 +180,7 @@ public class DriveTrain {
 
             averageDegrees = (LeftFront.getCurrentPosition() + RightFront.getCurrentPosition()
                     + RightBack.getCurrentPosition() + LeftBack.getCurrentPosition())/4;
-            power = ((degrees - averageDegrees)/RATIO_BILLY);
+            power = (Math.abs(degrees - averageDegrees)/RATIO_BILLY);
             power = (power > maxPower) ? maxPower : power;
             power = (power < minPower) ? minPower : power;
 

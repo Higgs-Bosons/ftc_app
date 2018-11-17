@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.Robot;
 
+import android.graphics.Color;
+
 import com.qualcomm.hardware.bosch.*;
 import com.qualcomm.robotcore.hardware.*;
 import org.firstinspires.ftc.robotcore.external.navigation.*;
@@ -11,6 +13,7 @@ import org.firstinspires.ftc.teamcode.Constants;
 import static org.firstinspires.ftc.teamcode.Constants.*;
 
 public class Sensors {
+    private Map<String, String> sensorNameAndTypes;
     private Map<String, ColorSensor> colorSensor;
     private Map<String, GyroSensor> gyroSensor;
     private Map<String, TouchSensor> touchSensor;
@@ -25,6 +28,7 @@ public class Sensors {
 
     private HardwareMap hardwareMap;
 
+    public Sensors(){}
     public Sensors(HardwareMap hardwareMap) {
         this.hardwareMap = hardwareMap;
         this.colorSensor = new Hashtable<>();
@@ -38,8 +42,11 @@ public class Sensors {
         this.compassSensor = new Hashtable<>();
         this.voltageSensor = new Hashtable<>();
         this.imu = new Hashtable<>();
+        this.sensorNameAndTypes = new Hashtable<>();
     }
+
     public void addSensor(String name, @Constants.SensorTypes int sensorType) throws RuntimeException {
+        sensorNameAndTypes.put(name, sensorType+"");
         switch (sensorType) {
             case COLOR_SENSOR:
                 if (this.colorSensor.containsKey(name)) {
@@ -107,44 +114,12 @@ public class Sensors {
                 }
                 this.imu.put(name, hardwareMap.get(BNO055IMU.class, "imu"));
                 break;
-            }
+        }
     }
 
-    public ColorSensor getColorSensor(String name) {
-        return this.colorSensor.get(name);
-    }
-    public GyroSensor getGyroSensor(String name) {
-        return this.gyroSensor.get(name);
-    }
-    public TouchSensor getTouchSensor(String name) {
-        return this.touchSensor.get(name);
-    }
-    public UltrasonicSensor getUltrasonicSensor(String name) {
-        return this.ultrasonicSensor.get(name);
-    }
-    public OpticalDistanceSensor getOpticalDistanceSensor(String name) {
-        return this.opticalDistanceSensor.get(name);
-    }
-    public LightSensor getLightSensor(String name) {
-        return this.lightSensor.get(name);
-    }
-    public IrSeekerSensor getIrSeekerSensor(String name) {
-        return this.irSeekerSensor.get(name);
-    }
-    public AccelerationSensor getAccelerationSensor(String name) {
-        return this.accelerationSensor.get(name);
-    }
-    public CompassSensor getCompassSensor(String name) {
-        return this.compassSensor.get(name);
-    }
-    public VoltageSensor getVoltageSensor(String name) {
-        return this.voltageSensor.get(name);
-    }
-    public BNO055IMU getIMU(String name) {
-        return this.imu.get(name);
-    }
 
-    public void ResetIMUGyro(String IMUName){
+//-------{IMU}--------------------------------------------------------------------------------------
+    public void ResetIMUGyro(String IMUName) {
         BNO055IMU IMU = getIMU(IMUName);
         BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
         parameters.angleUnit = BNO055IMU.AngleUnit.DEGREES;
@@ -161,10 +136,98 @@ public class Sensors {
         Values[0] = IMU.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES).firstAngle;
         Values[1] = IMU.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES).secondAngle;
         Values[2] = IMU.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES).thirdAngle;
-        if(Values[0]<0)Values[0] = (180+(181 - Math.abs(Values[0])));
-        if(Values[1]<0)Values[1] = (180+(181 - Math.abs(Values[1])));
-        if(Values[2]<0)Values[2] = (180+(181 - Math.abs(Values[2])));
+        if (Values[0] < 0) Values[0] = (180 + (181 - Math.abs(Values[0])));
+        if (Values[1] < 0) Values[1] = (180 + (181 - Math.abs(Values[1])));
+        if (Values[2] < 0) Values[2] = (180 + (181 - Math.abs(Values[2])));
 
         return Values;
+    }
+    public float   readSensor(String sensorName, int readingTag){
+        float returnValue;
+
+        //-----{COLOR SENSOR}-----------------------------------------------------------------------
+        if(sensorNameAndTypes.get(sensorName).equals(COLOR_SENSOR + "")){
+            ColorSensor colorSensor = getColorSensor(sensorName);
+            if(readingTag == COLOR_RED)
+                return colorSensor.red();
+            else if(readingTag == COLOR_GREEN)
+                return colorSensor.green();
+            else if(readingTag == COLOR_BLUE)
+                return colorSensor.blue();
+            else
+                return Color.rgb(colorSensor.red(), colorSensor.green(), colorSensor.blue());
+
+         //-----{GYRO SENSOR}-----------------------------------------------------------------------
+        }else if(sensorNameAndTypes.get(sensorName).equals(GYRO_SENSOR + "")){
+            GyroSensor gyroSensor = getGyroSensor(sensorName);
+            if(readingTag == GYRO_X)
+                return gyroSensor.rawX();
+            else if(readingTag == GYRO_Y)
+                return gyroSensor.rawY();
+            else if(readingTag == GYRO_Z)
+                return gyroSensor.rawZ();
+
+         //-----{TOUCH SENSOR}----------------------------------------------------------------------
+        }else if(sensorNameAndTypes.get(sensorName).equals(TOUCH_SENSOR + "")){
+            if(readingTag == TOUCH_VALUE)
+                return (float) getTouchSensor(sensorName).getValue();
+            if(readingTag == TOUCH_VALUE)
+                return (getTouchSensor(sensorName).isPressed()) ? 1 : 0;
+
+         //-----{ULTRASONIC SENSOR}-----------------------------------------------------------------
+        }else if(sensorNameAndTypes.get(sensorName).equals(ULTRASONIC_SENSOR + "")){
+            return (float) getUltrasonicSensor(sensorName).getUltrasonicLevel();
+
+        //-----{OPTICAL DISTANCE SENSOR}------------------------------------------------------------
+        }else if(sensorNameAndTypes.get(sensorName).equals(OPTICAL_DISTANCE_SENSOR +"")){
+            return (float) getOpticalDistanceSensor(sensorName).getLightDetected();
+
+
+        //-----{OPTICAL DISTANCE SENSOR}------------------------------------------------------------
+        }else if(sensorNameAndTypes.get(sensorName).equals(LIGHT_SENSOR +"")){
+           return (float) getLightSensor(sensorName).getLightDetected();
+        }
+
+        else if(sensorNameAndTypes.get(sensorName).equals(IR_SEEKER_SENSOR +"")){
+            return (float) getIrSeekerSensor(sensorName).
+        }
+
+    }
+
+
+
+//-------{GETTERS}----------------------------------------------------------------------------------
+    private ColorSensor getColorSensor(String name) {
+        return this.colorSensor.get(name);
+    }
+    private GyroSensor getGyroSensor(String name) {
+        return this.gyroSensor.get(name);
+    }
+    private TouchSensor getTouchSensor(String name) {
+        return this.touchSensor.get(name);
+    }
+    private UltrasonicSensor getUltrasonicSensor(String name) {
+        return this.ultrasonicSensor.get(name);
+    }
+    private OpticalDistanceSensor getOpticalDistanceSensor(String name) {
+        return this.opticalDistanceSensor.get(name);
+    }
+    private LightSensor getLightSensor(String name) {
+        return this.lightSensor.get(name);
+    }
+    private IrSeekerSensor getIrSeekerSensor(String name) {
+        return this.irSeekerSensor.get(name);
+    }
+    private AccelerationSensor getAccelerationSensor(String name) {
+        return this.accelerationSensor.get(name);
+    }
+    private CompassSensor getCompassSensor(String name) {
+        return this.compassSensor.get(name);
+    }
+    private VoltageSensor getVoltageSensor(String name) {
+        return this.voltageSensor.get(name);
+    }
+    private BNO055IMU getIMU(String name) {
+        return this.imu.get(name);
     }
 }
