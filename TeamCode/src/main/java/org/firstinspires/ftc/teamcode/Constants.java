@@ -62,6 +62,11 @@ public class Constants {
     public static final int ACCELERATION_Y = 12;
     public static final int ACCELERATION_Z = 13;
 
+//-------{Directions}-----------------------------------------------------------------------
+    public static final int NORTH = 0;
+    public static final int EAST = 90;
+    public static final int SOUTH = 180;
+    public static final int WEST = 270;
 
     //-------{@IntDef}----------------------------------------------------------------------------------
     @IntDef({FORWARDS, REVERSE})
@@ -86,6 +91,7 @@ public class Constants {
               COLOR_RGB,           ACCELERATION_Z,   GYRO_X,   COLOR_GREEN,  NO_TAG})
     @Retention(RetentionPolicy.CLASS)
     public @interface ReadingTags{}
+
 
 //-------{@StringDef}-------------------------------------------------------------------------------
     @StringDef({FIRST_LETTER_NO_SPACE_UPPERCASE, FIRST_LETTER_WITH_SPACE_UPPERCASE, FIRST_LETTER_WITH_UNDERSCORE_UPPERCASE,

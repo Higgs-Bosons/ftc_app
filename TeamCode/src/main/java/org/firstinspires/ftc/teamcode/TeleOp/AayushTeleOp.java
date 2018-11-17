@@ -26,11 +26,8 @@ public class AayushTeleOp extends LinearOpMode{
 
         MecanumWheelRobot mwr = new MecanumWheelRobot(hardwareMap, FIRST_LETTER_NO_SPACE_UPPERCASE);
 
-        Motors motor = new Motors(hardwareMap);
-
-        DriveTrain dt = new DriveTrain(motor.getAutoDriveTrain(FIRST_LETTER_NO_SPACE_UPPERCASE));
-        dt.setMotorDirection(REVERSE,FORWARDS,FORWARDS,REVERSE);
-        dt.setBreakOrCoast(DcMotor.ZeroPowerBehavior.BRAKE);
+        mwr.useDriveTrain().setMotorDirection(REVERSE,FORWARDS,FORWARDS,REVERSE);
+        mwr.useDriveTrain().setBreakOrCoast(DcMotor.ZeroPowerBehavior.BRAKE);
 
         waitForStart();
 
@@ -39,15 +36,15 @@ public class AayushTeleOp extends LinearOpMode{
             if (!tanked) {
                 mode = "Crab";
                 if (slowed)
-                    dt.driveByJoystick(gamepad1, 0.5);
+                    mwr.useDriveTrain().driveByJoystick(gamepad1, 0.5);
                 else
-                    dt.driveByJoystick(gamepad1, 1);
+                    mwr.useDriveTrain().driveByJoystick(gamepad1, 1);
             } else {
                 mode = "Tank";
                 if (slowed)
-                    dt.driveByTank(gamepad1, 0.5);
+                    mwr.useDriveTrain().driveByTank(gamepad1, 0.5);
                 else
-                    dt.driveByTank(gamepad1, 1);
+                    mwr.useDriveTrain().driveByTank(gamepad1, 1);
             }
             while (gamepad1.a)
                 tanked = !tanked;
@@ -58,7 +55,7 @@ public class AayushTeleOp extends LinearOpMode{
             telemetry.update();
         }
 
-        dt.stopRobot();
+        mwr.useDriveTrain().stopRobot();
     }
 
 }

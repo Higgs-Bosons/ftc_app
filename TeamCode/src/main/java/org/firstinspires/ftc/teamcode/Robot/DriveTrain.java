@@ -179,18 +179,10 @@ public class DriveTrain {
         for(int count = 1; count !=3; count++){
             boolean WhichWay = WhichWayToTurn(toDegree, (int) degrees);
             while(HowFar(toDegree, (int) degrees) >= 50) {
-                if(!WhichWay){
-                    LeftFront.setPower(power);
-                    RightFront.setPower(-power);
-                    RightBack.setPower(power);
-                    RightBack.setPower(-power);
-                }
-                else {
-                    LeftFront.setPower(-power);
-                    RightFront.setPower(power);
-                    RightBack.setPower(-power);
-                    RightBack.setPower(power);
-                }
+                if(!WhichWay)
+                    spinRobot(power);
+                else
+                    spinRobot(-power);
             }
             power -= 0.2;
         }
