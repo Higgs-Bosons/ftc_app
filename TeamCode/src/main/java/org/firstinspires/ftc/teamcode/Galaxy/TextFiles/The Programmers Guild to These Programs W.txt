@@ -189,6 +189,31 @@ Made by: Whitaker K. and Aayush V.
      This part in unnecessary for those of you who just want to use the system, but I put it in so           (CanOfPineapple)
      you can make changes, fix problems, and update the code to make it more powerful.
 
+     The CanOfPineapple object initializes a camera, and to be honest, I don't really know how that
+     works, but it does. It displays a camera preview into a TextureView object. instead for actually
+     taking a picture with the camera, all that it does it get the Bitmap the TextureView is displaying.
+     This way is a LOT faster, but it gets a lower quality image, but that is fine, because we \
+     reduce the quality more for speed later.
+
+     The PineappleStrainer is a little bit more complex. I have previously made a greenscreen picture
+     editor in Eclipse using Java. The formulas are very simualr. Here are the steps it takes:
+
+     1.) It finds the color of a pixel on the screen that is the closest to the inputted color.
+         For this set the program goes through the picture and compares the color a pixel with the
+         inputted color to find. If the color is closer, it saves that color as the closest color
+         then moves onto the next color until it has checked every pixel.
+
+     2.) It checks if the closest color is close enough.
+         If it didn't do this step, if it found no cube, it would compare the wrong colors later,
+         leading to it finding the "correct" color, which could be a totally different color. If the
+         closest color is not close enough, is exits the program and returns "No Cubes".
+
+     3.) It creates an array of the found color.
+         In this step the robot uses the closest
+
+
+
+
 
 
 
