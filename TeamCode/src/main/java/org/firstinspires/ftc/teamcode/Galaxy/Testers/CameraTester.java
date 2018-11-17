@@ -10,8 +10,10 @@ public class CameraTester extends LinearOpMode {
         CanOfPineapple thePineappleCan = new CanOfPineapple();
         waitForStart();
         Bitmap picture = thePineappleCan.getBitmap();
-        PineappleStrainer pineappleStrainer = new PineappleStrainer( 80, 80, thePineappleCan);
-        pineappleStrainer.findColoredObject(picture, Color.rgb(250,200, 0), 130);
+        PineappleStrainer pineappleStrainer = new PineappleStrainer( thePineappleCan);
+
+        pineappleStrainer.findShadedObject(80,80, picture, Color.rgb(250,200, 0), 130);
+
         while (opModeIsActive()) {}
         thePineappleCan.closeCanOfPineapple();
     }
