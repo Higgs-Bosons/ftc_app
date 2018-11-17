@@ -78,7 +78,6 @@ public class Constants {
     @Retention(RetentionPolicy.CLASS)
     public @interface MotorTag{}
 
-
     @IntDef({COLOR_SENSOR, GYRO_SENSOR, TOUCH_SENSOR, ULTRASONIC_SENSOR,
     OPTICAL_DISTANCE_SENSOR, LIGHT_SENSOR, IR_SEEKER_SENSOR, IMU,
     ACCELERATION_SENSOR, COMPASS_SENSOR, VOLTAGE_SENSOR,})
