@@ -30,14 +30,14 @@ public class PineappleStrainer {
     private boolean didIFindACloseEnoughColor = true;
 
     public PineappleStrainer(int contrast, int precision, CanOfPineapple epicPineapple){
-        this.PictureHeight = picture.getHeight();
-        this.PictureWidth = picture.getWidth();
         this.precision = (precision >= 100) ?  1 : 100 - precision;
         this.contrast = (int) ((-7.65*contrast)+765);
         this.epicPineapple = epicPineapple;
     }
 
     public PineappleChunks findColoredObject(Bitmap picture, int colorToFind, int sizeFrom15cm){
+        this.PictureHeight = picture.getHeight();
+        this.PictureWidth = picture.getWidth();
         this.picture = picture;
 
         long start = System.currentTimeMillis();
@@ -46,8 +46,6 @@ public class PineappleStrainer {
         boolean[][] cords = findColorPixels(colorToFind);
 
 
-
-        final int NUMBER_OF_WHITE_SPOTS = 3;
         if(!didIFindACloseEnoughColor){
             Tools.showToast("NO COLOR FOUND");
             showCordsArray(cords);
@@ -55,7 +53,62 @@ public class PineappleStrainer {
             return null;
         }
 
+        pineappleChunks = getChunks(cords, sizeFrom15cm);
+        showCordsArray(cords);
+
+        int bigger = pineappleChunks.getBiggerChunkSize();
+        for(int counter = 0; counter < pineappleChunks.numberOfChunks;counter ++){
+            if(pineappleChunks.getChunk(counter)[PineappleChunks.SIZE] <= bigger){
+                pineappleChunks.removeChunk(counter);
+                counter--;
+            }
+        }
+        long finish =  System.currentTimeMillis();
+
+        Tools.showToast("I found " + pineappleChunks.numberOfChunks + " cube(s). " +
+                "\n It took " + (finish - start) + " mls.");
+        return pineappleChunks;
+    }
+    public PineappleChunks findShadedObject(Bitmap picture, int colorToFind, int sizeFrom15cm){
+        this.PictureHeight = picture.getHeight();
+        this.PictureWidth = picture.getWidth();
+        this.picture = picture;
+
+        long start = System.currentTimeMillis();
+        PineappleChunks pineappleChunks;
+
+        boolean[][] cords = findColorPixels(colorToFind);
+
+
+        if(!didIFindACloseEnoughColor){
+            Tools.showToast("NO COLOR FOUND");
+            showCordsArray(cords);
+            Log.d("Results:", "NO COLOR");
+            return null;
+        }
+
+        pineappleChunks = getChunks(cords, sizeFrom15cm);
+        showCordsArray(cords);
+
+        int bigger = pineappleChunks.getBiggerChunkSize();
+        for(int counter = 0; counter < pineappleChunks.numberOfChunks;counter ++){
+            if(pineappleChunks.getChunk(counter)[PineappleChunks.SIZE] <= bigger){
+                pineappleChunks.removeChunk(counter);
+                counter--;
+            }
+        }
+        long finish =  System.currentTimeMillis();
+
+        Tools.showToast("I found " + pineappleChunks.numberOfChunks + " cube(s). " +
+                "\n It took " + (finish - start) + " mls.");
+        return pineappleChunks;
+    }
+
+
+    private PineappleChunks getChunks(boolean[][] cords, int sizeFrom15cm){
         boolean[][] alreadyFound = getFilledArray(PictureWidth / precision, PictureHeight / precision);
+        final int NUMBER_OF_WHITE_SPOTS = 3;
+        PineappleChunks pineappleChunks = new PineappleChunks();
 
         int numOfWhiteSpots;
         for(int Y = 0; Y < cords[0].length; Y ++) {
@@ -123,24 +176,8 @@ public class PineappleStrainer {
                 }
             }
         }
-        showCordsArray(cords);
-        int bigger = pineappleChunks.getBiggerChunkSize();
-        for(int counter = 0; counter < pineappleChunks.numberOfChunks;counter ++){
-            if(pineappleChunks.getChunk(counter)[PineappleChunks.SIZE] <= bigger){
-                pineappleChunks.removeChunk(counter);
-                counter--;
-            }
-        }
-        long finish =  System.currentTimeMillis();
-
-
-
-        Tools.showToast("I found " + pineappleChunks.numberOfChunks + " cube(s). " +
-                "\n It took " + (finish - start) + " mls.");
         return pineappleChunks;
     }
-
-
     private boolean isTheColorCloser(int colorInQuestion, int currentClosest, int colorToFind){
 
         int offRed =   Math.abs(Color.red(colorInQuestion) - Color.red(colorToFind));
