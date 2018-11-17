@@ -286,8 +286,14 @@ Made by: Whitaker K. and Aayush V.
 
 
 
-----{MacanumWheelRobot}------------------------------------
+----{MacanumWheelRobot}------------------------------------                                             =MacanumWheelRobot - Intro=
     (11/17/2018 - Last Edit)
+
+       Topic        |   Line #
+    -----------------------------
+     Initializing   | 304
+
+
 
     MacanumWheelRobot, to say the last, is the main way of using most of our systems of classes that
     we have built. It contains an easy way of controlling all the motors, sensors, servos, and the
@@ -295,7 +301,7 @@ Made by: Whitaker K. and Aayush V.
 
 
 
-    <Initializing>
+    -----<Initializing>------------------------------------                                             =MacanumWheelRobot - Initializing=
 
     Before you initialze, make sure you import these two in your class somewhere:
     import static org.firstinspires.ftc.teamcode.Galaxy.Constants.*;
@@ -314,10 +320,10 @@ Made by: Whitaker K. and Aayush V.
 
 
 
-    <DriveTrain>
+    -----{DriveTrain}--------------------------------------                                             =MacanumWheelRobot - DriveTrain=
 
     This will mainly be a list of all the functions you can use and how to use them. There will be
-    subcatagories to help you navigate.
+    subcategories to help you navigate.
 
 
     [Settings]
@@ -343,7 +349,7 @@ Made by: Whitaker K. and Aayush V.
     An example of using this would be:
     someName.stopRobot().
 
-    Next up are two of them, driveByTank() (tank controls) and driveByJoystick() (left stick is
+    Next up are two of them, driveByTank() (tank controls) and driveByJoystick() (left stick is         (MacanumWheelRobot - DriveTrain)
     movement, right is turning). An example of using them is:
     someName.driveByTank(gamepad1, 0.8);
     which would use gamepad 1 for tank controls running at 0.8 speed. Speed can be anything between
@@ -375,7 +381,7 @@ Made by: Whitaker K. and Aayush V.
     someName.moveDegrees(90, 720, 0.3, 1, 0.1, 5);
     which moves the robot east for 2 whole wheel rotations, spining the robot at 0.3,
     the power being from 0.1 - 1, and it being 5 degrees loose.
-
+                                                                                                        (MacanumWheelRobot - DriveTrain)
     spinRobot() is thankfully much easier to use. All you define is the power it should spin at
     (which means you do have to stop the robot).
     An example of this is:
@@ -393,7 +399,7 @@ Made by: Whitaker K. and Aayush V.
 
 
 
-    <Motors>
+    -----{Motors}------------------------------------------                                             =MacanumWheelRobot - Motors=
     Next up on the list is the Motors.
 
     First, to add a motor, do:
@@ -409,7 +415,7 @@ Made by: Whitaker K. and Aayush V.
 
 
 
-    <Sensors>
+    -----{Sensors}-----------------------------------------                                             =MacanumWheelRobot - Sensors=
     You add sensors largely how you added motors, like:
     someName.addSensor(name, tag);
     where name is the name of the sensor and tag's something like COLOR_SENSOR or IMU.
@@ -429,7 +435,7 @@ Made by: Whitaker K. and Aayush V.
 
 
 
-    <Servors>
+    -----{Servos}------------------------------------------                                             =MacanumWheelRobot - Servos=
     This is probably the easiest out of them all.
     You add servos largely how you added motors, like:
     someName.addServo(name);
@@ -451,7 +457,7 @@ Made by: Whitaker K. and Aayush V.
 
 
 
-    
+
 
 
 ----{Constants}-------------------------------------------------------------------------------------
