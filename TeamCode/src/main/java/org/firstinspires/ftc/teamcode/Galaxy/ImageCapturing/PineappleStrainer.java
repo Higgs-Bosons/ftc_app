@@ -75,7 +75,7 @@ public class PineappleStrainer {
         this.PictureHeight = picture.getHeight();
         this.PictureWidth = picture.getWidth();
         this.precision = (precision >= 100) ?  1 : 100 - precision;
-        this.contrast = (contrast/100);
+        this.contrast = (contrast);
         this.picture = picture;
 
         long start = System.currentTimeMillis();
@@ -182,6 +182,46 @@ public class PineappleStrainer {
         }
         return pineappleChunks;
     }
+    private boolean[][] getFilledArray(int size1, int size2){
+        boolean[][] toReturn = new boolean[size1][size2];
+        for(int X = 0; X < size1; X ++) {
+            for (int Y = 0; Y < size2; Y++) {
+                toReturn[X][Y] = false;
+            }
+        }
+        return toReturn;
+    }
+    private void showCordsArray(boolean[][] cords){
+        boolean RandomThingy = true;
+
+        StringBuilder OneLine = new StringBuilder(" |");
+        for(int Y = 0; Y < cords[0].length; Y ++) {
+            for (boolean[] cord : cords) {
+                if (cord[Y]) {
+                    OneLine.append("[]");
+                } else {
+                    OneLine.append("  ");
+                }
+            }
+            Log.d((RandomThingy+" "+!RandomThingy), OneLine.toString()+ "|");
+            toDisplay.append(OneLine).append("\n");
+            RandomThingy = !RandomThingy;
+            OneLine = new StringBuilder(" |");
+        }
+
+        AppUtil.getInstance().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                FtcRobotControllerActivity.setTextDisplay(toDisplay.toString());
+                epicPineapple.hidePreview();
+
+            }
+        });
+
+
+    }
+
+
     private boolean isTheColorCloser(int colorInQuestion, int currentClosest, int colorToFind){
 
         int offRed =   Math.abs(Color.red(colorInQuestion) - Color.red(colorToFind));
@@ -234,44 +274,8 @@ public class PineappleStrainer {
         int offTotal = offRed + offBlue + offGreen;
         return (offTotal < contrast);
     }
-    private boolean[][] getFilledArray(int size1, int size2){
-        boolean[][] toReturn = new boolean[size1][size2];
-        for(int X = 0; X < size1; X ++) {
-            for (int Y = 0; Y < size2; Y++) {
-                toReturn[X][Y] = false;
-            }
-        }
-        return toReturn;
-    }
-    private void showCordsArray(boolean[][] cords){
-        boolean RandomThingy = true;
-
-        StringBuilder OneLine = new StringBuilder(" |");
-        for(int Y = 0; Y < cords[0].length; Y ++) {
-            for (boolean[] cord : cords) {
-                if (cord[Y]) {
-                    OneLine.append("[]");
-                } else {
-                    OneLine.append("  ");
-                }
-            }
-            Log.d((RandomThingy+" "+!RandomThingy), OneLine.toString()+ "|");
-            toDisplay.append(OneLine).append("\n");
-            RandomThingy = !RandomThingy;
-            OneLine = new StringBuilder(" |");
-        }
-
-        AppUtil.getInstance().runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                FtcRobotControllerActivity.setTextDisplay(toDisplay.toString());
-                epicPineapple.hidePreview();
-
-            }
-        });
 
 
-    }
 
     
     private boolean[][] findShadedPixels(int colorToFind){
@@ -288,13 +292,15 @@ public class PineappleStrainer {
             }
         }
 
-        double R2GColorF = Color.red(colorToFind)/Color.green(colorToFind);
-        double G2BColorF = Color.green(colorToFind)/Color.blue(colorToFind);
-        double B2RColorF = Color.blue(colorToFind)/Color.red(colorToFind);
+        // Make method to compare : g2r, b2r, g2r
+        double R2GColorF = Color.red(colorToFind)/(Color.green(colorToFind)+1);
+        double G2BColorF = Color.green(colorToFind)/(Color.blue(colorToFind)+1);
+        double B2RColorF = Color.blue(colorToFind)/(Color.red(colorToFind)+1);
 
-        double R2GColorQ = Color.red(closestColor)/Color.green(closestColor);
-        double G2BColorQ = Color.green(closestColor)/Color.blue(closestColor);
-        double B2RColorQ = Color.blue(closestColor)/Color.red(closestColor);
+        double R2GColorQ = Color.red(closestColor)/(Color.green(closestColor)+1);
+        double G2BColorQ = Color.green(closestColor)/(Color.blue(closestColor)+1);
+        double B2RColorQ = Color.blue(closestColor)/(Color.red(closestColor)+1);
+
         double offTotal = Math.abs(R2GColorQ-R2GColorF) + Math.abs(G2BColorQ-G2BColorF) +  Math.abs(B2RColorQ-B2RColorF);
 
         didIFindACloseEnoughColor = (offTotal < contrast * 2);
@@ -311,30 +317,30 @@ public class PineappleStrainer {
     }
     private boolean isTheColorCloserShade(int colorInQuestion, int currentClosest, int colorToFind){
 
-        double R2GColorF = Color.red(colorToFind)/Color.green(colorToFind);
-        double G2BColorF = Color.green(colorToFind)/Color.blue(colorToFind);
-        double B2RColorF = Color.blue(colorToFind)/Color.red(colorToFind);
+        double R2GColorF = Color.red(colorToFind)/(Color.green(colorToFind)+1);
+        double G2BColorF = Color.green(colorToFind)/(Color.blue(colorToFind)+1);
+        double B2RColorF = Color.blue(colorToFind)/(Color.red(colorToFind)+1);
                 
-        double R2GColorQ = Color.red(colorInQuestion)/Color.green(colorInQuestion);
-        double G2BColorQ = Color.green(colorInQuestion)/Color.blue(colorInQuestion);
-        double B2RColorQ = Color.blue(colorInQuestion)/Color.red(colorInQuestion);
+        double R2GColorQ = Color.red(colorInQuestion)/(Color.green(colorInQuestion)+1);
+        double G2BColorQ = Color.green(colorInQuestion)/(Color.blue(colorInQuestion)+1);
+        double B2RColorQ = Color.blue(colorInQuestion)/(Color.red(colorInQuestion)+1);
 
-        double R2GColorC = Color.red(currentClosest)/Color.green(currentClosest);
-        double G2BColorC = Color.green(currentClosest)/Color.blue(currentClosest);
-        double B2RColorC = Color.blue(currentClosest)/Color.red(currentClosest);
+        double R2GColorC = Color.red(currentClosest)/(Color.green(currentClosest)+1);
+        double G2BColorC = Color.green(currentClosest)/(Color.blue(currentClosest)+1);
+        double B2RColorC = Color.blue(currentClosest)/(Color.red(currentClosest)+1);
 
         double offTotalQ = Math.abs(R2GColorQ-R2GColorF) + Math.abs(G2BColorQ-G2BColorF) +  Math.abs(B2RColorQ-B2RColorF);
         double offTotalC = Math.abs(R2GColorC-R2GColorF) + Math.abs(G2BColorC-G2BColorF) +  Math.abs(B2RColorC-B2RColorF);
         return (offTotalQ < offTotalC);
     }
     private boolean isCloseEnoughShade(int colorInQuestion, int colorToFind){
-        double R2GColorF = Color.red(colorToFind)/Color.green(colorToFind);
-        double G2BColorF = Color.green(colorToFind)/Color.blue(colorToFind);
-        double B2RColorF = Color.blue(colorToFind)/Color.red(colorToFind);
+        double R2GColorF = Color.red(colorToFind)/(Color.green(colorToFind)+1);
+        double G2BColorF = Color.green(colorToFind)/(Color.blue(colorToFind)+1);
+        double B2RColorF = Color.blue(colorToFind)/(Color.red(colorToFind)+1);
 
-        double R2GColorQ = Color.red(colorInQuestion)/Color.green(colorInQuestion);
-        double G2BColorQ = Color.green(colorInQuestion)/Color.blue(colorInQuestion);
-        double B2RColorQ = Color.blue(colorInQuestion)/Color.red(colorInQuestion);
+        double R2GColorQ = Color.red(colorInQuestion)/(Color.green(colorInQuestion)+1);
+        double G2BColorQ = Color.green(colorInQuestion)/(Color.blue(colorInQuestion)+1);
+        double B2RColorQ = Color.blue(colorInQuestion)/(Color.red(colorInQuestion)+1);
 
         double offTotal = Math.abs(R2GColorQ-R2GColorF) + Math.abs(G2BColorQ-G2BColorF) +  Math.abs(B2RColorQ-B2RColorF);
         return (offTotal < contrast);
