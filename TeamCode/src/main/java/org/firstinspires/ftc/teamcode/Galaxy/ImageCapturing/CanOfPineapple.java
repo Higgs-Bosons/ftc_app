@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.ImageCapturing;
+package org.firstinspires.ftc.teamcode.Galaxy.ImageCapturing;
 
 import android.annotation.TargetApi;
 import android.content.Context;

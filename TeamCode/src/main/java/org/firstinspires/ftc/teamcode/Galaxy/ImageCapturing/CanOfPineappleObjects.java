@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.ImageCapturing;
+package org.firstinspires.ftc.teamcode.Galaxy.ImageCapturing;
 
 import android.hardware.camera2.CameraCaptureSession;
 import android.hardware.camera2.CameraDevice;

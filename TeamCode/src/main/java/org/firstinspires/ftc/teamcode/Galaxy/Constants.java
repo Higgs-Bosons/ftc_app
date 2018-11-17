@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode;
+package org.firstinspires.ftc.teamcode.Galaxy;
 
 import android.support.annotation.*;
 import java.lang.annotation.*;

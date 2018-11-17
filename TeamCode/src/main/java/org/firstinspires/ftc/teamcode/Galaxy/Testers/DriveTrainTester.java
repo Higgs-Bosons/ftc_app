@@ -1,10 +1,10 @@
-package org.firstinspires.ftc.teamcode.Testers;
+package org.firstinspires.ftc.teamcode.Galaxy.Testers;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
-import static org.firstinspires.ftc.teamcode.Constants.*;
-import org.firstinspires.ftc.teamcode.Robot.MecanumWheelRobot;
+import static org.firstinspires.ftc.teamcode.Galaxy.Constants.*;
+import org.firstinspires.ftc.teamcode.Galaxy.Robot.MecanumWheelRobot;
 
 @TeleOp(name = "DriveTrain Tester", group = "Tester")
 public class DriveTrainTester extends LinearOpMode {
