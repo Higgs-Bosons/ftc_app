@@ -144,16 +144,6 @@ public class Sensors {
         return this.imu.get(name);
     }
 
-    public void ResetIMUGyro(BNO055IMU IMU){
-        BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
-        parameters.angleUnit = BNO055IMU.AngleUnit.DEGREES;
-        parameters.accelUnit = BNO055IMU.AccelUnit.METERS_PERSEC_PERSEC;
-        parameters.calibrationDataFile = "BNO055IMUCalibration.json";
-        parameters.loggingEnabled = true;
-        parameters.loggingTag = "imu";
-        parameters.accelerationIntegrationAlgorithm = new JustLoggingAccelerationIntegrator();
-        IMU.initialize(parameters);
-    }
     public void ResetIMUGyro(String IMUName){
         BNO055IMU IMU = getIMU(IMUName);
         BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
@@ -165,11 +155,16 @@ public class Sensors {
         parameters.accelerationIntegrationAlgorithm = new JustLoggingAccelerationIntegrator();
         IMU.initialize(parameters);
     }
-    public float ReadIMUGyro(BNO055IMU IMU) {
-        float Value = IMU.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES).firstAngle ;
-        if(Value<0){
-            Value = (180+(181 - Math.abs(Value)));
-        }
-        return Value;
+    public float[] ReadIMUGyro(String IMUName) {
+        BNO055IMU IMU = getIMU(IMUName);
+        float[] Values = new float[3];
+        Values[0] = IMU.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES).firstAngle;
+        Values[1] = IMU.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES).secondAngle;
+        Values[2] = IMU.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES).thirdAngle;
+        if(Values[0]<0)Values[0] = (180+(181 - Math.abs(Values[0])));
+        if(Values[1]<0)Values[1] = (180+(181 - Math.abs(Values[1])));
+        if(Values[2]<0)Values[2] = (180+(181 - Math.abs(Values[2])));
+
+        return Values;
     }
 }

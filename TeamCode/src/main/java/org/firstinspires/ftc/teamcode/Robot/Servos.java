@@ -13,15 +13,13 @@ public class Servos {
         this.hardwareMap = hardwareMap;
         this.servos = new Hashtable<>();
     }
-
     public void addServo(String name) throws RuntimeException{
         if (servos.containsKey(name)) {
             throw new customErrors.DuplicateNameException();
         }
         servos.put(name, hardwareMap.servo.get(name));
     }
-
-    public Servo getServer(String name) {
-        return this.servos.get(name);
+    public void moveServo(String name, double toMoveTo){
+        this.servos.get(name).setPosition(toMoveTo);
     }
 }

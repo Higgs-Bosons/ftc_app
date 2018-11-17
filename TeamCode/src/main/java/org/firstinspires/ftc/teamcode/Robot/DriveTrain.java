@@ -4,7 +4,7 @@ import com.qualcomm.robotcore.hardware.*;
 import org.firstinspires.ftc.teamcode.Tools;
 import static org.firstinspires.ftc.teamcode.Constants.*;
 
-public class DriveTrain extends Robot{
+public class DriveTrain {
     private DcMotor LeftFront, LeftBack, RightFront, RightBack;
 
 //-------{INITIALIZATION}---------------------------------------------------------------------------
