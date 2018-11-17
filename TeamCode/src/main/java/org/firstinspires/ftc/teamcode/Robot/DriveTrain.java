@@ -1,6 +1,11 @@
 package org.firstinspires.ftc.teamcode.Robot;
 
+import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.robotcore.hardware.*;
+
+import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
+import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
+import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
 import org.firstinspires.ftc.teamcode.Tools;
 import static org.firstinspires.ftc.teamcode.Constants.*;
 
@@ -167,6 +172,82 @@ public class DriveTrain {
         LeftFront.setPower(spinPower);
         LeftBack.setPower(spinPower);
     }
+
+    public void turnGyro(int toDegree, BNO055IMU IMU){
+        double power = 0.6;
+        float degrees = getGyroReading(IMU);
+        for(int count = 1; count !=3; count++){
+            boolean WhichWay = WhichWayToTurn(toDegree, (int) degrees);
+            while(HowFar(toDegree, (int) degrees) >= 50) {
+                if(!WhichWay){
+                    LeftFront.setPower(power);
+                    RightFront.setPower(-power);
+                    RightBack.setPower(power);
+                    RightBack.setPower(-power);
+                }
+                else {
+                    LeftFront.setPower(-power);
+                    RightFront.setPower(power);
+                    RightBack.setPower(-power);
+                    RightBack.setPower(power);
+                }
+            }
+            power -= 0.2;
+        }
+        stopRobot();
+    }
+
+    private boolean WhichWayToTurn(int Target, int Gyro){
+        int  VirtualDegrees = Gyro;
+        int counterOne = 0;
+        int counterTwo = 0;
+        boolean LOOP = true;
+        while(LOOP){
+            VirtualDegrees ++;
+            counterOne ++;
+            if(VirtualDegrees == 361){VirtualDegrees = 0;}
+            if(VirtualDegrees == -1) {VirtualDegrees = 360;}
+            LOOP = !(Math.abs(VirtualDegrees - Target) <= 2.5);
+        }
+        LOOP = true;
+        VirtualDegrees = Gyro;
+        while(LOOP){
+            VirtualDegrees --;
+            counterTwo ++;
+            if(VirtualDegrees == 361){VirtualDegrees = 0;}
+            if(VirtualDegrees == -1) {VirtualDegrees = 360;}
+            LOOP = !(Math.abs(VirtualDegrees - Target) <= 2.5);
+        }
+        return counterOne > counterTwo;
+    }
+
+    private int HowFar(int Target, int Gyro){
+        int  VirtualDegrees = Gyro;
+        int counterOne = 0;
+        int counterTwo = 0;
+        boolean LOOP = true;
+        while(LOOP){
+            VirtualDegrees ++;
+            counterOne ++;
+            if(VirtualDegrees == 361){VirtualDegrees = 0;}
+            if(VirtualDegrees == -1) {VirtualDegrees = 360;}
+            LOOP = !(Math.abs(VirtualDegrees - Target) <= 2.5);
+        }
+        LOOP = true;
+        VirtualDegrees = Gyro;
+        while(LOOP){
+            VirtualDegrees --;
+            counterTwo ++;
+            if(VirtualDegrees == 361){VirtualDegrees = 0;}
+            if(VirtualDegrees == -1) {VirtualDegrees = 360;}
+            LOOP = !(Math.abs(VirtualDegrees - Target) <= 2.5);
+        }
+        if(counterOne < counterTwo){
+            return counterOne;
+        }
+        return counterTwo;
+    }
+
     public void moveDegrees(double direction, int degrees, double spin, double maxPower, double minPower, double precision){
         final int RATIO_BILLY = 100000;
         int averageDegrees;
@@ -203,6 +284,12 @@ public class DriveTrain {
             power = (power > maxPower) ? maxPower : power;
             power = (power < minPower) ? minPower : power;
         }
+    }
+
+
+
+    public float getGyroReading(BNO055IMU IMU){
+        return IMU.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES).firstAngle;
     }
 
     private void resetEncoders(){
