@@ -3,9 +3,9 @@ Made by: Whitaker K. and Aayush V.
      Table of Contents:
  Line Number:   |   Topic:
  ==========================
-    21          | CanOfPineapple - v1.0
-    32          | Sensors -------- v1.0
-    74          | Constants ------ v1.0
+    21          | CanOfPineapple ---- v1.0
+    289         | MecanumWheelRobot - v1.0
+    470         | Constants --------- v1.0
 
 
  Things in (),            friendly reminders of what section you are in
@@ -291,7 +291,12 @@ Made by: Whitaker K. and Aayush V.
 
        Topic        |   Line #
     -----------------------------
-     Initializing   | 304
+     Initializing   | #309
+     Drive Train    | #328
+     Motors         | #407
+     Sensors        | #423
+     Servos         | #444
+
 
 
 
@@ -301,7 +306,7 @@ Made by: Whitaker K. and Aayush V.
 
 
 
-    -----<Initializing>------------------------------------                                             =MacanumWheelRobot - Initializing=
+    -----{Initializing}------------------------------------                                             =MacanumWheelRobot - Initializing=
 
     Before you initialze, make sure you import these two in your class somewhere:
     import static org.firstinspires.ftc.teamcode.Galaxy.Constants.*;
@@ -435,6 +440,7 @@ Made by: Whitaker K. and Aayush V.
 
 
 
+
     -----{Servos}------------------------------------------                                             =MacanumWheelRobot - Servos=
     This is probably the easiest out of them all.
     You add servos largely how you added motors, like:
@@ -460,7 +466,8 @@ Made by: Whitaker K. and Aayush V.
 
 
 
-----{Constants}-------------------------------------------------------------------------------------
+
+----{Constants}-------------------------------------------------------------------------------------    =Constants - Intro=
     (11/17/2018 - Last Edit)
 
     Most of the time, you don't need to touch Constants. But in case you do, here are some things to
