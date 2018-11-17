@@ -169,11 +169,7 @@ public class FtcRobotControllerActivity extends Activity
 
   protected WifiMuteStateMachine wifiMuteStateMachine;
   protected MotionDetection motionDetection;
-  
-  //start custom
-  public static TextureView CameraTexture;
-  public static TextView displayText;
-  //end custom
+
 
   protected class RobotRestarter implements Restarter {
 
@@ -757,8 +753,13 @@ public class FtcRobotControllerActivity extends Activity
       wifiMuteStateMachine.consumeEvent(WifiMuteEvent.USER_ACTIVITY);
     }
   }
-  
-  //start custom
+
+
+
+    //start custom
+    public static TextureView CameraTexture;
+    public static TextView displayText;
+
   public static TextureView getTextureView(){
       return CameraTexture;
   }

@@ -59,7 +59,7 @@ public class CanOfPineapple extends CanOfPineappleObjects {
     }
 
 //-----{GETTING FRAMES}----------------------------------------------------------------------------
-    public Bitmap getWhatIAmSeeing(){
+    public Bitmap getBitmap(){
         return textureView.getBitmap();
     }
 
@@ -183,7 +183,7 @@ public class CanOfPineapple extends CanOfPineappleObjects {
         backgroundThread.start();
         backgroundHandler = new Handler(backgroundThread.getLooper());
     }
-    void showPreview(){
+    private void showPreview(){
         textureView.setScaleX(1);
         textureView.setScaleY(1);
     }
