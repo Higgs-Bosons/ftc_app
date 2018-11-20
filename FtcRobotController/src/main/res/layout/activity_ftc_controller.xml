@@ -133,7 +133,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
           android:fontFamily="monospace"
           android:text="BELLO"
           android:textColor="@android:color/black"
-          android:textSize="2sp" />
+          android:textSize="6sp" />
 
       <TextureView
           android:id="@+id/CameraTexture"

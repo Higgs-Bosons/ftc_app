@@ -767,7 +767,6 @@ public class FtcRobotControllerActivity extends Activity
       displayText.setText(text);
       displayText.setScaleY(1);
       displayText.setScaleX(1);
-     return;
   }
   //end custom
 }

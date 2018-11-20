@@ -35,11 +35,11 @@ public class PineappleStrainer {
         this.epicPineapple = epicPineapple;
     }
 
-    public PineappleChunks findColoredObject(int contrast, int precision, Bitmap picture, int colorToFind, int sizeFrom15cm){
+    public PineappleChunks findColoredObject(double contrast, int precision, Bitmap picture, int colorToFind, int sizeFrom15cm){
         this.PictureHeight = picture.getHeight();
         this.PictureWidth = picture.getWidth();
         this.precision = (precision >= 100) ?  1 : 100 - precision;
-        this.contrast = (int) ((-7.65*contrast)+765);
+        this.contrast = ((-7.65*contrast)+765);
         this.picture = picture;
 
         long start = System.currentTimeMillis();
@@ -71,11 +71,11 @@ public class PineappleStrainer {
                 "\n It took " + (finish - start) + " mls.");
         return pineappleChunks;
     }
-    public PineappleChunks findShadedObject(int contrast, int precision, Bitmap picture, int colorToFind, int sizeFrom15cm){
+    public PineappleChunks findShadedObject(double contrast, int precision, Bitmap picture, int colorToFind, int sizeFrom15cm){
         this.PictureHeight = picture.getHeight();
         this.PictureWidth = picture.getWidth();
         this.precision = (precision >= 100) ?  1 : 100 - precision;
-        this.contrast = (contrast);
+        this.contrast = (-0.015 * contrast) + 1.5;
         this.picture = picture;
 
         long start = System.currentTimeMillis();
@@ -85,7 +85,9 @@ public class PineappleStrainer {
 
 
         if(!didIFindACloseEnoughColor){
-            Tools.showToast("NO COLOR FOUND");
+            long finish =  System.currentTimeMillis();
+            Tools.showToast("I found 0 cubes. " +
+                    "\n It took " + (finish - start) + " mls.");
             showCordsArray(cords);
             Log.d("Results:", "NO COLOR");
             return null;
@@ -291,58 +293,48 @@ public class PineappleStrainer {
                     closestColor = PixelColor;
             }
         }
+        double offTotal = getOffTotalForShade(closestColor, colorToFind,contrast);
 
-        // Make method to compare : g2r, b2r, g2r
-        double R2GColorF = Color.red(colorToFind)/(Color.green(colorToFind)+1);
-        double G2BColorF = Color.green(colorToFind)/(Color.blue(colorToFind)+1);
-        double B2RColorF = Color.blue(colorToFind)/(Color.red(colorToFind)+1);
-
-        double R2GColorQ = Color.red(closestColor)/(Color.green(closestColor)+1);
-        double G2BColorQ = Color.green(closestColor)/(Color.blue(closestColor)+1);
-        double B2RColorQ = Color.blue(closestColor)/(Color.red(closestColor)+1);
-
-        double offTotal = Math.abs(R2GColorQ-R2GColorF) + Math.abs(G2BColorQ-G2BColorF) +  Math.abs(B2RColorQ-B2RColorF);
-
-        didIFindACloseEnoughColor = (offTotal < contrast * 2);
-
-        int PictureHeightTrun = (int) (Math.floor(PictureHeight / 100.0) *100);
-        int PictureWidthTrun = (int) (Math.floor(PictureWidth / 100.0) *100);
-        for(int X = 0; X < PictureWidthTrun; X += precision){
-            for(int Y = 0; Y < PictureHeightTrun; Y += precision){
-                PixelColor = picture.getPixel(X,Y);
-                cords[X/precision][(Y/precision)] = isCloseEnoughShade(PixelColor, closestColor);
+        didIFindACloseEnoughColor = (offTotal < (contrast));
+        if(didIFindACloseEnoughColor){
+            int PictureHeightTrun = (int) (Math.floor(PictureHeight / 100.0) *100);
+            int PictureWidthTrun = (int) (Math.floor(PictureWidth / 100.0) *100);
+            for(int X = 0; X < PictureWidthTrun; X += precision){
+                for(int Y = 0; Y < PictureHeightTrun; Y += precision){
+                    PixelColor = picture.getPixel(X,Y);
+                    cords[X/precision][(Y/precision)] = isCloseEnoughShade(PixelColor, closestColor);
+                }
             }
         }
         return cords;
     }
     private boolean isTheColorCloserShade(int colorInQuestion, int currentClosest, int colorToFind){
-
-        double R2GColorF = Color.red(colorToFind)/(Color.green(colorToFind)+1);
-        double G2BColorF = Color.green(colorToFind)/(Color.blue(colorToFind)+1);
-        double B2RColorF = Color.blue(colorToFind)/(Color.red(colorToFind)+1);
-                
-        double R2GColorQ = Color.red(colorInQuestion)/(Color.green(colorInQuestion)+1);
-        double G2BColorQ = Color.green(colorInQuestion)/(Color.blue(colorInQuestion)+1);
-        double B2RColorQ = Color.blue(colorInQuestion)/(Color.red(colorInQuestion)+1);
-
-        double R2GColorC = Color.red(currentClosest)/(Color.green(currentClosest)+1);
-        double G2BColorC = Color.green(currentClosest)/(Color.blue(currentClosest)+1);
-        double B2RColorC = Color.blue(currentClosest)/(Color.red(currentClosest)+1);
-
-        double offTotalQ = Math.abs(R2GColorQ-R2GColorF) + Math.abs(G2BColorQ-G2BColorF) +  Math.abs(B2RColorQ-B2RColorF);
-        double offTotalC = Math.abs(R2GColorC-R2GColorF) + Math.abs(G2BColorC-G2BColorF) +  Math.abs(B2RColorC-B2RColorF);
+        double offTotalQ = getOffTotalForShade(colorInQuestion, colorToFind, contrast);
+        double offTotalC = getOffTotalForShade(currentClosest, colorToFind, contrast);
         return (offTotalQ < offTotalC);
     }
     private boolean isCloseEnoughShade(int colorInQuestion, int colorToFind){
-        double R2GColorF = Color.red(colorToFind)/(Color.green(colorToFind)+1);
-        double G2BColorF = Color.green(colorToFind)/(Color.blue(colorToFind)+1);
-        double B2RColorF = Color.blue(colorToFind)/(Color.red(colorToFind)+1);
-
-        double R2GColorQ = Color.red(colorInQuestion)/(Color.green(colorInQuestion)+1);
-        double G2BColorQ = Color.green(colorInQuestion)/(Color.blue(colorInQuestion)+1);
-        double B2RColorQ = Color.blue(colorInQuestion)/(Color.red(colorInQuestion)+1);
-
-        double offTotal = Math.abs(R2GColorQ-R2GColorF) + Math.abs(G2BColorQ-G2BColorF) +  Math.abs(B2RColorQ-B2RColorF);
+        double offTotal = getOffTotalForShade(colorInQuestion, colorToFind, contrast);
         return (offTotal < contrast);
+    }
+    private double getOffTotalForShade(int colorInQuestion, int colorToFind, double tolerance){
+        tolerance /= 4;
+
+        double R2GColorF = Color.red(colorToFind)/((double) Color.green(colorToFind)+1);
+        double G2BColorF = Color.green(colorToFind)/((double) Color.red(colorToFind)+1);
+        double B2RColorF = Color.blue(colorToFind)/((double) Color.red(colorToFind)+1);
+
+        double R2GColorQ = Color.red(colorInQuestion)/((double) Color.green(colorInQuestion)+1);
+        double G2BColorQ = Color.green(colorInQuestion)/((double) Color.red(colorInQuestion)+1);
+        double B2RColorQ = Color.blue(colorInQuestion)/((double) Color.red(colorInQuestion)+1);
+
+        if(R2GColorQ <= R2GColorF - tolerance){R2GColorQ+=tolerance;}
+        if(R2GColorQ >= R2GColorF+ tolerance){R2GColorQ-=tolerance;}
+        if(G2BColorQ <= G2BColorF - tolerance){G2BColorQ+=tolerance;}
+        if(G2BColorQ >= G2BColorF+ tolerance){G2BColorQ-=tolerance;}
+        if(B2RColorQ <= B2RColorF - tolerance){B2RColorQ+=tolerance;}
+        if(B2RColorQ >= B2RColorF+ tolerance){B2RColorQ-=tolerance;}
+
+        return (Math.abs(R2GColorQ-R2GColorF) + Math.abs(G2BColorQ-G2BColorF) +  Math.abs(B2RColorQ-B2RColorF));
     }
 }
