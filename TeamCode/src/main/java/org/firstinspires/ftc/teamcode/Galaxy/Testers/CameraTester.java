@@ -14,7 +14,7 @@ public class CameraTester extends LinearOpMode {
 
         pineappleStrainer.findShadedObject(80,80, picture, Color.rgb(250,200, 0), 130);
 
-        while (opModeIsActive()) {}
+        while (opModeIsActive()){}
         thePineappleCan.closeCanOfPineapple();
     }
 }

@@ -88,14 +88,10 @@ public class PineappleStrainer {
             long finish =  System.currentTimeMillis();
             Tools.showToast("I found 0 cubes. " +
                     "\n It took " + (finish - start) + " mls.");
-            showCordsArray(cords);
-            Log.d("Results:", "NO COLOR");
             return null;
         }
 
         pineappleChunks = getChunks(cords, sizeFrom15cm);
-        showCordsArray(cords);
-
         int bigger = pineappleChunks.getBiggerChunkSize();
         for(int counter = 0; counter < pineappleChunks.numberOfChunks;counter ++){
             if(pineappleChunks.getChunk(counter)[PineappleChunks.SIZE] <= bigger){

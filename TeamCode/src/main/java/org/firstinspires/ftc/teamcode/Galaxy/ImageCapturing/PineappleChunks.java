@@ -2,15 +2,15 @@ package org.firstinspires.ftc.teamcode.Galaxy.ImageCapturing;
 
 import java.util.ArrayList;
 
-class PineappleChunks {
+public class PineappleChunks {
 
-    static final int X = 0;
-    static final int Y = 1;
-    static final int Z = 2;
-    static final int WIDTH = 3;
-    static final int HEIGHT = 4;
-    static final int SIZE = 5;
-    static final int RELIABILITY = 6;
+    public static final int X = 0;
+    public static final int Y = 1;
+    public static final int Z = 2;
+    public static final int WIDTH = 3;
+    public static final int HEIGHT = 4;
+    public static final int SIZE = 5;
+    public static final int RELIABILITY = 6;
      
     private ArrayList<Integer> x = new ArrayList<>();
     private ArrayList<Integer> y= new ArrayList<>();
@@ -66,7 +66,7 @@ class PineappleChunks {
         return (averageChunkSize/(numberOfChunks+1));
     }
 
-    int[] getChunk(int spotNum){
+    public int[] getChunk(int spotNum){
             int[] returnArray = new int[7];
             returnArray[0] = this.x.get(spotNum);
             returnArray[1] = this.y.get(spotNum);
