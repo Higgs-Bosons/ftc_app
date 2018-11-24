@@ -14,19 +14,20 @@ public class MainTeleOp extends LinearOpMode{
 
     private boolean slowed = false;
     private boolean tanked = false;
+    private boolean gateOpen = false;
     private MecanumWheelRobot BubbleTheRobo;
-    private String mode;
+    private String mode = "JOYSTICK DRIVE";
     
     @Override
     public void runOpMode(){
         BubbleTheRobo = new MecanumWheelRobot(hardwareMap, FIRST_LETTER_NO_SPACE_UPPERCASE);
-
+        BubbleTheRobo.addServo("Gate");
         BubbleTheRobo.setMotorDirection(FORWARDS,REVERSE,REVERSE,REVERSE);
         BubbleTheRobo.addAMotor("Grabby", NO_TAG);
         BubbleTheRobo.setBreakOrCoast(DcMotor.ZeroPowerBehavior.FLOAT);
 
         waitForStart();
-
+        BubbleTheRobo.moveServo("Gate",.55);
         while (opModeIsActive()) {
             checkDriveMotors();
             checkButtons();
@@ -64,5 +65,15 @@ public class MainTeleOp extends LinearOpMode{
             BubbleTheRobo.moveMotor("Grabby", 0.5);
         else
             BubbleTheRobo.stopMotor("Grabby");
+
+        if(gamepad2.a){
+            gateOpen = !gateOpen;
+            while (gamepad2.a){}
+            if(gateOpen)
+                BubbleTheRobo.moveServo("Gate",0.4);
+            else
+                BubbleTheRobo.moveServo("Gate", 0.55);
+
+        }
     }
 }
