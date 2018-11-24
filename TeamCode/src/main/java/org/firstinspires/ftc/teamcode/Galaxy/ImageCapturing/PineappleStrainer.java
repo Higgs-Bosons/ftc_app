@@ -4,23 +4,8 @@ import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.util.Log;
 
-
 import org.firstinspires.ftc.robotcontroller.internal.FtcRobotControllerActivity;
 import org.firstinspires.ftc.robotcore.internal.system.AppUtil;
-import org.firstinspires.ftc.teamcode.Galaxy.Tools;
-
-
-/*
-(Average in parentheses)
-precession: 80:
-15 cm - 156, 139, 140, 109, 108 (130.4)
-
-precession: 90:
-15 cm - 931, 768, 636, 553, 611 - 636 (42.4)
-
-precession: 100:
-15 cm - 58903, 77245, 33277, 54508 (55,973)
-*/
 
 public class PineappleStrainer {
     private int PictureWidth, PictureHeight,  precision;
@@ -30,11 +15,13 @@ public class PineappleStrainer {
     private CanOfPineapple epicPineapple;
     private boolean didIFindACloseEnoughColor = true;
 
+//-------{INITIALIZATION}---------------------------------------------------------------------------
     public PineappleStrainer(CanOfPineapple epicPineapple){
 
         this.epicPineapple = epicPineapple;
     }
 
+//-------{FINDING OBJECT}---------------------------------------------------------------------------
     public PineappleChunks findColoredObject(double contrast, int precision, Bitmap picture, int colorToFind, int sizeFrom15cm){
         this.PictureHeight = picture.getHeight();
         this.PictureWidth = picture.getWidth();
@@ -42,7 +29,6 @@ public class PineappleStrainer {
         this.contrast = ((-7.65*contrast)+765);
         this.picture = picture;
 
-        long start = System.currentTimeMillis();
         PineappleChunks pineappleChunks;
 
         boolean[][] cords = findColorPixels(colorToFind);
@@ -64,7 +50,6 @@ public class PineappleStrainer {
                 counter--;
             }
         }
-        long finish =  System.currentTimeMillis();
 
         return pineappleChunks;
     }
@@ -92,12 +77,11 @@ public class PineappleStrainer {
                 counter--;
             }
         }
-        long finish =  System.currentTimeMillis();
-
         return pineappleChunks;
     }
 
-
+//-------{HELPER METHODS}---------------------------------------------------------------------------
+    //---{USED BY BOTH}--------------------------------------------------------
     private PineappleChunks getChunks(boolean[][] cords, int sizeFrom15cm){
         boolean[][] alreadyFound = getFilledArray(PictureWidth / precision, PictureHeight / precision);
         final int NUMBER_OF_WHITE_SPOTS = 3;
@@ -210,7 +194,7 @@ public class PineappleStrainer {
 
     }
 
-
+    //---{USED BY findColoredObject}-------------------------------------------
     private boolean isTheColorCloser(int colorInQuestion, int currentClosest, int colorToFind){
 
         int offRed =   Math.abs(Color.red(colorInQuestion) - Color.red(colorToFind));
@@ -255,7 +239,6 @@ public class PineappleStrainer {
         }
         return cords;
     }
-   
     private boolean isCloseEnough(int ColorToTest, int ColorBase){
         int offRed =   Math.abs(Color.red(ColorToTest) - Color.red(ColorBase));
         int offGreen = Math.abs(Color.green(ColorToTest) - Color.green(ColorBase));
@@ -265,8 +248,7 @@ public class PineappleStrainer {
     }
 
 
-
-    
+    //---{USED BY findShadedObject}--------------------------------------------
     private boolean[][] findShadedPixels(int colorToFind){
         boolean[][] cords = getFilledArray(PictureWidth / precision,PictureHeight / precision);
         int PixelColor;
