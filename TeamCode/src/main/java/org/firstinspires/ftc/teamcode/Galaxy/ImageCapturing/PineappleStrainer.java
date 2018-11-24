@@ -49,7 +49,6 @@ public class PineappleStrainer {
 
 
         if(!didIFindACloseEnoughColor){
-            Tools.showToast("NO COLOR FOUND");
             showCordsArray(cords);
             Log.d("Results:", "NO COLOR");
             return null;
@@ -67,8 +66,6 @@ public class PineappleStrainer {
         }
         long finish =  System.currentTimeMillis();
 
-        Tools.showToast("I found " + pineappleChunks.numberOfChunks + " cube(s). " +
-                "\n It took " + (finish - start) + " mls.");
         return pineappleChunks;
     }
     public PineappleChunks findShadedObject(double contrast, int precision, Bitmap picture, int colorToFind, int sizeFrom15cm){
@@ -77,18 +74,14 @@ public class PineappleStrainer {
         this.precision = (precision >= 100) ?  1 : 100 - precision;
         this.contrast = (-0.015 * contrast) + 1.5;
         this.picture = picture;
-
-        long start = System.currentTimeMillis();
+        
         PineappleChunks pineappleChunks;
 
         boolean[][] cords = findShadedPixels(colorToFind);
 
 
         if(!didIFindACloseEnoughColor){
-            long finish =  System.currentTimeMillis();
-            Tools.showToast("I found 0 cubes. " +
-                    "\n It took " + (finish - start) + " mls.");
-            return null;
+            return new PineappleChunks();
         }
 
         pineappleChunks = getChunks(cords, sizeFrom15cm);
@@ -101,8 +94,6 @@ public class PineappleStrainer {
         }
         long finish =  System.currentTimeMillis();
 
-        Tools.showToast("I found " + pineappleChunks.numberOfChunks + " cube(s). " +
-                "\n It took " + (finish - start) + " mls.");
         return pineappleChunks;
     }
 
@@ -162,8 +153,8 @@ public class PineappleStrainer {
                         int z = ((sizeFrom15cm-size)/sizeFrom15cm)*-100;
                         // Less than Expected: negative percent, Equal = 0,  More than Expected: positive percent
 
-                        x = (int) ((x/(double) PictureWidth) * 100);
-                        y = (int) ((y/(double) PictureHeight) * 100);
+                        x = (int) ((x/(double) cords.length) * 100);
+                        y = (int) ((y/(double) cords[0].length) * 100);
 
                         int reliability = (100 - Math.abs(sizeFrom15cm - size));
 

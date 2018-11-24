@@ -1,37 +1,44 @@
 package org.firstinspires.ftc.teamcode.Galaxy.Testers;
+import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.Galaxy.Robot.DriveTrain;
+import org.firstinspires.ftc.teamcode.Galaxy.Robot.MecanumWheelRobot;
 import org.firstinspires.ftc.teamcode.Galaxy.Robot.Motors;
 
 import static org.firstinspires.ftc.teamcode.Galaxy.Constants.*;
 
-@TeleOp(name = "Motor Tester", group = "Tester")
+@Autonomous(name = "Motor Tester", group = "Tester")
 public class MotorTester extends LinearOpMode {
     @Override
     public void runOpMode(){
-        Motors motors = new Motors(hardwareMap);
-        DriveTrain dt = new DriveTrain(motors.getAutoDriveTrain(FIRST_LETTER_NO_SPACE_UPPERCASE));
+        MecanumWheelRobot mwr = new MecanumWheelRobot(hardwareMap, FIRST_LETTER_NO_SPACE_UPPERCASE);
         waitForStart();
         while (opModeIsActive()) {
             while (gamepad1.a) {
-                dt.moveMotor(LEFT_FRONT, 1.0);
+                mwr.moveMotor(LEFT_FRONT, 1.0);
             }
             while (gamepad1.b) {
-                dt.moveMotor(RIGHT_FRONT, 1.0);
+                mwr.moveMotor(RIGHT_FRONT, 1.0);
             }
             while (gamepad1.x) {
-               dt.moveMotor(LEFT_BACK, 1.0);
+                mwr.moveMotor(LEFT_BACK, 1.0);
             }
             while (gamepad1.y) {
-                dt.moveMotor(RIGHT_BACK, 1.0);
+                mwr.moveMotor(RIGHT_BACK, 1.0);
             }
-            dt.stopRobot();
+            mwr.stopRobot();
             telemetry.addData("A", "LF");
             telemetry.addData("B", "RF");
             telemetry.addData("X", "LB");
             telemetry.addData("Y", "RB");
+
+            int[] values = mwr.getMotorValues();
+            telemetry.addData("LF", values[0]);
+            telemetry.addData("LB", values[1]);
+            telemetry.addData("RF", values[2]);
+            telemetry.addData("RB", values[3]);
             telemetry.update();
 
         }

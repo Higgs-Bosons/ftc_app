@@ -36,6 +36,8 @@ public class PineappleChunks {
 
         this.averageChunkSize += size;
     }
+
+
     void addChunk(int x, int y, int z, int width, int height, int size, int reliability){
         this.x.add(x);
         this.y.add(y);
@@ -62,9 +64,7 @@ public class PineappleChunks {
         this.numberOfChunks --;
 
     }
-    int getBiggerChunkSize() {
-        return (averageChunkSize/(numberOfChunks+1));
-    }
+
 
     public int[] getChunk(int spotNum){
             int[] returnArray = new int[7];
@@ -77,5 +77,16 @@ public class PineappleChunks {
             returnArray[6] = this.reliability.get(spotNum);
 
             return returnArray;
+    }
+
+
+    public boolean doesChunkExist(){
+        return (numberOfChunks > 0);
+    }
+    public int getNumberOfChunks(){
+        return numberOfChunks;
+    }
+    int getBiggerChunkSize() {
+        return (averageChunkSize/(numberOfChunks+1));
     }
 }

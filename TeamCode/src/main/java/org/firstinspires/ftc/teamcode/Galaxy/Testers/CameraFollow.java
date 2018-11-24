@@ -18,9 +18,13 @@ public class CameraFollow extends LinearOpMode {
             picture = thePineappleCan.getBitmap();
             pineappleChunks = pineappleStrainer
                     .findShadedObject(80,80, picture, Color.rgb(250,200, 0), 130);
-            telemetry.addData("X ",pineappleChunks.getChunk(0)[PineappleChunks.X]);
-            telemetry.addData("Y ",pineappleChunks.getChunk(0)[PineappleChunks.Y]);
-            telemetry.addData("SIZE ",pineappleChunks.getChunk(0)[PineappleChunks.SIZE]);
+            telemetry.addData("Num of chunks", pineappleChunks.getNumberOfChunks());
+            if (pineappleChunks.doesChunkExist()) {
+                telemetry.addData("X ",pineappleChunks.getChunk(0)[PineappleChunks.X]);
+                telemetry.addData("Y ",pineappleChunks.getChunk(0)[PineappleChunks.Y]);
+                telemetry.addData("SIZE ",pineappleChunks.getChunk(0)[PineappleChunks.SIZE]);
+            }
+
             telemetry.update();
         }
         thePineappleCan.closeCanOfPineapple();

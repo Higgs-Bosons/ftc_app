@@ -19,12 +19,14 @@ public class DriveTrain {
         RightFront = driveMotors[1];
         RightBack = driveMotors[2];
         LeftBack = driveMotors[3];
+        resetEncoders();
     }
     public void addMotors(DcMotor[] driveMotors){
         LeftFront = driveMotors[0];
         RightFront = driveMotors[1];
         RightBack = driveMotors[2];
         LeftBack = driveMotors[3];
+        resetEncoders();
     }
 
 
@@ -49,6 +51,15 @@ public class DriveTrain {
 
         if(LeftBackDirection   == REVERSE){LeftBack.setDirection(DcMotorSimple.Direction.REVERSE);}
         else{LeftBack.setDirection(DcMotorSimple.Direction.FORWARD);}
+    }
+
+    public int[] getMotorValues(){
+        int[] values = new int[4];
+        values[0] = LeftFront.getCurrentPosition();
+        values[1] = LeftBack.getCurrentPosition();
+        values[2] = RightFront.getCurrentPosition();
+        values[3] = RightBack.getCurrentPosition();
+        return values;
     }
 
 //-------{DRIVING}----------------------------------------------------------------------------------
@@ -292,20 +303,15 @@ public class DriveTrain {
         }
         return counterTwo;
     }
-    private void resetEncoders(){
+    public void resetEncoders(){
         RightFront.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         LeftFront.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         RightBack.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         LeftBack.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
-        RightFront.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        LeftFront.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        RightBack.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        LeftBack.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-
-        // RightFront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        // LeftFront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        // RightBack.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        // LeftBack.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        RightFront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        LeftFront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        RightBack.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        LeftBack.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
     }
 }

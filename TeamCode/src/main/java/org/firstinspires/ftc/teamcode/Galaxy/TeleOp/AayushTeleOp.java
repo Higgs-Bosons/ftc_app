@@ -9,7 +9,7 @@ import org.firstinspires.ftc.teamcode.Galaxy.Robot.MecanumWheelRobot;
 
 import static org.firstinspires.ftc.teamcode.Galaxy.Constants.*;
 
-@TeleOp(name = "Aayush's TeleOp", group = "TeleOp")
+@TeleOp(name = "TeleOp", group = "TeleOp")
 public class AayushTeleOp extends LinearOpMode{
 
     private boolean slowed = false;
@@ -20,8 +20,8 @@ public class AayushTeleOp extends LinearOpMode{
 
         MecanumWheelRobot mwr = new MecanumWheelRobot(hardwareMap, FIRST_LETTER_NO_SPACE_UPPERCASE);
 
-        mwr.setMotorDirection(REVERSE,FORWARDS,FORWARDS,REVERSE);
-        mwr.setBreakOrCoast(DcMotor.ZeroPowerBehavior.BRAKE);
+        mwr.setMotorDirection(FORWARDS,REVERSE,REVERSE,REVERSE);
+        mwr.setBreakOrCoast(DcMotor.ZeroPowerBehavior.FLOAT);
 
         waitForStart();
 
