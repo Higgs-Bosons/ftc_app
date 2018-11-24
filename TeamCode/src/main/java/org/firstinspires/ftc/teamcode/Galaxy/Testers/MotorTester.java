@@ -17,16 +17,16 @@ public class MotorTester extends LinearOpMode {
         waitForStart();
         while (opModeIsActive()) {
             while (gamepad1.a) {
-                mwr.moveMotor(LEFT_FRONT, 1.0);
+                mwr.moveDriveMotor(LEFT_FRONT, 1.0);
             }
             while (gamepad1.b) {
-                mwr.moveMotor(RIGHT_FRONT, 1.0);
+                mwr.moveDriveMotor(RIGHT_FRONT, 1.0);
             }
             while (gamepad1.x) {
-                mwr.moveMotor(LEFT_BACK, 1.0);
+                mwr.moveDriveMotor(LEFT_BACK, 1.0);
             }
             while (gamepad1.y) {
-                mwr.moveMotor(RIGHT_BACK, 1.0);
+                mwr.moveDriveMotor(RIGHT_BACK, 1.0);
             }
             mwr.stopRobot();
             telemetry.addData("A", "LF");

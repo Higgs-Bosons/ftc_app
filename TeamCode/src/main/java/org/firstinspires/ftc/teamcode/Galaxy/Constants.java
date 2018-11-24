@@ -74,7 +74,7 @@ public class Constants {
     public @interface MotorDirections{}
 
 
-    @IntDef({LEFT_FRONT,RIGHT_FRONT, RIGHT_BACK, LEFT_BACK})
+    @IntDef({LEFT_FRONT,RIGHT_FRONT, RIGHT_BACK, LEFT_BACK, NO_TAG})
     @Retention(RetentionPolicy.CLASS)
     public @interface MotorTag{}
 

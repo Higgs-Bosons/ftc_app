@@ -21,6 +21,7 @@ public class AayushTeleOp extends LinearOpMode{
         MecanumWheelRobot mwr = new MecanumWheelRobot(hardwareMap, FIRST_LETTER_NO_SPACE_UPPERCASE);
 
         mwr.setMotorDirection(FORWARDS,REVERSE,REVERSE,REVERSE);
+        mwr.addAMotor("Grabby", NO_TAG);
         mwr.setBreakOrCoast(DcMotor.ZeroPowerBehavior.FLOAT);
 
         waitForStart();
@@ -44,6 +45,8 @@ public class AayushTeleOp extends LinearOpMode{
                 tanked = !tanked;
             while (gamepad1.b)
                 slowed = !slowed;
+            while (gamepad1.dpad_down)
+                mwr.moveMotorByName("Grabby", 0.5);
             telemetry.addData("Movement Mode: ", mode);
             telemetry.addData("Slowed: ", slowed);
             telemetry.update();
