@@ -45,7 +45,7 @@ public class MainTeleOp extends LinearOpMode{
             BubbleTheRobo.driveByJoystick(gamepad1, speed);
          else
              BubbleTheRobo.driveByTank(gamepad1, speed);
-    }
+    } 
     private void checkButtons(){
         if(gamepad1.a) {
             while (gamepad1.a){}
