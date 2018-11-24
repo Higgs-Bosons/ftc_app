@@ -4,8 +4,8 @@ Made by: Whitaker K. and Aayush V.
  Line Number:   |   Topic:
  ==========================
     21          | CanOfPineapple ---- v1.0
-    289         | MecanumWheelRobot - v1.0
-    470         | Constants --------- v1.0
+    289         | MecanumWheelRobot - v1.1
+    470         | Constants --------- v1.0.1
 
 
  Things in (),            friendly reminders of what section you are in
@@ -287,7 +287,7 @@ Made by: Whitaker K. and Aayush V.
 
 
 ----{MacanumWheelRobot}------------------------------------                                             =MacanumWheelRobot - Intro=
-    (11/17/2018 - Last Edit)
+    (11/24/2018 - Last Edit)
 
        Topic        |   Line #
     -----------------------------
@@ -417,6 +417,15 @@ Made by: Whitaker K. and Aayush V.
     getMotorByTag() gets a motor by the tag you gave it, like
     someName.getMotorByTag(RIGHT_FRONT);
 
+    If you just want to move a motor, we have a shortcut for that.
+    You can use:
+    someName.moveMotor(name, power)
+    where name is the name of the motor and power is how much power you want to give to the
+    motor.
+    To stop the motor after you're done with it, do:
+    someName.stopMotor(name)
+    where name is the name of the motor.
+
 
 
 
@@ -468,7 +477,7 @@ Made by: Whitaker K. and Aayush V.
 
 
 ----{Constants}-------------------------------------------------------------------------------------    =Constants - Intro=
-    (11/17/2018 - Last Edit)
+    (11/24/2018 - Last Edit)
 
     Most of the time, you don't need to touch Constants. But in case you do, here are some things to
     note.
@@ -484,7 +493,7 @@ Made by: Whitaker K. and Aayush V.
 
     If you look at the @IntDef section of Constants, you should get a good idea of how they are
     made into a list. Basically, something like
-    @IntDef({LEFT_FRONT,RIGHT_FRONT, RIGHT_BACK, LEFT_BACK}) gets vars into a list,
+    @IntDef({LEFT_FRONT, RIGHT_FRONT, RIGHT_BACK, LEFT_BACK, NO_TAG}) gets vars into a list,
     @Retention(RetentionPolicy.SOURCE) does... something important, and something like public
     @interface MotorTag{} allows for them to be used.
 
