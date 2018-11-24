@@ -61,10 +61,6 @@ public class Motors extends Sensors{
         return this.motorsByTag.get(tag);
     }
 
-    public void moveMotorByName(String motorName, double power){
-        getMotorByName(motorName).setPower(power);
-    }
-
     //-------{GETTING DRIVE TRAINS}----------------------------------------------------------------------
     public DcMotor[] getAutoDriveTrain(@MotorNameTypes String motorNameType){
         DcMotor[] returnArray = new DcMotor[4];
@@ -165,5 +161,12 @@ public class Motors extends Sensors{
         returnArray[2] = getMotorByTag(RIGHT_BACK);
         returnArray[3] = getMotorByTag(LEFT_BACK);
         return returnArray;
+    }
+
+    public void moveMotor(String motorName, double power){
+        getMotorByName(motorName).setPower(power);
+    }
+    public void stopMotor(String motorName){
+        moveMotor(motorName, 0);
     }
 }
