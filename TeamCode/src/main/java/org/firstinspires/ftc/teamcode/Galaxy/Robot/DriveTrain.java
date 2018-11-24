@@ -118,10 +118,9 @@ public class DriveTrain {
         double LFPower = 0, RFPower = 0, RBPower = 0, LBPower = 0;
 
         while(degrees < 0)
-            degrees = 360 + degrees;
+            degrees += 360;
 
-        if(degrees != 0)
-            degrees = (degrees % 360);
+        degrees = (degrees % 360);
 
         if(0 <= degrees && degrees < 90){
             RFPower = power;
@@ -197,7 +196,7 @@ public class DriveTrain {
         averageDegrees = Math.abs((LeftFront.getCurrentPosition() + RightFront.getCurrentPosition()
                 + RightBack.getCurrentPosition() + LeftBack.getCurrentPosition())/4);
 
-        while(Math.abs(averageDegrees - Math.abs(degrees)) <= precision){
+        while(Math.abs(averageDegrees - Math.abs(degrees)) >= precision){
             driveAtHeader(direction,power,spinPower);
 
             averageDegrees = Math.abs((LeftFront.getCurrentPosition() + RightFront.getCurrentPosition()

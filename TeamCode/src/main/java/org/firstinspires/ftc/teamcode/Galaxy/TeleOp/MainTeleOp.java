@@ -24,6 +24,7 @@ public class MainTeleOp extends LinearOpMode{
         BubbleTheRobo.addServo("Gate");
         BubbleTheRobo.setMotorDirection(FORWARDS,REVERSE,REVERSE,REVERSE);
         BubbleTheRobo.addAMotor("Grabby", NO_TAG);
+        BubbleTheRobo.addAMotor("Lifter", NO_TAG);
         BubbleTheRobo.setBreakOrCoast(DcMotor.ZeroPowerBehavior.FLOAT);
 
         waitForStart();
@@ -43,7 +44,7 @@ public class MainTeleOp extends LinearOpMode{
     private void checkDriveMotors(){
         double speed = (slowed) ? 0.5 : 1;
         if (!tanked) 
-            BubbleTheRobo.driveByJoystick(gamepad1, speed);
+             BubbleTheRobo.driveByJoystick(gamepad1, speed);
          else
              BubbleTheRobo.driveByTank(gamepad1, speed);
     } 
@@ -65,6 +66,12 @@ public class MainTeleOp extends LinearOpMode{
             BubbleTheRobo.moveMotor("Grabby", -1);
         else
             BubbleTheRobo.stopMotor("Grabby");
+
+        while (gamepad1.dpad_up)
+            BubbleTheRobo.moveMotor("Lifter", -1);
+        while (gamepad1.dpad_down)
+            BubbleTheRobo.moveMotor("Lifter", 1);
+        BubbleTheRobo.stopMotor("Lifter");
 
         if(gamepad2.a){
             gateOpen = !gateOpen;
