@@ -6,11 +6,11 @@ Made by: Whitaker K. and Aayush V.
  Line Number:   |   Topic:
  ==========================
     23          | CanOfPineapple ---- v2.0
-    289         | MecanumWheelRobot - v1.1
-    470         | Constants --------- v1.0.1
+    358         | MecanumWheelRobot - v1.1
+    548         | Constants --------- v1.0.1
 
 
- Things in (),            friendly reminders of what section you are in
+ Things in (),             friendly reminders of what section you are in
  Thing surrounded by ==,   Notes a new topic
 
 
@@ -25,10 +25,12 @@ Made by: Whitaker K. and Aayush V.
 
     Topic                 |  Line #
     -------------------------
-    Setup                 |   #50
-    Usage                 |   #149
-     -findColoredObject   |
-    How it works          |   #211
+    Setup                 |   #52
+    Usage                 |   #152
+     -findColoredObject   |   #169
+     -findShadedObject    |   #218
+    How it works          |   #259
+    Two Search Methods    |   #312
 
     The CanOfPineapple image capturing is a system that we made ourselves.
         The system has Five Simple Steps:
@@ -307,7 +309,7 @@ Made by: Whitaker K. and Aayush V.
 
 
 
-     -----{Differences Between the Two Searches}----------                                              =CanOfPineapple - Two Searches=
+     -----{Differences Between the Two Searches}----------                                              =CanOfPineapple - Two Search Method=
 
      As you may have noticed, there are two different methods you can use to search the bitmap image.
      There is one BIG difference.
@@ -326,7 +328,7 @@ Made by: Whitaker K. and Aayush V.
      in telling the differences in the colors. FindShadedObject() is better for searching for objects
      in different amounts of light. Use which ever one you find is better for your environment.
 
-     And that's all folks!                                                                              (CanOfPineapple - Two Searches)
+     And that's all folks!                                                                              (CanOfPineapple - Two Search Method)
 
 
 
@@ -358,11 +360,11 @@ Made by: Whitaker K. and Aayush V.
 
        Topic        |   Line #
     -----------------------------
-     Initializing   | #309
-     Drive Train    | #328
-     Motors         | #407
-     Sensors        | #423
-     Servos         | #444
+     Initializing   | #378
+     Drive Train    | #397
+     Motors         | #476
+     Sensors        | #501
+     Servos         | #522
 
 
 
