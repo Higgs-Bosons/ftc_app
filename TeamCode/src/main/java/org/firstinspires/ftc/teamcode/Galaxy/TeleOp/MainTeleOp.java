@@ -59,10 +59,10 @@ public class MainTeleOp extends LinearOpMode{
         }
     }
     private void checkGrabber(){
-        if(gamepad1.dpad_up)
-            BubbleTheRobo.moveMotor("Grabby", 0.5);
-        else if(gamepad1.dpad_down)
-            BubbleTheRobo.moveMotor("Grabby", 0.5);
+        if(gamepad2.left_stick_y > 0)
+            BubbleTheRobo.moveMotor("Grabby", 1);
+        else if(gamepad2.left_stick_y < 0)
+            BubbleTheRobo.moveMotor("Grabby", -1);
         else
             BubbleTheRobo.stopMotor("Grabby");
 
