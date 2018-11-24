@@ -21,7 +21,7 @@ public class DriveTrain {
         LeftBack = driveMotors[3];
         resetEncoders();
     }
-    public void addMotors(DcMotor[] driveMotors){
+    void addMotors(DcMotor[] driveMotors){
         LeftFront = driveMotors[0];
         RightFront = driveMotors[1];
         RightBack = driveMotors[2];
@@ -188,19 +188,20 @@ public class DriveTrain {
     }
 
     public void moveDegrees(double direction, int degrees, double spin, double maxPower, double minPower, double precision){
-        final int RATIO_BILLY = 100000;
+        final int RATIO_BILLY = 10000;
         int averageDegrees;
         double power = maxPower;
         double spinPower = spin;
-        degrees = (int) ((degrees / 1150.0) * 360);
+        degrees = (int) ((degrees * 1150.0) / 360);
         resetEncoders();
-        averageDegrees = (LeftFront.getCurrentPosition() + RightFront.getCurrentPosition()
-                + RightBack.getCurrentPosition() + LeftBack.getCurrentPosition())/4;
-        while(Math.abs(averageDegrees - degrees) <= precision){
+        averageDegrees = Math.abs((LeftFront.getCurrentPosition() + RightFront.getCurrentPosition()
+                + RightBack.getCurrentPosition() + LeftBack.getCurrentPosition())/4);
+
+        while(Math.abs(averageDegrees - Math.abs(degrees)) <= precision){
             driveAtHeader(direction,power,spinPower);
 
-            averageDegrees = (LeftFront.getCurrentPosition() + RightFront.getCurrentPosition()
-                    + RightBack.getCurrentPosition() + LeftBack.getCurrentPosition())/4;
+            averageDegrees = Math.abs((LeftFront.getCurrentPosition() + RightFront.getCurrentPosition()
+                    + RightBack.getCurrentPosition() + LeftBack.getCurrentPosition())/4);
             power = (Math.abs(degrees - averageDegrees)/RATIO_BILLY);
             power = (power > maxPower) ? maxPower : power;
             power = (power < minPower) ? minPower : power;
