@@ -1,9 +1,11 @@
 Made by: Whitaker K. and Aayush V.
 
+        Version 4
+
      Table of Contents:
  Line Number:   |   Topic:
  ==========================
-    21          | CanOfPineapple ---- v1.0
+    23          | CanOfPineapple ---- v2.0
     289         | MecanumWheelRobot - v1.1
     470         | Constants --------- v1.0.1
 
@@ -18,14 +20,15 @@ Made by: Whitaker K. and Aayush V.
 
 
 
-----{CanOfPineapple}-------------------------------------------------------------------------------     =CanOfPineapple - Intro=
-    (11/17/2018 - Last Edit)
+----{CanOfPineapple}--------------------------------------------------------------------------------    =CanOfPineapple - Intro=
+    (11/24/2018 - Last Edit) Accurate in these versions: 4.3
 
-    Topic         |  Line #
+    Topic                 |  Line #
     -------------------------
-    Setup         |   #47
-    Usage         |   #147
-    How it works  |   #211
+    Setup                 |   #50
+    Usage                 |   #149
+     -findColoredObject   |
+    How it works          |   #211
 
     The CanOfPineapple image capturing is a system that we made ourselves.
         The system has Five Simple Steps:
@@ -157,22 +160,25 @@ Made by: Whitaker K. and Aayush V.
      Bitmap the preview is displaying at that instance. You then can use the bitmap however you like.
 
      To use the PineappleStrainer object, you need to initialize and declare the object. When you do
-     so you need to pass it some values. It need the value (in an int variable) of the contrast,
-     precession, and the CanOfPineapple. The contrast is the sensitivity of the search. The higher
-     contrast, the closer the pixel color will have to be to the original color to be counted. Thus
-     the higher the contrast, the pickier the strainer. The precession is the how much of the picture
-     it searches. At 100 (which is the highest) it checks every pixel. At 90, it checks 1 out of every
-     10 pixels, at 80, it checks 1 out of every 20 pixels, and so on. a good starting point for you
-     to start at would be about 85 precession and 80 contrast. You then can change these values to
-     suit your needs. You also need to pass the CanOfPineapple object so the strainer can manipulate
-     the preview.
+     so you need to pass it one values. You need to pass the CanOfPineapple object so the
+     strainer can manipulate the preview.
+
+
+     --{Using .findColoredObject}----------------
 
      The next thing to do is to call the .findColoredObject() method on the
-     PineappleStrainer object. You need to pass three objects to this method. The bitmap, the color
-     you are looking for and the size of the object from 15cm. The bitmap is what will be search, and
-     the color is the color that the object is and what will be searched for. The size variable is for
-     basic and not so accurate distance readings. This method returns a PineappleChunks object,
-     which holds all of the information about the objects found. It holds:
+     PineappleStrainer object. You need to pass five objects to this method. The contrast, the
+     precession, the bitmap, the color you are looking for and the size of the object from 15cm.
+     The contrast is the sensitivity of the search. The higher contrast, the closer the pixel color
+     will have to be to the original color to be counted. Thus the higher the contrast, the pickier
+     the strainer. The precession is the how much of the picture it searches. At 100 (which is the
+     highest) it checks every pixel. At 90, it checks 1 out of every 10 pixels, at 80, it checks 1
+     out of every 20 pixels, and so on. a good starting point for you to start at would be about 85
+     precession and 80 contrast. You then can change these values to suit your needs. The bitmap is
+     what will be search, and the color is the color that the object is and what will be  searched
+     for. The size variable is for basic and not so accurate distance readings. This method returns
+     a PineappleChunks object, which holds all of the information about the objects found. It holds:
+
      1.) X value (0-100, where 0 is on the left and 100 on the right)
      2.) Y value (0-100, where 0 is up, and 100 is down)
      3.) Z value which is a distance from camera approximation (Not very accurate)
@@ -198,14 +204,54 @@ Made by: Whitaker K. and Aayush V.
              CanOfPineapple thePineappleCan = new CanOfPineapple();
              waitForStart();
              Bitmap picture = thePineappleCan.getBitmap();
-             PineappleStrainer pineappleStrainer = new PineappleStrainer( 80, 80, thePineappleCan);
-             pineappleStrainer.findColoredObject(picture, Color.rgb(250,200, 0), 130);
+             PineappleStrainer pineappleStrainer = new PineappleStrainer(thePineappleCan);
+             pineappleStrainer.findColoredObject(80, 80, picture, Color.rgb(250, 200, 0), 130);
+             while (opModeIsActive()) {}
+             thePineappleCan.closeCanOfPineapple();
+         }
+     }                                                                                                  (CanOfPineapple - Using the CanOfPineapple)
+
+
+
+     --{Using .findShadedObject}-----------------
+
+     The next thing to do is to call the .findShadedObject() method on the
+     PineappleStrainer object. You need to pass five objects to this method. The contrast, the
+     precession, the bitmap, the color you are looking for and the size of the object from 15cm.
+     The contrast is the sensitivity of the search. The higher contrast, the closer the pixel color
+     will have to be to the original color to be counted. Thus the higher the contrast, the pickier
+     the strainer. The precession is the how much of the picture it searches. At 100 (which is the
+     highest) it checks every pixel. At 90, it checks 1 out of every 10 pixels, at 80, it checks 1
+     out of every 20 pixels, and so on. a good starting point for you to start at would be about 85
+     precession and 80 contrast. You then can change these values to suit your needs. The bitmap is
+     what will be search, and the color is the color that the object is and what will be  searched
+     for. The size variable is for basic and not so accurate distance readings. This method returns
+     a PineappleChunks object, which holds all of the information about the objects found. It holds:
+
+     1.) X value (0-100, where 0 is on the left and 100 on the right)
+     2.) Y value (0-100, where 0 is up, and 100 is down)
+     3.) Z value which is a distance from camera approximation (Not very accurate)
+     4.) Width of the object
+     5.) Height of the object
+     6.) Size of the object (in pixels checked)                                                         (CanOfPineapple - Using the CanOfPineapple)
+     7.) Reliability of the object.
+
+
+     Here is an example program that can detect yellow cubes: (There are alo some imports)
+
+
+     @Autonomous(name = "Camera Tester", group = "Tester")
+     public class CameraTester extends LinearOpMode {
+         public void runOpMode(){
+             CanOfPineapple thePineappleCan = new CanOfPineapple();
+             waitForStart();
+             Bitmap picture = thePineappleCan.getBitmap();
+             PineappleStrainer pineappleStrainer = new PineappleStrainer(thePineappleCan);
+             pineappleStrainer.findShadedObject(80, 80, picture, Color.rgb(250, 200, 0), 130);
              while (opModeIsActive()) {}
              thePineappleCan.closeCanOfPineapple();
          }
      }
-
-
 
 
      -----{How it works}-----------------------------------                                             =CanOfPineapple - How it works=
@@ -260,7 +306,28 @@ Made by: Whitaker K. and Aayush V.
 
 
 
-     And that's all folks!
+
+     -----{Differences Between the Two Searches}----------                                              =CanOfPineapple - Two Searches=
+
+     As you may have noticed, there are two different methods you can use to search the bitmap image.
+     There is one BIG difference.
+
+     The findColorObject() compares the direct color of the pixel and  compares the RGB values. It
+     finds the total difference between each of the values (red, green and blue) and combines them
+     into one total offTotal value. It then checks if that value is  greater than the required
+     maximum offTotal value.
+
+     The findShadedObject() compares the ratio of the RGB values (Red/Green, Blue/Red, Green/Red).
+     It then finds the difference between the ratio of the color in question and the color to find.
+     It then combines all the differences into one total offTotal value. It then checks if that value
+     is  greater than the required maximum offTotal value.
+
+     FindColorObject() is better for searching for an object is bright light. It is more accurate
+     in telling the differences in the colors. FindShadedObject() is better for searching for objects
+     in different amounts of light. Use which ever one you find is better for your environment.
+
+     And that's all folks!                                                                              (CanOfPineapple - Two Searches)
+
 
 
 
@@ -287,7 +354,7 @@ Made by: Whitaker K. and Aayush V.
 
 
 ----{MacanumWheelRobot}------------------------------------                                             =MacanumWheelRobot - Intro=
-    (11/24/2018 - Last Edit)
+    (11/24/2018 - Last Edit) Accurate in these versions: 4.3
 
        Topic        |   Line #
     -----------------------------
@@ -477,7 +544,7 @@ Made by: Whitaker K. and Aayush V.
 
 
 ----{Constants}-------------------------------------------------------------------------------------    =Constants - Intro=
-    (11/24/2018 - Last Edit)
+    (11/24/2018 - Last Edit) Accurate in these versions: 4.3
 
     Most of the time, you don't need to touch Constants. But in case you do, here are some things to
     note.
