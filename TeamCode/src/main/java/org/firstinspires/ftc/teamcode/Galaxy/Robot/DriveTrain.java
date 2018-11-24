@@ -88,10 +88,10 @@ public class DriveTrain {
         stick1Y = gamepad.left_stick_y  * speed;
         stick2X = gamepad.right_stick_x * speed;
 
-        RFPower = (((stick1Y - stick1X) / 2)+stick2X)*2;
-        RBPower = (((stick1Y + stick1X) / 2)+stick2X)*2;
-        LFPower = (((stick1Y + stick1X) / 2)-stick2X)*2;
-        LBPower = (((stick1Y - stick1X) / 2)-stick2X)*2;
+        RFPower = (((stick1Y + stick1X) / 2)+stick2X)*2;
+        RBPower = (((stick1Y - stick1X) / 2)+stick2X)*2;
+        LFPower = (((stick1Y - stick1X) / 2)-stick2X)*2;
+        LBPower = (((stick1Y + stick1X) / 2)-stick2X)*2;
 
         RightFront.setPower(RFPower);
         RightBack.setPower(RBPower);
