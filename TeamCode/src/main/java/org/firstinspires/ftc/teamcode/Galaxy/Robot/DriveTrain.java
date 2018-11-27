@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.Galaxy.Robot;
 
+import android.util.Log;
+
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.robotcore.hardware.*;
 
@@ -148,6 +150,7 @@ public class DriveTrain {
         RightBack.setPower(RBPower);
         LeftFront.setPower(LFPower);
         LeftBack.setPower(LBPower);
+        Log.d("LF", LFPower +", RF: " + RFPower + ", RB: " + RBPower + "LB: " + LBPower);
     }
     public void driveAtHeader(double degrees, double power, double spinPower){
         double LFPower = 0, RFPower = 0, RBPower = 0, LBPower = 0;
@@ -180,10 +183,10 @@ public class DriveTrain {
             LBPower = -(power - (((degrees-90) / 90)*2*power));
         }
 
-        RightFront.setPower((RFPower - spinPower)/2);
-        RightBack.setPower( (RBPower - spinPower)/2);
-        LeftFront.setPower( (LFPower + spinPower)/2);
-        LeftBack.setPower(  (LBPower + spinPower)/2);
+        RightFront.setPower(RFPower - spinPower);
+        RightBack.setPower( RBPower - spinPower);
+        LeftFront.setPower( LFPower + spinPower);
+        LeftBack.setPower(  LBPower + spinPower);
     }
 
     public void moveDegrees(double direction, int degrees, double spin, double maxPower, double minPower, double precision){
@@ -197,7 +200,7 @@ public class DriveTrain {
                 + RightBack.getCurrentPosition() + LeftBack.getCurrentPosition())/4);
 
         while(Math.abs(averageDegrees - Math.abs(degrees)) >= precision){
-            driveAtHeader(direction,power,spinPower);
+            driveAtHeader(direction,power, spinPower);
 
             averageDegrees = Math.abs((LeftFront.getCurrentPosition() + RightFront.getCurrentPosition()
                     + RightBack.getCurrentPosition() + LeftBack.getCurrentPosition())/4);
@@ -205,7 +208,7 @@ public class DriveTrain {
             power = (power > maxPower) ? maxPower : power;
             power = (power < minPower) ? minPower : power;
 
-            spin = (spin * (power / maxPower));
+            spinPower = (spin * (power / maxPower));
         }
     }
     public void moveDegrees(double direction, int degrees, double maxPower, double minPower, double precision){

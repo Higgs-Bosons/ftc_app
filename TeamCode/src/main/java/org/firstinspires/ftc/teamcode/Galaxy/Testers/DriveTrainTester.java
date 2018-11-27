@@ -11,13 +11,10 @@ import org.firstinspires.ftc.teamcode.Galaxy.Robot.MecanumWheelRobot;
 public class DriveTrainTester extends LinearOpMode {
     public void runOpMode(){
         MecanumWheelRobot Robo = new MecanumWheelRobot(hardwareMap, FIRST_LETTER_NO_SPACE_UPPERCASE);
+        Robo.setMotorDirection(FORWARDS,REVERSE,REVERSE,REVERSE);
         waitForStart();
         while (opModeIsActive()){
-            Robo.resetEncoders();
-            Robo.moveDegrees(NORTH, 720, 0, 0.5, 0.1, 5);
-            Robo.moveDegrees(SOUTH, 720, 0, 0.5, 0.1, 5);
-            Robo.moveDegrees(NORTH, 720, 0.3, 0.5, 0.1, 5);
-            break;
+           Robo.moveDriveMotor(LEFT_BACK, 0.2);
         }
         Robo.stopRobot();
     }
