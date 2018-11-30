@@ -68,6 +68,9 @@ public class Constants {
     public static final int SOUTH = 180;
     public static final int WEST = 270;
 
+//-------{Autonomous Actions}-----------------------------------------------------------------------
+    public static final String DRIVE_ROBOT = "AKAs";
+
 //-------{@IntDef}----------------------------------------------------------------------------------
     @IntDef({FORWARDS, REVERSE})
     @Retention(RetentionPolicy.CLASS)
@@ -99,4 +102,9 @@ public class Constants {
                 FULL_NAME_NO_SPACE,              FULL_NAME_WITH_SPACE,              FULL_NAME_WITH_UNDERSCORE_UPPERCASE})
     @Retention(RetentionPolicy.CLASS)
     public @interface MotorNameTypes{}
+
+
+    @StringDef({DRIVE_ROBOT})
+    @Retention(RetentionPolicy.CLASS)
+    public @interface AutonomousActions{}
 }
