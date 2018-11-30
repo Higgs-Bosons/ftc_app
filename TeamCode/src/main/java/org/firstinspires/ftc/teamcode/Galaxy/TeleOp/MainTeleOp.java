@@ -22,7 +22,7 @@ public class MainTeleOp extends LinearOpMode{
     public void runOpMode(){
         BubbleTheRobo = new MecanumWheelRobot(hardwareMap, FIRST_LETTER_NO_SPACE_UPPERCASE);
         BubbleTheRobo.addServo("Gate");
-        BubbleTheRobo.setMotorDirection(FORWARDS,REVERSE,REVERSE,REVERSE);
+        BubbleTheRobo.setMotorDirection(FORWARDS,REVERSE,REVERSE,FORWARDS);
         BubbleTheRobo.addAMotor("Grabby", NO_TAG);
         BubbleTheRobo.addAMotor("Lifter", NO_TAG);
         BubbleTheRobo.setBreakOrCoast(DcMotor.ZeroPowerBehavior.FLOAT);
