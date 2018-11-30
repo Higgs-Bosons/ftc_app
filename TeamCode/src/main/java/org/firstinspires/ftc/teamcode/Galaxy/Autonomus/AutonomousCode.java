@@ -16,31 +16,31 @@ public class AutonomousCode extends AutonomousMethods {
         programToRun = new LinkedHashMap<>();
     }
 
-    public float[] getBlock(int index){
+    public float[] getAction(int index){
         return programToRun.get(tagsNIndex.get(index));
     }
 
-    public void addBlock(String actionName, float valueOne){
+    public void addAction(String actionName, float valueOne){
         float[] array = {1f, valueOne};
         tagsNIndex.add(actionName);
         programToRun.put(actionName, array);
     }
-    public void addBlock(String actionName, float valueOne, float valueTwo){
+    public void addAction(String actionName, float valueOne, float valueTwo){
         float[] array = {2f, valueOne, valueTwo};
         tagsNIndex.add(actionName);
         programToRun.put(actionName, array);
     }
-    public void addBlock(String actionName, float valueOne, float valueTwo, float valueThree){
+    public void addAction(String actionName, float valueOne, float valueTwo, float valueThree){
         float[] array = {3f, valueOne, valueTwo, valueThree};
         tagsNIndex.add(actionName);
         programToRun.put(actionName, array);
     }
-    public void addBlock(String actionName, float valueOne, float valueTwo, float valueThree, float valueFour){
+    public void addAction(String actionName, float valueOne, float valueTwo, float valueThree, float valueFour){
         float[] array = {4f, valueOne, valueTwo, valueThree, valueFour};
         tagsNIndex.add(actionName);
         programToRun.put(actionName, array);
     }
-    public void addBlock(String actionName, float valueOne, float valueTwo, float valueThree, float valueFour, float valueFive){
+    public void addAction(String actionName, float valueOne, float valueTwo, float valueThree, float valueFour, float valueFive){
         float[] array = {5f, valueOne, valueTwo, valueThree, valueFour, valueFive};
         tagsNIndex.add(actionName);
         programToRun.put(actionName, array);
