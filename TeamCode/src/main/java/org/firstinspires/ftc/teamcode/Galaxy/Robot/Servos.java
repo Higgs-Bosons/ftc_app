@@ -23,4 +23,7 @@ public class Servos extends  Motors{
     public void moveServo(String name, double toMoveTo){
         this.servos.get(name).setPosition(toMoveTo);
     }
+    public Servo getServo(String name) {
+        return this.servos.get(name);
+    }
 }
