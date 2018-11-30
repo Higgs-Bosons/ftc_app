@@ -22,6 +22,9 @@ public class AutonomousCode extends AutonomousMethods {
     public float[] getAction(int index){
         return programToRun.get(tagsNIndex.get(index));
     }
+    public String getActionName(int index){
+        return tagsNIndex.get(index);
+    }
 
     public void addAction(String actionName, float valueOne){
         float[] array = {1f, valueOne};
@@ -55,6 +58,12 @@ public class AutonomousCode extends AutonomousMethods {
     }
 
     public void runProgram() {
-        super.runProgram(this);
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                AutonomousMethods.runProgram(AutonomousCode.this);
+            }
+        }).start();
+
     }
 }

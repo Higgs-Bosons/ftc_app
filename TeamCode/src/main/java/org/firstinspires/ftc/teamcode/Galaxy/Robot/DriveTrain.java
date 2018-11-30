@@ -228,6 +228,7 @@ public class DriveTrain {
             power = (power > maxPower) ? maxPower : power;
             power = (power < minPower) ? minPower : power;
         }
+        stopRobot();
     }
 
     public void spinRobot(double spinPower) {
