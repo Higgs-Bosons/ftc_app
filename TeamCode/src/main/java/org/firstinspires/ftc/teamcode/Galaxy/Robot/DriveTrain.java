@@ -190,7 +190,7 @@ public class DriveTrain {
     }
 
     public void moveDegrees(double direction, int degrees, double spin, double maxPower, double minPower, double precision){
-        final int RATIO_BILLY = 10000;
+        final int RATIO_BILLY = 400;
         int averageDegrees;
         double power = maxPower;
         double spinPower = spin;
@@ -212,7 +212,7 @@ public class DriveTrain {
         }
     }
     public void moveDegrees(double direction, int degrees, double maxPower, double minPower, double precision){
-        final int RATIO_BILLY = 100000;
+        final int RATIO_BILLY = 400;
         int averageDegrees;
         double power = maxPower;
         degrees = (int) ((degrees / 1150.0) * 360);

@@ -30,11 +30,15 @@ public class MainTeleOp extends LinearOpMode{
         BubbleTheRobo.setBreakOrCoast(DcMotor.ZeroPowerBehavior.FLOAT);
 
         waitForStart();
+
+        BubbleTheRobo.moveServo("X-Thing", 0.6);
+        BubbleTheRobo.moveServo("Y-Thing", 0.47);
         BubbleTheRobo.moveServo("Gate",.55);
         while (opModeIsActive()) {
             checkDriveMotors();
             checkButtons();
             checkGrabber();
+            checkLifter();
             telemetry.addData("Movement Mode: ", mode);
             telemetry.addData("Slowed: ", slowed);
             telemetry.update();
@@ -62,27 +66,18 @@ public class MainTeleOp extends LinearOpMode{
         }
     }
     private void checkGrabber(){
-        while (gamepad2.x)
-            BubbleTheRobo.moveMotor("Grabby", 1);
-        BubbleTheRobo.stopMotor("Grabby");
-
-        while (gamepad1.dpad_up)
-            BubbleTheRobo.moveMotor("Lifter", -1);
-        while (gamepad1.dpad_down)
-            BubbleTheRobo.moveMotor("Lifter", 1);
-        BubbleTheRobo.stopMotor("Lifter");
-
-        if(gamepad2.a){
-            gateOpen = !gateOpen;
-            while (gamepad2.a){}
-            if(gateOpen)
-                BubbleTheRobo.moveServo("Gate",0.4);
-            else
-                BubbleTheRobo.moveServo("Gate", 0.55);
-
-        }
-
-        BubbleTheRobo.moveServo("X-Thing", 0.6);
-        BubbleTheRobo.moveServo("Y-Thing", 0.47);
+        BubbleTheRobo.moveMotor("Grabby", gamepad2.left_stick_y);
+        if(gamepad2.a)
+            BubbleTheRobo.moveServo("Gate",0.4);
+        else
+            BubbleTheRobo.moveServo("Gate", 0.55);
+    }
+    private void checkLifter(){
+        if(gamepad2.dpad_up)
+            BubbleTheRobo.moveMotor("Lifter",1);
+        else if(gamepad2.dpad_down)
+            BubbleTheRobo.moveMotor("Lifter",-1);
+        else
+            BubbleTheRobo.stopMotor("Lifter");
     }
 }

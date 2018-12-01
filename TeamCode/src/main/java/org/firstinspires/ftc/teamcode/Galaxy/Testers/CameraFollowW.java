@@ -40,8 +40,8 @@ public class CameraFollowW extends LinearOpMode {
                     .findShadedObject(80,80, picture, Color.rgb(250,200, 0), 130);
 
             if(pineappleChunks.doesChunkExist()){
-                X = pineappleChunks.getChunk(0)[PineappleChunks.Y];
-                Y = pineappleChunks.getChunk(0)[PineappleChunks.X];
+                X = pineappleChunks.getBiggestChunk()[PineappleChunks.Y];
+                Y = pineappleChunks.getBiggestChunk()[PineappleChunks.X];
 
                 X = (X - 50) / 700;
                 Y = (Y - 50) / 700;

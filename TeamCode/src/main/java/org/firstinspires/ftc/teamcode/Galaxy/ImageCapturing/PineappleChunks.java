@@ -67,18 +67,39 @@ public class PineappleChunks {
 
 
     public int[] getChunk(int spotNum){
-            int[] returnArray = new int[7];
-            returnArray[0] = this.x.get(spotNum);
-            returnArray[1] = this.y.get(spotNum);
-            returnArray[2] = this.z.get(spotNum);
-            returnArray[3] = this.width.get(spotNum);
-            returnArray[4] = this.height.get(spotNum);
-            returnArray[5] = this.size.get(spotNum);
-            returnArray[6] = this.reliability.get(spotNum);
+        int[] returnArray = new int[7];
+        returnArray[0] = this.x.get(spotNum);
+        returnArray[1] = this.y.get(spotNum);
+        returnArray[2] = this.z.get(spotNum);
+        returnArray[3] = this.width.get(spotNum);
+        returnArray[4] = this.height.get(spotNum);
+        returnArray[5] = this.size.get(spotNum);
+        returnArray[6] = this.reliability.get(spotNum);
 
-            return returnArray;
+        return returnArray;
     }
+    public int[] getBiggestChunk(){
+        int spotNum, biggestSize;
+        biggestSize = -1000000;
+        spotNum = 0;
+        for(int sizeCounter = 0; sizeCounter < size.size(); sizeCounter++){
+            if(size.get(sizeCounter) > biggestSize){
+                biggestSize = size.get(sizeCounter);
+                spotNum = sizeCounter;
+            }
+        }
 
+        int[] returnArray = new int[7];
+        returnArray[0] = this.x.get(spotNum);
+        returnArray[1] = this.y.get(spotNum);
+        returnArray[2] = this.z.get(spotNum);
+        returnArray[3] = this.width.get(spotNum);
+        returnArray[4] = this.height.get(spotNum);
+        returnArray[5] = this.size.get(spotNum);
+        returnArray[6] = this.reliability.get(spotNum);
+
+        return returnArray;
+    }
 
     public boolean doesChunkExist(){
         return (numberOfChunks > 0);

@@ -14,11 +14,9 @@ public class DriveTrainTester extends LinearOpMode {
     public void runOpMode(){
         MecanumWheelRobot Robo = new MecanumWheelRobot(hardwareMap, FIRST_LETTER_NO_SPACE_UPPERCASE);
         Robo.setMotorDirection(FORWARDS,REVERSE,REVERSE,FORWARDS);
-        AutonomousCode code = new AutonomousCode(Robo);
 
-        code.addAction(DRIVE_ROBOT, 0, 180, 0.5f, 0.1f, 5);
-        waitForStart();
-        code.runProgram();
+        //(double direction, int degrees, double spin, double maxPower, double minPower, double precision)
+        Robo.moveDegrees(NORTH, 360, 0,0.7, 0.1, 10);
 
         while (opModeIsActive()){}
 
