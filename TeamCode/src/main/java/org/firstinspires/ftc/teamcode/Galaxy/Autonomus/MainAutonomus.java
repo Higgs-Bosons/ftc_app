@@ -14,19 +14,17 @@ public class MainAutonomus extends LinearOpMode{
         MecanumWheelRobot Bubbles = new MecanumWheelRobot(hardwareMap, FIRST_LETTER_NO_SPACE_UPPERCASE);
         Bubbles.addServo("Gate");
         Bubbles.setMotorDirection(FORWARDS,REVERSE,REVERSE,FORWARDS);
-        Bubbles.addAMotor("Grabby", NO_TAG);
-        Bubbles.addAMotor("Lifter", NO_TAG);
-        Bubbles.addServo("X-Thing");
-        Bubbles.addServo("Y-Thing");
+        AutonomousCode autonomousCode = new AutonomousCode(Bubbles);
 
-        Bubbles.moveServo("X-Thing", 0.6);
-        Bubbles.moveServo("Y-Thing", 0.47);
-
-        Bubbles.setBreakOrCoast(DcMotor.ZeroPowerBehavior.FLOAT);
+        autonomousCode.addAction(DRIVE_ROBOT, NORTH, 720, 0.7f, 0.1f, 10);
 
         waitForStart();
-        Bubbles.moveDegrees(NORTH, 360, 0,0.7, 0.1, 10);
 
+        autonomousCode.runProgram();
 
+        while (opModeIsActive()){}
+
+        autonomousCode.stopProgram();
+        Bubbles.stopRobot();
     }
 }
