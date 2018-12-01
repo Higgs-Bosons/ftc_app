@@ -15,7 +15,7 @@ class AutonomousMethods {
             switch(actionName){
                 case DRIVE_ROBOT:
                     array = code.getAction(counter);
-                    bubbles.moveDegrees((int) array[1], (int) array[2],(float) array[3], (float) array[4], (float) array[5]);
+                    bubbles.moveDegrees((double) array[1], (int) array[2],(double) array[3], (double) array[4], (double) array[5]);
                     break;
                 case MOVE_SERVO:
                     array = code.getAction(counter);
