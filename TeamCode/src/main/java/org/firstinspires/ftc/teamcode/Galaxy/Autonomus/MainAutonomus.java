@@ -18,11 +18,15 @@ public class MainAutonomus extends LinearOpMode{
         Bubbles.addAMotor("Lifter", NO_TAG);
         Bubbles.addServo("X-Thing");
         Bubbles.addServo("Y-Thing");
-        Bubbles.getServo("X-Thing").scaleRange(0.4, 0.8);
+
+        Bubbles.moveServo("X-Thing", 0.6);
+        Bubbles.moveServo("Y-Thing", 0.47);
+
         Bubbles.setBreakOrCoast(DcMotor.ZeroPowerBehavior.FLOAT);
 
         waitForStart();
-        Bubbles.moveServo("X-Thing", 0.5);
+        Bubbles.moveDegrees(NORTH, 360, 0,0.7, 0.1, 10);
+
 
     }
 }
