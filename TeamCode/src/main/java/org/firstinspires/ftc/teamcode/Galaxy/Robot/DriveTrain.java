@@ -146,6 +146,11 @@ public class DriveTrain {
             LBPower = -(power - (((degrees-90) / 90)*2*power));
         }
 
+        LFPower = -LFPower;
+        RFPower = -RFPower;
+        RBPower = -RBPower;
+        LBPower = -LBPower;
+
         RightFront.setPower(RFPower);
         RightBack.setPower(RBPower);
         LeftFront.setPower(LFPower);
@@ -183,10 +188,15 @@ public class DriveTrain {
             LBPower = -(power - (((degrees-90) / 90)*2*power));
         }
 
-        RightFront.setPower(RFPower - spinPower);
-        RightBack.setPower( RBPower - spinPower);
-        LeftFront.setPower( LFPower + spinPower);
-        LeftBack.setPower(  LBPower + spinPower);
+        LFPower = -(LFPower + spinPower);
+        RFPower = -(RFPower - spinPower);
+        RBPower = -(RBPower - spinPower);
+        LBPower = -(LBPower + spinPower);
+
+        RightFront.setPower(RFPower);
+        RightBack.setPower( RBPower);
+        LeftFront.setPower( LFPower);
+        LeftBack.setPower(  LBPower);
     }
 
     public void moveDegrees(double direction, int degrees, double spin, double maxPower, double minPower, double precision){
