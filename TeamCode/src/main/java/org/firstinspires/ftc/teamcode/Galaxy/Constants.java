@@ -69,7 +69,8 @@ public class Constants {
     public static final int WEST = 270;
 
 //-------{Autonomous Actions}-----------------------------------------------------------------------
-    public static final String DRIVE_ROBOT = "AKAs";
+    public static final String DRIVE_ROBOT = "Used to move the robot around";
+    public static final String MOVE_SERVO = "Used to move a servo to a position";
 
 //-------{@IntDef}----------------------------------------------------------------------------------
     @IntDef({FORWARDS, REVERSE})

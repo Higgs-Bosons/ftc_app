@@ -226,7 +226,9 @@ public class DriveTrain {
         int averageDegrees;
         double power = maxPower;
         degrees = (int) ((degrees / 360.0) * 1150.0);
+
         resetEncoders();
+
         averageDegrees = (LeftFront.getCurrentPosition() + RightFront.getCurrentPosition()
                 + RightBack.getCurrentPosition() + LeftBack.getCurrentPosition())/4;
         while(Math.abs(averageDegrees - degrees) <= precision){
