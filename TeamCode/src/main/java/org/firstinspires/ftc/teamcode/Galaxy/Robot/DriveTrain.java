@@ -204,14 +204,15 @@ public class DriveTrain {
         double spinPower = spin;
         degrees = (int) ((degrees / 360.0) * 1150.0);
         resetEncoders();
-        averageDegrees = Math.abs((LeftFront.getCurrentPosition() + RightFront.getCurrentPosition()
-                + RightBack.getCurrentPosition() + LeftBack.getCurrentPosition())/4);
+        averageDegrees = (Math.abs(LeftFront.getCurrentPosition()) + Math.abs(RightFront.getCurrentPosition())
+                        + Math.abs(RightBack.getCurrentPosition()) + Math.abs(LeftBack.getCurrentPosition()))/4;
 
         while(Math.abs(Math.abs(averageDegrees) - Math.abs(degrees)) > precision){
             driveAtHeader(direction,power, spinPower);
 
-            averageDegrees = Math.abs((LeftFront.getCurrentPosition() + RightFront.getCurrentPosition()
-                    + RightBack.getCurrentPosition() + LeftBack.getCurrentPosition())/4);
+            averageDegrees = (Math.abs(LeftFront.getCurrentPosition()) + Math.abs(RightFront.getCurrentPosition())
+                    + Math.abs(RightBack.getCurrentPosition()) + Math.abs(LeftBack.getCurrentPosition()))/4;
+
             power = (Math.abs(degrees - averageDegrees)/RATIO_BILLY);
             power = (power > maxPower) ? maxPower : power;
             power = (power < minPower) ? minPower : power;
@@ -227,13 +228,13 @@ public class DriveTrain {
 
         resetEncoders();
 
-        averageDegrees = (LeftFront.getCurrentPosition() + RightFront.getCurrentPosition()
-                + RightBack.getCurrentPosition() + LeftBack.getCurrentPosition())/4;
+        averageDegrees = (Math.abs(LeftFront.getCurrentPosition()) + Math.abs(RightFront.getCurrentPosition())
+                + Math.abs(RightBack.getCurrentPosition()) + Math.abs(LeftBack.getCurrentPosition()))/4;
         while(Math.abs(Math.abs(averageDegrees) - Math.abs(degrees)) > precision){
             driveAtHeader(direction,power);
 
-            averageDegrees = (LeftFront.getCurrentPosition() + RightFront.getCurrentPosition()
-                    + RightBack.getCurrentPosition() + LeftBack.getCurrentPosition())/4;
+            averageDegrees = (Math.abs(LeftFront.getCurrentPosition()) + Math.abs(RightFront.getCurrentPosition())
+                    + Math.abs(RightBack.getCurrentPosition()) + Math.abs(LeftBack.getCurrentPosition()))/4;
             power = ((degrees - averageDegrees)/RATIO_BILLY);
             power = (power > maxPower) ? maxPower : power;
             power = (power < minPower) ? minPower : power;
