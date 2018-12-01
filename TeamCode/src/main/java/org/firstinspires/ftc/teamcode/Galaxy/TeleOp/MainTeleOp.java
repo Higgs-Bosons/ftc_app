@@ -25,6 +25,8 @@ public class MainTeleOp extends LinearOpMode{
         BubbleTheRobo.setMotorDirection(FORWARDS,REVERSE,REVERSE,FORWARDS);
         BubbleTheRobo.addAMotor("Grabby", NO_TAG);
         BubbleTheRobo.addAMotor("Lifter", NO_TAG);
+        BubbleTheRobo.addServo("X-Thing");
+        BubbleTheRobo.addServo("Y-Thing");
         BubbleTheRobo.setBreakOrCoast(DcMotor.ZeroPowerBehavior.FLOAT);
 
         waitForStart();
@@ -60,12 +62,9 @@ public class MainTeleOp extends LinearOpMode{
         }
     }
     private void checkGrabber(){
-        if(gamepad2.left_stick_y > 0)
+        while (gamepad2.x)
             BubbleTheRobo.moveMotor("Grabby", 1);
-        else if(gamepad2.left_stick_y < 0)
-            BubbleTheRobo.moveMotor("Grabby", -1);
-        else
-            BubbleTheRobo.stopMotor("Grabby");
+        BubbleTheRobo.stopMotor("Grabby");
 
         while (gamepad1.dpad_up)
             BubbleTheRobo.moveMotor("Lifter", -1);
@@ -82,5 +81,8 @@ public class MainTeleOp extends LinearOpMode{
                 BubbleTheRobo.moveServo("Gate", 0.55);
 
         }
+
+        BubbleTheRobo.moveServo("X-Thing", 0.6);
+        BubbleTheRobo.moveServo("Y-Thing", 0.47);
     }
 }

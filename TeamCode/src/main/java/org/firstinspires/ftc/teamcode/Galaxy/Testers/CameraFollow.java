@@ -24,6 +24,8 @@ public class CameraFollow extends LinearOpMode {
         MecanumWheelRobot Bubbles = new MecanumWheelRobot(hardwareMap, FIRST_LETTER_NO_SPACE_UPPERCASE);
         Bubbles.addServo("X-Thing");
         Bubbles.addServo("Y-Thing");
+        Bubbles.getServo("X-Thing").scaleRange(0.4, 0.8);
+        Bubbles.getServo("Y-Thing").scaleRange(0.33, 0.5);
 
         while (opModeIsActive()){
             picture = thePineappleCan.getBitmap();
@@ -34,19 +36,20 @@ public class CameraFollow extends LinearOpMode {
                 Servo ything = Bubbles.getServo("Y-Thing");
                 int[] theChunk = pineappleChunks.getChunk(0);
 
-                if (theChunk[1] < 40 && !(xthing.getPosition() < 0.4)) {
+                if (theChunk[1] < 40) {
                     Bubbles.moveServo("X-Thing", xthing.getPosition() - 0.05);
-                } else if (theChunk[1] > 60 && !(xthing.getPosition() > 0.8)) {
+                } else if (theChunk[1] > 60) {
                     Bubbles.moveServo("X-Thing", xthing.getPosition() + 0.05);
                 }
 
-                if (theChunk[0] < 40 && !(ything.getPosition() > 0.5)) {
-                    Bubbles.moveServo("Y-Thing", ything.getPosition() - 0.05);
-                } else if (theChunk[0] > 40 && !(ything.getPosition() < 0.33)) {
+                if (theChunk[0] < 40) {
                     Bubbles.moveServo("Y-Thing", ything.getPosition() + 0.05);
+                } else if (theChunk[0] > 60) {
+                    Bubbles.moveServo("Y-Thing", ything.getPosition() - 0.05);
                 }
             }
 
         }
+        thePineappleCan.closeCanOfPineapple();
     }
 }
