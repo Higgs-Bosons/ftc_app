@@ -116,7 +116,7 @@ public class DriveTrain {
 
 //-------{AUTONOMOUS}----------------------------------------------------------------------------------
     //--{MOVEMENT}---------------------------------------------------
-    public void driveAtHeader(double degrees, double power){
+    private void driveAtHeader(double degrees, double power){
         double LFPower = 0, RFPower = 0, RBPower = 0, LBPower = 0;
 
         while(degrees < 0)
@@ -152,7 +152,7 @@ public class DriveTrain {
         LeftBack.setPower(-LBPower);
         Log.d("LF", LFPower +", RF: " + RFPower + ", RB: " + RBPower + "LB: " + LBPower);
     }
-    public void driveAtHeader(double degrees, double power, double spinPower){
+    private void driveAtHeader(double degrees, double power, double spinPower){
         double LFPower = 0, RFPower = 0, RBPower = 0, LBPower = 0;
 
         while(degrees < 0)
@@ -193,9 +193,15 @@ public class DriveTrain {
         LeftFront.setPower( LFPower);
         LeftBack.setPower(  LBPower);
     }
+    private void spinRobot(double spinPower) {
+        RightFront.setPower(-spinPower);
+        RightBack.setPower(-spinPower);
+        LeftFront.setPower(spinPower);
+        LeftBack.setPower(spinPower);
+    }
 
-    public void moveDegrees(double direction, int degrees, double spin, double maxPower, double minPower, double precision){
-        final int RATIO_BILLY = 1500;
+
+    public void moveRobot(double direction, int degrees, double spin, double maxPower, double minPower, double precision){
         int averageDegrees;
         double power = maxPower;
         double spinPower = spin;
@@ -219,8 +225,7 @@ public class DriveTrain {
             spinPower = (spin * (power / maxPower));
         }
     }
-    public void moveDegrees(double direction, int degrees, double maxPower, double minPower, double precision){
-        final int RATIO_BILLY = 1500;
+    public void moveRobot(double direction, int degrees, double maxPower, double minPower, double precision){
         int averageDegrees;
         double power = maxPower;
         degrees = (int) ((degrees / 360.0) * 1150.0);
@@ -241,15 +246,7 @@ public class DriveTrain {
         }
         stopRobot();
     }
-
-    public void spinRobot(double spinPower) {
-        RightFront.setPower(-spinPower);
-        RightBack.setPower(-spinPower);
-        LeftFront.setPower(spinPower);
-        LeftBack.setPower(spinPower);
-    }
-
-    public void turnGyro(int toDegree, BNO055IMU IMU){
+    public void gyroTurn(int toDegree, BNO055IMU IMU){
         double power = 0.6;
         float degrees = getGyroReading(IMU);
         for(int count = 1; count !=3; count++){

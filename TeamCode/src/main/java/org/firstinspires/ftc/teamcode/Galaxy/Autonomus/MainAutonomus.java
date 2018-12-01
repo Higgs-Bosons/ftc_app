@@ -10,15 +10,7 @@ import static org.firstinspires.ftc.teamcode.Galaxy.Constants.*;
 public class MainAutonomus extends LinearOpMode{
     MecanumWheelRobot Bubbles;
     public void runOpMode(){
-        Bubbles = new MecanumWheelRobot(hardwareMap, FIRST_LETTER_NO_SPACE_UPPERCASE);
-        Bubbles.resetEncoders();
-        Bubbles.addServo("Gate");
-        Bubbles.setMotorDirection(FORWARDS,REVERSE,REVERSE,FORWARDS);
-        Bubbles.addAMotor("Grabby", NO_TAG);
-        Bubbles.addAMotor("Lifter", NO_TAG);
-        Bubbles.addServo("X-Thing");
-        Bubbles.addServo("Y-Thing");
-        Bubbles.setBreakOrCoast(DcMotor.ZeroPowerBehavior.FLOAT);
+        initializeTheRobot();
 
         AutonomousProgram program = new AutonomousProgram();
         waitForStart();
@@ -31,6 +23,19 @@ public class MainAutonomus extends LinearOpMode{
 
     }
 
+    private void initializeTheRobot(){
+        Bubbles = new MecanumWheelRobot(hardwareMap, FIRST_LETTER_NO_SPACE_UPPERCASE);
+        Bubbles.resetEncoders();
+        Bubbles.addServo("Gate");
+        Bubbles.addSensor("imu", IMU);
+        Bubbles.setMotorDirection(FORWARDS,REVERSE,REVERSE,FORWARDS);
+        Bubbles.addAMotor("Grabby", NO_TAG);
+        Bubbles.addAMotor("Lifter", NO_TAG);
+        Bubbles.addServo("X-Thing");
+        Bubbles.addServo("Y-Thing");
+        Bubbles.setBreakOrCoast(DcMotor.ZeroPowerBehavior.FLOAT);
+    }
+
     class AutonomousProgram implements Runnable {
         private Thread thread;
         void runAutonomous() {
@@ -38,12 +43,17 @@ public class MainAutonomus extends LinearOpMode{
            thread.start();
         }
         public void run() {
-            Bubbles.moveDegrees(NORTH, 360, 0.8, 0.2, 10);
+            LanderToSampling();
         }
         void stop(){
             thread.interrupt();
         }
     }
+    
+    private void LanderToSampling(){
+        Bubbles.gyroTurn(90, Bubbles.getIMU("imu"));
+    }
+
 }
 
 

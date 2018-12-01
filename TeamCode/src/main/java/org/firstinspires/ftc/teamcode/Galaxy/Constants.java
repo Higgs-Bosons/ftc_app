@@ -68,10 +68,6 @@ public class Constants {
     public static final double SOUTH = 180;
     public static final double WEST = 270;
 
-//-------{Autonomous Actions}-----------------------------------------------------------------------
-    public static final String DRIVE_ROBOT = "Used to move the robot around";
-    public static final String MOVE_SERVO = "Used to move a servo to a position";
-
 //-------{@IntDef}----------------------------------------------------------------------------------
     @IntDef({FORWARDS, REVERSE})
     @Retention(RetentionPolicy.CLASS)
@@ -103,9 +99,4 @@ public class Constants {
                 FULL_NAME_NO_SPACE,              FULL_NAME_WITH_SPACE,              FULL_NAME_WITH_UNDERSCORE_UPPERCASE})
     @Retention(RetentionPolicy.CLASS)
     public @interface MotorNameTypes{}
-
-
-    @StringDef({DRIVE_ROBOT})
-    @Retention(RetentionPolicy.CLASS)
-    public @interface AutonomousActions{}
 }
