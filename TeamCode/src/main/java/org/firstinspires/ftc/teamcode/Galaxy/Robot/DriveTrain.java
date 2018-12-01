@@ -231,7 +231,7 @@ public class DriveTrain {
 
         averageDegrees = (LeftFront.getCurrentPosition() + RightFront.getCurrentPosition()
                 + RightBack.getCurrentPosition() + LeftBack.getCurrentPosition())/4;
-        while(Math.abs(averageDegrees - degrees) <= precision){
+        while(Math.abs(Math.abs(averageDegrees) - Math.abs(degrees)) <= precision){
             driveAtHeader(direction,power);
 
             averageDegrees = (LeftFront.getCurrentPosition() + RightFront.getCurrentPosition()
