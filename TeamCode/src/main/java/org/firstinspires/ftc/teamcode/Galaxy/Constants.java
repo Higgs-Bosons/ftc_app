@@ -63,10 +63,10 @@ public class Constants {
     public static final int ACCELERATION_Z = 13;
 
 //-------{Directions}-----------------------------------------------------------------------
-    public static final int NORTH = 0;
-    public static final int EAST = 90;
-    public static final int SOUTH = 180;
-    public static final int WEST = 270;
+    public static final double NORTH = 0;
+    public static final double EAST = 90;
+    public static final double SOUTH = 180;
+    public static final double WEST = 270;
 
 //-------{Autonomous Actions}-----------------------------------------------------------------------
     public static final String DRIVE_ROBOT = "Used to move the robot around";
