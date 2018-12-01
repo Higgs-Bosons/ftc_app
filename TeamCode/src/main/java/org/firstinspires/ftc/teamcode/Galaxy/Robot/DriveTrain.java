@@ -146,13 +146,10 @@ public class DriveTrain {
             LBPower = -(power - (((degrees-90) / 90)*2*power));
         }
 
-        LFPower = -LFPower;
-        LBPower = -LBPower;
-
-        RightFront.setPower(RFPower);
-        RightBack.setPower(RBPower);
-        LeftFront.setPower(LFPower);
-        LeftBack.setPower(LBPower);
+        RightFront.setPower(-RFPower);
+        RightBack.setPower(-RBPower);
+        LeftFront.setPower(-LFPower);
+        LeftBack.setPower(-LBPower);
         Log.d("LF", LFPower +", RF: " + RFPower + ", RB: " + RBPower + "LB: " + LBPower);
     }
     public void driveAtHeader(double degrees, double power, double spinPower){
@@ -187,8 +184,8 @@ public class DriveTrain {
         }
 
         LFPower = -(LFPower + spinPower);
-        RFPower = (RFPower - spinPower);
-        RBPower = (RBPower - spinPower);
+        RFPower = -(RFPower - spinPower);
+        RBPower = -(RBPower - spinPower);
         LBPower = -(LBPower + spinPower);
 
         RightFront.setPower(RFPower);
