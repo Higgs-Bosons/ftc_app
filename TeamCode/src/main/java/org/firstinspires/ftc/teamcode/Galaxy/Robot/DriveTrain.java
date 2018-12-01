@@ -147,8 +147,6 @@ public class DriveTrain {
         }
 
         LFPower = -LFPower;
-        RFPower = -RFPower;
-        RBPower = -RBPower;
         LBPower = -LBPower;
 
         RightFront.setPower(RFPower);
@@ -189,8 +187,8 @@ public class DriveTrain {
         }
 
         LFPower = -(LFPower + spinPower);
-        RFPower = -(RFPower - spinPower);
-        RBPower = -(RBPower - spinPower);
+        RFPower = (RFPower - spinPower);
+        RBPower = (RBPower - spinPower);
         LBPower = -(LBPower + spinPower);
 
         RightFront.setPower(RFPower);
