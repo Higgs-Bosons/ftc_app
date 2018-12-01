@@ -2,17 +2,15 @@ package org.firstinspires.ftc.teamcode.Galaxy.Autonomus;
 
 import com.qualcomm.robotcore.eventloop.opmode.*;
 import com.qualcomm.robotcore.hardware.DcMotor;
-
-import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.Galaxy.Robot.MecanumWheelRobot;
 
 import static org.firstinspires.ftc.teamcode.Galaxy.Constants.*;
 
-@Autonomous(name = "Autonomus", group = "Autonomus")
+@Autonomous(name = "Autonomous", group = "Autonomous")
 public class MainAutonomus extends LinearOpMode{
-
+    MecanumWheelRobot Bubbles;
     public void runOpMode(){
-        MecanumWheelRobot Bubbles = new MecanumWheelRobot(hardwareMap, FIRST_LETTER_NO_SPACE_UPPERCASE);
+        Bubbles = new MecanumWheelRobot(hardwareMap, FIRST_LETTER_NO_SPACE_UPPERCASE);
         Bubbles.resetEncoders();
         Bubbles.addServo("Gate");
         Bubbles.setMotorDirection(FORWARDS,REVERSE,REVERSE,FORWARDS);
@@ -22,23 +20,30 @@ public class MainAutonomus extends LinearOpMode{
         Bubbles.addServo("Y-Thing");
         Bubbles.setBreakOrCoast(DcMotor.ZeroPowerBehavior.FLOAT);
 
-        AutonomousCode autonomousCode = new AutonomousCode(Bubbles);
-
-        autonomousCode.addAction(DRIVE_ROBOT, NORTH, 720, 0.7, 0.1, 10);
+        AutonomousProgram program = new AutonomousProgram();
         waitForStart();
 
-        autonomousCode.runProgram();
+        program.runAutonomous();
 
-        while (opModeIsActive()){
-            int[] values = Bubbles.getMotorValues();
-            telemetry.addData("LF", values[0]);
-            telemetry.addData("LB", values[1]);
-            telemetry.addData("RF", values[2]);
-            telemetry.addData("RB", values[3]);
-            telemetry.update();
-        }
-
-        autonomousCode.stopProgram();
+        while (opModeIsActive()) {}
+        program.stop();
         Bubbles.stopRobot();
+
+    }
+
+    class AutonomousProgram implements Runnable {
+        private Thread thread;
+        void runAutonomous() {
+           thread =  new Thread(this);
+           thread.start();
+        }
+        public void run() {
+            Bubbles.moveDegrees(NORTH, 360, 0.8, 0.2, 10);
+        }
+        void stop(){
+            thread.interrupt();
+        }
     }
 }
+
+
