@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.Galaxy.Autonomus;
 
+import org.firstinspires.ftc.teamcode.Galaxy.Constants.*;
 import org.firstinspires.ftc.teamcode.Galaxy.Robot.MecanumWheelRobot;
 
 import java.util.ArrayList;
@@ -11,6 +12,7 @@ public class AutonomousCode extends AutonomousMethods {
     private Map<String, float[]> programToRun;
     private ArrayList<String> tagsNIndex;
     int numOfActions;
+    Thread program;
 
     public AutonomousCode(MecanumWheelRobot Robot){
         this.Bubbles = Robot;
@@ -26,31 +28,31 @@ public class AutonomousCode extends AutonomousMethods {
         return tagsNIndex.get(index);
     }
 
-    public void addAction(String actionName, float valueOne){
+    public void addAction(@AutonomousActions  String actionName, float valueOne){
         float[] array = {1f, valueOne};
         tagsNIndex.add(actionName);
         programToRun.put(actionName, array);
         numOfActions++;
     }
-    public void addAction(String actionName, float valueOne, float valueTwo){
+    public void addAction(@AutonomousActions String actionName, float valueOne, float valueTwo){
         float[] array = {2f, valueOne, valueTwo};
         tagsNIndex.add(actionName);
         programToRun.put(actionName, array);
         numOfActions++;
     }
-    public void addAction(String actionName, float valueOne, float valueTwo, float valueThree){
+    public void addAction(@AutonomousActions String actionName, float valueOne, float valueTwo, float valueThree){
         float[] array = {3f, valueOne, valueTwo, valueThree};
         tagsNIndex.add(actionName);
         programToRun.put(actionName, array);
         numOfActions++;
     }
-    public void addAction(String actionName, float valueOne, float valueTwo, float valueThree, float valueFour){
+    public void addAction(@AutonomousActions String actionName, float valueOne, float valueTwo, float valueThree, float valueFour){
         float[] array = {4f, valueOne, valueTwo, valueThree, valueFour};
         tagsNIndex.add(actionName);
         programToRun.put(actionName, array);
         numOfActions++;
     }
-    public void addAction(String actionName, float valueOne, float valueTwo, float valueThree, float valueFour, float valueFive){
+    public void addAction(@AutonomousActions String actionName, float valueOne, float valueTwo, float valueThree, float valueFour, float valueFive){
         float[] array = {5f, valueOne, valueTwo, valueThree, valueFour, valueFive};
         tagsNIndex.add(actionName);
         programToRun.put(actionName, array);
@@ -58,12 +60,17 @@ public class AutonomousCode extends AutonomousMethods {
     }
 
     public void runProgram() {
-        new Thread(new Runnable() {
+        program = new Thread(new Runnable() {
             @Override
             public void run() {
                 AutonomousMethods.runProgram(AutonomousCode.this);
             }
-        }).start();
+        });
+        program.start();
 
     }
+    public void stopProgram(){
+        program.interrupt();
+    }
+
 }
