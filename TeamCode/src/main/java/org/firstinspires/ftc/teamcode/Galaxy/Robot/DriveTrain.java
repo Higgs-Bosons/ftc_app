@@ -210,9 +210,9 @@ public class DriveTrain {
             averageDegrees = (Math.abs(LeftFront.getCurrentPosition()) + Math.abs(RightFront.getCurrentPosition())
                     + Math.abs(RightBack.getCurrentPosition()) + Math.abs(LeftBack.getCurrentPosition()))/4;
 
-            power = ( ((1916+(2/3.0)) * (Math.abs(Math.abs(averageDegrees) - Math.abs(degrees)))) +
+            power = ( ((1916+(2/3.0)) * Math.pow(Math.abs(Math.abs(averageDegrees) - Math.abs(degrees)), 2)) +
                     ((1341+(2/3.0)) * Math.abs(Math.abs(averageDegrees) - Math.abs(degrees))));
-            
+
             power = (power > maxPower) ? maxPower : power;
             power = (power < minPower) ? minPower : power;
 
