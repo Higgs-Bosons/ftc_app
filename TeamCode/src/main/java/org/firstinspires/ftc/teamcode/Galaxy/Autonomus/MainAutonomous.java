@@ -1,14 +1,23 @@
 package org.firstinspires.ftc.teamcode.Galaxy.Autonomus;
 
+import android.graphics.Bitmap;
+import android.graphics.Color;
+import android.util.Log;
+
 import com.qualcomm.robotcore.eventloop.opmode.*;
 import com.qualcomm.robotcore.hardware.DcMotor;
+
+import org.firstinspires.ftc.teamcode.Galaxy.ImageCapturing.CanOfPineapple;
+import org.firstinspires.ftc.teamcode.Galaxy.ImageCapturing.PineappleChunks;
+import org.firstinspires.ftc.teamcode.Galaxy.ImageCapturing.PineappleStrainer;
 import org.firstinspires.ftc.teamcode.Galaxy.Robot.MecanumWheelRobot;
 
 import static org.firstinspires.ftc.teamcode.Galaxy.Constants.*;
 
 @Autonomous(name = "Autonomous", group = "Autonomous")
 public class MainAutonomous extends LinearOpMode{
-    MecanumWheelRobot Bubbles;
+    private MecanumWheelRobot Bubbles;
+    private CanOfPineapple canOfPineapple;
     public void runOpMode(){
         initializeTheRobot();
 
@@ -34,6 +43,8 @@ public class MainAutonomous extends LinearOpMode{
         Bubbles.addServo("X-Thing");
         Bubbles.addServo("Y-Thing");
         Bubbles.setBreakOrCoast(DcMotor.ZeroPowerBehavior.FLOAT);
+
+        canOfPineapple = new CanOfPineapple();
     }
 
     class AutonomousProgram implements Runnable {
@@ -52,6 +63,21 @@ public class MainAutonomous extends LinearOpMode{
     
     private void LanderToSampling(){
         Bubbles.gyroTurn(90, Bubbles.getIMU("imu"));
+        Log.d("Cube is in spot", findYellowCubePlacement()+"");
+    }
+    private int findYellowCubePlacement(){
+        PineappleStrainer pineappleStrainer = new PineappleStrainer(canOfPineapple);
+        PineappleChunks pineappleChunks;
+        Bitmap picture = canOfPineapple.getBitmap();
+
+        pineappleChunks = pineappleStrainer
+                .findShadedObject(80,80, picture, Color.rgb(250,200, 0), 130);
+
+        if(pineappleChunks.doesChunkExist()){
+            return (int) (Math.floor((pineappleChunks.getBiggestChunk()[PineappleChunks.X])/34)+1);
+        }else{
+            return 0;
+        }
     }
 
 }
