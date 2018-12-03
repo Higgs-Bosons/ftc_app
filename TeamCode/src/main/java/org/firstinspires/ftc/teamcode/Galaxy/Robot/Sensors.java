@@ -111,6 +111,7 @@ public class Sensors extends DriveTrain{
                     throw new customErrors.DuplicateNameException();
                 }
                 this.imu.put(name, hardwareMap.get(BNO055IMU.class, "imu"));
+                ResetIMUGyro(name);
                 break;
         }
     }
