@@ -7,7 +7,7 @@ import org.firstinspires.ftc.teamcode.Galaxy.Robot.MecanumWheelRobot;
 import static org.firstinspires.ftc.teamcode.Galaxy.Constants.*;
 
 @Autonomous(name = "Autonomous", group = "Autonomous")
-public class MainAutonomus extends LinearOpMode{
+public class MainAutonomous extends LinearOpMode{
     MecanumWheelRobot Bubbles;
     public void runOpMode(){
         initializeTheRobot();
