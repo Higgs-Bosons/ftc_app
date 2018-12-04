@@ -269,7 +269,11 @@ public class DriveTrain {
 
     //--{TOOLS}------------------------------------------------------
     private float getGyroReading(BNO055IMU IMU){
-        return IMU.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES).firstAngle;
+        float degree = IMU.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES).firstAngle;
+        if(degree<0){
+            degree = (180+(181 - Math.abs(degree)));
+        }
+        return degree;
     }
     private boolean WhichWayToTurn(int Target, int Gyro){
         int  VirtualDegrees = Gyro;
