@@ -83,7 +83,7 @@ public class PineappleStrainer {
 //-------{HELPER METHODS}---------------------------------------------------------------------------
     //---{USED BY BOTH}--------------------------------------------------------
     private PineappleChunks getChunks(boolean[][] cords, int sizeFrom15cm){
-        boolean[][] alreadyFound = getFilledArray(PictureWidth / precision, PictureHeight / precision);
+        boolean[][] alreadyFound = getFilledArray((PictureWidth / precision)+1, (PictureHeight / precision)+1);
         final int NUMBER_OF_WHITE_SPOTS = 3;
         PineappleChunks pineappleChunks = new PineappleChunks();
 
