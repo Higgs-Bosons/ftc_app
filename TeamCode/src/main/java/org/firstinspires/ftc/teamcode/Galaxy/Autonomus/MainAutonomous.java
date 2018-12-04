@@ -23,12 +23,17 @@ public class MainAutonomous extends LinearOpMode{
         initializeTheRobot();
 
         AutonomousProgram program = new AutonomousProgram();
+        telemetry.addData("READY ", "-)");
+        telemetry.update();
+
         waitForStart();
         //Bubbles.gyroTurn(90, Bubbles.getIMU("imu"));
        // program.runAutonomous();
 
         telemetry.addData("Cube is at position ", " " +findYellowCubePlacement());
         telemetry.update();
+
+        sample();
 
 
         while (opModeIsActive()) {}
@@ -47,6 +52,7 @@ public class MainAutonomous extends LinearOpMode{
         Bubbles.addAMotor("Lifter", NO_TAG);
         Bubbles.addServo("X-Thing");
         Bubbles.addServo("Y-Thing");
+
         Bubbles.moveServo("X-Thing", 0.64);
         Bubbles.moveServo("Y-Thing", 0.29);
         Bubbles.setBreakOrCoast(DcMotor.ZeroPowerBehavior.FLOAT);
@@ -88,6 +94,17 @@ public class MainAutonomous extends LinearOpMode{
         }
     }
 
+    private void sample(){
+        final int NO_CUBE = 0;
+        int cubePosition = findYellowCubePlacement();
+        if(cubePosition == NO_CUBE){
+            Bubbles.moveRobot(NORTH, 400, 0.7, 0.1, 1);
+        }else{
+            if(cubePosition == 1){
+                
+            }
+        }
+    }
 }
 
 
