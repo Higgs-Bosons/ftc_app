@@ -47,6 +47,8 @@ public class MainAutonomous extends LinearOpMode{
         Bubbles.addAMotor("Lifter", NO_TAG);
         Bubbles.addServo("X-Thing");
         Bubbles.addServo("Y-Thing");
+        Bubbles.moveServo("X-Thing", 0.64);
+        Bubbles.moveServo("Y-Thing", 0.29);
         Bubbles.setBreakOrCoast(DcMotor.ZeroPowerBehavior.FLOAT);
 
         canOfPineapple = new CanOfPineapple();
