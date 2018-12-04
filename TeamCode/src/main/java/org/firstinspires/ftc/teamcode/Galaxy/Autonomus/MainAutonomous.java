@@ -11,6 +11,7 @@ import org.firstinspires.ftc.teamcode.Galaxy.ImageCapturing.CanOfPineapple;
 import org.firstinspires.ftc.teamcode.Galaxy.ImageCapturing.PineappleChunks;
 import org.firstinspires.ftc.teamcode.Galaxy.ImageCapturing.PineappleStrainer;
 import org.firstinspires.ftc.teamcode.Galaxy.Robot.MecanumWheelRobot;
+import org.firstinspires.ftc.teamcode.Galaxy.Tools;
 
 import static org.firstinspires.ftc.teamcode.Galaxy.Constants.*;
 
@@ -23,8 +24,12 @@ public class MainAutonomous extends LinearOpMode{
 
         AutonomousProgram program = new AutonomousProgram();
         waitForStart();
+        //Bubbles.gyroTurn(90, Bubbles.getIMU("imu"));
+       // program.runAutonomous();
 
-        program.runAutonomous();
+        telemetry.addData("Cube is at position ", " " +findYellowCubePlacement());
+        telemetry.update();
+
 
         while (opModeIsActive()) {}
         program.stop();
@@ -63,7 +68,8 @@ public class MainAutonomous extends LinearOpMode{
     
     private void LanderToSampling(){
         Bubbles.gyroTurn(90, Bubbles.getIMU("imu"));
-        Log.d("Cube is in spot", findYellowCubePlacement()+"");
+        telemetry.addData("Cube is at position ", " " +findYellowCubePlacement());
+        Tools.showToast("Cube is at position" + findYellowCubePlacement());
     }
     private int findYellowCubePlacement(){
         PineappleStrainer pineappleStrainer = new PineappleStrainer(canOfPineapple);
@@ -71,10 +77,10 @@ public class MainAutonomous extends LinearOpMode{
         Bitmap picture = canOfPineapple.getBitmap();
 
         pineappleChunks = pineappleStrainer
-                .findShadedObject(80,80, picture, Color.rgb(250,200, 0), 130);
+                .findShadedObject(80,90, picture, Color.rgb(250,200, 0), 130);
 
         if(pineappleChunks.doesChunkExist()){
-            return (int) (Math.floor((pineappleChunks.getBiggestChunk()[PineappleChunks.X])/34)+1);
+            return (int) (Math.floor((pineappleChunks.getBiggestChunk()[PineappleChunks.Y])/34)+1);
         }else{
             return 0;
         }

@@ -228,11 +228,10 @@ public class PineappleStrainer {
         int offGreen = Math.abs(Color.green(closestColor) - Color.green(colorToFind));
         didIFindACloseEnoughColor = ((offBlue <= contrast/2) && (offRed <= contrast/2) && (offGreen <= contrast/2));
 
-
-        int PictureHeightTrun = (int) (Math.floor(PictureHeight / 100.0) *100);
-        int PictureWidthTrun = (int) (Math.floor(PictureWidth / 100.0) *100);
-        for(int X = 0; X < PictureWidthTrun; X += precision){
-            for(int Y = 0; Y < PictureHeightTrun; Y += precision){
+        for(int X = 0; X < PictureWidth; X += precision){
+            for(int Y = 0; Y < PictureHeight; Y += precision){
+                X = (X > PictureWidth) ? PictureWidth : X;
+                Y = (Y > PictureHeight) ? PictureHeight : Y;
                 PixelColor = picture.getPixel(X,Y);
                 cords[X/precision][(Y/precision)] = isCloseEnough(PixelColor, closestColor);
             }
@@ -266,10 +265,10 @@ public class PineappleStrainer {
 
         didIFindACloseEnoughColor = (offTotal < (contrast));
         if(didIFindACloseEnoughColor){
-            int PictureHeightTrun = (int) (Math.floor(PictureHeight / 100.0) *100);
-            int PictureWidthTrun = (int) (Math.floor(PictureWidth / 100.0) *100);
-            for(int X = 0; X < PictureWidthTrun; X += precision){
-                for(int Y = 0; Y < PictureHeightTrun; Y += precision){
+            for(int X = 0; X < PictureWidth; X += precision){
+                for(int Y = 0; Y < PictureHeight; Y += precision){
+                    X = (X > PictureWidth) ? PictureWidth : X;
+                    Y = (Y > PictureHeight) ? PictureHeight : Y;
                     PixelColor = picture.getPixel(X,Y);
                     cords[X/precision][(Y/precision)] = isCloseEnoughShade(PixelColor, closestColor);
                 }
