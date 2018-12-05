@@ -247,22 +247,16 @@ public class DriveTrain {
         stopRobot();
     }
     public void gyroTurn(int toDegree, BNO055IMU IMU){
-        int counter = 0;
-        double power = 0.6;
+        int counter;
+        double power = 0.6, precession = 43;
+
         boolean WhichWay = WhichWayToTurn(toDegree, (int) getGyroReading(IMU));
-        while(HowFar(toDegree, (int) getGyroReading(IMU)) >= 50) {
-            if(!WhichWay){spinRobot(-power);}else{spinRobot(power);}
-        }
-        WhichWay = WhichWayToTurn(toDegree, (int) getGyroReading(IMU));
-        power = 0.5;
-        while (HowFar(toDegree, (int) getGyroReading(IMU)) >= 25){
-            if(!WhichWay){spinRobot(-power);}else{spinRobot(power);}
-        }
-        power = 0.2;
-        WhichWay = WhichWayToTurn(toDegree, (int) getGyroReading(IMU));
-        while (HowFar(toDegree, (int) getGyroReading(IMU)) >= 2.5) {
-            if(counter == 25){WhichWay = WhichWayToTurn(toDegree, (int) getGyroReading(IMU));counter = 0;}else{counter++;}
-            if(!WhichWay){spinRobot(-power);}else{spinRobot(power);}
+
+        for(counter = 0; counter < 3; counter++, power -= 0.2, precession -= 20){
+            while(HowFar(toDegree, (int) getGyroReading(IMU)) >= precession) {
+                if(WhichWay){spinRobot(power);}else{spinRobot(-power);}
+                WhichWay = WhichWayToTurn(toDegree, (int) getGyroReading(IMU));
+            }
         }
         stopRobot();
     }

@@ -27,7 +27,7 @@ public class MainAutonomous extends LinearOpMode{
         telemetry.update();
 
         waitForStart();
-        //Bubbles.gyroTurn(90, Bubbles.getIMU("imu"));
+        Bubbles.gyroTurn(90, Bubbles.getIMU("imu"));
        // program.runAutonomous();
 
         telemetry.addData("Cube is at position ", " " +findYellowCubePlacement());
