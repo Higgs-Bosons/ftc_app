@@ -150,7 +150,6 @@ public class DriveTrain {
         RightBack.setPower(-RBPower);
         LeftFront.setPower(-LFPower);
         LeftBack.setPower(-LBPower);
-        Log.d("LF", LFPower +", RF: " + RFPower + ", RB: " + RBPower + "LB: " + LBPower);
     }
     private void driveAtHeader(double degrees, double power, double spinPower){
         double LFPower = 0, RFPower = 0, RBPower = 0, LBPower = 0;
@@ -234,12 +233,14 @@ public class DriveTrain {
 
         averageDegrees = (Math.abs(LeftFront.getCurrentPosition()) + Math.abs(RightFront.getCurrentPosition())
                 + Math.abs(RightBack.getCurrentPosition()) + Math.abs(LeftBack.getCurrentPosition()))/4;
+
         while(Math.abs(Math.abs(averageDegrees) - Math.abs(degrees)) > precision){
             driveAtHeader(direction,power);
 
             averageDegrees = (Math.abs(LeftFront.getCurrentPosition()) + Math.abs(RightFront.getCurrentPosition())
                     + Math.abs(RightBack.getCurrentPosition()) + Math.abs(LeftBack.getCurrentPosition()))/4;
-            power = ( ((1916+(2/3.0)) * (Math.abs(Math.abs(averageDegrees) - Math.abs(degrees)))) +
+
+            power = (((1916+(2/3.0)) * Math.pow(Math.abs(Math.abs(averageDegrees) - Math.abs(degrees)), 2)) +
                     ((1341+(2/3.0)) * Math.abs(Math.abs(averageDegrees) - Math.abs(degrees))));
             power = (power > maxPower) ? maxPower : power;
             power = (power < minPower) ? minPower : power;
@@ -254,22 +255,23 @@ public class DriveTrain {
 
         for(counter = 0; counter < 3; counter++, power -= 0.2, precession -= 20){
             while(HowFar(toDegree, (int) getGyroReading(IMU)) >= precession) {
-                if(WhichWay){spinRobot(power);}else{spinRobot(-power);}
+                if(WhichWay){spinRobot(-power);}else{spinRobot(power);}
                 WhichWay = WhichWayToTurn(toDegree, (int) getGyroReading(IMU));
+                Log.d("LOOP","LOOP");
             }
         }
         stopRobot();
     }
 
     //--{TOOLS}------------------------------------------------------
-    private float getGyroReading(BNO055IMU IMU){
+    public float getGyroReading(BNO055IMU IMU){
         float degree = IMU.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES).firstAngle;
         if(degree<0){
             degree = (180+(181 - Math.abs(degree)));
         }
         return degree;
     }
-    private boolean WhichWayToTurn(int Target, int Gyro){
+    public boolean WhichWayToTurn(int Target, int Gyro){
         int  VirtualDegrees = Gyro;
         int counterOne = 0;
         int counterTwo = 0;
@@ -292,7 +294,7 @@ public class DriveTrain {
         }
         return counterOne > counterTwo;
     }
-    private int HowFar(int Target, int Gyro){
+    public int HowFar(int Target, int Gyro){
         int  VirtualDegrees = Gyro;
         int counterOne = 0;
         int counterTwo = 0;

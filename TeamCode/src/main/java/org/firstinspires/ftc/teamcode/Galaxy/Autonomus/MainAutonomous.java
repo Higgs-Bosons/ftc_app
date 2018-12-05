@@ -27,17 +27,8 @@ public class MainAutonomous extends LinearOpMode{
         telemetry.update();
 
         waitForStart();
-        Bubbles.gyroTurn(90, Bubbles.getIMU("imu"));
-       // program.runAutonomous();
-
-        telemetry.addData("Cube is at position ", " " +findYellowCubePlacement());
-        telemetry.update();
-
         sample();
-
-
-        while (opModeIsActive()) {}
-        program.stop();
+        //program.stop();
         Bubbles.stopRobot();
 
     }
@@ -50,6 +41,8 @@ public class MainAutonomous extends LinearOpMode{
         Bubbles.setMotorDirection(FORWARDS,REVERSE,REVERSE,FORWARDS);
         Bubbles.addAMotor("Grabby", NO_TAG);
         Bubbles.addAMotor("Lifter", NO_TAG);
+        Bubbles.addSensor("Touchyl",TOUCH_SENSOR);
+        Bubbles.addSensor("Touchyr",TOUCH_SENSOR);
         Bubbles.addServo("X-Thing");
         Bubbles.addServo("Y-Thing");
 
@@ -98,11 +91,17 @@ public class MainAutonomous extends LinearOpMode{
         final int NO_CUBE = 0;
         int cubePosition = findYellowCubePlacement();
         if(cubePosition == NO_CUBE){
-            Bubbles.moveRobot(NORTH, 400, 0.7, 0.1, 1);
+            Bubbles.moveRobot(NORTH, 400, 0.7, 0.1, 15);
         }else{
-            if(cubePosition == 1){
-                
+            Bubbles.moveRobot(NORTH, 100, 0,0.7, 0.1, 15);
+            if(cubePosition == 3){
+                Bubbles.gyroTurn(330,Bubbles.getIMU("imu"));
+            }else if (cubePosition == 1){
+                Bubbles.gyroTurn(25,Bubbles.getIMU("imu"));
             }
+            Bubbles.moveMotor("Grabby", -1);
+            Bubbles.moveRobot(NORTH, 1500, 0.7, 0.1, 15);
+            Bubbles.stopMotor("Grabby");
         }
     }
 }
