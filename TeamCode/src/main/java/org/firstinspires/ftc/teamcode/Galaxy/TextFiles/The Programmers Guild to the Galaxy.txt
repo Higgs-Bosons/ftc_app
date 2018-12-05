@@ -3,19 +3,19 @@ Made by: Whitaker K. and Aayush V.
         Version 4, 569 Lines
 
      Table of Contents:
- Line Number:   |   Topic:
- ==========================
-    23          | CanOfPineapple ---- v2.0
-    358         | MecanumWheelRobot - v1.1
-    548         | Constants --------- v1.0.1
+ Line Number:   |   Topic:                   |  Bookmark Letter:
+ =================================================================
+    23          | CanOfPineapple ---- v2.0   |        A
+    358         | MecanumWheelRobot - v1.1   |        B
+    548         | Constants --------- v1.0.1 |        C
 
 
  Things in (),             friendly reminders of what section you are in
  Thing surrounded by ==,   Notes a new topic
 
-
-
-
+The topics, if you view them in Android Studio, are bookmarked. To see them (at least in 3.2.1),
+either go to Navigate > Bookmarks > Show Bookmarks or press Shift + F11. Each topic corresponds with
+a letter, as seen in the Table itself.
 
 
 
