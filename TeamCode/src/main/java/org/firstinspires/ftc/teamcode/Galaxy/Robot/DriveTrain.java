@@ -9,6 +9,9 @@ import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
 import org.firstinspires.ftc.teamcode.Galaxy.Tools;
+
+import javax.xml.datatype.Duration;
+
 import static org.firstinspires.ftc.teamcode.Galaxy.Constants.*;
 
 public class DriveTrain {
@@ -330,5 +333,12 @@ public class DriveTrain {
         LeftFront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         RightBack.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         LeftBack.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+    }
+    public void pause(int Duration){
+        try {
+            Thread.sleep(Duration);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 }
