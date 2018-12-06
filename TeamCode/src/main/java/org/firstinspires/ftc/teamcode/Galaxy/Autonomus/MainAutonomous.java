@@ -19,6 +19,8 @@ import static org.firstinspires.ftc.teamcode.Galaxy.Constants.*;
 public class MainAutonomous extends LinearOpMode{
     private MecanumWheelRobot Bubbles;
     private CanOfPineapple canOfPineapple;
+    private int cubePosition;
+
     public void runOpMode(){
         initializeTheRobot();
 
@@ -27,8 +29,12 @@ public class MainAutonomous extends LinearOpMode{
         telemetry.update();
 
         waitForStart();
+
         sample();
-        //program.stop();
+        toDepo();
+        atDepo();
+
+        // program.stop();
         Bubbles.stopRobot();
 
     }
@@ -37,12 +43,16 @@ public class MainAutonomous extends LinearOpMode{
         Bubbles = new MecanumWheelRobot(hardwareMap, FIRST_LETTER_NO_SPACE_UPPERCASE);
         Bubbles.resetEncoders();
         Bubbles.addServo("Gate");
+        Bubbles.addServo("Dumper");
         Bubbles.addSensor("imu", IMU);
+
         Bubbles.setMotorDirection(FORWARDS,REVERSE,REVERSE,FORWARDS);
         Bubbles.addAMotor("Grabby", NO_TAG);
         Bubbles.addAMotor("Lifter", NO_TAG);
-        Bubbles.addSensor("Touchyl",TOUCH_SENSOR);
-        Bubbles.addSensor("Touchyr",TOUCH_SENSOR);
+
+        Bubbles.addSensor("TouchyL",TOUCH_SENSOR);
+        Bubbles.addSensor("TouchyR",TOUCH_SENSOR);
+
         Bubbles.addServo("X-Thing");
         Bubbles.addServo("Y-Thing");
 
@@ -60,7 +70,7 @@ public class MainAutonomous extends LinearOpMode{
            thread.start();
         }
         public void run() {
-            LanderToSampling();
+            sample();
         }
         void stop(){
             thread.interrupt();
@@ -89,7 +99,7 @@ public class MainAutonomous extends LinearOpMode{
 
     private void sample(){
         final int NO_CUBE = 0;
-        int cubePosition = findYellowCubePlacement();
+        cubePosition = findYellowCubePlacement();
         if(cubePosition == NO_CUBE){
             Bubbles.moveRobot(NORTH, 400, 0.7, 0.1, 15);
         }else{
@@ -101,9 +111,48 @@ public class MainAutonomous extends LinearOpMode{
             }
             Bubbles.moveMotor("Grabby", -1);
             Bubbles.moveRobot(NORTH, 1500, 0.7, 0.1, 15);
+            Bubbles.pause(500);
             Bubbles.stopMotor("Grabby");
         }
     }
+
+    private void toDepo(){
+        if (cubePosition == 2 || cubePosition == 3) {
+            Bubbles.gyroTurn(315,Bubbles.getIMU("imu"));
+        }
+        else if (cubePosition == 1) {
+            Bubbles.gyroTurn(45, Bubbles.getIMU("imu"));
+        }
+        while (Bubbles.readSensor("TouchyL", TOUCH_BOOLEAN) == 0 && Bubbles.readSensor("TouchyR", TOUCH_BOOLEAN) == 0) {
+            Bubbles.moveRobot(NORTH, 10, 0.7, 0.4, 15);
+        }
+        Bubbles.moveRobot(SOUTH, 20, 0.7, 0.1, 15);
+        Bubbles.ResetIMUGyro("imu");
+        if (cubePosition == 3 || cubePosition == 2) {
+            Bubbles.gyroTurn(270, Bubbles.getIMU("imu"));
+        }
+        else if (cubePosition == 1) {
+            Bubbles.gyroTurn(90, Bubbles.getIMU("imu"));
+        }
+        while (Bubbles.readSensor("TouchyL", TOUCH_BOOLEAN) == 0 && Bubbles.readSensor("TouchyR", TOUCH_BOOLEAN) == 0) {
+            Bubbles.moveRobot(NORTH, 10, 0.7, 0.4, 15);
+        }
+    }
+    private void atDepo(){
+        Bubbles.ResetIMUGyro("imu");
+        if (cubePosition == 2 || cubePosition == 3) {
+            Bubbles.gyroTurn(180,Bubbles.getIMU("imu"));
+        }
+        if (cubePosition == 1) {
+            Bubbles.gyroTurn(90, Bubbles.getIMU("imu"));
+        }
+        Bubbles.moveServo("Gate",0.4);
+        Bubbles.moveServo("Dumper", 0.4);
+        Bubbles.pause(500);
+        Bubbles.moveServo("Gate",0.55);
+        Bubbles.moveServo("Dumper", 0);
+    }
+
 }
 
 

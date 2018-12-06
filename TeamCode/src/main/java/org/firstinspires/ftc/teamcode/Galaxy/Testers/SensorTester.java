@@ -12,7 +12,7 @@ public class SensorTester extends LinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {
         MecanumWheelRobot Bubbles = new MecanumWheelRobot(hardwareMap, FIRST_LETTER_NO_SPACE_UPPERCASE);
-        Bubbles.addSensor("touchy",TOUCH_SENSOR);
+        Bubbles.addServo("Dumper");
 
         waitForStart();
         while (opModeIsActive()){
