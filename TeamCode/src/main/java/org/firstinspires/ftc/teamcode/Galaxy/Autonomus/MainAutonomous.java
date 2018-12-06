@@ -123,6 +123,8 @@ public class MainAutonomous extends LinearOpMode{
         else if (cubePosition == 1) {
             Bubbles.gyroTurn(45, Bubbles.getIMU("imu"));
         }
+
+        
         while (Bubbles.readSensor("TouchyL", TOUCH_BOOLEAN) == 0 && Bubbles.readSensor("TouchyR", TOUCH_BOOLEAN) == 0) {
             Bubbles.moveRobot(NORTH, 10, 0.7, 0.4, 15);
         }
