@@ -32,7 +32,6 @@ public class MainAutonomous extends LinearOpMode{
 
         sample();
         toDepo();
-        atDepo();
 
         // program.stop();
         Bubbles.stopRobot();
@@ -123,7 +122,7 @@ public class MainAutonomous extends LinearOpMode{
         else if (cubePosition == 1) {
             Bubbles.gyroTurn(45, Bubbles.getIMU("imu"));
         }
-        while (Bubbles.readSensor("TouchyL", TOUCH_BOOLEAN) == 0 && Bubbles.readSensor("TouchyR", TOUCH_BOOLEAN) == 0) {
+        while (Bubbles.readSensor("TouchyL", TOUCH_VALUE) == 0 || Bubbles.readSensor("TouchyR", TOUCH_VALUE) == 0) {
             Bubbles.moveRobot(NORTH, 10, 0.7, 0.4, 15);
         }
         Bubbles.moveRobot(SOUTH, 20, 0.7, 0.1, 15);
@@ -134,7 +133,7 @@ public class MainAutonomous extends LinearOpMode{
         else if (cubePosition == 1) {
             Bubbles.gyroTurn(90, Bubbles.getIMU("imu"));
         }
-        while (Bubbles.readSensor("TouchyL", TOUCH_BOOLEAN) == 0 && Bubbles.readSensor("TouchyR", TOUCH_BOOLEAN) == 0) {
+        while (Bubbles.readSensor("TouchyL", TOUCH_VALUE) == 0 || Bubbles.readSensor("TouchyR", TOUCH_VALUE) == 0) {
             Bubbles.moveRobot(NORTH, 10, 0.7, 0.4, 15);
         }
     }
