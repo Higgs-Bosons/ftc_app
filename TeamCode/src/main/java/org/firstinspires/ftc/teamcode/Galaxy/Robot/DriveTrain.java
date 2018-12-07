@@ -119,7 +119,7 @@ public class DriveTrain {
 
 //-------{AUTONOMOUS}----------------------------------------------------------------------------------
     //--{MOVEMENT}---------------------------------------------------
-    private void driveAtHeader(double degrees, double power){
+    public void driveAtHeader(double degrees, double power){
         double LFPower = 0, RFPower = 0, RBPower = 0, LBPower = 0;
 
         while(degrees < 0)
@@ -154,7 +154,7 @@ public class DriveTrain {
         LeftFront.setPower(-LFPower);
         LeftBack.setPower(-LBPower);
     }
-    private void driveAtHeader(double degrees, double power, double spinPower){
+    public void driveAtHeader(double degrees, double power, double spinPower){
         double LFPower = 0, RFPower = 0, RBPower = 0, LBPower = 0;
 
         while(degrees < 0)
@@ -247,12 +247,13 @@ public class DriveTrain {
                     ((1341+(2/3.0)) * Math.abs(Math.abs(averageDegrees) - Math.abs(degrees))));
             power = (power > maxPower) ? maxPower : power;
             power = (power < minPower) ? minPower : power;
+            if(Math.abs(averageDegrees) > Math.abs(degrees))power = -power;
         }
         stopRobot();
     }
     public void gyroTurn(int toDegree, BNO055IMU IMU){
         int counter;
-        double power = 0.6, precession = 43;
+        double power = 0.6, precession = 42;
 
         boolean WhichWay = WhichWayToTurn(toDegree, (int) getGyroReading(IMU));
 

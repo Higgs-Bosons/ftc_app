@@ -23,9 +23,12 @@ public class Sensors extends DriveTrain{
     private Map<String, AccelerationSensor> accelerationSensor;
     private Map<String, CompassSensor> compassSensor;
     private Map<String, VoltageSensor> voltageSensor;
+    private Map<String , DistanceSensor> distanceSensor;
     private Map<String, BNO055IMU> imu;
 
     private HardwareMap hardwareMap;
+
+    public static final int READING_FAILED = -1234567890;
 
     public Sensors(HardwareMap hardwareMap) {
         this.hardwareMap = hardwareMap;
@@ -39,6 +42,7 @@ public class Sensors extends DriveTrain{
         this.accelerationSensor = new Hashtable<>();
         this.compassSensor = new Hashtable<>();
         this.voltageSensor = new Hashtable<>();
+        this.distanceSensor = new Hashtable<>();
         this.imu = new Hashtable<>();
         this.sensorNameAndTypes = new Hashtable<>();
     }
@@ -113,6 +117,9 @@ public class Sensors extends DriveTrain{
                 this.imu.put(name, hardwareMap.get(BNO055IMU.class, "imu"));
                 ResetIMUGyro(name);
                 break;
+            case DISTANCE_SENSOR:
+                this.distanceSensor.put(name, hardwareMap.get(DistanceSensor.class, name));
+                break;
         }
     }
 
@@ -147,6 +154,7 @@ public class Sensors extends DriveTrain{
             //-----{COLOR SENSOR}-------------------------------------------------------------------
             case COLOR_SENSOR + "":
                 ColorSensor colorSensor = getColorSensor(sensorName);
+
                 if (readingTag == COLOR_RED)
                     return colorSensor.red();
                 else if (readingTag == COLOR_GREEN)
@@ -213,9 +221,19 @@ public class Sensors extends DriveTrain{
             //-----{VOLTAGE SENSOR}-----------------------------------------------------------------
             case VOLTAGE_SENSOR + "":
                 return (float) getVoltageSensor(sensorName).getVoltage();
+
+            case DISTANCE_SENSOR + "":
+                if(readingTag == DISTANCE_IN_INCHES)
+                    return (float) getDistanceSensor(sensorName).getDistance(DistanceUnit.INCH);
+                else if(readingTag == DISTANCE_IN_MILLIMETERS)
+                    return (float) getDistanceSensor(sensorName).getDistance(DistanceUnit.MM);
+                else if(readingTag == DISTANCE_IN_CENTIMETERS)
+                    return (float) getDistanceSensor(sensorName).getDistance(DistanceUnit.CM);
+                else if(readingTag == DISTANCE_IN_METERS)
+                    return (float) getDistanceSensor(sensorName).getDistance(DistanceUnit.METER);
         }
 
-        return -1234567890;
+        return READING_FAILED;
     }
 
 //-------{GETTERS}----------------------------------------------------------------------------------
@@ -248,6 +266,9 @@ public class Sensors extends DriveTrain{
     }
     private VoltageSensor getVoltageSensor(String name) {
         return this.voltageSensor.get(name);
+    }
+    private DistanceSensor getDistanceSensor(String name){
+        return this.distanceSensor.get(name);
     }
     public BNO055IMU getIMU(String name) {
         return this.imu.get(name);

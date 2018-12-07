@@ -44,6 +44,7 @@ public class Constants {
     public static final int COMPASS_SENSOR = 9;
     public static final int VOLTAGE_SENSOR = 10;
     public static final int IMU = 11;
+    public static final int DISTANCE_SENSOR = 12;
 
 //-------{SENSOR READING TAG}-----------------------------------------------------------------------
     //public static final int NO_TAG = -1; - You can use the variable NO_TAG for above (line 12)
@@ -61,6 +62,10 @@ public class Constants {
     public static final int ACCELERATION_X = 11;
     public static final int ACCELERATION_Y = 12;
     public static final int ACCELERATION_Z = 13;
+    public static final int DISTANCE_IN_INCHES = 14;
+    public static final int DISTANCE_IN_CENTIMETERS = 15;
+    public static final int DISTANCE_IN_METERS = 16;
+    public static final int DISTANCE_IN_MILLIMETERS = 17;
 
 //-------{Directions}-----------------------------------------------------------------------
     public static final double NORTH = 0;
@@ -80,14 +85,15 @@ public class Constants {
 
     @IntDef({COLOR_SENSOR, GYRO_SENSOR, TOUCH_SENSOR, ULTRASONIC_SENSOR,
     OPTICAL_DISTANCE_SENSOR, LIGHT_SENSOR, IR_SEEKER_SENSOR, IMU,
-    ACCELERATION_SENSOR, COMPASS_SENSOR, VOLTAGE_SENSOR,})
+    ACCELERATION_SENSOR, COMPASS_SENSOR, VOLTAGE_SENSOR, DISTANCE_SENSOR})
     @Retention(RetentionPolicy.CLASS)
     public @interface SensorTypes{}
 
 
-    @IntDef({ IR_SEEKER_ANGLE,     ACCELERATION_X,   GYRO_Z,   COLOR_RED,    TOUCH_BOOLEAN,
-              IR_SEEKER_STRENGTH,  ACCELERATION_Y,   GYRO_Y,   COLOR_BLUE,   TOUCH_VALUE,
-              COLOR_RGB,           ACCELERATION_Z,   GYRO_X,   COLOR_GREEN,  NO_TAG})
+    @IntDef({ IR_SEEKER_ANGLE,     ACCELERATION_X,   GYRO_Z,   COLOR_RED,      TOUCH_BOOLEAN,
+              IR_SEEKER_STRENGTH,  ACCELERATION_Y,   GYRO_Y,   COLOR_BLUE,     TOUCH_VALUE,
+              COLOR_RGB,           ACCELERATION_Z,   GYRO_X,   COLOR_GREEN,    DISTANCE_IN_CENTIMETERS,
+              DISTANCE_IN_INCHES,  DISTANCE_IN_METERS, DISTANCE_IN_MILLIMETERS, NO_TAG})
     @Retention(RetentionPolicy.CLASS)
     public @interface ReadingTags{}
 

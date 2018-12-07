@@ -12,12 +12,20 @@ public class SensorTester extends LinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {
         MecanumWheelRobot Bubbles = new MecanumWheelRobot(hardwareMap, FIRST_LETTER_NO_SPACE_UPPERCASE);
-        Bubbles.addServo("Dumper");
+        Bubbles.addSensor("TouchyL", TOUCH_SENSOR);
+        Bubbles.addSensor("TouchyR", TOUCH_SENSOR);
+        Bubbles.addSensor("imu", IMU);
 
         waitForStart();
         while (opModeIsActive()){
-            float touched = Bubbles.readSensor("touchy",TOUCH_VALUE);
-            telemetry.addData("touchy", touched);
+            float touchedL = Bubbles.readSensor("TouchyL",TOUCH_BOOLEAN);
+            float touchedR = Bubbles.readSensor("TouchyR",TOUCH_BOOLEAN);
+            float[] imuDegrees = Bubbles.ReadIMUGyro("imu");
+            telemetry.addData("TouchyL", touchedL);
+            telemetry.addData("TouchyR", touchedR);
+            telemetry.addData("IMU Rotation", imuDegrees[0]);
+            telemetry.addData("IMU Tilt 1", imuDegrees[1]);
+            telemetry.addData("IMU Tilt 2", imuDegrees[2]);
             telemetry.update();
         }
 

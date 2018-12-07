@@ -24,7 +24,6 @@ public class MainAutonomous extends LinearOpMode{
     public void runOpMode(){
         initializeTheRobot();
 
-        AutonomousProgram program = new AutonomousProgram();
         telemetry.addData("READY ", "-)");
         telemetry.update();
 
@@ -32,9 +31,12 @@ public class MainAutonomous extends LinearOpMode{
 
         sample();
         toDepo();
+        atDepo();
 
-        // program.stop();
+
+
         Bubbles.stopRobot();
+        canOfPineapple.closeCanOfPineapple();
 
     }
 
@@ -62,20 +64,6 @@ public class MainAutonomous extends LinearOpMode{
         canOfPineapple = new CanOfPineapple();
     }
 
-    class AutonomousProgram implements Runnable {
-        private Thread thread;
-        void runAutonomous() {
-           thread =  new Thread(this);
-           thread.start();
-        }
-        public void run() {
-            sample();
-        }
-        void stop(){
-            thread.interrupt();
-        }
-    }
-    
     private void LanderToSampling(){
         Bubbles.gyroTurn(90, Bubbles.getIMU("imu"));
         telemetry.addData("Cube is at position ", " " +findYellowCubePlacement());
@@ -104,58 +92,49 @@ public class MainAutonomous extends LinearOpMode{
         }else{
             Bubbles.moveRobot(NORTH, 100, 0,0.7, 0.1, 15);
             if(cubePosition == 3){
-                Bubbles.gyroTurn(330,Bubbles.getIMU("imu"));
+                Bubbles.gyroTurn(327,Bubbles.getIMU("imu"));
             }else if (cubePosition == 1){
                 Bubbles.gyroTurn(25,Bubbles.getIMU("imu"));
             }
             Bubbles.moveMotor("Grabby", -1);
             Bubbles.moveRobot(NORTH, 1500, 0.7, 0.1, 15);
-            Bubbles.pause(500);
-            Bubbles.stopMotor("Grabby");
         }
     }
 
     private void toDepo(){
-        if (cubePosition == 2 || cubePosition == 3) {
+        if (cubePosition == 2 || cubePosition == 3)
             Bubbles.gyroTurn(315,Bubbles.getIMU("imu"));
-        }
-        else if (cubePosition == 1) {
+        else
             Bubbles.gyroTurn(45, Bubbles.getIMU("imu"));
-        }
-<<<<<<< HEAD
 
-        
-        while (Bubbles.readSensor("TouchyL", TOUCH_BOOLEAN) == 0 && Bubbles.readSensor("TouchyR", TOUCH_BOOLEAN) == 0) {
-=======
-        while (Bubbles.readSensor("TouchyL", TOUCH_VALUE) == 0 || Bubbles.readSensor("TouchyR", TOUCH_VALUE) == 0) {
->>>>>>> cdbc573d2b0c0359629eaa0b4a247b153fbe48ba
-            Bubbles.moveRobot(NORTH, 10, 0.7, 0.4, 15);
-        }
-        Bubbles.moveRobot(SOUTH, 20, 0.7, 0.1, 15);
+
+        Bubbles.stopMotor("Grabby");
+
+        while (Bubbles.readSensor("TouchyL", TOUCH_VALUE) == 0 || Bubbles.readSensor("TouchyR", TOUCH_VALUE) == 0)
+            Bubbles.driveAtHeader(0, 0.5);
+
+        Bubbles.moveRobot(SOUTH, 135, 0.7, 0.1, 15);
+
         Bubbles.ResetIMUGyro("imu");
-        if (cubePosition == 3 || cubePosition == 2) {
+
+        if (cubePosition == 3 || cubePosition == 2)
             Bubbles.gyroTurn(270, Bubbles.getIMU("imu"));
-        }
-        else if (cubePosition == 1) {
+        else
             Bubbles.gyroTurn(90, Bubbles.getIMU("imu"));
-        }
-        while (Bubbles.readSensor("TouchyL", TOUCH_VALUE) == 0 || Bubbles.readSensor("TouchyR", TOUCH_VALUE) == 0) {
-            Bubbles.moveRobot(NORTH, 10, 0.7, 0.4, 15);
-        }
+
+        if(cubePosition == 2)
+           Bubbles.moveRobot(SOUTH, 800, 0.7, 0.4, 15);
+        else
+            Bubbles.moveRobot(SOUTH, 1200, 0.7, 0.4, 15);
     }
     private void atDepo(){
         Bubbles.ResetIMUGyro("imu");
-        if (cubePosition == 2 || cubePosition == 3) {
-            Bubbles.gyroTurn(180,Bubbles.getIMU("imu"));
-        }
-        if (cubePosition == 1) {
-            Bubbles.gyroTurn(90, Bubbles.getIMU("imu"));
-        }
         Bubbles.moveServo("Gate",0.4);
-        Bubbles.moveServo("Dumper", 0.4);
-        Bubbles.pause(500);
+        Bubbles.moveServo("Dumper", 0.5);
+        Bubbles.pause(1000);
         Bubbles.moveServo("Gate",0.55);
         Bubbles.moveServo("Dumper", 0);
+        Bubbles.pause(1000);
     }
 
 }
