@@ -356,15 +356,15 @@ a letter, as seen in the Table itself.
 
 
 ----{MacanumWheelRobot}------------------------------------                                             =MacanumWheelRobot - Intro=
-    (11/24/2018 - Last Edit) Accurate in these versions: 4.3
+    (12/8/2018 - Last Edit) Accurate in these versions: 4.3
 
        Topic        |   Line #
     -----------------------------
      Initializing   | #378
      Drive Train    | #397
-     Motors         | #476
-     Sensors        | #501
-     Servos         | #522
+     Motors         | #480
+     Sensors        | #505
+     Servos         | #526
 
 
 
@@ -415,6 +415,9 @@ a letter, as seen in the Table itself.
     An example of using this would be:
     someName.setMotorDirection(REVERSE,FORWARDS,FORWARDS,REVERSE);
 
+    Finally, there's getMotorValues(), which simply returns the values of the motors in an array in
+    the order of Left Front, Left Back, Right Front, and Right Back.
+
 
     [Driving]
 
@@ -429,8 +432,8 @@ a letter, as seen in the Table itself.
     which would use gamepad 1 for tank controls running at 0.8 speed. Speed can be anything between
     0 and 1.
 
-    Finally, there's moveMotor(). This allows you to move every motor separately, making for easy
-    testing.
+    Finally, there's moveDriveMotor(). This allows you to move every motor separately, making for
+    easy testing.
     An example of using this would be:
     someName.moveMotor(RIGHT_FRONT, 0.8);
     which will move the motor with the tag RIGHT_FRONT (there's a tag for each wheel,
@@ -445,15 +448,16 @@ a letter, as seen in the Table itself.
     moveDegrees() has 5-6 arguments, and it's honestly easier to explain them out.
     direction is what direction you want to go to. 0 is North (of the robot), 90 is East, you know
     the rest.
-    degrees is how many degrees you want the wheels to turn. 360 would be one wheel rotation.
-    spin allows you to do a curve. How much you want it to curve is up to experimentation.
+    inches is how many inches you want the robot to move.
+    spin allows you to do a curve. How much you want it to curve is up to experimentation. It's also
+    optional, so feel free to just ignore this if you don't know what it means.
     maxPower and minPower are well, the maximum and minimum you want the power to be. It goes from
     0-1.
     Finally, precision is how off you can be when turning. The closer to 1, the more precise.
 
     An example of using this would be:
-    someName.moveDegrees(90, 720, 0.3, 1, 0.1, 5);
-    which moves the robot east for 2 whole wheel rotations, spining the robot at 0.3,
+    someName.moveDegrees(90, 5, 0.3, 1, 0.1, 5);
+    which moves the robot east for 5 inches, spining the robot at 0.3,
     the power being from 0.1 - 1, and it being 5 degrees loose.
                                                                                                         (MacanumWheelRobot - DriveTrain)
     spinRobot() is thankfully much easier to use. All you define is the power it should spin at
@@ -468,7 +472,7 @@ a letter, as seen in the Table itself.
     follow the example.
     An example of this is:
     someName.turnGyro(90, someName.getIMU("IMU"));
-    someName.getIMU("IMU"); gets an IMU called "IMU", fyi.
+    someName.getIMU("IMU"); gets an IMU called "IMU", by the way.
 
 
 
@@ -524,6 +528,8 @@ a letter, as seen in the Table itself.
     You add servos largely how you added motors, like:
     someName.addServo(name);
     Notice how there's only the name to be added. You don't need a tag, unlike the other two.
+    Note: there's also someName.addServo(name, minRange, maxRange);, which allows you to define the
+    range of movement the servo can do.
 
     moveServo(name, toMoveTo) is also rather simple. name is the name of the servo, and toMoveTo
     is what degree you want the servo at.
@@ -567,3 +573,23 @@ a letter, as seen in the Table itself.
     @interface MotorTag{} allows for them to be used.
 
     If you ever want to use them, use import static org.firstinspires.ftc.teamcode.Constants.*;.
+
+
+
+
+
+
+
+
+
+
+
+
+
+----{Tools}-----------------------------------------------------------------------------------------
+    (12/8/2018 - Last Edit) Accurate in these versions: 4.3
+    As the name implies, Tools contain tools that help for certain things.
+
+    There's Tools.wait(milliseconds), which stops a program for that period of time defined.
+    Tools.showToast(message) shows a message to the phones via a bubble towards the bottom.
+    Tools.isTagRepeatable(tag) allows you to see if, well, a tag is repeatable.
