@@ -73,6 +73,12 @@ public class Constants {
     public static final double SOUTH = 180;
     public static final double WEST = 270;
 
+//-------{MENU OPTIONS}-----------------------------------------------------------------------------
+    public static final int CRATER_ON_THE_LEFT = 0;
+    public static final int CRATER_ON_THE_RIGHT = 1;
+    public static final int LEFT_SIDE_OF_THE_LANDER = 2;
+    public static final int RIGHT_SIDE_OF_THE_LANDER = 3;
+
 //-------{@IntDef}----------------------------------------------------------------------------------
     @IntDef({FORWARDS, REVERSE})
     @Retention(RetentionPolicy.CLASS)
