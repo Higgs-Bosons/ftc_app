@@ -116,7 +116,7 @@ public class MainAutonomous extends LinearOpMode{
                 Bubbles.gyroTurn(25,Bubbles.getIMU(Imu));
             }
             Bubbles.moveMotor(Grabby, -1);
-            Bubbles.moveRobot(NORTH, 37.37, 0.7, 0.1, 15);
+            Bubbles.moveRobot(NORTH, 40, 0.7, 0.1, 15);
         }
     }
 
@@ -129,7 +129,7 @@ public class MainAutonomous extends LinearOpMode{
         driveUntilItHitsAWall();
 
         Bubbles.stopMotor(Grabby);
-        Bubbles.moveRobot(SOUTH, 3.36, 0.7, 0.1, 15);
+        Bubbles.moveRobot(SOUTH, 1, 0.7, 0.1, 15);
 
         Bubbles.ResetIMUGyro(Imu);
         Bubbles.gyroTurn(90, Bubbles.getIMU(Imu));
@@ -145,7 +145,7 @@ public class MainAutonomous extends LinearOpMode{
         driveUntilItHitsAWall();
 
         Bubbles.stopMotor(Grabby);
-        Bubbles.moveRobot(SOUTH, 3.36, 0.7, 0.1, 15);
+        Bubbles.moveRobot(SOUTH, 1, 0.7, 0.1, 15);
 
         Bubbles.ResetIMUGyro(Imu);
         Bubbles.gyroTurn(90, Bubbles.getIMU(Imu));
@@ -157,23 +157,22 @@ public class MainAutonomous extends LinearOpMode{
     private void dropOffStuffAndDriveToCrater(){
         Bubbles.ResetIMUGyro(Imu);
 
-        /** Bubbles.gyroTurn(180, Bubbles.getIMU(Imu));
+        Bubbles.gyroTurn(180, Bubbles.getIMU(Imu));
 
         if (craterToGoTo.equals(CRATER_ON_THE_RIGHT)) {
             Bubbles.gyroTurn(270, Bubbles.getIMU(Imu));
-        } **/
+        }
 
         Bubbles.moveServo(Gate,0.4);
-        Bubbles.moveServo(Dumper, 0.5);
-        Tools.wait(1000);
+        Bubbles.moveServo(Dumper, 0.45);
+        Tools.wait(2000);
         Bubbles.moveServo(Gate,0.55);
         Bubbles.moveServo(Dumper, 0);
-        Tools.wait(1000);
 
         float[] imuDegrees = Bubbles.ReadIMUGyro(Imu);
-        while (imuDegrees[1] > 340) {
+        while (imuDegrees[1] > 355) {
             imuDegrees = Bubbles.ReadIMUGyro(Imu);
-            Bubbles.moveRobot(SOUTH, 4.98, 0.7, 0.4, 15);
+            Bubbles.driveAtHeader(NORTH, 1);
         }
     }
     private void driveUntilItHitsAWall(){
