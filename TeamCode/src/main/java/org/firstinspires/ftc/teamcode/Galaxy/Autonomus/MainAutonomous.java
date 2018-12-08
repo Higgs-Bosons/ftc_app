@@ -29,9 +29,9 @@ public class MainAutonomous extends LinearOpMode{
 
         waitForStart();
 
-        sample();
-        toDepo();
-        atDepo();
+        sampleOnTheRight();
+        driveToTheDepoOnTheRight();
+        dropOffStuffAndDriveToCrater();
 
 
 
@@ -84,7 +84,7 @@ public class MainAutonomous extends LinearOpMode{
         }
     }
 
-    private void sample(){
+    private void sampleOnTheRight(){
         final int NO_CUBE = 0;
         cubePosition = findYellowCubePlacement();
         if(cubePosition == NO_CUBE){
@@ -101,7 +101,7 @@ public class MainAutonomous extends LinearOpMode{
         }
     }
 
-    private void toDepo(){
+    private void driveToTheDepoOnTheRight(){
         if (cubePosition == 2 || cubePosition == 3)
             Bubbles.gyroTurn(315,Bubbles.getIMU("imu"));
         else
@@ -127,7 +127,7 @@ public class MainAutonomous extends LinearOpMode{
         else
             Bubbles.moveRobot(SOUTH, 1200, 0.7, 0.4, 15);
     }
-    private void atDepo(){
+    private void dropOffStuffAndDriveToCrater(){
         Bubbles.ResetIMUGyro("imu");
         Bubbles.moveServo("Gate",0.4);
         Bubbles.moveServo("Dumper", 0.5);
