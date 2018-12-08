@@ -34,7 +34,7 @@ public class MainAutonomous extends LinearOpMode{
         if (sideOfTheLander == LEFT_SIDE_OF_THE_LANDER)
             driveToTheDepoFromLeft();
         else
-            ddriveToTheDepoFromRight();
+            driveToTheDepoFromRight();
 
         dropOffStuffAndDriveToCrater();
 
@@ -120,7 +120,7 @@ public class MainAutonomous extends LinearOpMode{
         }
     }
 
-    private void ddriveToTheDepoFromRight(){
+    private void driveToTheDepoFromRight(){
         Bubbles.gyroTurn(270,Bubbles.getIMU("imu"));
         if (cubePosition == 1)
             Bubbles.moveRobot(NORTH, 20, 0.7, 0.1, 15);
