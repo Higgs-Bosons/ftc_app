@@ -9,8 +9,7 @@ import org.firstinspires.ftc.teamcode.Galaxy.Robot.MecanumWheelRobot;
 @Autonomous(name = "Sensor Tester", group = "Tester")
 public class SensorTester extends LinearOpMode {
 
-    @Override
-    public void runOpMode() throws InterruptedException {
+    public void runOpMode(){
         MecanumWheelRobot Bubbles = new MecanumWheelRobot(hardwareMap, FIRST_LETTER_NO_SPACE_UPPERCASE);
         Bubbles.addSensor("TouchyL", TOUCH_SENSOR);
         Bubbles.addSensor("TouchyR", TOUCH_SENSOR);

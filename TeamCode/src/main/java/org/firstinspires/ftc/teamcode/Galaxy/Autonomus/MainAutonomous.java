@@ -2,7 +2,6 @@ package org.firstinspires.ftc.teamcode.Galaxy.Autonomus;
 
 import android.graphics.Bitmap;
 import android.graphics.Color;
-import android.util.Log;
 
 import com.qualcomm.robotcore.eventloop.opmode.*;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -11,7 +10,6 @@ import org.firstinspires.ftc.teamcode.Galaxy.ImageCapturing.CanOfPineapple;
 import org.firstinspires.ftc.teamcode.Galaxy.ImageCapturing.PineappleChunks;
 import org.firstinspires.ftc.teamcode.Galaxy.ImageCapturing.PineappleStrainer;
 import org.firstinspires.ftc.teamcode.Galaxy.Robot.MecanumWheelRobot;
-import org.firstinspires.ftc.teamcode.Galaxy.Tools;
 
 import static org.firstinspires.ftc.teamcode.Galaxy.Constants.*;
 import static org.firstinspires.ftc.teamcode.Galaxy.Names.*;

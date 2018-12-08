@@ -10,8 +10,6 @@ import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
 import org.firstinspires.ftc.teamcode.Galaxy.Tools;
 
-import javax.xml.datatype.Duration;
-
 import static org.firstinspires.ftc.teamcode.Galaxy.Constants.*;
 
 public class DriveTrain {
@@ -204,22 +202,22 @@ public class DriveTrain {
 
 
     public void moveRobot(double direction, double inches, double spin, double maxPower, double minPower, double precision){
-        int averageDegrees;
+        int numberOfTicksMoved;
         double power = maxPower;
         double spinPower = spin;
-        int degrees = (int) (inches / (Math.PI * 4) * 1680);
+        int ticksToMove = (int) (inches / (Math.PI * 4) * 1680);
         resetEncoders();
-        averageDegrees = (Math.abs(LeftFront.getCurrentPosition()) + Math.abs(RightFront.getCurrentPosition())
+        numberOfTicksMoved = (Math.abs(LeftFront.getCurrentPosition()) + Math.abs(RightFront.getCurrentPosition())
                         + Math.abs(RightBack.getCurrentPosition()) + Math.abs(LeftBack.getCurrentPosition()))/4;
 
-        while(Math.abs(Math.abs(averageDegrees) - Math.abs(degrees)) > precision){
+        while(Math.abs(Math.abs(numberOfTicksMoved) - Math.abs(ticksToMove)) > precision){
             driveAtHeader(direction,power, spinPower);
 
-            averageDegrees = (Math.abs(LeftFront.getCurrentPosition()) + Math.abs(RightFront.getCurrentPosition())
+            numberOfTicksMoved = (Math.abs(LeftFront.getCurrentPosition()) + Math.abs(RightFront.getCurrentPosition())
                     + Math.abs(RightBack.getCurrentPosition()) + Math.abs(LeftBack.getCurrentPosition()))/4;
 
-            power = (((1916+(2/3.0)) * Math.pow(Math.abs(Math.abs(averageDegrees) - Math.abs(degrees)), 2)) +
-                    ((1341+(2/3.0)) * Math.abs(Math.abs(averageDegrees) - Math.abs(degrees))));
+            power = (((1916+(2/3.0)) * Math.pow(Math.abs(Math.abs(numberOfTicksMoved) - Math.abs(ticksToMove)), 2)) +
+                    ((1341+(2/3.0)) * Math.abs(Math.abs(numberOfTicksMoved) - Math.abs(ticksToMove))));
 
             power = (power > maxPower) ? maxPower : power;
             power = (power < minPower) ? minPower : power;
@@ -228,26 +226,26 @@ public class DriveTrain {
         }
     }
     public void moveRobot(double direction, double inches, double maxPower, double minPower, double precision){
-        int averageDegrees;
+        int numberOfTicksMoved;
         double power = maxPower;
-        int degrees = (int) (inches / (Math.PI * 4) * 1680);
+        int ticksToMove = (int) (inches / (Math.PI * 4) * 1680);
 
         resetEncoders();
 
-        averageDegrees = (Math.abs(LeftFront.getCurrentPosition()) + Math.abs(RightFront.getCurrentPosition())
+        numberOfTicksMoved = (Math.abs(LeftFront.getCurrentPosition()) + Math.abs(RightFront.getCurrentPosition())
                 + Math.abs(RightBack.getCurrentPosition()) + Math.abs(LeftBack.getCurrentPosition()))/4;
 
-        while(Math.abs(Math.abs(averageDegrees) - Math.abs(degrees)) > precision){
+        while(Math.abs(Math.abs(numberOfTicksMoved) - Math.abs(ticksToMove)) > precision){
             driveAtHeader(direction,power);
 
-            averageDegrees = (Math.abs(LeftFront.getCurrentPosition()) + Math.abs(RightFront.getCurrentPosition())
+            numberOfTicksMoved = (Math.abs(LeftFront.getCurrentPosition()) + Math.abs(RightFront.getCurrentPosition())
                     + Math.abs(RightBack.getCurrentPosition()) + Math.abs(LeftBack.getCurrentPosition()))/4;
 
-            power = (((1916+(2/3.0)) * Math.pow(Math.abs(Math.abs(averageDegrees) - Math.abs(degrees)), 2)) +
-                    ((1341+(2/3.0)) * Math.abs(Math.abs(averageDegrees) - Math.abs(degrees))));
+            power = (((1916+(2/3.0)) * Math.pow(Math.abs(Math.abs(numberOfTicksMoved) - Math.abs(ticksToMove)), 2)) +
+                    ((1341+(2/3.0)) * Math.abs(Math.abs(numberOfTicksMoved) - Math.abs(ticksToMove))));
             power = (power > maxPower) ? maxPower : power;
             power = (power < minPower) ? minPower : power;
-            if(Math.abs(averageDegrees) > Math.abs(degrees))power = -power;
+            if(Math.abs(numberOfTicksMoved) > Math.abs(ticksToMove))power = -power;
         }
         stopRobot();
     }
@@ -268,14 +266,14 @@ public class DriveTrain {
     }
 
     //--{TOOLS}------------------------------------------------------
-    public float getGyroReading(BNO055IMU IMU){
+    private float getGyroReading(BNO055IMU IMU){
         float degree = IMU.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES).firstAngle;
         if(degree<0){
             degree = (180+(181 - Math.abs(degree)));
         }
         return degree;
     }
-    public boolean WhichWayToTurn(int Target, int Gyro){
+    private boolean WhichWayToTurn(int Target, int Gyro){
         int  VirtualDegrees = Gyro;
         int counterOne = 0;
         int counterTwo = 0;
@@ -298,7 +296,7 @@ public class DriveTrain {
         }
         return counterOne > counterTwo;
     }
-    public int HowFar(int Target, int Gyro){
+    private int HowFar(int Target, int Gyro){
         int  VirtualDegrees = Gyro;
         int counterOne = 0;
         int counterTwo = 0;
