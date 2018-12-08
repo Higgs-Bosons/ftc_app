@@ -123,12 +123,9 @@ public class MainAutonomous extends LinearOpMode{
 
     private void driveToTheDepoFromRight(){
         Bubbles.gyroTurn(270,Bubbles.getIMU(Imu));
-        if (cubePosition == 1)
-            Bubbles.moveRobot(NORTH, 20, 0.7, 0.1, 15);
-        else if (cubePosition == 2)
-            Bubbles.moveRobot(NORTH, 36.5, 0.7, 0.1, 15);
-        else
-            Bubbles.moveRobot(NORTH, 53, 0.7, 0.1, 15);
+
+        double movementInInches = 16.5 * cubePosition + 3.5;
+        Bubbles.moveRobot(NORTH, movementInInches, 0.7, 0.1, 15);
 
         driveUntilItHitsAWall();
 
