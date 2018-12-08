@@ -14,6 +14,7 @@ import org.firstinspires.ftc.teamcode.Galaxy.Robot.MecanumWheelRobot;
 import org.firstinspires.ftc.teamcode.Galaxy.Tools;
 
 import static org.firstinspires.ftc.teamcode.Galaxy.Constants.*;
+import static org.firstinspires.ftc.teamcode.Galaxy.Names.*;
 
 @Autonomous(name = "Autonomous", group = "Autonomous")
 public class MainAutonomous extends LinearOpMode{
