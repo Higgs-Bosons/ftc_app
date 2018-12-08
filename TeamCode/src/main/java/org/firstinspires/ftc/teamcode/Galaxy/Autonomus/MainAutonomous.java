@@ -55,7 +55,13 @@ public class MainAutonomous extends LinearOpMode{
         Bubbles.addAMotor(Lifter, NO_TAG);
 
         Bubbles.addSensor(TouchyLF,TOUCH_SENSOR);
+<<<<<<< HEAD
         Bubbles.addSensor(TouchyR,TOUCH_SENSOR);
+=======
+        Bubbles.addSensor(TouchyRF,TOUCH_SENSOR);
+        Bubbles.addSensor(TouchyLB,TOUCH_SENSOR);
+        Bubbles.addSensor(TouchyRB,TOUCH_SENSOR);
+>>>>>>> ccf5c4c5a9cd7f70ca1e3cc17e3ec1a0eb7a8929
 
         Bubbles.addServo(XThing);
         Bubbles.addServo(YThing);
@@ -116,7 +122,7 @@ public class MainAutonomous extends LinearOpMode{
                 Bubbles.gyroTurn(25,Bubbles.getIMU(Imu));
             }
             Bubbles.moveMotor(Grabby, -1);
-            Bubbles.moveRobot(NORTH, 37.37, 0.7, 0.1, 15);
+            Bubbles.moveRobot(NORTH, 40, 0.7, 0.1, 15);
         }
     }
 
@@ -126,15 +132,15 @@ public class MainAutonomous extends LinearOpMode{
         double movementInInches = 16.5 * cubePosition + 3.5;
         Bubbles.moveRobot(NORTH, movementInInches, 0.7, 0.1, 15);
 
-        driveUntilItHitsAWall();
+        ramIntoWall(FORWARDS);
 
         Bubbles.stopMotor(Grabby);
-        Bubbles.moveRobot(SOUTH, 3.36, 0.7, 0.1, 15);
+        Bubbles.moveRobot(SOUTH, 1, 0.7, 0.1, 15);
 
         Bubbles.ResetIMUGyro(Imu);
-        Bubbles.gyroTurn(90, Bubbles.getIMU(Imu));
+        Bubbles.gyroTurn(270, Bubbles.getIMU(Imu));
 
-        driveUntilItHitsAWall();
+        ramIntoWall(REVERSE);
 
         Bubbles.moveRobot(SOUTH, 4.98, 0.7, 0.4, 15);
     }
@@ -142,50 +148,57 @@ public class MainAutonomous extends LinearOpMode{
     private void driveToTheDepoFromLeft(){
         Bubbles.gyroTurn(315,Bubbles.getIMU(Imu));
 
-        driveUntilItHitsAWall();
+        ramIntoWall(FORWARDS);
 
         Bubbles.stopMotor(Grabby);
-        Bubbles.moveRobot(SOUTH, 3.36, 0.7, 0.1, 15);
+        Bubbles.moveRobot(SOUTH, 1, 0.7, 0.1, 15);
 
         Bubbles.ResetIMUGyro(Imu);
-        Bubbles.gyroTurn(90, Bubbles.getIMU(Imu));
+        Bubbles.gyroTurn(270, Bubbles.getIMU(Imu));
 
-        driveUntilItHitsAWall();
+        ramIntoWall(REVERSE);
 
         Bubbles.moveRobot(SOUTH, 4.98, 0.7, 0.4, 15);
     }
     private void dropOffStuffAndDriveToCrater(){
         Bubbles.ResetIMUGyro(Imu);
 
-        /** Bubbles.gyroTurn(180, Bubbles.getIMU(Imu));
-
         if (craterToGoTo.equals(CRATER_ON_THE_RIGHT)) {
-            Bubbles.gyroTurn(270, Bubbles.getIMU(Imu));
-        } **/
+            Bubbles.gyroTurn(90, Bubbles.getIMU(Imu));
+        }
 
         Bubbles.moveServo(Gate,0.4);
-        Bubbles.moveServo(Dumper, 0.5);
-        Tools.wait(1000);
+        Bubbles.moveServo(Dumper, 0.45);
+        Tools.wait(2000);
         Bubbles.moveServo(Gate,0.55);
         Bubbles.moveServo(Dumper, 0);
-        Tools.wait(1000);
 
         float[] imuDegrees = Bubbles.ReadIMUGyro(Imu);
-        while (imuDegrees[1] > 340) {
+        while (imuDegrees[1] > 355) {
             imuDegrees = Bubbles.ReadIMUGyro(Imu);
-            Bubbles.moveRobot(SOUTH, 4.98, 0.7, 0.4, 15);
+            Bubbles.driveAtHeader(NORTH, 1);
         }
     }
-    private void driveUntilItHitsAWall(){
+    private void ramIntoWall(@MotorDirections int direction){
         int hittingAWall = 0;
         Bubbles.driveAtHeader(0, 0.5);
         while (hittingAWall < 25){
-            if((Bubbles.readSensor(TouchyL, TOUCH_VALUE) == 1) ^ (Bubbles.readSensor(TouchyR, TOUCH_VALUE) == 1))
-                hittingAWall++;
-            else
-                hittingAWall = 0;
-            if(Bubbles.readSensor(TouchyL, TOUCH_VALUE) == 1 && Bubbles.readSensor(TouchyR, TOUCH_VALUE) == 1)
-                hittingAWall = 999999999;
+            if (direction == FORWARDS) {
+                if ((Bubbles.readSensor(TouchyLF, TOUCH_VALUE) == 1) ^ (Bubbles.readSensor(TouchyRF, TOUCH_VALUE) == 1))
+                    hittingAWall++;
+                else
+                    hittingAWall = 0;
+                if (Bubbles.readSensor(TouchyLF, TOUCH_VALUE) == 1 && Bubbles.readSensor(TouchyRF, TOUCH_VALUE) == 1)
+                    hittingAWall = 999999999;
+            }
+            else {
+                if ((Bubbles.readSensor(TouchyLB, TOUCH_VALUE) == 1) ^ (Bubbles.readSensor(TouchyRB, TOUCH_VALUE) == 1))
+                    hittingAWall++;
+                else
+                    hittingAWall = 0;
+                if (Bubbles.readSensor(TouchyLB, TOUCH_VALUE) == 1 && Bubbles.readSensor(TouchyRB, TOUCH_VALUE) == 1)
+                    hittingAWall = 999999999;
+            }
         }
         Bubbles.stopRobot();
 
