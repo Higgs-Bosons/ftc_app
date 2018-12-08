@@ -10,6 +10,7 @@ import org.firstinspires.ftc.teamcode.Galaxy.ImageCapturing.CanOfPineapple;
 import org.firstinspires.ftc.teamcode.Galaxy.ImageCapturing.PineappleChunks;
 import org.firstinspires.ftc.teamcode.Galaxy.ImageCapturing.PineappleStrainer;
 import org.firstinspires.ftc.teamcode.Galaxy.MecanumWheelRobot.MecanumWheelRobot;
+import org.firstinspires.ftc.teamcode.Galaxy.Tools;
 
 import static org.firstinspires.ftc.teamcode.Galaxy.Constants.*;
 import static org.firstinspires.ftc.teamcode.Galaxy.Names.*;
@@ -164,10 +165,10 @@ public class MainAutonomous extends LinearOpMode{
 
         Bubbles.moveServo(Gate,0.4);
         Bubbles.moveServo(Dumper, 0.5);
-        Bubbles.pause(1000);
+        Tools.wait(1000);
         Bubbles.moveServo(Gate,0.55);
         Bubbles.moveServo(Dumper, 0);
-        Bubbles.pause(1000);
+        Tools.wait(1000);
 
         float[] imuDegrees = Bubbles.ReadIMUGyro(Imu);
         while (imuDegrees[1] > 340) {

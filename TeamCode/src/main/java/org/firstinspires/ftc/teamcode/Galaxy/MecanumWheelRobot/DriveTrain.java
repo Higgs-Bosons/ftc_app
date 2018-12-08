@@ -333,11 +333,4 @@ public class DriveTrain {
         RightBack.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         LeftBack.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
     }
-    public void pause(int Duration){
-        try {
-            Thread.sleep(Duration);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-    }
 }
