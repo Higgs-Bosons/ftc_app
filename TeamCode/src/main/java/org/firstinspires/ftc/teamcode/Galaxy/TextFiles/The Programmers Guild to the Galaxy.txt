@@ -7,7 +7,9 @@ Made by: Whitaker K. and Aayush V.
  =================================================================
     23          | CanOfPineapple ---- v2.0   |        A
     358         | MecanumWheelRobot - v1.1   |        B
-    548         | Constants --------- v1.0.1 |        C
+    554         | Tools ------------- v1.0.1 |        C
+    583         | Constants --------- v1.2   |        D
+
 
 
  Things in (),             friendly reminders of what section you are in
@@ -16,8 +18,6 @@ Made by: Whitaker K. and Aayush V.
 The topics, if you view them in Android Studio, are bookmarked. To see them (at least in 3.2.1),
 either go to Navigate > Bookmarks > Show Bookmarks or press Shift + F11. Each topic corresponds with
 a letter, as seen in the Table itself.
-
-
 
 
 ----{CanOfPineapple}--------------------------------------------------------------------------------    =CanOfPineapple - Intro=
@@ -551,45 +551,79 @@ a letter, as seen in the Table itself.
 
 
 
-----{Constants}-------------------------------------------------------------------------------------    =Constants - Intro=
-    (11/24/2018 - Last Edit) Accurate in these versions: 4.3
-
-    Most of the time, you don't need to touch Constants. But in case you do, here are some things to
-    note.
-
-    Constants is basically a bunch of glorified variables, as in, there are basically variables
-    usable for other programs that look cool. These variables are glorified via @InfDef, a thing
-    built into Android Studio that allows a list of vars to be contained into one list for when you
-    need them.
-
-    If you need an example for how they are used, Sensors uses '@Constants.SensorTypes int
-    sensorType' as part of the 'addSensor' function. It allows for a neat autocomplete of all of the
-    vars in the SensorTypes list.
-
-    If you look at the @IntDef section of Constants, you should get a good idea of how they are
-    made into a list. Basically, something like
-    @IntDef({LEFT_FRONT, RIGHT_FRONT, RIGHT_BACK, LEFT_BACK, NO_TAG}) gets vars into a list,
-    @Retention(RetentionPolicy.SOURCE) does... something important, and something like public
-    @interface MotorTag{} allows for them to be used.
-
-    If you ever want to use them, use import static org.firstinspires.ftc.teamcode.Constants.*;.
-
-
-
-
-
-
-
-
-
-
-
-
-
-----{Tools}-----------------------------------------------------------------------------------------
+----{Tools}-----------------------------------------------------------------------------------------    =Tools=
     (12/8/2018 - Last Edit) Accurate in these versions: 4.3
     As the name implies, Tools contain tools that help for certain things.
 
     There's Tools.wait(milliseconds), which stops a program for that period of time defined.
     Tools.showToast(message) shows a message to the phones via a bubble towards the bottom.
     Tools.isTagRepeatable(tag) allows you to see if, well, a tag is repeatable.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+----{Constants}-------------------------------------------------------------------------------------    =Constants - Intro=
+        (12/8/2018 - Last Edit) Accurate in these versions: 4.3
+
+               Topic     |  Line Number
+         -----------------------------
+         Constants File  |    #592
+         Names File      |    #627
+
+
+        ---{Constants File}------------------------------------                                         (Constants - Constants File)
+        The Constant file holds most of our constants. They are used to simply down the code and the
+        usage of our different programs. There are 7 different "topics" of constants: Motor Tags, Motor
+        Directions, Motor Name Configurations, Sensor Types, Sensor Reading Tags, Directions, and Menu
+        Options. Most of them are used in the MecanumWheelRobot classes.
+
+        Motor Tags: These are used for identifying the motors that are added to the robot. They are used
+                    to find the drive train.
+
+        Motor Directions: These are used to identify the direction of the drive motors and if they need
+                          to be reversed.
+
+        Motor Name Configurations: These are used for the getAutoDriveTrain Method. This method receives
+                                   one of these constants and uses it to get all the drive motors.
+
+        Sensor Types: These are used to identify the different types of sensors and so you can add them
+                      to the sensors class.
+
+        Sensor Reading Tags: These are used to identify the different ways to read a sensor and are used
+                             to choose which value to return.
+
+        Directions: These can be used to simply the code when you call moveRobot. They can be passed in
+                    the direction variable spot.
+
+        Menu Options: These are used in the MainAutonomous to show the position and target of the robot.
+
+
+        @IntDef and @StringDef are used for making code easier to write. When you add it before the
+        variable type, it only allows you to use the variables you defined in the @IntDef/@StringDef
+        interface. This makes sure you only enter correct values.
+
+        If you ever want to use them, use:
+        import static org.firstinspires.ftc.teamcode.Constants.*;
+
+
+        ---{Names File}----------------------------------------                                         (Constants - Names File)
+        This file is for you to put your part names of your sensors, motors and servos. You then can
+        use these constants instead of String literals for add and using sensors, motors and servos.
