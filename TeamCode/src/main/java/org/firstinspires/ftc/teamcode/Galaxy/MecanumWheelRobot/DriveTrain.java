@@ -250,14 +250,13 @@ public class DriveTrain {
         stopRobot();
     }
     public void gyroTurn(int toDegree, BNO055IMU IMU){
-        int counter;
-        double power = 0.6, precession = 42;
+        double power;
 
 
         boolean WhichWay = WhichWayToTurn(toDegree, (int) getGyroReading(IMU));
 
         while(HowFar(toDegree, (int) getGyroReading(IMU)) >= 2) {
-            power = (HowFar(toDegree, (int) getGyroReading(IMU))) / 90;
+            power = (HowFar(toDegree, (int) getGyroReading(IMU))) / 75.0;
             power = (power < 0.1) ? 0.1 : power;
             power = (power > 1.0) ? 1.0 : power;
 

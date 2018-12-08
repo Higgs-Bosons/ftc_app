@@ -31,7 +31,7 @@ public class MainAutonomous extends LinearOpMode{
 
         sample();
 
-        if (sideOfTheLander.equals(LEFT_SIDE_OF_THE_LANDER))
+        if (sideOfTheLander.equals(RIGHT_SIDE_OF_THE_LANDER))
             driveToTheDepoFromLeft();
         else
             driveToTheDepoFromRight();
@@ -65,6 +65,8 @@ public class MainAutonomous extends LinearOpMode{
         Bubbles.moveServo(XThing, 0.64);
         Bubbles.moveServo(YThing, 0.29);
         Bubbles.setBreakOrCoast(DcMotor.ZeroPowerBehavior.FLOAT);
+
+        Bubbles.ResetIMUGyro(Imu);
 
         canOfPineapple = new CanOfPineapple();
     }
@@ -113,7 +115,7 @@ public class MainAutonomous extends LinearOpMode{
         }else{
             Bubbles.moveRobot(NORTH, 2.49, 0,0.7, 0.1, 15);
             if(cubePosition == 3){
-                Bubbles.gyroTurn(315,Bubbles.getIMU(Imu));
+                Bubbles.gyroTurn(330,Bubbles.getIMU(Imu));
             }else if (cubePosition == 1){
                 Bubbles.gyroTurn(25,Bubbles.getIMU(Imu));
             }
@@ -127,12 +129,14 @@ public class MainAutonomous extends LinearOpMode{
 
         double movementInInches = 16.5 * cubePosition + 3.5;
         Bubbles.moveRobot(NORTH, movementInInches, 0.7, 0.1, 15);
+        Bubbles.gyroTurn(315,Bubbles.getIMU(Imu));
 
         ramIntoWall(FORWARDS);
 
         Bubbles.stopMotor(Grabby);
-        Bubbles.moveRobot(SOUTH, 1.25, 0.7, 0.1, 15);
+        Bubbles.moveRobot(SOUTH, 1.7, 0.7, 0.1, 15);
 
+        Bubbles.gyroTurn(315, Bubbles.getIMU(Imu));
         Bubbles.ResetIMUGyro(Imu);
         Bubbles.gyroTurn(270, Bubbles.getIMU(Imu));
 
@@ -147,8 +151,9 @@ public class MainAutonomous extends LinearOpMode{
         ramIntoWall(FORWARDS);
 
         Bubbles.stopMotor(Grabby);
-        Bubbles.moveRobot(SOUTH, 1.25, 0.7, 0.1, 15);
+        Bubbles.moveRobot(SOUTH, 1.7, 0.7, 0.1, 15);
 
+        Bubbles.gyroTurn(315, Bubbles.getIMU(Imu));
         Bubbles.ResetIMUGyro(Imu);
         Bubbles.gyroTurn(270, Bubbles.getIMU(Imu));
 
@@ -159,8 +164,8 @@ public class MainAutonomous extends LinearOpMode{
     private void dropOffStuffAndDriveToCrater(){
         Bubbles.ResetIMUGyro(Imu);
 
-        if (craterToGoTo.equals(CRATER_ON_THE_RIGHT)) {
-            Bubbles.gyroTurn(90, Bubbles.getIMU(Imu));
+        if (craterToGoTo.equals(CRATER_ON_THE_LEFT)) {
+            Bubbles.gyroTurn(270, Bubbles.getIMU(Imu));
         }
 
         Bubbles.moveServo(Gate,0.4);
@@ -170,7 +175,7 @@ public class MainAutonomous extends LinearOpMode{
         Bubbles.moveServo(Dumper, 0);
 
         float[] imuDegrees = Bubbles.ReadIMUGyro(Imu);
-        while (imuDegrees[1] > 355) {
+        while (imuDegrees[1] > 355 && (imuDegrees[2] < 2 || imuDegrees[2] > 300) && (imuDegrees[2] < 355 || imuDegrees[2] > 10)) {
             imuDegrees = Bubbles.ReadIMUGyro(Imu);
             Bubbles.driveAtHeader(NORTH, 1);
         }
