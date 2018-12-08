@@ -20,21 +20,24 @@ import static org.firstinspires.ftc.teamcode.Galaxy.Names.*;
 public class MainAutonomous extends LinearOpMode{
     private MecanumWheelRobot Bubbles;
     private CanOfPineapple canOfPineapple;
+    private String craterToGoTo =  "  NULL";
+    private String sideOfTheLander =  "  NULL";
     private int cubePosition;
 
     public void runOpMode(){
         initializeTheRobot();
-
-        telemetry.addData("READY ", "-)");
-        telemetry.update();
+        getMenuChoices();
 
         waitForStart();
 
-        sampleOnTheRight();
-        driveToTheDepoOnTheRight();
+        sample();
+
+        if (sideOfTheLander == LEFT_SIDE_OF_THE_LANDER)
+            driveToTheDepoFromLeft();
+        else
+            driveToTheDepoFromRight();
+
         dropOffStuffAndDriveToCrater();
-
-
 
         Bubbles.stopRobot();
         canOfPineapple.closeCanOfPineapple();
@@ -64,12 +67,28 @@ public class MainAutonomous extends LinearOpMode{
 
         canOfPineapple = new CanOfPineapple();
     }
-    
-    private void LanderToSampling(){
-        Bubbles.gyroTurn(90, Bubbles.getIMU("imu"));
-        telemetry.addData("Cube is at position ", " " +findYellowCubePlacement());
-        Tools.showToast("Cube is at position" + findYellowCubePlacement());
+
+    private void getMenuChoices(){
+        while(!gamepad1.y || sideOfTheLander.equals("  NULL") || craterToGoTo.equals("  NULL")){
+            telemetry.addData("WHICH CRATER TO GO TO    ", craterToGoTo);
+            telemetry.addData("WHICH SIDE OF THE LANDER ", sideOfTheLander);
+            telemetry.addLine("         PRESS Y TO CONTINUE  ");
+            telemetry.update();
+            if(gamepad1.dpad_left)
+                sideOfTheLander = LEFT_SIDE_OF_THE_LANDER;
+            else if(gamepad1.dpad_right)
+                sideOfTheLander = RIGHT_SIDE_OF_THE_LANDER;
+
+            if(gamepad1.x)
+                craterToGoTo = CRATER_ON_THE_LEFT;
+            else if(gamepad1.b)
+                craterToGoTo = CRATER_ON_THE_RIGHT;
+        }
+
+        telemetry.addData("READY ", "-)");
+        telemetry.update();
     }
+
     private int findYellowCubePlacement(){
         PineappleStrainer pineappleStrainer = new PineappleStrainer(canOfPineapple);
         PineappleChunks pineappleChunks;
@@ -85,7 +104,7 @@ public class MainAutonomous extends LinearOpMode{
         }
     }
 
-    private void sampleOnTheRight(){
+    private void sample(){
         final int NO_CUBE = 0;
         cubePosition = findYellowCubePlacement();
         if(cubePosition == NO_CUBE){
@@ -102,25 +121,38 @@ public class MainAutonomous extends LinearOpMode{
         }
     }
 
-    private void driveToTheDepoOnTheRight(){
-        if (cubePosition == 2 || cubePosition == 3)
-            Bubbles.gyroTurn(315,Bubbles.getIMU("imu"));
+    private void driveToTheDepoFromRight(){
+        Bubbles.gyroTurn(270,Bubbles.getIMU("imu"));
+        if (cubePosition == 1)
+            Bubbles.moveRobot(NORTH, 20, 0.7, 0.1, 15);
+        else if (cubePosition == 2)
+            Bubbles.moveRobot(NORTH, 36.5, 0.7, 0.1, 15);
         else
-            Bubbles.gyroTurn(45, Bubbles.getIMU("imu"));
-
+            Bubbles.moveRobot(NORTH, 53, 0.7, 0.1, 15);
 
         driveUntilItHitsAWall();
 
         Bubbles.stopMotor("Grabby");
-
         Bubbles.moveRobot(SOUTH, 3.36, 0.7, 0.1, 15);
 
         Bubbles.ResetIMUGyro("imu");
+        Bubbles.gyroTurn(90, Bubbles.getIMU("imu"));
 
-        if (cubePosition == 3 || cubePosition == 2)
-            Bubbles.gyroTurn(90, Bubbles.getIMU("imu"));
-        else
-            Bubbles.gyroTurn(270, Bubbles.getIMU("imu"));
+        driveUntilItHitsAWall();
+
+        Bubbles.moveRobot(SOUTH, 4.98, 0.7, 0.4, 15);
+    }
+
+    private void driveToTheDepoFromLeft(){
+        Bubbles.gyroTurn(315,Bubbles.getIMU("imu"));
+
+        driveUntilItHitsAWall();
+
+        Bubbles.stopMotor("Grabby");
+        Bubbles.moveRobot(SOUTH, 3.36, 0.7, 0.1, 15);
+
+        Bubbles.ResetIMUGyro("imu");
+        Bubbles.gyroTurn(90, Bubbles.getIMU("imu"));
 
         driveUntilItHitsAWall();
 
@@ -128,12 +160,25 @@ public class MainAutonomous extends LinearOpMode{
     }
     private void dropOffStuffAndDriveToCrater(){
         Bubbles.ResetIMUGyro("imu");
+
+        Bubbles.gyroTurn(180, Bubbles.getIMU("imu"));
+
+        if (craterToGoTo == CRATER_ON_THE_RIGHT) {
+            Bubbles.gyroTurn(270, Bubbles.getIMU("imu"));
+        }
+
         Bubbles.moveServo("Gate",0.4);
         Bubbles.moveServo("Dumper", 0.5);
         Bubbles.pause(1000);
         Bubbles.moveServo("Gate",0.55);
         Bubbles.moveServo("Dumper", 0);
         Bubbles.pause(1000);
+
+        float[] imuDegrees = Bubbles.ReadIMUGyro("imu");
+        while (imuDegrees[1] > 340) {
+            imuDegrees = Bubbles.ReadIMUGyro("imu");
+            Bubbles.moveRobot(SOUTH, 4.98, 0.7, 0.4, 15);
+        }
     }
     private void driveUntilItHitsAWall(){
         int hittingAWall = 0;
