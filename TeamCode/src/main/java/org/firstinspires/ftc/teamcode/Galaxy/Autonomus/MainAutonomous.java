@@ -63,7 +63,7 @@ public class MainAutonomous extends LinearOpMode{
 
         canOfPineapple = new CanOfPineapple();
     }
-
+    
     private void LanderToSampling(){
         Bubbles.gyroTurn(90, Bubbles.getIMU("imu"));
         telemetry.addData("Cube is at position ", " " +findYellowCubePlacement());
@@ -75,7 +75,7 @@ public class MainAutonomous extends LinearOpMode{
         Bitmap picture = canOfPineapple.getBitmap();
 
         pineappleChunks = pineappleStrainer
-                .findShadedObject(80,90, picture, Color.rgb(250,200, 0), 130);
+                .findShadedObject(85,90, picture, Color.rgb(250,200, 0), 130);
 
         if(pineappleChunks.doesChunkExist()){
             return (int) (Math.floor((pineappleChunks.getBiggestChunk()[PineappleChunks.Y])/34)+1);
@@ -108,9 +108,9 @@ public class MainAutonomous extends LinearOpMode{
             Bubbles.gyroTurn(45, Bubbles.getIMU("imu"));
 
 
-        Bubbles.stopMotor("Grabby");
-
         driveUntilItHitsAWall();
+
+        Bubbles.stopMotor("Grabby");
 
         Bubbles.moveRobot(SOUTH, 3.36, 0.7, 0.1, 15);
 
@@ -123,7 +123,7 @@ public class MainAutonomous extends LinearOpMode{
 
         driveUntilItHitsAWall();
 
-        Bubbles.moveRobot(NORTH, 4.98, 0.7, 0.4, 15);
+        Bubbles.moveRobot(SOUTH, 4.98, 0.7, 0.4, 15);
     }
     private void dropOffStuffAndDriveToCrater(){
         Bubbles.ResetIMUGyro("imu");
@@ -137,7 +137,7 @@ public class MainAutonomous extends LinearOpMode{
     private void driveUntilItHitsAWall(){
         int hittingAWall = 0;
         Bubbles.driveAtHeader(0, 0.5);
-        while (hittingAWall < 100){
+        while (hittingAWall < 25){
             if((Bubbles.readSensor("TouchyL", TOUCH_VALUE) == 1) ^ (Bubbles.readSensor("TouchyR", TOUCH_VALUE) == 1))
                 hittingAWall++;
             else

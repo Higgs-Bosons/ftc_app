@@ -50,7 +50,6 @@ public class PineappleStrainer {
                 counter--;
             }
         }
-
         return pineappleChunks;
     }
     public PineappleChunks findShadedObject(double contrast, int precision, Bitmap picture, int colorToFind, int sizeFrom15cm){
@@ -176,7 +175,6 @@ public class PineappleStrainer {
                     OneLine.append("  ");
                 }
             }
-            Log.d((RandomThingy+" "+!RandomThingy), OneLine.toString()+ "|");
             toDisplay.append(OneLine).append("\n");
             RandomThingy = !RandomThingy;
             OneLine = new StringBuilder(" |");
