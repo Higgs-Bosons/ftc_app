@@ -54,7 +54,7 @@ public class MainAutonomous extends LinearOpMode{
         Bubbles.addAMotor(Grabby, NO_TAG);
         Bubbles.addAMotor(Lifter, NO_TAG);
 
-        Bubbles.addSensor(TouchyL,TOUCH_SENSOR);
+        Bubbles.addSensor(TouchyLF,TOUCH_SENSOR);
         Bubbles.addSensor(TouchyR,TOUCH_SENSOR);
 
         Bubbles.addServo(XThing);
