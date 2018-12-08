@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.Galaxy.Robot;
+package org.firstinspires.ftc.teamcode.Galaxy.MecanumWheelRobot;
 
 public class customErrors {
     public static class DuplicateTagException extends RuntimeException{

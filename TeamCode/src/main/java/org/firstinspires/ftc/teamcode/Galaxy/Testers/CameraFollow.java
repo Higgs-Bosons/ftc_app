@@ -8,7 +8,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 
 import org.firstinspires.ftc.teamcode.Galaxy.ImageCapturing.*;
-import org.firstinspires.ftc.teamcode.Galaxy.Robot.MecanumWheelRobot;
+import org.firstinspires.ftc.teamcode.Galaxy.MecanumWheelRobot.MecanumWheelRobot;
 import org.firstinspires.ftc.teamcode.Galaxy.Tools;
 
 import static org.firstinspires.ftc.teamcode.Galaxy.Constants.*;

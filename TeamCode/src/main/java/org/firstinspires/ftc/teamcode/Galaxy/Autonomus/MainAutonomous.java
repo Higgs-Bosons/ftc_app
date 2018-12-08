@@ -9,7 +9,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import org.firstinspires.ftc.teamcode.Galaxy.ImageCapturing.CanOfPineapple;
 import org.firstinspires.ftc.teamcode.Galaxy.ImageCapturing.PineappleChunks;
 import org.firstinspires.ftc.teamcode.Galaxy.ImageCapturing.PineappleStrainer;
-import org.firstinspires.ftc.teamcode.Galaxy.Robot.MecanumWheelRobot;
+import org.firstinspires.ftc.teamcode.Galaxy.MecanumWheelRobot.MecanumWheelRobot;
 
 import static org.firstinspires.ftc.teamcode.Galaxy.Constants.*;
 import static org.firstinspires.ftc.teamcode.Galaxy.Names.*;

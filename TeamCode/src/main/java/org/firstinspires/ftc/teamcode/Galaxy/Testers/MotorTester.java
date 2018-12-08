@@ -1,11 +1,8 @@
 package org.firstinspires.ftc.teamcode.Galaxy.Testers;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
-import org.firstinspires.ftc.teamcode.Galaxy.Robot.DriveTrain;
-import org.firstinspires.ftc.teamcode.Galaxy.Robot.MecanumWheelRobot;
-import org.firstinspires.ftc.teamcode.Galaxy.Robot.Motors;
+import org.firstinspires.ftc.teamcode.Galaxy.MecanumWheelRobot.MecanumWheelRobot;
 
 import static org.firstinspires.ftc.teamcode.Galaxy.Constants.*;
 
