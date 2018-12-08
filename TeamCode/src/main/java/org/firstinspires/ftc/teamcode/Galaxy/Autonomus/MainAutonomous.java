@@ -157,11 +157,11 @@ public class MainAutonomous extends LinearOpMode{
     private void dropOffStuffAndDriveToCrater(){
         Bubbles.ResetIMUGyro(Imu);
 
-        Bubbles.gyroTurn(180, Bubbles.getIMU(Imu));
+        /** Bubbles.gyroTurn(180, Bubbles.getIMU(Imu));
 
         if (craterToGoTo.equals(CRATER_ON_THE_RIGHT)) {
             Bubbles.gyroTurn(270, Bubbles.getIMU(Imu));
-        }
+        } **/
 
         Bubbles.moveServo(Gate,0.4);
         Bubbles.moveServo(Dumper, 0.5);
