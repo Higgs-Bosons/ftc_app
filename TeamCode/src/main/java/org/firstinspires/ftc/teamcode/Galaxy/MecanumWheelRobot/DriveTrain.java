@@ -253,15 +253,18 @@ public class DriveTrain {
         int counter;
         double power = 0.6, precession = 42;
 
+
         boolean WhichWay = WhichWayToTurn(toDegree, (int) getGyroReading(IMU));
 
-        for(counter = 0; counter < 3; counter++, power -= 0.2, precession -= 20){
-            while(HowFar(toDegree, (int) getGyroReading(IMU)) >= precession) {
-                if(WhichWay){spinRobot(-power);}else{spinRobot(power);}
-                WhichWay = WhichWayToTurn(toDegree, (int) getGyroReading(IMU));
-                Log.d("LOOP","LOOP");
-            }
+        while(HowFar(toDegree, (int) getGyroReading(IMU)) >= 2) {
+            power = (HowFar(toDegree, (int) getGyroReading(IMU))) / 90;
+            power = (power < 0.1) ? 0.1 : power;
+            power = (power > 1.0) ? 1.0 : power;
+
+            if(WhichWay){spinRobot(-power);}else{spinRobot(power);}
+            WhichWay = WhichWayToTurn(toDegree, (int) getGyroReading(IMU));
         }
+        
         stopRobot();
     }
 
