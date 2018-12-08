@@ -59,7 +59,6 @@ public class MainAutonomous extends LinearOpMode{
         Bubbles.addSensor(TouchyLB,TOUCH_SENSOR);
         Bubbles.addSensor(TouchyRB,TOUCH_SENSOR);
 
-
         Bubbles.addServo(XThing);
         Bubbles.addServo(YThing);
 
@@ -114,7 +113,7 @@ public class MainAutonomous extends LinearOpMode{
         }else{
             Bubbles.moveRobot(NORTH, 2.49, 0,0.7, 0.1, 15);
             if(cubePosition == 3){
-                Bubbles.gyroTurn(327,Bubbles.getIMU(Imu));
+                Bubbles.gyroTurn(315,Bubbles.getIMU(Imu));
             }else if (cubePosition == 1){
                 Bubbles.gyroTurn(25,Bubbles.getIMU(Imu));
             }
@@ -132,14 +131,14 @@ public class MainAutonomous extends LinearOpMode{
         ramIntoWall(FORWARDS);
 
         Bubbles.stopMotor(Grabby);
-        Bubbles.moveRobot(SOUTH, 1, 0.7, 0.1, 15);
+        Bubbles.moveRobot(SOUTH, 1.25, 0.7, 0.1, 15);
 
         Bubbles.ResetIMUGyro(Imu);
         Bubbles.gyroTurn(270, Bubbles.getIMU(Imu));
 
         ramIntoWall(REVERSE);
 
-        Bubbles.moveRobot(SOUTH, 4.98, 0.7, 0.4, 15);
+        Bubbles.moveRobot(NORTH, 4.98, 0.7, 0.4, 15);
     }
 
     private void driveToTheDepoFromLeft(){
@@ -148,14 +147,14 @@ public class MainAutonomous extends LinearOpMode{
         ramIntoWall(FORWARDS);
 
         Bubbles.stopMotor(Grabby);
-        Bubbles.moveRobot(SOUTH, 1, 0.7, 0.1, 15);
+        Bubbles.moveRobot(SOUTH, 1.25, 0.7, 0.1, 15);
 
         Bubbles.ResetIMUGyro(Imu);
         Bubbles.gyroTurn(270, Bubbles.getIMU(Imu));
 
         ramIntoWall(REVERSE);
 
-        Bubbles.moveRobot(SOUTH, 4.98, 0.7, 0.4, 15);
+        Bubbles.moveRobot(NORTH, 4.98, 0.7, 0.4, 15);
     }
     private void dropOffStuffAndDriveToCrater(){
         Bubbles.ResetIMUGyro(Imu);
@@ -166,7 +165,7 @@ public class MainAutonomous extends LinearOpMode{
 
         Bubbles.moveServo(Gate,0.4);
         Bubbles.moveServo(Dumper, 0.45);
-        Tools.wait(2000);
+        Tools.wait(1500);
         Bubbles.moveServo(Gate,0.55);
         Bubbles.moveServo(Dumper, 0);
 
@@ -178,7 +177,10 @@ public class MainAutonomous extends LinearOpMode{
     }
     private void ramIntoWall(@MotorDirections int direction){
         int hittingAWall = 0;
-        Bubbles.driveAtHeader(0, 0.5);
+        if (direction == FORWARDS)
+            Bubbles.driveAtHeader(0, 1);
+        else
+            Bubbles.driveAtHeader(SOUTH, 1);
         while (hittingAWall < 25){
             if (direction == FORWARDS) {
                 if ((Bubbles.readSensor(TouchyLF, TOUCH_VALUE) == 1) ^ (Bubbles.readSensor(TouchyRF, TOUCH_VALUE) == 1))
