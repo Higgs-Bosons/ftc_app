@@ -203,11 +203,11 @@ public class DriveTrain {
     }
 
 
-    public void moveRobot(double direction, int degrees, double spin, double maxPower, double minPower, double precision){
+    public void moveRobot(double direction, double inches, double spin, double maxPower, double minPower, double precision){
         int averageDegrees;
         double power = maxPower;
         double spinPower = spin;
-        degrees = (int) ((degrees / 360.0) * 1150.0);
+        int degrees = (int) (((inches * 4 * Math.PI)/ 360.0) * 1150.0);
         resetEncoders();
         averageDegrees = (Math.abs(LeftFront.getCurrentPosition()) + Math.abs(RightFront.getCurrentPosition())
                         + Math.abs(RightBack.getCurrentPosition()) + Math.abs(LeftBack.getCurrentPosition()))/4;
@@ -227,10 +227,10 @@ public class DriveTrain {
             spinPower = (spin * (power / maxPower));
         }
     }
-    public void moveRobot(double direction, int degrees, double maxPower, double minPower, double precision){
+    public void moveRobot(double direction, double inches, double maxPower, double minPower, double precision){
         int averageDegrees;
         double power = maxPower;
-        degrees = (int) ((degrees / 360.0) * 1150.0);
+        int degrees = (int) (((inches * 4 * Math.PI)/ 360.0) * 1150.0);
 
         resetEncoders();
 
