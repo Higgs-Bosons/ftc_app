@@ -11,17 +11,23 @@ public class SensorTester extends LinearOpMode {
 
     public void runOpMode(){
         MecanumWheelRobot Bubbles = new MecanumWheelRobot(hardwareMap, FIRST_LETTER_NO_SPACE_UPPERCASE);
-        Bubbles.addSensor("TouchyL", TOUCH_SENSOR);
-        Bubbles.addSensor("TouchyR", TOUCH_SENSOR);
+        Bubbles.addSensor("TouchyLF", TOUCH_SENSOR);
+        Bubbles.addSensor("TouchyRF", TOUCH_SENSOR);
+        Bubbles.addSensor("TouchyLB", TOUCH_SENSOR);
+        Bubbles.addSensor("TouchyRB", TOUCH_SENSOR);
         Bubbles.addSensor("imu", IMU);
 
         waitForStart();
         while (opModeIsActive()){
-            float touchedL = Bubbles.readSensor("TouchyL",TOUCH_BOOLEAN);
-            float touchedR = Bubbles.readSensor("TouchyR",TOUCH_BOOLEAN);
+            float touchedLF = Bubbles.readSensor("TouchyLF",TOUCH_BOOLEAN);
+            float touchedRF = Bubbles.readSensor("TouchyRF",TOUCH_BOOLEAN);
+            float touchedLB = Bubbles.readSensor("TouchyLB",TOUCH_BOOLEAN);
+            float touchedRB = Bubbles.readSensor("TouchyRB",TOUCH_BOOLEAN);
             float[] imuDegrees = Bubbles.ReadIMUGyro("imu");
-            telemetry.addData("TouchyL", touchedL);
-            telemetry.addData("TouchyR", touchedR);
+            telemetry.addData("TouchyLF", touchedLF);
+            telemetry.addData("TouchyRF", touchedRF);
+            telemetry.addData("TouchyLB", touchedLB);
+            telemetry.addData("TouchyRB", touchedRB);
             telemetry.addData("IMU Rotation", imuDegrees[0]);
             telemetry.addData("IMU Tilt 1", imuDegrees[1]);
             telemetry.addData("IMU Tilt 2", imuDegrees[2]);
