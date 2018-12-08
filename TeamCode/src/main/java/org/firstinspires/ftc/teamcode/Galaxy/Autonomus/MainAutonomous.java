@@ -131,6 +131,9 @@ public class MainAutonomous extends LinearOpMode{
 
         driveUntilItHitsAWall();
 
+        Bubbles.stopMotor("Grabby");
+        Bubbles.moveRobot(SOUTH, 3.36, 0.7, 0.1, 15);
+
         Bubbles.ResetIMUGyro("imu");
         Bubbles.gyroTurn(90, Bubbles.getIMU("imu"));
 
