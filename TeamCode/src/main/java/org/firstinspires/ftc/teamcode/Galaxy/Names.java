@@ -8,6 +8,6 @@ public class Names {
     public static final String Lifter = "Lifter";
     public static final String TouchyL = "TouchyL";
     public static final String TouchyR = "TouchyR";
-    public static final String XThing = "X-Thingy";
-    public static final String YThing = "Y-Thingy";
+    public static final String XThing = "X-Thing";
+    public static final String YThing = "Y-Thing";
 }
