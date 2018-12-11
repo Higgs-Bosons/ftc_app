@@ -466,7 +466,7 @@ a letter, as seen in the Table itself.
     someName.spinRobot(0.5);
 
     Finally, there's turnGyro(). There are two arguments, toDegree and IMU.
-    toDegree is the degree you want to spin to (0's north, 90's east, etc.),
+    toDegree is the degree you want to spin to (0's north, 90's actually west, etc.),
     while the IMU is the control hub for the robot.
     To get the IMU, first make sure you have added it on (explained in the Motors section), then
     follow the example.

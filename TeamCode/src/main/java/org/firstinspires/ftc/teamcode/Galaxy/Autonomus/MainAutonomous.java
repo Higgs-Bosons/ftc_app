@@ -125,20 +125,19 @@ public class MainAutonomous extends LinearOpMode{
     }
 
     private void driveToTheDepoFromRight(){
-        Bubbles.gyroTurn(270,Bubbles.getIMU(Imu));
+        Bubbles.gyroTurn(90,Bubbles.getIMU(Imu));
 
         double movementInInches = 16.5 * cubePosition + 3.5;
         Bubbles.moveRobot(NORTH, movementInInches, 0.7, 0.1, 15);
-        Bubbles.gyroTurn(315,Bubbles.getIMU(Imu));
+        Bubbles.gyroTurn(45,Bubbles.getIMU(Imu));
 
         ramIntoWall(FORWARDS);
 
         Bubbles.stopMotor(Grabby);
         Bubbles.moveRobot(SOUTH, 1.7, 0.7, 0.1, 15);
 
+        Bubbles.gyroTurn(45, Bubbles.getIMU(Imu));
         Bubbles.gyroTurn(315, Bubbles.getIMU(Imu));
-        Bubbles.ResetIMUGyro(Imu);
-        Bubbles.gyroTurn(270, Bubbles.getIMU(Imu));
 
         ramIntoWall(REVERSE);
 
@@ -154,8 +153,7 @@ public class MainAutonomous extends LinearOpMode{
         Bubbles.moveRobot(SOUTH, 1.7, 0.7, 0.1, 15);
 
         Bubbles.gyroTurn(315, Bubbles.getIMU(Imu));
-        Bubbles.ResetIMUGyro(Imu);
-        Bubbles.gyroTurn(270, Bubbles.getIMU(Imu));
+        Bubbles.gyroTurn(225, Bubbles.getIMU(Imu));
 
         ramIntoWall(REVERSE);
 
