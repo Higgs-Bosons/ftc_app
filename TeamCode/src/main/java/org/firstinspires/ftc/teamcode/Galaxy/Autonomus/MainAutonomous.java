@@ -108,6 +108,7 @@ public class MainAutonomous extends LinearOpMode{
     }
 
     private void sample(){
+        // 1 - 0.32, 0.61; 2 - 0.32, 0.84; 3 - 0.32, 0.42
         final int NO_CUBE = 0;
         cubePosition = findYellowCubePlacement();
         if(cubePosition == NO_CUBE){
