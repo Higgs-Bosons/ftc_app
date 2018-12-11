@@ -120,7 +120,7 @@ public class MainAutonomous extends LinearOpMode{
 
             pineappleStrainer = new PineappleStrainer(canOfPineapple);
             Bitmap picture = canOfPineapple.getBitmap();
-            
+
 
             pineappleChunks = pineappleStrainer
                     .findShadedObject(85,90, picture, Color.rgb(250,200, 0), 130);
