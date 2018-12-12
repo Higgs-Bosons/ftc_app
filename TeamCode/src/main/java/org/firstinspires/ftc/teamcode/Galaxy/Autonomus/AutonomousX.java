@@ -3,7 +3,8 @@ package org.firstinspires.ftc.teamcode.Galaxy.Autonomus;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 
-import com.qualcomm.robotcore.eventloop.opmode.*;
+import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
 import org.firstinspires.ftc.teamcode.Galaxy.ImageCapturing.CanOfPineapple;
@@ -12,11 +13,34 @@ import org.firstinspires.ftc.teamcode.Galaxy.ImageCapturing.PineappleStrainer;
 import org.firstinspires.ftc.teamcode.Galaxy.MecanumWheelRobot.MecanumWheelRobot;
 import org.firstinspires.ftc.teamcode.Galaxy.Tools;
 
-import static org.firstinspires.ftc.teamcode.Galaxy.Constants.*;
-import static org.firstinspires.ftc.teamcode.Galaxy.Names.*;
+import static org.firstinspires.ftc.teamcode.Galaxy.Constants.CRATER_ON_THE_LEFT;
+import static org.firstinspires.ftc.teamcode.Galaxy.Constants.CRATER_ON_THE_RIGHT;
+import static org.firstinspires.ftc.teamcode.Galaxy.Constants.FIRST_LETTER_NO_SPACE_UPPERCASE;
+import static org.firstinspires.ftc.teamcode.Galaxy.Constants.FORWARDS;
+import static org.firstinspires.ftc.teamcode.Galaxy.Constants.IMU;
+import static org.firstinspires.ftc.teamcode.Galaxy.Constants.LEFT_SIDE_OF_THE_LANDER;
+import static org.firstinspires.ftc.teamcode.Galaxy.Constants.MotorDirections;
+import static org.firstinspires.ftc.teamcode.Galaxy.Constants.NORTH;
+import static org.firstinspires.ftc.teamcode.Galaxy.Constants.NO_TAG;
+import static org.firstinspires.ftc.teamcode.Galaxy.Constants.REVERSE;
+import static org.firstinspires.ftc.teamcode.Galaxy.Constants.RIGHT_SIDE_OF_THE_LANDER;
+import static org.firstinspires.ftc.teamcode.Galaxy.Constants.SOUTH;
+import static org.firstinspires.ftc.teamcode.Galaxy.Constants.TOUCH_SENSOR;
+import static org.firstinspires.ftc.teamcode.Galaxy.Constants.TOUCH_VALUE;
+import static org.firstinspires.ftc.teamcode.Galaxy.Names.Dumper;
+import static org.firstinspires.ftc.teamcode.Galaxy.Names.Gate;
+import static org.firstinspires.ftc.teamcode.Galaxy.Names.Grabby;
+import static org.firstinspires.ftc.teamcode.Galaxy.Names.Imu;
+import static org.firstinspires.ftc.teamcode.Galaxy.Names.Lifter;
+import static org.firstinspires.ftc.teamcode.Galaxy.Names.TouchyLB;
+import static org.firstinspires.ftc.teamcode.Galaxy.Names.TouchyLF;
+import static org.firstinspires.ftc.teamcode.Galaxy.Names.TouchyRB;
+import static org.firstinspires.ftc.teamcode.Galaxy.Names.TouchyRF;
+import static org.firstinspires.ftc.teamcode.Galaxy.Names.XThing;
+import static org.firstinspires.ftc.teamcode.Galaxy.Names.YThing;
 
-@Autonomous(name = "Autonomous", group = "Autonomous")
-public class MainAutonomous extends LinearOpMode{
+@Autonomous(name = "Autonomous X", group = "Autonomous")
+public class AutonomousX extends LinearOpMode{
     private MecanumWheelRobot Bubbles;
     private CanOfPineapple canOfPineapple;
     private PineappleStrainer pineappleStrainer;
@@ -48,10 +72,10 @@ public class MainAutonomous extends LinearOpMode{
 
         while(opModeIsActive());
 
-        canOfPineapple.closeCanOfPineapple();
         thread.interrupt();
-        Bubbles.stopRobot();
 
+        Bubbles.stopRobot();
+        canOfPineapple.closeCanOfPineapple();
     }
     private void initializeTheRobot(){
         Bubbles = new MecanumWheelRobot(hardwareMap, FIRST_LETTER_NO_SPACE_UPPERCASE);

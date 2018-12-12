@@ -256,7 +256,7 @@ public class DriveTrain {
         boolean WhichWay = WhichWayToTurn(toDegree, (int) getGyroReading(IMU));
 
         while(HowFar(toDegree, (int) getGyroReading(IMU)) >= 2) {
-            power = (HowFar(toDegree, (int) getGyroReading(IMU))) / 75.0;
+            power = (HowFar(toDegree, (int) getGyroReading(IMU))) / 60.0;
             power = (power < 0.1) ? 0.1 : power;
             power = (power > 1.0) ? 1.0 : power;
 
