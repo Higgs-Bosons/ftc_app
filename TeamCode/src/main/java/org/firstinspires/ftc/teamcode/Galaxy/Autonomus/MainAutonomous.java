@@ -54,30 +54,34 @@ public class MainAutonomous extends LinearOpMode{
 
     }
     private void initializeTheRobot(){
+        telemetry.addData("INITIALIZING","ROBOT"); telemetry.update();
         Bubbles = new MecanumWheelRobot(hardwareMap, FIRST_LETTER_NO_SPACE_UPPERCASE);
         Bubbles.resetEncoders();
+
+        telemetry.addData("INITIALIZING","SERVOS"); telemetry.update();
         Bubbles.addServo(Gate);
         Bubbles.addServo(Dumper);
-        Bubbles.addSensor(Imu, IMU);
-
-        Bubbles.setMotorDirection(FORWARDS,REVERSE,REVERSE,FORWARDS);
-        Bubbles.addAMotor(Grabby, NO_TAG);
-        Bubbles.addAMotor(Lifter, NO_TAG);
-
-        Bubbles.addSensor(TouchyLF,TOUCH_SENSOR);
-        Bubbles.addSensor(TouchyRF,TOUCH_SENSOR);
-        Bubbles.addSensor(TouchyLB,TOUCH_SENSOR);
-        Bubbles.addSensor(TouchyRB,TOUCH_SENSOR);
-
         Bubbles.addServo(XThing);
         Bubbles.addServo(YThing);
 
         Bubbles.moveServo(XThing, 0.64);
         Bubbles.moveServo(YThing, 0.27);
-        Bubbles.setBreakOrCoast(DcMotor.ZeroPowerBehavior.BRAKE);
 
+        telemetry.addData("INITIALIZING","MOTORS"); telemetry.update();
+        Bubbles.setBreakOrCoast(DcMotor.ZeroPowerBehavior.BRAKE);
+        Bubbles.setMotorDirection(FORWARDS,REVERSE,REVERSE,FORWARDS);
+        Bubbles.addAMotor(Grabby, NO_TAG);
+        Bubbles.addAMotor(Lifter, NO_TAG);
+
+        telemetry.addData("INITIALIZING","SENSORS"); telemetry.update();
+        Bubbles.addSensor(TouchyLF,TOUCH_SENSOR);
+        Bubbles.addSensor(TouchyRF,TOUCH_SENSOR);
+        Bubbles.addSensor(TouchyLB,TOUCH_SENSOR);
+        Bubbles.addSensor(TouchyRB,TOUCH_SENSOR);
+        Bubbles.addSensor(Imu, IMU);
         Bubbles.ResetIMUGyro(Imu);
 
+        telemetry.addData("INITIALIZING","CAN OF PINEAPPLE"); telemetry.update();
         canOfPineapple = new CanOfPineapple();
     }
 
