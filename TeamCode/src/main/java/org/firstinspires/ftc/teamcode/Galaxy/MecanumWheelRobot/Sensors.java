@@ -28,7 +28,7 @@ public class Sensors extends DriveTrain{
 
     private HardwareMap hardwareMap;
 
-    public static final int READING_FAILED = -1234567890;
+    private static final int READING_FAILED = -1234567890;
 
     public Sensors(HardwareMap hardwareMap) {
         this.hardwareMap = hardwareMap;

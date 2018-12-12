@@ -17,6 +17,7 @@ import static org.firstinspires.ftc.teamcode.Galaxy.Names.*;
 
 @Autonomous(name = "Autonomous", group = "Autonomous")
 public class MainAutonomous extends LinearOpMode{
+    //---{VARIABLES}---------------------------------------
     private MecanumWheelRobot Bubbles;
     private CanOfPineapple canOfPineapple;
     private PineappleStrainer pineappleStrainer;
@@ -25,6 +26,8 @@ public class MainAutonomous extends LinearOpMode{
     private String sideOfTheLander =  "  NULL";
     private int cubePosition;
 
+
+//-------{runOpMode()}------------------------------------------------------------------------------
     public void runOpMode() {
         initializeTheRobot();
         getMenuChoices();
@@ -53,6 +56,8 @@ public class MainAutonomous extends LinearOpMode{
         Bubbles.stopRobot();
 
     }
+
+//-------{INITIALIZATION}---------------------------------------------------------------------------
     private void initializeTheRobot(){
         telemetry.addData("INITIALIZING","ROBOT"); telemetry.update();
         Bubbles = new MecanumWheelRobot(hardwareMap, FIRST_LETTER_NO_SPACE_UPPERCASE);
@@ -84,7 +89,6 @@ public class MainAutonomous extends LinearOpMode{
         telemetry.addData("INITIALIZING","CAN OF PINEAPPLE"); telemetry.update();
         canOfPineapple = new CanOfPineapple();
     }
-
     private void getMenuChoices(){
         while(!gamepad1.y || sideOfTheLander.equals("  NULL") || craterToGoTo.equals("  NULL")){
             telemetry.addData("WHICH CRATER TO GO TO    ", craterToGoTo);
@@ -106,89 +110,7 @@ public class MainAutonomous extends LinearOpMode{
         telemetry.update();
     }
 
-    private int findYellowCubePlacement(){
-       pineappleStrainer = new PineappleStrainer(canOfPineapple);
-        Bitmap picture = canOfPineapple.getBitmap();
-
-        pineappleChunks = pineappleStrainer
-                .findShadedObject(85,90, picture, Color.rgb(250,200, 0), 130);
-
-        if(pineappleChunks.doesChunkExist()){
-            return (int) (Math.floor((pineappleChunks.getBiggestChunk()[PineappleChunks.Y])/34)+1);
-        }else{
-            return 0;
-        }
-    }
-
-    private void sampleOnRight(){
-        // 1 - 0.32, 0.61; 2 - 0.32, 0.84; 3 - 0.32, 0.42
-        final int NO_CUBE = 0;
-        cubePosition = findYellowCubePlacement();
-        if(cubePosition == NO_CUBE){
-            int biggestSize = 0;
-            Bubbles.moveServo(YThing, 0.29);
-            Bubbles.moveServo(XThing, 0.84);
-            Bubbles.moveRobot(NORTH, 8.4, 1, 0.1, 15);
-
-            pineappleStrainer = new PineappleStrainer(canOfPineapple);
-            Bitmap picture = canOfPineapple.getBitmap();
-
-
-            pineappleChunks = pineappleStrainer
-                    .findShadedObject(85,90, picture, Color.rgb(250,200, 0), 130);
-
-            if(pineappleChunks.doesChunkExist()){
-                if(pineappleChunks.getBiggestChunk()[PineappleChunks.X] > 35
-                        && pineappleChunks.getBiggestChunk()[PineappleChunks.X] < 65) {
-                    cubePosition = 3;
-                    biggestSize = pineappleChunks.getBiggestChunk()[PineappleChunks.SIZE];
-                }
-            }
-
-            Bubbles.moveServo(XThing, 0.61);
-            Tools.wait(333);
-
-            picture = canOfPineapple.getBitmap();
-
-            pineappleChunks = pineappleStrainer
-                    .findShadedObject(85,90, picture, Color.rgb(250,200, 0), 130);
-
-            if(pineappleChunks.doesChunkExist()){
-                    if(pineappleChunks.getBiggestChunk()[PineappleChunks.SIZE] > biggestSize &&
-                        pineappleChunks.getBiggestChunk()[PineappleChunks.X] > 35 && pineappleChunks.getBiggestChunk()[PineappleChunks.X] < 65) {
-                        cubePosition = 2;
-                    }else if(cubePosition == NO_CUBE){
-                        cubePosition = 1;
-                    }
-
-            }else if (cubePosition == NO_CUBE){
-                cubePosition = 1;
-            }
-
-            telemetry.addData("CUBE POSITION", cubePosition);
-            telemetry.update();
-
-            if(cubePosition == 3){
-                Bubbles.gyroTurn(330,Bubbles.getIMU(Imu));
-            }else if (cubePosition == 1){
-                Bubbles.gyroTurn(30,Bubbles.getIMU(Imu));
-            }
-
-            Bubbles.moveMotor(Grabby, -1);
-            Bubbles.moveRobot(NORTH, 40, 1, 0.1, 15);
-
-
-        }else{
-            Bubbles.moveRobot(NORTH, 2.49, 0,1, 0.1, 15);
-            if(cubePosition == 3){
-                Bubbles.gyroTurn(330,Bubbles.getIMU(Imu));
-            }else if (cubePosition == 1){
-                Bubbles.gyroTurn(25,Bubbles.getIMU(Imu));
-            }
-            Bubbles.moveMotor(Grabby, -1);
-            Bubbles.moveRobot(NORTH, 40, 1, 0.1, 15);
-        }
-    }
+//-------{LEFT SIDE}--------------------------------------------------------------------------------
     private void sampleOnLeft(){
         // 1 - 0.32, 0.61; 2 - 0.32, 0.84; 3 - 0.32, 0.42
         final int NO_CUBE = 0;
@@ -259,7 +181,6 @@ public class MainAutonomous extends LinearOpMode{
             Bubbles.moveRobot(SOUTH, 10, 1, 0.1, 15);
         }
     }
-
     private void driveToTheDepoFromLeft(){
         Bubbles.gyroTurn(90,Bubbles.getIMU(Imu));
 
@@ -279,6 +200,76 @@ public class MainAutonomous extends LinearOpMode{
         Bubbles.moveRobot(NORTH, 4.98, 1, 0.4, 15);
     }
 
+//-------{RIGHT SIDE}-------------------------------------------------------------------------------
+    private void sampleOnRight(){
+        // 1 - 0.32, 0.61; 2 - 0.32, 0.84; 3 - 0.32, 0.42
+        final int NO_CUBE = 0;
+        cubePosition = findYellowCubePlacement();
+        if(cubePosition == NO_CUBE){
+            int biggestSize = 0;
+            Bubbles.moveServo(YThing, 0.29);
+            Bubbles.moveServo(XThing, 0.84);
+            Bubbles.moveRobot(NORTH, 8.4, 1, 0.1, 15);
+
+            pineappleStrainer = new PineappleStrainer(canOfPineapple);
+            Bitmap picture = canOfPineapple.getBitmap();
+
+
+            pineappleChunks = pineappleStrainer
+                    .findShadedObject(85,90, picture, Color.rgb(250,200, 0), 130);
+
+            if(pineappleChunks.doesChunkExist()){
+                if(pineappleChunks.getBiggestChunk()[PineappleChunks.X] > 35
+                        && pineappleChunks.getBiggestChunk()[PineappleChunks.X] < 65) {
+                    cubePosition = 3;
+                    biggestSize = pineappleChunks.getBiggestChunk()[PineappleChunks.SIZE];
+                }
+            }
+
+            Bubbles.moveServo(XThing, 0.61);
+            Tools.wait(333);
+
+            picture = canOfPineapple.getBitmap();
+
+            pineappleChunks = pineappleStrainer
+                    .findShadedObject(85,90, picture, Color.rgb(250,200, 0), 130);
+
+            if(pineappleChunks.doesChunkExist()){
+                if(pineappleChunks.getBiggestChunk()[PineappleChunks.SIZE] > biggestSize &&
+                        pineappleChunks.getBiggestChunk()[PineappleChunks.X] > 35 && pineappleChunks.getBiggestChunk()[PineappleChunks.X] < 65) {
+                    cubePosition = 2;
+                }else if(cubePosition == NO_CUBE){
+                    cubePosition = 1;
+                }
+
+            }else if (cubePosition == NO_CUBE){
+                cubePosition = 1;
+            }
+
+            telemetry.addData("CUBE POSITION", cubePosition);
+            telemetry.update();
+
+            if(cubePosition == 3){
+                Bubbles.gyroTurn(330,Bubbles.getIMU(Imu));
+            }else if (cubePosition == 1){
+                Bubbles.gyroTurn(30,Bubbles.getIMU(Imu));
+            }
+
+            Bubbles.moveMotor(Grabby, -1);
+            Bubbles.moveRobot(NORTH, 40, 1, 0.1, 15);
+
+
+        }else{
+            Bubbles.moveRobot(NORTH, 2.49, 0,1, 0.1, 15);
+            if(cubePosition == 3){
+                Bubbles.gyroTurn(330,Bubbles.getIMU(Imu));
+            }else if (cubePosition == 1){
+                Bubbles.gyroTurn(25,Bubbles.getIMU(Imu));
+            }
+            Bubbles.moveMotor(Grabby, -1);
+            Bubbles.moveRobot(NORTH, 40, 1, 0.1, 15);
+        }
+    }
     private void driveToTheDepoFromRight(){
 
         Bubbles.gyroTurn(315,Bubbles.getIMU(Imu));
@@ -294,6 +285,21 @@ public class MainAutonomous extends LinearOpMode{
         ramIntoWall(REVERSE);
 
         Bubbles.moveRobot(NORTH, 4.98, 1, 0.4, 15);
+    }
+
+//-------{USED BY BOTH}-----------------------------------------------------------------------------
+    private int findYellowCubePlacement(){
+        pineappleStrainer = new PineappleStrainer(canOfPineapple);
+        Bitmap picture = canOfPineapple.getBitmap();
+
+        pineappleChunks = pineappleStrainer
+                .findShadedObject(85,90, picture, Color.rgb(250,200, 0), 130);
+
+        if(pineappleChunks.doesChunkExist()){
+            return (int) (Math.floor((pineappleChunks.getBiggestChunk()[PineappleChunks.Y])/34)+1);
+        }else{
+            return 0;
+        }
     }
     private void dropOffStuffAndDriveToCrater(){
 
