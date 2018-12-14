@@ -320,15 +320,21 @@ public class MainAutonomous extends LinearOpMode{
         Bubbles.moveServo(Gate,0.55);
         Bubbles.moveServo(Dumper, 0);
 
-
+        Bubbles.driveAtHeader(NORTH, 1);
 
         float[] imuDegrees = Bubbles.ReadIMUGyro(Imu);
-        while (!((imuDegrees[1] < 2 && imuDegrees[1] > 368) || 
-                (imuDegrees[2] > 368 && imuDegrees[2] < 2) ||
-                (imuDegrees[0] > 345 && imuDegrees[0] < 5))) {
+
+        while (!((imuDegrees[1] > 3  && imuDegrees[1] < 357) ||
+                (imuDegrees[2] > 3  && imuDegrees[2] < 357) ||
+                (imuDegrees[0] > 30 && imuDegrees[0] < 330))) {
             imuDegrees = Bubbles.ReadIMUGyro(Imu);
-            Bubbles.driveAtHeader(NORTH, 1);
+
+            telemetry.addData("imuDegrees[0] ",imuDegrees[0]);
+            telemetry.addData("imuDegrees[1] ",imuDegrees[1]);
+            telemetry.addData("imuDegrees[2] ",imuDegrees[2]);
+            telemetry.update();
         }
+        Bubbles.stopRobot();
     }
     private void ramIntoWall(@MotorDirections int direction){
         int hittingAWall = 0;
