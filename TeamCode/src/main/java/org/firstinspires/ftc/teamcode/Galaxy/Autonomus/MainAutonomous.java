@@ -73,6 +73,9 @@ public class MainAutonomous extends LinearOpMode{
         Bubbles.moveServo(XThing, 0.64);
         Bubbles.moveServo(YThing, 0.27);
 
+        Bubbles.moveServo(Gate,0.55);
+        Bubbles.moveServo(Dumper, 0);
+
         telemetry.addData("INITIALIZING","MOTORS"); telemetry.update();
         Bubbles.setBreakOrCoast(DcMotor.ZeroPowerBehavior.BRAKE);
         Bubbles.setMotorDirection(FORWARDS,REVERSE,REVERSE,FORWARDS);
@@ -192,7 +195,7 @@ public class MainAutonomous extends LinearOpMode{
         Bubbles.stopMotor(Grabby);
         ramIntoWall(FORWARDS);
 
-        Bubbles.moveRobot(SOUTH, 2, 1, 0.1, 15);
+        Bubbles.moveRobot(SOUTH, 2.4, 1, 0.1, 15);
 
         Bubbles.gyroTurn(315, Bubbles.getIMU(Imu));
 
@@ -278,7 +281,7 @@ public class MainAutonomous extends LinearOpMode{
         ramIntoWall(FORWARDS);
 
         Bubbles.stopMotor(Grabby);
-        Bubbles.moveRobot(SOUTH, 1.7, 1, 0.1, 15);
+        Bubbles.moveRobot(SOUTH, 2.4, 1, 0.1, 15);
 
         Bubbles.gyroTurn(315, Bubbles.getIMU(Imu));
         Bubbles.gyroTurn(225, Bubbles.getIMU(Imu));
