@@ -306,7 +306,12 @@ public class MainAutonomous extends LinearOpMode{
         }
     }
     private void dropOffStuffAndDriveToCrater(){
+        Bubbles.moveRobot(NORTH, 2, 1, 0.1, 1);
+        Bubbles.ResetIMUGyro(Imu);
 
+        if (craterToGoTo.equals(CRATER_ON_THE_RIGHT)) {
+            Bubbles.gyroTurn(270, Bubbles.getIMU(Imu));
+        }
         Bubbles.moveServo(Gate,0.4);
         Bubbles.moveServo(Dumper, 0.45);
 
@@ -315,23 +320,32 @@ public class MainAutonomous extends LinearOpMode{
         Bubbles.moveServo(Gate,0.55);
         Bubbles.moveServo(Dumper, 0);
 
-        if (craterToGoTo.equals(CRATER_ON_THE_RIGHT)) {
-            Bubbles.gyroTurn(270, Bubbles.getIMU(Imu));
-        }
+
 
         float[] imuDegrees = Bubbles.ReadIMUGyro(Imu);
-        while ((imuDegrees[1] < 2 || imuDegrees[1] > 300) && (imuDegrees[2] < 355 || imuDegrees[2] > 10)) {
+        while (!((imuDegrees[1] < 2 && imuDegrees[1] > 368) || 
+                (imuDegrees[2] > 368 && imuDegrees[2] < 2) ||
+                (imuDegrees[0] > 345 && imuDegrees[0] < 5))) {
             imuDegrees = Bubbles.ReadIMUGyro(Imu);
             Bubbles.driveAtHeader(NORTH, 1);
         }
     }
     private void ramIntoWall(@MotorDirections int direction){
         int hittingAWall = 0;
+        long startTime = System.currentTimeMillis();
+        long currentTime;
+
         if (direction == FORWARDS)
             Bubbles.driveAtHeader(0, 1);
         else
             Bubbles.driveAtHeader(SOUTH, 1);
+
+
         while (hittingAWall < 25){
+            currentTime = System.currentTimeMillis();
+
+            if(currentTime - startTime >= 10000){hittingAWall = 9999999;}
+
             if (direction == FORWARDS) {
                 if ((Bubbles.readSensor(TouchyLF, TOUCH_VALUE) == 1) ^ (Bubbles.readSensor(TouchyRF, TOUCH_VALUE) == 1))
                     hittingAWall++;
