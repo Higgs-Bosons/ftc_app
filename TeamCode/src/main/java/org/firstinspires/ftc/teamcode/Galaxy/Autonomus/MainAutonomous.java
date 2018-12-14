@@ -44,6 +44,7 @@ public class MainAutonomous extends LinearOpMode{
                     driveToTheDepoFromRight();
                 }
                 dropOffStuffAndDriveToCrater();
+
                 requestOpModeStop();
             }
         });
@@ -316,7 +317,7 @@ public class MainAutonomous extends LinearOpMode{
         }
 
         float[] imuDegrees = Bubbles.ReadIMUGyro(Imu);
-        while (imuDegrees[1] > 355 && (imuDegrees[2] < 2 || imuDegrees[2] > 300) && (imuDegrees[2] < 355 || imuDegrees[2] > 10)) {
+        while ((imuDegrees[1] < 2 || imuDegrees[1] > 300) && (imuDegrees[2] < 355 || imuDegrees[2] > 10)) {
             imuDegrees = Bubbles.ReadIMUGyro(Imu);
             Bubbles.driveAtHeader(NORTH, 1);
         }
