@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.Galaxy.Testers;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
@@ -37,7 +38,7 @@ public class CraterStopOnTester extends LinearOpMode {
         telemetry.update();
         waitForStart();
 
-        Bubbles.driveAtHeader(NORTH, 1);
+        Bubbles.driveAtHeader(NORTH, 1, -0.1);
         Tools.wait(500);
         Bubbles.ResetIMUGyro(Imu);
 

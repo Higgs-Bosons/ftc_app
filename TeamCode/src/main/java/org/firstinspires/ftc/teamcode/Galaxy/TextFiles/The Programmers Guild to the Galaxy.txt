@@ -1,6 +1,6 @@
 Made by: Whitaker K. and Aayush V.
 
-        Version 5, 569 Lines
+        Version 5, 629 Lines
 
      Table of Contents:
  Line Number:   |          Topic:            |  Bookmark Letter:
@@ -377,7 +377,7 @@ a letter, as seen in the Table itself.
 
     -----{Initializing}------------------------------------                                             =MacanumWheelRobot - Initializing=
 
-    Before you initialze, make sure you import these two in your class somewhere:
+    Before you initialize, make sure you import these two in your class somewhere:
     import static org.firstinspires.ftc.teamcode.Galaxy.Constants.*;
     import org.firstinspires.ftc.teamcode.Galaxy.Robot.MecanumWheelRobot;
 

@@ -1,7 +1,5 @@
 package org.firstinspires.ftc.teamcode.Galaxy.MecanumWheelRobot;
 
-import android.util.Log;
-
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.robotcore.hardware.*;
 
@@ -14,7 +12,6 @@ import static org.firstinspires.ftc.teamcode.Galaxy.Constants.*;
 
 public class DriveTrain {
     private DcMotor LeftFront, LeftBack, RightFront, RightBack;
-
 //-------{INITIALIZATION}---------------------------------------------------------------------------
     public DriveTrain(){}
     public DriveTrain(DcMotor[] driveMotors){
@@ -209,20 +206,27 @@ public class DriveTrain {
         resetEncoders();
         numberOfTicksMoved = (Math.abs(LeftFront.getCurrentPosition()) + Math.abs(RightFront.getCurrentPosition())
                         + Math.abs(RightBack.getCurrentPosition()) + Math.abs(LeftBack.getCurrentPosition()))/4;
+        try {
 
-        while(Math.abs(Math.abs(numberOfTicksMoved) - Math.abs(ticksToMove)) > precision){
-            driveAtHeader(direction,power, spinPower);
+            while (Math.abs(Math.abs(numberOfTicksMoved) - Math.abs(ticksToMove)) > precision) {
+                driveAtHeader(direction, power, spinPower);
 
-            numberOfTicksMoved = (Math.abs(LeftFront.getCurrentPosition()) + Math.abs(RightFront.getCurrentPosition())
-                    + Math.abs(RightBack.getCurrentPosition()) + Math.abs(LeftBack.getCurrentPosition()))/4;
+                numberOfTicksMoved = (Math.abs(LeftFront.getCurrentPosition()) + Math.abs(RightFront.getCurrentPosition())
+                        + Math.abs(RightBack.getCurrentPosition()) + Math.abs(LeftBack.getCurrentPosition())) / 4;
 
-            power = (((1916+(2/3.0)) * Math.pow(Math.abs(Math.abs(numberOfTicksMoved) - Math.abs(ticksToMove)), 2)) +
-                    ((1341+(2/3.0)) * Math.abs(Math.abs(numberOfTicksMoved) - Math.abs(ticksToMove))));
+                power = (((1916 + (2 / 3.0)) * Math.pow(Math.abs(Math.abs(numberOfTicksMoved) - Math.abs(ticksToMove)), 2)) +
+                        ((1341 + (2 / 3.0)) * Math.abs(Math.abs(numberOfTicksMoved) - Math.abs(ticksToMove))));
 
-            power = (power > maxPower) ? maxPower : power;
-            power = (power < minPower) ? minPower : power;
+                power = (power > maxPower) ? maxPower : power;
+                power = (power < minPower) ? minPower : power;
 
-            spinPower = (spin * (power / maxPower));
+                spinPower = (spin * (power / maxPower));
+                Thread.sleep(0,50);
+            }
+        }catch (InterruptedException e){
+            Thread.currentThread().interrupt();
+        }finally {
+            stopRobot();
         }
     }
     public void moveRobot(double direction, double inches, double maxPower, double minPower, double precision){
@@ -234,37 +238,51 @@ public class DriveTrain {
 
         numberOfTicksMoved = (Math.abs(LeftFront.getCurrentPosition()) + Math.abs(RightFront.getCurrentPosition())
                 + Math.abs(RightBack.getCurrentPosition()) + Math.abs(LeftBack.getCurrentPosition()))/4;
+        try {
+            while (Math.abs(Math.abs(numberOfTicksMoved) - Math.abs(ticksToMove)) > precision) {
+                driveAtHeader(direction, power);
 
-        while(Math.abs(Math.abs(numberOfTicksMoved) - Math.abs(ticksToMove)) > precision){
-            driveAtHeader(direction,power);
+                numberOfTicksMoved = (Math.abs(LeftFront.getCurrentPosition()) + Math.abs(RightFront.getCurrentPosition())
+                        + Math.abs(RightBack.getCurrentPosition()) + Math.abs(LeftBack.getCurrentPosition())) / 4;
 
-            numberOfTicksMoved = (Math.abs(LeftFront.getCurrentPosition()) + Math.abs(RightFront.getCurrentPosition())
-                    + Math.abs(RightBack.getCurrentPosition()) + Math.abs(LeftBack.getCurrentPosition()))/4;
+                power = (((1916 + (2 / 3.0)) * Math.pow(Math.abs(Math.abs(numberOfTicksMoved) - Math.abs(ticksToMove)), 2)) +
+                        ((1341 + (2 / 3.0)) * Math.abs(Math.abs(numberOfTicksMoved) - Math.abs(ticksToMove))));
+                power = (power > maxPower) ? maxPower : power;
+                power = (power < minPower) ? minPower : power;
+                if (Math.abs(numberOfTicksMoved) > Math.abs(ticksToMove)) power = -power;
 
-            power = (((1916+(2/3.0)) * Math.pow(Math.abs(Math.abs(numberOfTicksMoved) - Math.abs(ticksToMove)), 2)) +
-                    ((1341+(2/3.0)) * Math.abs(Math.abs(numberOfTicksMoved) - Math.abs(ticksToMove))));
-            power = (power > maxPower) ? maxPower : power;
-            power = (power < minPower) ? minPower : power;
-            if(Math.abs(numberOfTicksMoved) > Math.abs(ticksToMove))power = -power;
+                Thread.sleep(0,50);
+            }
+        }catch (InterruptedException e){
+            Thread.currentThread().interrupt();
+        }finally {
+            stopRobot();
         }
-        stopRobot();
     }
     public void gyroTurn(int toDegree, BNO055IMU IMU){
         double power;
-
-
         boolean WhichWay = WhichWayToTurn(toDegree, (int) getGyroReading(IMU));
 
-        while(HowFar(toDegree, (int) getGyroReading(IMU)) >= 2) {
-            power = (HowFar(toDegree, (int) getGyroReading(IMU))) / 60.0;
-            power = (power < 0.1) ? 0.1 : power;
-            power = (power > 1.0) ? 1.0 : power;
+        try {
+            while (HowFar(toDegree, (int) getGyroReading(IMU)) >= 2) {
+                power = (HowFar(toDegree, (int) getGyroReading(IMU))) / 60.0;
+                power = (power < 0.1) ? 0.1 : power;
+                power = (power > 1.0) ? 1.0 : power;
 
-            if(WhichWay){spinRobot(-power);}else{spinRobot(power);}
-            WhichWay = WhichWayToTurn(toDegree, (int) getGyroReading(IMU));
+                if (WhichWay) {
+                    spinRobot(-power);
+                } else {
+                    spinRobot(power);
+                }
+                WhichWay = WhichWayToTurn(toDegree, (int) getGyroReading(IMU));
+
+               Thread.sleep(0,50);
+            }
+        }catch (InterruptedException e){
+            Thread.currentThread().interrupt();
+        }finally {
+            stopRobot();
         }
-        
-        stopRobot();
     }
 
     //--{TOOLS}------------------------------------------------------

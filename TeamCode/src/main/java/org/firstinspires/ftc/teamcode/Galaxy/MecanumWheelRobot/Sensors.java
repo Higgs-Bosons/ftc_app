@@ -123,7 +123,7 @@ public class Sensors extends DriveTrain{
         }
     }
 
-//-------{IMU}--------------------------------------------------------------------------------------
+    //-------{IMU}--------------------------------------------------------------------------------------
     public void ResetIMUGyro(String IMUName) {
         BNO055IMU IMU = getIMU(IMUName);
         BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
@@ -236,7 +236,7 @@ public class Sensors extends DriveTrain{
         return READING_FAILED;
     }
 
-//-------{GETTERS}----------------------------------------------------------------------------------
+    //-------{GETTERS}----------------------------------------------------------------------------------
     private ColorSensor getColorSensor(String name) {
         return this.colorSensor.get(name);
     }

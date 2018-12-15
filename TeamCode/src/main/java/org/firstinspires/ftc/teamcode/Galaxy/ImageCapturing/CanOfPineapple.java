@@ -66,8 +66,8 @@ public class CanOfPineapple extends CanOfPineappleObjects {
 //-----{CLOSING}-----------------------------------------------------------------------------------
     public void closeCanOfPineapple(){
         PineappleIsActive = false;
-        closeBackgroundThread();
         closeCamera();
+        closeBackgroundThread();
         hidePreview();
     }
     private void closeCamera() {

@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.Galaxy.Autonomus;
 
 import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.util.Log;
 
 import com.qualcomm.robotcore.eventloop.opmode.*;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -27,35 +28,51 @@ public class MainAutonomous extends LinearOpMode{
     private int cubePosition;
 
 
+
 //-------{runOpMode()}------------------------------------------------------------------------------
     public void runOpMode() {
         initializeTheRobot();
         getMenuChoices();
 
-        waitForStart();
-
         final Thread thread = new Thread(new Runnable() {
             public void run() {
-                if (!sideOfTheLander.equals(RIGHT_SIDE_OF_THE_LANDER)) {
+                if (sideOfTheLander.equals(LEFT_SIDE_OF_THE_LANDER)) {
+                    Tools.showToast("LEFT");
                     sampleOnLeft();
+                    Tools.showToast("TO DEPO");
                     driveToTheDepoFromLeft();
                 } else {
+                    Tools.showToast("RIGHT");
                     sampleOnRight();
+                    Tools.showToast("TO DEPO");
                     driveToTheDepoFromRight();
                 }
+
+                canOfPineapple.closeCanOfPineapple();
+
+                Tools.showToast("TO CRATER");
                 dropOffStuffAndDriveToCrater();
 
+                Tools.showToast("DONE");
                 requestOpModeStop();
             }
         });
+
+        waitForStart();
+
+
+
         thread.start();
 
-        while(opModeIsActive());
+        while(opModeIsActive()){
 
-        canOfPineapple.closeCanOfPineapple();
+        }
+
+
         thread.interrupt();
+        Tools.showToast(thread.isAlive()+"");
         Bubbles.stopRobot();
-
+        telemetry.clearAll();
     }
 
 //-------{INITIALIZATION}---------------------------------------------------------------------------
@@ -174,7 +191,7 @@ public class MainAutonomous extends LinearOpMode{
 
 
         }else{
-            Bubbles.moveRobot(NORTH, 2.49, 0,1, 0.1, 15);
+            Bubbles.moveRobot(NORTH, 2.49, 1, 0.1, 15);
             if(cubePosition == 3){
                 Bubbles.gyroTurn(330,Bubbles.getIMU(Imu));
             }else if (cubePosition == 1){
@@ -201,7 +218,7 @@ public class MainAutonomous extends LinearOpMode{
 
         ramIntoWall(REVERSE);
 
-        Bubbles.moveRobot(NORTH, 4.98, 1, 0.4, 15);
+        Bubbles.moveRobot(NORTH, 4, 0.2, 0.1, 15);
     }
 
 //-------{RIGHT SIDE}-------------------------------------------------------------------------------
@@ -264,7 +281,7 @@ public class MainAutonomous extends LinearOpMode{
 
 
         }else{
-            Bubbles.moveRobot(NORTH, 2.49, 0,1, 0.1, 15);
+            Bubbles.moveRobot(NORTH, 2.49, 1, 0.1, 15);
             if(cubePosition == 3){
                 Bubbles.gyroTurn(330,Bubbles.getIMU(Imu));
             }else if (cubePosition == 1){
@@ -288,7 +305,7 @@ public class MainAutonomous extends LinearOpMode{
 
         ramIntoWall(REVERSE);
 
-        Bubbles.moveRobot(NORTH, 4.98, 1, 0.4, 15);
+        Bubbles.moveRobot(NORTH, 4, 0.2, 0.1, 15);
     }
 
 //-------{USED BY BOTH}-----------------------------------------------------------------------------
@@ -306,12 +323,11 @@ public class MainAutonomous extends LinearOpMode{
         }
     }
     private void dropOffStuffAndDriveToCrater(){
-        Bubbles.moveRobot(NORTH, 2, 1, 0.1, 1);
         Bubbles.ResetIMUGyro(Imu);
 
-        if (craterToGoTo.equals(CRATER_ON_THE_RIGHT)) {
+        if (craterToGoTo.equals(CRATER_ON_THE_RIGHT))
             Bubbles.gyroTurn(270, Bubbles.getIMU(Imu));
-        }
+
         Bubbles.moveServo(Gate,0.4);
         Bubbles.moveServo(Dumper, 0.45);
 
@@ -320,7 +336,12 @@ public class MainAutonomous extends LinearOpMode{
         Bubbles.moveServo(Gate,0.55);
         Bubbles.moveServo(Dumper, 0);
 
-        Bubbles.driveAtHeader(NORTH, 1);
+        if(craterToGoTo.equals(CRATER_ON_THE_LEFT))
+            Bubbles.driveAtHeader(NORTH, 1, -0.1);
+        else
+            Bubbles.driveAtHeader(NORTH, 1, 0.1);
+
+        // Tools.wait(2000); // TODO Lets the robot get off of something if it is prompted up on something
 
         float[] imuDegrees = Bubbles.ReadIMUGyro(Imu);
 
@@ -328,11 +349,6 @@ public class MainAutonomous extends LinearOpMode{
                 (imuDegrees[2] > 3  && imuDegrees[2] < 357) ||
                 (imuDegrees[0] > 30 && imuDegrees[0] < 330))) {
             imuDegrees = Bubbles.ReadIMUGyro(Imu);
-
-            telemetry.addData("imuDegrees[0] ",imuDegrees[0]);
-            telemetry.addData("imuDegrees[1] ",imuDegrees[1]);
-            telemetry.addData("imuDegrees[2] ",imuDegrees[2]);
-            telemetry.update();
         }
         Bubbles.stopRobot();
     }
@@ -347,10 +363,8 @@ public class MainAutonomous extends LinearOpMode{
             Bubbles.driveAtHeader(SOUTH, 1);
 
 
-        while (hittingAWall < 25){
-            currentTime = System.currentTimeMillis();
-
-            if(currentTime - startTime >= 10000){hittingAWall = 9999999;}
+        while (hittingAWall < 25 && opModeIsActive()){
+            sleep(20);
 
             if (direction == FORWARDS) {
                 if ((Bubbles.readSensor(TouchyLF, TOUCH_VALUE) == 1) ^ (Bubbles.readSensor(TouchyRF, TOUCH_VALUE) == 1))
@@ -368,6 +382,9 @@ public class MainAutonomous extends LinearOpMode{
                 if (Bubbles.readSensor(TouchyLB, TOUCH_VALUE) == 1 && Bubbles.readSensor(TouchyRB, TOUCH_VALUE) == 1)
                     hittingAWall = 999999999;
             }
+
+            currentTime = System.currentTimeMillis();
+            if(currentTime - startTime >= 10000){hittingAWall = 9999999;} // TODO CAN LOWER THE TIME LIMIT, AROUND 5000 milliseconds
         }
         Bubbles.stopRobot();
 
