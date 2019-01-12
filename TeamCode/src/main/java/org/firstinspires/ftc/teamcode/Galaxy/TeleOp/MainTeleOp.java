@@ -50,7 +50,7 @@ public class MainTeleOp extends LinearOpMode{
         BubbleTheRobo.setMotorDirection(REVERSE, FORWARDS, FORWARDS, REVERSE);
         BubbleTheRobo.setBreakOrCoast(DcMotor.ZeroPowerBehavior.FLOAT);
     }
-    
+
     private void checkDriveMotors(){
         if (!tanked) 
              BubbleTheRobo.driveByJoystick(gamepad1, (speed/100.0));
