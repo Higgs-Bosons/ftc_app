@@ -12,4 +12,12 @@ public class Names {
     public static final String TouchyRB = "TouchyRB";
     public static final String XThing = "X-Thing";
     public static final String YThing = "Y-Thing";
+
+
+    public static final String PowerUp = "PowerUp";
+    public static final String PowerDown = "PowerDown";
+    public static final String VSlide = "VSlide";
+    public static final String HSlide = "HSlide";
+    public static final String Holder = "Holder";
+
 }

@@ -19,7 +19,7 @@ public class CameraFollow extends LinearOpMode {
     //   LEFT AND RIGHT:  0.4,  0.8     CENTER 0.6
 
     public void runOpMode(){
-        double X, Y , XPos = .6, YPos = .47;
+        double X, Y , XPos = 0.45, YPos = 0.6;
 
         MecanumWheelRobot Bubbles = new MecanumWheelRobot(hardwareMap, FIRST_LETTER_NO_SPACE_UPPERCASE);
         Bubbles.addServo("X-Thing");
@@ -47,8 +47,8 @@ public class CameraFollow extends LinearOpMode {
                 telemetry.addData("Y ",pineappleChunks.getChunk(0)[PineappleChunks.Y]);
                 telemetry.addData("SIZE ",pineappleChunks.getChunk(0)[PineappleChunks.SIZE]);
 
-                X = pineappleChunks.getBiggestChunk()[PineappleChunks.Y];
-                Y = pineappleChunks.getBiggestChunk()[PineappleChunks.X];
+                X = 100 - pineappleChunks.getBiggestChunk()[PineappleChunks.X];
+                Y = 100 - pineappleChunks.getBiggestChunk()[PineappleChunks.Y];
 
                 X = (X - 50) / 700;
                 Y = (Y - 50) / 700;
@@ -56,11 +56,11 @@ public class CameraFollow extends LinearOpMode {
                 XPos += X;
                 YPos += Y;
 
-                XPos = (XPos > 0.8) ? 0.8 : XPos;
-                XPos = (XPos < 0.4) ? 0.4 : XPos;
+                XPos = (XPos > 0.7) ? 0.7 : XPos;
+                XPos = (XPos < 0.2) ? 0.2 : XPos;
 
-                YPos = (YPos > 0.5) ? 0.5 : YPos;
-                YPos = (YPos < 0.33) ? 0.33 : YPos;
+                YPos = (YPos > 0.85) ? 0.85 : YPos;
+                YPos = (YPos < 0.25) ? 0.25 : YPos;
 
                 Bubbles.moveServo("X-Thing", XPos);
                 Bubbles.moveServo("Y-Thing", YPos);
