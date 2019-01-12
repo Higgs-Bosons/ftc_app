@@ -2,15 +2,17 @@ package org.firstinspires.ftc.teamcode.Galaxy.Testers;
 
 import android.graphics.*;
 import com.qualcomm.robotcore.eventloop.opmode.*;
+
+import org.firstinspires.ftc.teamcode.Galaxy.Constants;
 import org.firstinspires.ftc.teamcode.Galaxy.ImageCapturing.*;
 
 @Autonomous(name = "Camera Tester", group = "Tester")
 public class CameraTester extends LinearOpMode {
     public void runOpMode(){
-        CanOfPineapple thePineappleCan = new CanOfPineapple();
+        CanOfPineapple thePineappleCan = new CanOfPineapple(Constants.LANDSCAPE_RIGHT);
         waitForStart();
         Bitmap picture;
-        PineappleStrainer pineappleStrainer = new PineappleStrainer( thePineappleCan);
+        PineappleStrainer pineappleStrainer = new PineappleStrainer(thePineappleCan);
         PineappleChunks pineappleChunks;
 
 

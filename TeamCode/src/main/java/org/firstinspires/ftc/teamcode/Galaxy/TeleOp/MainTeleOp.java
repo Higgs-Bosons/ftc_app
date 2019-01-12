@@ -25,6 +25,10 @@ public class MainTeleOp extends LinearOpMode{
     public void runOpMode(){
         initializeTheRobot();
 
+        telemetry.setCaptionValueSeparator("");
+        telemetry.addData("Ready to Rumble!", "");
+        telemetry.update();
+        
         waitForStart();
 
         while (opModeIsActive()) {
@@ -32,11 +36,11 @@ public class MainTeleOp extends LinearOpMode{
             checkLifter();
             checkSlides();
             checkSettings();
-            telemetry.addData("Movement Mode ", mode);
-            telemetry.addData("Speed", speed + "/100");
-            telemetry.addData("Lifter Tick Count", BubbleTheRobo.getMotorTickCount(PowerUp));
-            telemetry.addData("VSlide Tick Count", BubbleTheRobo.getMotorTickCount(VSlide));
-            telemetry.addData("HSlide Tick Count", BubbleTheRobo.getMotorTickCount(HSlide));
+            telemetry.addData("Movement Mode : ", mode);
+            telemetry.addData("Speed : ", speed + "/100");
+            telemetry.addData("Lifter Tick Count : ", BubbleTheRobo.getMotorTickCount(PowerUp));
+            telemetry.addData("VSlide Tick Count : ", BubbleTheRobo.getMotorTickCount(VSlide));
+            telemetry.addData("HSlide Tick Count : ", BubbleTheRobo.getMotorTickCount(HSlide));
             telemetry.update();
         }
 
@@ -49,6 +53,8 @@ public class MainTeleOp extends LinearOpMode{
         BubbleTheRobo.addAMotor(VSlide, NO_TAG);
         BubbleTheRobo.addAMotor(HSlide, NO_TAG);
         BubbleTheRobo.addServo(Holder);
+        BubbleTheRobo.addServo(Grabby);
+        BubbleTheRobo.addServo(WeightLifter);
         BubbleTheRobo.setMotorZeroPowerMode(PowerUp, DcMotor.ZeroPowerBehavior.BRAKE);
         BubbleTheRobo.setMotorZeroPowerMode(PowerDown, DcMotor.ZeroPowerBehavior.BRAKE);
         BubbleTheRobo.setMotorZeroPowerMode(VSlide, DcMotor.ZeroPowerBehavior.BRAKE);
@@ -75,7 +81,7 @@ public class MainTeleOp extends LinearOpMode{
                 BubbleTheRobo.moveMotor(PowerUp, 1.0);
                 BubbleTheRobo.moveMotor(PowerDown, 1.0);
                 counterOfLiftingRobot ++;
-                if(counterOfLiftingRobot == 10){
+                if(counterOfLiftingRobot == 20){
                     BubbleTheRobo.moveServo(Holder, 0);
                 }
             }else{

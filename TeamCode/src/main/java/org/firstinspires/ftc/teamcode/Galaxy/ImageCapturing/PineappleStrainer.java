@@ -6,6 +6,7 @@ import android.util.Log;
 
 import org.firstinspires.ftc.robotcontroller.internal.FtcRobotControllerActivity;
 import org.firstinspires.ftc.robotcore.internal.system.AppUtil;
+import org.firstinspires.ftc.teamcode.Galaxy.Constants;
 
 public class PineappleStrainer {
     private int PictureWidth, PictureHeight,  precision;
@@ -14,11 +15,12 @@ public class PineappleStrainer {
     private StringBuilder toDisplay = new StringBuilder();
     private CanOfPineapple epicPineapple;
     private boolean didIFindACloseEnoughColor = true;
+    private int cameraOrientation;
 
 //-------{INITIALIZATION}---------------------------------------------------------------------------
     public PineappleStrainer(CanOfPineapple epicPineapple){
-
         this.epicPineapple = epicPineapple;
+        this.cameraOrientation = epicPineapple.getCameraOrientation();
     }
 
 //-------{FINDING OBJECT}---------------------------------------------------------------------------
@@ -147,6 +149,10 @@ public class PineappleStrainer {
                         reliability = (reliability < 0) ? 0 : reliability;
                         reliability = (reliability > 100) ? 100 : reliability;
 
+                        if(cameraOrientation == Constants.UPSIDE_DOWN){y = 100 - y;}
+                        else if(cameraOrientation == Constants.UPRIGHT){x = 100 - x;}
+                        else if(cameraOrientation == Constants.LANDSCAPE_LEFT){int oldX = x; x = y; y = 100 - oldX;}
+                        else if(cameraOrientation == Constants.LANDSCAPE_RIGHT){x = 100 - x;}
                         pineappleChunks.addChunk(x,y,z,width,height,size,reliability);
                     }
                 }

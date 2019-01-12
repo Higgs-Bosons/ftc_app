@@ -25,4 +25,5 @@ public class CanOfPineappleObjects {
 
     int cameraFacing;
     boolean PineappleIsActive;
+    private int cameraOrientation;
 }

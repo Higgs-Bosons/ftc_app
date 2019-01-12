@@ -11,6 +11,7 @@ import android.view.*;
 
 import org.firstinspires.ftc.robotcontroller.internal.FtcRobotControllerActivity;
 import org.firstinspires.ftc.robotcore.internal.system.AppUtil;
+import org.firstinspires.ftc.teamcode.Galaxy.Constants;
 
 import java.util.Collections;
 
@@ -18,7 +19,25 @@ import java.util.Collections;
 public class CanOfPineapple extends CanOfPineappleObjects {
 
 //-----{INITIALIZING}------------------------------------------------------------------------------
+    public CanOfPineapple(@Constants.CameraOrientations int cameraOrientation){
+    this.cameraFacing = cameraOrientation;
+    cameraManager = (CameraManager) AppUtil.getDefContext().getSystemService(Context.CAMERA_SERVICE);
+    cameraFacing = CameraCharacteristics.LENS_FACING_BACK;
+
+    TextureView.SurfaceTextureListener surfaceTextureListener = getSurfaceTextureListener();
+    stateCallback = getStateCallback();
+
+    textureView = FtcRobotControllerActivity.getTextureView();
+    textureView.setSurfaceTextureListener(surfaceTextureListener);
+
+    openBackgroundThread();
+
+    setUpCamera();
+    openCamera();
+    showPreview();
+}
     public CanOfPineapple(){
+        this.cameraFacing = Constants.UPRIGHT;
         cameraManager = (CameraManager) AppUtil.getDefContext().getSystemService(Context.CAMERA_SERVICE);
         cameraFacing = CameraCharacteristics.LENS_FACING_BACK;
 
@@ -33,6 +52,9 @@ public class CanOfPineapple extends CanOfPineappleObjects {
         setUpCamera();
         openCamera();
         showPreview();
+    }
+    int getCameraOrientation(){
+        return this.cameraFacing;
     }
     private void openCamera() {
         try {
