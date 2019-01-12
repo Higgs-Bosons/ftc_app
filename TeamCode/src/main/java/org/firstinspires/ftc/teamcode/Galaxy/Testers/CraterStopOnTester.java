@@ -28,6 +28,7 @@ import static org.firstinspires.ftc.teamcode.Galaxy.Names.TouchyRF;
 import static org.firstinspires.ftc.teamcode.Galaxy.Names.XThing;
 import static org.firstinspires.ftc.teamcode.Galaxy.Names.YThing;
 
+@Disabled
 @Autonomous(name = "Crater Park Tester", group = "Tester")
 public class CraterStopOnTester extends LinearOpMode {
     private MecanumWheelRobot Bubbles;

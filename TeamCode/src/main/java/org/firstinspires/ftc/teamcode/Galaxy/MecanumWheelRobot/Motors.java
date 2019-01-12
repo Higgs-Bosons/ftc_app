@@ -169,4 +169,11 @@ public class Motors extends Sensors{
     public void stopMotor(String motorName){
         moveMotor(motorName, 0);
     }
+    public void setMotorZeroPowerMode(String motorName, DcMotor.ZeroPowerBehavior motorMode){
+        motorsByName.get(motorName).setZeroPowerBehavior(motorMode);
+    }
+    public int getMotorTickCount(String motorName){
+        return (motorsByName.get(motorName).getCurrentPosition());
+    }
+
 }

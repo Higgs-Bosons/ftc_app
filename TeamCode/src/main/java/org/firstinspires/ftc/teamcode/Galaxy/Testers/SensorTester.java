@@ -1,11 +1,13 @@
 package org.firstinspires.ftc.teamcode.Galaxy.Testers;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import static org.firstinspires.ftc.teamcode.Galaxy.Constants.*;
 import org.firstinspires.ftc.teamcode.Galaxy.MecanumWheelRobot.MecanumWheelRobot;
 
+@Disabled
 @Autonomous(name = "Sensor Tester", group = "Tester")
 public class SensorTester extends LinearOpMode {
 
