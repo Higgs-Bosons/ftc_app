@@ -30,7 +30,7 @@ public class CameraFollow extends LinearOpMode {
         waitForStart();
 
         Bitmap picture;
-        PineappleStrainer pineappleStrainer = new PineappleStrainer( thePineappleCan);
+        PineappleStrainer pineappleStrainer = new PineappleStrainer(thePineappleCan);
         PineappleChunks pineappleChunks;
 
 

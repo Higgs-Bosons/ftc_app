@@ -149,10 +149,10 @@ public class PineappleStrainer {
                         reliability = (reliability < 0) ? 0 : reliability;
                         reliability = (reliability > 100) ? 100 : reliability;
 
-                        if(cameraOrientation == Constants.UPSIDE_DOWN){y = 100 - y;}
-                        else if(cameraOrientation == Constants.UPRIGHT){x = 100 - x;}
-                        else if(cameraOrientation == Constants.LANDSCAPE_LEFT){int oldX = x; x = y; y = 100 - oldX;}
-                        else if(cameraOrientation == Constants.LANDSCAPE_RIGHT){x = 100 - x;}
+                        if(this.cameraOrientation == Constants.UPSIDE_DOWN){x = 100 - x; y = 100 - y;}
+                        else if(this.cameraOrientation == Constants.UPRIGHT){}
+                        else if(this.cameraOrientation == Constants.LANDSCAPE_LEFT){int oldX = x; x = y; y = 100 - oldX;}
+                        else if(this.cameraOrientation == Constants.LANDSCAPE_RIGHT){int oldX = x; x = 100 - y; y = oldX;}
                         pineappleChunks.addChunk(x,y,z,width,height,size,reliability);
                     }
                 }

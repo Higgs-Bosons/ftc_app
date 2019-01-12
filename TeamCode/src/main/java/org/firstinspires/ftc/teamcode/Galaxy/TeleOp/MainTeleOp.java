@@ -6,6 +6,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
 import org.firstinspires.ftc.teamcode.Galaxy.MecanumWheelRobot.MecanumWheelRobot;
+import org.firstinspires.ftc.teamcode.Galaxy.Tools;
 
 import static org.firstinspires.ftc.teamcode.Galaxy.Constants.*;
 import static org.firstinspires.ftc.teamcode.Galaxy.Names.*;
@@ -14,6 +15,7 @@ import static org.firstinspires.ftc.teamcode.Galaxy.Names.*;
 @TeleOp(name = "TeleOp", group = "TeleOp")
 public class MainTeleOp extends LinearOpMode{
 
+    private boolean grabberToggle = true;
     private boolean isArmUp = true;
     private boolean tanked = false;
     private MecanumWheelRobot BubbleTheRobo;
@@ -28,7 +30,7 @@ public class MainTeleOp extends LinearOpMode{
         telemetry.setCaptionValueSeparator("");
         telemetry.addData("Ready to Rumble!", "");
         telemetry.update();
-        
+
         waitForStart();
 
         while (opModeIsActive()) {
@@ -36,6 +38,7 @@ public class MainTeleOp extends LinearOpMode{
             checkLifter();
             checkSlides();
             checkSettings();
+            checkGrabby();
             telemetry.addData("Movement Mode : ", mode);
             telemetry.addData("Speed : ", speed + "/100");
             telemetry.addData("Lifter Tick Count : ", BubbleTheRobo.getMotorTickCount(PowerUp));
@@ -52,9 +55,11 @@ public class MainTeleOp extends LinearOpMode{
         BubbleTheRobo.addAMotor(PowerDown, NO_TAG);
         BubbleTheRobo.addAMotor(VSlide, NO_TAG);
         BubbleTheRobo.addAMotor(HSlide, NO_TAG);
+
         BubbleTheRobo.addServo(Holder);
         BubbleTheRobo.addServo(Grabby);
         BubbleTheRobo.addServo(WeightLifter);
+
         BubbleTheRobo.setMotorZeroPowerMode(PowerUp, DcMotor.ZeroPowerBehavior.BRAKE);
         BubbleTheRobo.setMotorZeroPowerMode(PowerDown, DcMotor.ZeroPowerBehavior.BRAKE);
         BubbleTheRobo.setMotorZeroPowerMode(VSlide, DcMotor.ZeroPowerBehavior.BRAKE);
@@ -63,6 +68,9 @@ public class MainTeleOp extends LinearOpMode{
 
         BubbleTheRobo.setMotorDirection(FORWARDS, REVERSE, REVERSE, FORWARDS);
         BubbleTheRobo.setBreakOrCoast(DcMotor.ZeroPowerBehavior.FLOAT);
+
+        BubbleTheRobo.moveServo(Grabby, 0.6);
+        BubbleTheRobo.moveServo(WeightLifter, 0.7);
     }
 
 
@@ -136,6 +144,26 @@ public class MainTeleOp extends LinearOpMode{
             BubbleTheRobo.moveMotor(HSlide, -0.7);
         }else{
             BubbleTheRobo.stopMotor(HSlide);
+        }
+    }
+    private void checkGrabby(){
+        if (gamepad1.y) {
+            // Grab - 0.6 Lift - 0.7
+            //        1          0.25
+            //        0.65       0.4
+
+
+            BubbleTheRobo.moveServo(WeightLifter, 0.25);
+            Tools.wait(400);
+            BubbleTheRobo.moveServo(Grabby, 1.0);
+            Tools.wait(400);
+            BubbleTheRobo.moveServo(WeightLifter, 0.4);
+            Tools.wait(100);
+            BubbleTheRobo.moveServo(Grabby, 0.6);
+            Tools.wait(100);
+            BubbleTheRobo.moveServo(WeightLifter, 0.7);
+
+            while (gamepad1.y);
         }
     }
 }

@@ -9,7 +9,7 @@ import org.firstinspires.ftc.teamcode.Galaxy.ImageCapturing.*;
 @Autonomous(name = "Camera Tester", group = "Tester")
 public class CameraTester extends LinearOpMode {
     public void runOpMode(){
-        CanOfPineapple thePineappleCan = new CanOfPineapple(Constants.LANDSCAPE_RIGHT);
+        CanOfPineapple thePineappleCan = new CanOfPineapple(Constants.UPRIGHT);
         waitForStart();
         Bitmap picture;
         PineappleStrainer pineappleStrainer = new PineappleStrainer(thePineappleCan);

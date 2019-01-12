@@ -20,7 +20,7 @@ public class CanOfPineapple extends CanOfPineappleObjects {
 
 //-----{INITIALIZING}------------------------------------------------------------------------------
     public CanOfPineapple(@Constants.CameraOrientations int cameraOrientation){
-    this.cameraFacing = cameraOrientation;
+    this.cameraOrientation = cameraOrientation;
     cameraManager = (CameraManager) AppUtil.getDefContext().getSystemService(Context.CAMERA_SERVICE);
     cameraFacing = CameraCharacteristics.LENS_FACING_BACK;
 
@@ -54,7 +54,7 @@ public class CanOfPineapple extends CanOfPineappleObjects {
         showPreview();
     }
     int getCameraOrientation(){
-        return this.cameraFacing;
+        return this.cameraOrientation;
     }
     private void openCamera() {
         try {
