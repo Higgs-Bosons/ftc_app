@@ -13,6 +13,7 @@ import static org.firstinspires.ftc.teamcode.Galaxy.Constants.*;
 
 public class DriveTrain {
     private DcMotor LeftFront, LeftBack, RightFront, RightBack;
+    private final int POWER_DECAY_RATIO = 600;
 //-------{INITIALIZATION}---------------------------------------------------------------------------
     public DriveTrain(){}
     public DriveTrain(DcMotor[] driveMotors){
@@ -115,7 +116,6 @@ public class DriveTrain {
 
 //-------{AUTONOMOUS}----------------------------------------------------------------------------------
     //--{MOVEMENT}---------------------------------------------------
-    // TODO Work on formula not work. Joystick != 1 at max. Diagonal = 0.7, 0.7, not 0.5, 0.5
     public void driveAtHeader(double degrees, double power){
         double RFPower, RBPower, LFPower, LBPower;
 
@@ -182,20 +182,22 @@ public class DriveTrain {
         try {
 
             while (Math.abs(Math.abs(numberOfTicksMoved) - Math.abs(ticksToMove)) > precision) {
-                driveAtHeader(direction, power, spinPower);
-
                 numberOfTicksMoved = (Math.abs(LeftFront.getCurrentPosition()) + Math.abs(RightFront.getCurrentPosition())
                         + Math.abs(RightBack.getCurrentPosition()) + Math.abs(LeftBack.getCurrentPosition())) / 4;
 
-                power = Math.abs(Math.abs(numberOfTicksMoved) - Math.abs(ticksToMove)) / 500;
+                power = Math.abs(Math.abs(numberOfTicksMoved) - Math.abs(ticksToMove) / POWER_DECAY_RATIO);
+                telemetry.addData("Ticks Left " , Math.abs(Math.abs(numberOfTicksMoved) - Math.abs(ticksToMove)));
                 telemetry.addData("Power Before " , power);
 
                 power = (power > maxPower) ? maxPower : power;
                 power = (power < minPower) ? minPower : power;
+                if (Math.abs(numberOfTicksMoved) > Math.abs(ticksToMove)) power = -power;
                 telemetry.addData("Power After " , power);
                 telemetry.update();
 
                 spinPower = (spin * (power / maxPower));
+
+                driveAtHeader(direction, power, spinPower);
                 Thread.sleep(0,50);
             }
         }finally {
@@ -219,7 +221,7 @@ public class DriveTrain {
                 numberOfTicksMoved = (Math.abs(LeftFront.getCurrentPosition()) + Math.abs(RightFront.getCurrentPosition())
                         + Math.abs(RightBack.getCurrentPosition()) + Math.abs(LeftBack.getCurrentPosition())) / 4;
 
-                power = Math.abs(Math.abs(numberOfTicksMoved) - Math.abs(ticksToMove)) / 500;
+                power = Math.abs(Math.abs(numberOfTicksMoved) - Math.abs(ticksToMove) / POWER_DECAY_RATIO);
                 power = (power > maxPower) ? maxPower : power;
                 power = (power < minPower) ? minPower : power;
                 if (Math.abs(numberOfTicksMoved) > Math.abs(ticksToMove)) power = -power;
