@@ -1,5 +1,5 @@
 package org.firstinspires.ftc.teamcode.Galaxy.Autonomus;
-
+/*
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.util.Log;
@@ -391,5 +391,6 @@ public class OldAutonomous extends LinearOpMode{
 
     }
 }
+*/
 
 

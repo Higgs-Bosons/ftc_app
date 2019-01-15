@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.Galaxy.MecanumWheelRobot;
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.robotcore.hardware.*;
 
+import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
@@ -114,20 +115,23 @@ public class DriveTrain {
 
 //-------{AUTONOMOUS}----------------------------------------------------------------------------------
     //--{MOVEMENT}---------------------------------------------------
+    // TODO Work on formula not work. Joystick != 1 at max. Diagonal = 0.7, 0.7, not 0.5, 0.5
     public void driveAtHeader(double degrees, double power){
         double RFPower, RBPower, LFPower, LBPower;
-        double stick1X, stick1Y;
 
-        double X = Math.cos(degrees);
-        double Y = Math.sin(degrees);
+        degrees = ((degrees % 360) - 90);
+        if(degrees < 0){
+            degrees = (360 + degrees);
+        }
 
-        stick1X = X  * power;
-        stick1Y = Y  * power;
+        double X = Math.cos((degrees / 180) * 3.14159265358979);
+        double Y = Math.sin((degrees / 180) * 3.14159265358979);
 
-        RFPower = ((stick1Y + stick1X) / 2);
-        RBPower = ((stick1Y - stick1X) / 2);
-        LFPower = ((stick1Y - stick1X) / 2);
-        LBPower = ((stick1Y + stick1X) / 2);
+        RFPower = (Y + X)*power;
+        RBPower = (Y - X)*power;
+        LFPower = (Y - X)*power;
+        LBPower = (Y + X)*power;
+
 
         RightFront.setPower(RFPower);
         RightBack.setPower(RBPower);
@@ -136,18 +140,24 @@ public class DriveTrain {
     }
     public void driveAtHeader(double degrees, double power, double spinPower){
         double RFPower, RBPower, LFPower, LBPower;
-        double stick1X, stick1Y, stick2X;
 
-        double X = Math.cos(degrees);
-        double Y = Math.sin(degrees);
-        stick1X = X  * power;
-        stick1Y = Y  * power;
-        stick2X = spinPower;
+        degrees = ((degrees % 360) - 90);
+        if(degrees < 0){
+            degrees = (360 + degrees);
+        }
 
-        RFPower = (((stick1Y + stick1X) / 2)+stick2X)*2;
-        RBPower = (((stick1Y - stick1X) / 2)+stick2X)*2;
-        LFPower = (((stick1Y - stick1X) / 2)-stick2X)*2;
-        LBPower = (((stick1Y + stick1X) / 2)-stick2X)*2;
+        double X = Math.cos((degrees / 180) * 3.14159265358979);
+        double Y = Math.sin((degrees / 180) * 3.14159265358979);
+
+        RFPower = (Y + X)*power;
+        RBPower = (Y - X)*power;
+        LFPower = (Y - X)*power;
+        LBPower = (Y + X)*power;
+
+        RFPower = (spinPower + RFPower) / 2;
+        RBPower = (spinPower + RBPower) / 2;
+        LFPower = (spinPower + LFPower) / 2;
+        LBPower = (spinPower + LBPower) / 2;
 
         RightFront.setPower(RFPower);
         RightBack.setPower(RBPower);
@@ -161,12 +171,11 @@ public class DriveTrain {
         LeftBack.setPower(spinPower);
     }
 
-
-    public void moveRobot(double direction, double inches, double spin, double maxPower, double minPower, double precision){
+    public void moveRobot(double direction, double inches, double spin, double maxPower, double minPower, double precision, Telemetry telemetry) throws InterruptedException{
         int numberOfTicksMoved;
         double power = maxPower;
         double spinPower = spin;
-        int ticksToMove = (int) (inches / (Math.PI * 4) * 1680);
+        int ticksToMove = (int) (inches * (1120 / (Math.PI * 4)));
         resetEncoders();
         numberOfTicksMoved = (Math.abs(LeftFront.getCurrentPosition()) + Math.abs(RightFront.getCurrentPosition())
                         + Math.abs(RightBack.getCurrentPosition()) + Math.abs(LeftBack.getCurrentPosition()))/4;
@@ -178,25 +187,25 @@ public class DriveTrain {
                 numberOfTicksMoved = (Math.abs(LeftFront.getCurrentPosition()) + Math.abs(RightFront.getCurrentPosition())
                         + Math.abs(RightBack.getCurrentPosition()) + Math.abs(LeftBack.getCurrentPosition())) / 4;
 
-                power = (((1916 + (2 / 3.0)) * Math.pow(Math.abs(Math.abs(numberOfTicksMoved) - Math.abs(ticksToMove)), 2)) +
-                        ((1341 + (2 / 3.0)) * Math.abs(Math.abs(numberOfTicksMoved) - Math.abs(ticksToMove))));
+                power = Math.abs(Math.abs(numberOfTicksMoved) - Math.abs(ticksToMove)) / 500;
+                telemetry.addData("Power Before " , power);
 
                 power = (power > maxPower) ? maxPower : power;
                 power = (power < minPower) ? minPower : power;
+                telemetry.addData("Power After " , power);
+                telemetry.update();
 
                 spinPower = (spin * (power / maxPower));
                 Thread.sleep(0,50);
             }
-        }catch (InterruptedException e){
-            Thread.currentThread().interrupt();
         }finally {
             stopRobot();
         }
     }
-    public void moveRobot(double direction, double inches, double maxPower, double minPower, double precision){
+    public void moveRobot(double direction, double inches, double maxPower, double minPower, double precision) throws InterruptedException{
         int numberOfTicksMoved;
         double power = maxPower;
-        int ticksToMove = (int) (inches / (Math.PI * 4) * 1680);
+        int ticksToMove = (int) (inches * (1120 / (Math.PI * 4)));
 
         resetEncoders();
 
@@ -204,21 +213,19 @@ public class DriveTrain {
                 + Math.abs(RightBack.getCurrentPosition()) + Math.abs(LeftBack.getCurrentPosition()))/4;
         try {
             while (Math.abs(Math.abs(numberOfTicksMoved) - Math.abs(ticksToMove)) > precision) {
+
                 driveAtHeader(direction, power);
 
                 numberOfTicksMoved = (Math.abs(LeftFront.getCurrentPosition()) + Math.abs(RightFront.getCurrentPosition())
                         + Math.abs(RightBack.getCurrentPosition()) + Math.abs(LeftBack.getCurrentPosition())) / 4;
 
-                power = (((1916 + (2 / 3.0)) * Math.pow(Math.abs(Math.abs(numberOfTicksMoved) - Math.abs(ticksToMove)), 2)) +
-                        ((1341 + (2 / 3.0)) * Math.abs(Math.abs(numberOfTicksMoved) - Math.abs(ticksToMove))));
+                power = Math.abs(Math.abs(numberOfTicksMoved) - Math.abs(ticksToMove)) / 500;
                 power = (power > maxPower) ? maxPower : power;
                 power = (power < minPower) ? minPower : power;
                 if (Math.abs(numberOfTicksMoved) > Math.abs(ticksToMove)) power = -power;
 
                 Thread.sleep(0,50);
             }
-        }catch (InterruptedException e){
-            Thread.currentThread().interrupt();
         }finally {
             stopRobot();
         }

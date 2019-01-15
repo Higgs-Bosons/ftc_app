@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.Galaxy.Testers;
 
+/*
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
@@ -94,5 +95,5 @@ public class CraterStopOnTester extends LinearOpMode {
         Bubbles.addSensor(Imu, IMU);
         Bubbles.ResetIMUGyro(Imu);
     }
-}
+}*/
 
