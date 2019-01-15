@@ -11,7 +11,6 @@ public class Names {
     public static final String TouchyRB = "TouchyRB";
 
 
-
     public static final String PowerUp = "PowerUp";
     public static final String PowerDown = "PowerDown";
     public static final String VSlide = "VSlide";
@@ -21,5 +20,8 @@ public class Names {
     public static final String WeightLifter = "WeightLifter";
     public static final String XThing = "X-Thing";
     public static final String YThing = "Y-Thing";
-
+    public static final String TouchyL = "TouchyL";
+    public static final String TouchyR = "TouchyR";
+    public static final String DistanceL = "DistanceL";
+    public static final String DistanceR = "DistanceR";
 }

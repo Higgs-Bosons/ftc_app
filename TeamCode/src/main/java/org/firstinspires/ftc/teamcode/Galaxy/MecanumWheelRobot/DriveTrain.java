@@ -115,80 +115,44 @@ public class DriveTrain {
 //-------{AUTONOMOUS}----------------------------------------------------------------------------------
     //--{MOVEMENT}---------------------------------------------------
     public void driveAtHeader(double degrees, double power){
-        double LFPower = 0, RFPower = 0, RBPower = 0, LBPower = 0;
+        double RFPower, RBPower, LFPower, LBPower;
+        double stick1X, stick1Y;
 
-        while(degrees < 0)
-            degrees += 360;
+        double X = Math.cos(degrees);
+        double Y = Math.sin(degrees);
 
-        degrees = (degrees % 360);
+        stick1X = X  * power;
+        stick1Y = Y  * power;
 
-        if(0 <= degrees && degrees < 90){
-            RFPower = power;
-            LBPower = power;
-            LFPower = power - ((degrees / 90)*2*power);
-            RBPower = power - ((degrees / 90)*2*power);
-        }else if(90 <= degrees && degrees < 180){
-            LFPower = -power;
-            RBPower = -power;
-            RFPower = power - (((degrees-90) / 90)*2*power);
-            LBPower = power - (((degrees-90) / 90)*2*power);
-        }else if(180 <= degrees && degrees < 270){
-            RFPower = -power;
-            LBPower = -power;
-            LFPower = -(power - (((degrees-180) / 90)*2*power));
-            RBPower = -(power - (((degrees-180) / 90)*2*power));
-        }else if(270 <= degrees && degrees < 360){
-            LFPower = power;
-            RBPower = power;
-            RFPower = -(power - (((degrees-90) / 90)*2*power));
-            LBPower = -(power - (((degrees-90) / 90)*2*power));
-        }
-
-        RightFront.setPower(-RFPower);
-        RightBack.setPower(-RBPower);
-        LeftFront.setPower(-LFPower);
-        LeftBack.setPower(-LBPower);
-    }
-    public void driveAtHeader(double degrees, double power, double spinPower){
-        double LFPower = 0, RFPower = 0, RBPower = 0, LBPower = 0;
-
-        while(degrees < 0)
-            degrees = 360 + degrees;
-
-        if(degrees != 0)
-            degrees = (degrees % 360);
-
-        if(0 <= degrees && degrees < 90){
-            RFPower = power;
-            LBPower = power;
-            LFPower = power - ((degrees / 90)*2*power);
-            RBPower = power - ((degrees / 90)*2*power);
-        }else if(90 <= degrees && degrees < 180){
-            LFPower = -power;
-            RBPower = -power;
-            RFPower = power - (((degrees-90) / 90)*2*power);
-            LBPower = power - (((degrees-90) / 90)*2*power);
-        }else if(180 <= degrees && degrees < 270){
-            RFPower = -power;
-            LBPower = -power;
-            LFPower = -(power - (((degrees-180) / 90)*2*power));
-            RBPower = -(power - (((degrees-180) / 90)*2*power));
-        }else if(270 <= degrees && degrees < 360){
-            LFPower = power;
-            RBPower = power;
-            RFPower = -(power - (((degrees-90) / 90)*2*power));
-            LBPower = -(power - (((degrees-90) / 90)*2*power));
-        }
-
-        LFPower = -(LFPower + spinPower);
-        RFPower = -(RFPower - spinPower);
-        RBPower = -(RBPower - spinPower);
-        LBPower = -(LBPower + spinPower);
+        RFPower = ((stick1Y + stick1X) / 2);
+        RBPower = ((stick1Y - stick1X) / 2);
+        LFPower = ((stick1Y - stick1X) / 2);
+        LBPower = ((stick1Y + stick1X) / 2);
 
         RightFront.setPower(RFPower);
-        RightBack.setPower( RBPower);
-        LeftFront.setPower( LFPower);
-        LeftBack.setPower(  LBPower);
+        RightBack.setPower(RBPower);
+        LeftFront.setPower(LFPower);
+        LeftBack.setPower(LBPower);
+    }
+    public void driveAtHeader(double degrees, double power, double spinPower){
+        double RFPower, RBPower, LFPower, LBPower;
+        double stick1X, stick1Y, stick2X;
+
+        double X = Math.cos(degrees);
+        double Y = Math.sin(degrees);
+        stick1X = X  * power;
+        stick1Y = Y  * power;
+        stick2X = spinPower;
+
+        RFPower = (((stick1Y + stick1X) / 2)+stick2X)*2;
+        RBPower = (((stick1Y - stick1X) / 2)+stick2X)*2;
+        LFPower = (((stick1Y - stick1X) / 2)-stick2X)*2;
+        LBPower = (((stick1Y + stick1X) / 2)-stick2X)*2;
+
+        RightFront.setPower(RFPower);
+        RightBack.setPower(RBPower);
+        LeftFront.setPower(LFPower);
+        LeftBack.setPower(LBPower);
     }
     private void spinRobot(double spinPower) {
         RightFront.setPower(-spinPower);

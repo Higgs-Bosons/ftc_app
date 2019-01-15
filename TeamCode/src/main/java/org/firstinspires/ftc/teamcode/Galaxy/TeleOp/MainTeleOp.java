@@ -157,11 +157,9 @@ public class MainTeleOp extends LinearOpMode{
             Tools.wait(400);
             BubbleTheRobo.moveServo(Grabby, 1.0);
             Tools.wait(400);
-            BubbleTheRobo.moveServo(WeightLifter, 0.4);
-            Tools.wait(100);
-            BubbleTheRobo.moveServo(Grabby, 0.6);
-            Tools.wait(100);
             BubbleTheRobo.moveServo(WeightLifter, 0.7);
+            Tools.wait(50);
+            BubbleTheRobo.moveServo(Grabby, 0.6);
 
             while (gamepad1.y);
         }

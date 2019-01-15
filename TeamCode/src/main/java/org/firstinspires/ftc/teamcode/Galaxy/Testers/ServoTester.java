@@ -4,7 +4,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.Servo;
 
-@Autonomous(name = "ServoTester", group = "Tester")
+@Autonomous(name = "Servo Tester", group = "Tester")
 public class ServoTester extends LinearOpMode {
     public void runOpMode() {
         Servo grabby = hardwareMap.servo.get("Grabby");
