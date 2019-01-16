@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.Galaxy;
 
 public class Names {
+    public static final String Gyro = "Gyro";
     public static final String PowerUp = "PowerUp";
     public static final String PowerDown = "PowerDown";
     public static final String VSlide = "VSlide";

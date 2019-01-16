@@ -17,7 +17,7 @@ public class DriveTrainTester extends LinearOpMode {
             mwr.moveRobot(WEST, 6.0,  0, 0.8, 0.1, 2.0, telemetry);
             mwr.moveRobot(EAST, 6.0,  0, 0.8, 0.1, 2.0, telemetry);
             mwr.moveRobot(SOUTH, 6.0, 0, 0.8, 0.1, 2.0, telemetry);
-            mwr.moveRobot(NORTH, 6.0, 0, 0.8, 0.1, 2.0,telemetry);
+            mwr.moveRobot(NORTH, 6.0, 0, 0.8, 0.1, 2.0, telemetry);
         }finally {
             mwr.stopRobot();
         }

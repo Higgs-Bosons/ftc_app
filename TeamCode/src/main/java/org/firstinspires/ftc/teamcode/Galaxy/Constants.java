@@ -69,9 +69,9 @@ public class Constants {
 
 //-------{Directions}-------------------------------------------------------------------------------
     public static final double NORTH = 0;
-    public static final double EAST = 270;
+    public static final double EAST = 90;
     public static final double SOUTH = 180;
-    public static final double WEST = 90;
+    public static final double WEST = 270;
 
 //-------{MENU OPTIONS}-----------------------------------------------------------------------------
     public static final String CRATER_ON_THE_LEFT = "  LEFT";

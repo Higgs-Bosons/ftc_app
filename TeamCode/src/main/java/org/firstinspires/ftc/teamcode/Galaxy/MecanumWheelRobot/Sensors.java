@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.Galaxy.MecanumWheelRobot;
 
 import android.graphics.Color;
+import android.renderscript.Sampler;
 
 import com.qualcomm.hardware.bosch.*;
 import com.qualcomm.robotcore.hardware.*;
@@ -23,9 +24,10 @@ public class Sensors extends DriveTrain{
     private Map<String, AccelerationSensor> accelerationSensor;
     private Map<String, CompassSensor> compassSensor;
     private Map<String, VoltageSensor> voltageSensor;
-    private Map<String , DistanceSensor> distanceSensor;
+    private Map<String, DistanceSensor> distanceSensor;
     private Map<String, BNO055IMU> imu;
 
+    private Map<String, float[]> gyroHeadings;
     private HardwareMap hardwareMap;
 
     private static final int READING_FAILED = -1234567890;
@@ -45,6 +47,7 @@ public class Sensors extends DriveTrain{
         this.distanceSensor = new Hashtable<>();
         this.imu = new Hashtable<>();
         this.sensorNameAndTypes = new Hashtable<>();
+        this.gyroHeadings = new Hashtable<>();
     }
 
     public void addSensor(String name, @SensorTypes int sensorType) throws RuntimeException {
@@ -114,8 +117,20 @@ public class Sensors extends DriveTrain{
                 if (this.imu.containsKey(name)) {
                     throw new customErrors.DuplicateNameException();
                 }
-                this.imu.put(name, hardwareMap.get(BNO055IMU.class, "imu"));
-                ResetIMUGyro(name);
+                BNO055IMU IMU =  hardwareMap.get(BNO055IMU.class, name);
+                BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
+                parameters.angleUnit = BNO055IMU.AngleUnit.DEGREES;
+                parameters.accelUnit = BNO055IMU.AccelUnit.METERS_PERSEC_PERSEC;
+                parameters.calibrationDataFile = "BNO055IMUCalibration.json";
+                parameters.loggingEnabled = true;
+                parameters.loggingTag = "imu";
+                parameters.accelerationIntegrationAlgorithm = new JustLoggingAccelerationIntegrator();
+                IMU.initialize(parameters);
+
+                this.imu.put(name, IMU);
+                float[] array = {0f,0f,0f};
+                this.gyroHeadings.put(name, array);
+                resetIMUGyro(name);
                 break;
             case DISTANCE_SENSOR:
                 this.distanceSensor.put(name, hardwareMap.get(DistanceSensor.class, name));
@@ -124,26 +139,35 @@ public class Sensors extends DriveTrain{
     }
 
     //-------{IMU}--------------------------------------------------------------------------------------
-    public void ResetIMUGyro(String IMUName) {
-        BNO055IMU IMU = getIMU(IMUName);
-        BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
-        parameters.angleUnit = BNO055IMU.AngleUnit.DEGREES;
-        parameters.accelUnit = BNO055IMU.AccelUnit.METERS_PERSEC_PERSEC;
-        parameters.calibrationDataFile = "BNO055IMUCalibration.json";
-        parameters.loggingEnabled = true;
-        parameters.loggingTag = "imu";
-        parameters.accelerationIntegrationAlgorithm = new JustLoggingAccelerationIntegrator();
-        IMU.initialize(parameters);
-    }
-    public float[] ReadIMUGyro(String IMUName) {
+    public void resetIMUGyro(String IMUName) {
         BNO055IMU IMU = getIMU(IMUName);
         float[] Values = new float[3];
         Values[0] = IMU.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES).firstAngle;
         Values[1] = IMU.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES).secondAngle;
         Values[2] = IMU.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES).thirdAngle;
+
         if (Values[0] < 0) Values[0] = (180 + (181 - Math.abs(Values[0])));
         if (Values[1] < 0) Values[1] = (180 + (181 - Math.abs(Values[1])));
         if (Values[2] < 0) Values[2] = (180 + (181 - Math.abs(Values[2])));
+
+        gyroHeadings.get(IMUName)[0] = Values[0];
+        gyroHeadings.get(IMUName)[1] = Values[1];
+        gyroHeadings.get(IMUName)[2] = Values[2];
+    }
+    public float[] readIMUGyro(String IMUName) {
+        BNO055IMU IMU = getIMU(IMUName);
+        float[] Values = new float[3];
+        Values[0] = IMU.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES).firstAngle;
+        Values[1] = IMU.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES).secondAngle;
+        Values[2] = IMU.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES).thirdAngle;
+
+        if (Values[0] < 0) Values[0] = (180 + (181 - Math.abs(Values[0])));
+        if (Values[1] < 0) Values[1] = (180 + (181 - Math.abs(Values[1])));
+        if (Values[2] < 0) Values[2] = (180 + (181 - Math.abs(Values[2])));
+
+        Values[0] = (Values[0] - gyroHeadings.get(IMUName)[0] + 360) % 360;
+        Values[1] = (Values[1] - gyroHeadings.get(IMUName)[1] + 360) % 360;
+        Values[2] = (Values[2] - gyroHeadings.get(IMUName)[2] + 360) % 360;
 
         return Values;
     }

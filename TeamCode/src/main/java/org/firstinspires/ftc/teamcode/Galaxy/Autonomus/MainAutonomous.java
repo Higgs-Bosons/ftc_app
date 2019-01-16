@@ -21,49 +21,81 @@ public class MainAutonomous extends LinearOpMode {
     private PineappleStrainer pineappleStrainer;
     private PineappleChunks pineappleChunks;
 
-    public void runOpMode() {
+    public void runOpMode() throws InterruptedException {
         initializeRobot();
         //getMenuChoices();
 
         waitForStart();
-
-        dropFromLander();
-        /*
-        turnAndSample();
-        if (left) {driveToDepoFromLeft();}
-        else {driveToDepoFromRight();}
-        dropOffStuffAndDriveToCrater();
-        */
+        try{
+            dropFromLander();
+            unhookFromTheLander();
+            Bubbles.stopRobot();
+            Tools.wait(1000);
+            canOfPineapple.closeCanOfPineapple();
+        }finally {
+            Bubbles.stopRobot();
+        }
     }
 
     private void initializeRobot(){
         Bubbles = new MecanumWheelRobot(hardwareMap, FIRST_LETTER_NO_SPACE_UPPERCASE);
-        Bubbles.resetEncoders();
-
-        canOfPineapple = new CanOfPineapple(UPSIDE_DOWN);
-        pineappleStrainer = new PineappleStrainer(canOfPineapple);
-
+        Bubbles.addSensor(Gyro, IMU);
         Bubbles.addAMotor(PowerUp, NO_TAG);
         Bubbles.addAMotor(PowerDown, NO_TAG);
 
         Bubbles.addServo(XThing);
         Bubbles.addServo(YThing);
+        Bubbles.addServo(Holder);
+        Bubbles.addServo(Grabby);
+        Bubbles.addServo(WeightLifter);
 
         Bubbles.setBreakOrCoast(DcMotor.ZeroPowerBehavior.BRAKE);
         Bubbles.setMotorDirection(FORWARDS,REVERSE,REVERSE,FORWARDS);
+        Bubbles.resetEncoders();
+
+        canOfPineapple = new CanOfPineapple(UPSIDE_DOWN);
+        pineappleStrainer = new PineappleStrainer(canOfPineapple);
+
+        Bubbles.resetIMUGyro(Gyro);
+
+        Bubbles.moveServo(Grabby, 0.6);
+        Bubbles.moveServo(WeightLifter, 0.7);
     }
-    private void dropFromLander(){
+
+    private void dropFromLander() throws InterruptedException{
+
         Bubbles.moveMotor(PowerUp, -1.0);
         Bubbles.moveMotor(PowerDown, -1.0);
+        float[] gyroReadings = Bubbles.readIMUGyro(Gyro);
 
-        Tools.wait(1000);
+        while(gyroReadings[1] > 280 || gyroReadings[1] < 90){
+            gyroReadings = Bubbles.readIMUGyro(Gyro);
+            Thread.sleep(0,50);
+        }
 
+        Bubbles.stopMotor(PowerDown);
+        Bubbles.stopMotor(PowerUp);
+        Bubbles.moveServo(Holder, 1.0);
+    }
+    private void dropOffMarker(){
+        Bubbles.moveServo(WeightLifter, 0.25);
+        Tools.wait(400);
+        Bubbles.moveServo(Grabby, 1.0);
+        Tools.wait(400);
+        Bubbles.moveServo(WeightLifter, 0.7);
+        Tools.wait(50);
+        Bubbles.moveServo(Grabby, 0.6);
+    }
+    private void unhookFromTheLander()throws InterruptedException{
+        Bubbles.moveRobot(NORTH, 2.5, 0.5, 0.1, 2);
+        Bubbles.moveRobot(EAST, 2.5, 0.5, 0.1, 2);
+        Bubbles.moveMotor(PowerDown, 0.3);
+        Bubbles.moveMotor(PowerUp, 0.3);
+        Thread.sleep(500);
         Bubbles.stopMotor(PowerDown);
         Bubbles.stopMotor(PowerUp);
     }
     private void turnAndSample() {
         //move away from hook
-
-
     }
 }
