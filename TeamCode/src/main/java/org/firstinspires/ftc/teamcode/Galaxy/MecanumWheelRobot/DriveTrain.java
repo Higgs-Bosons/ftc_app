@@ -232,6 +232,38 @@ public class DriveTrain {
             stopRobot();
         }
     }
+    public void gyroTurn(int toDegree, BNO055IMU IMU, boolean inverted){
+        if(!inverted)
+            gyroTurn(toDegree, IMU);
+        else
+            invertedGyroTurn(toDegree, IMU)
+
+    }
+    public void invertedGyroTurn(int toDegree, BNO055IMU IMU){
+        double power;
+        boolean WhichWay = WhichWayToTurn(toDegree, (int) getGyroReading(IMU));
+
+        try {
+            while (HowFar(toDegree, (int) getGyroReading(IMU)) >= 2) {
+                power = (HowFar(toDegree, (int) getGyroReading(IMU))) / 60.0;
+                power = (power < 0.1) ? 0.1 : power;
+                power = (power > 1.0) ? 1.0 : power;
+
+                if (WhichWay) {
+                    spinRobot(power);
+                } else {
+                    spinRobot(-power);
+                }
+                WhichWay = WhichWayToTurn(toDegree, (int) getGyroReading(IMU));
+
+                Thread.sleep(0,50);
+            }
+        }catch (InterruptedException e){
+            Thread.currentThread().interrupt();
+        }finally {
+            stopRobot();
+        }
+    }
     public void gyroTurn(int toDegree, BNO055IMU IMU){
         double power;
         boolean WhichWay = WhichWayToTurn(toDegree, (int) getGyroReading(IMU));
