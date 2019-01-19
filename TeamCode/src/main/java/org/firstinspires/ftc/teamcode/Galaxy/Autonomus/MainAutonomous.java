@@ -22,18 +22,20 @@ public class MainAutonomous extends LinearOpMode {
     private PineappleChunks pineappleChunks;
 
     public void runOpMode() throws InterruptedException {
-        initializeRobot();
-        //getMenuChoices();
 
-        waitForStart();
         try{
+            initializeRobot();
+            //getMenuChoices();
+
+            waitForStart();
+
             dropFromLander();
             unhookFromTheLander();
+            positionForSampling();
+
+        }finally{
             Bubbles.stopRobot();
-            Tools.wait(1000);
             canOfPineapple.closeCanOfPineapple();
-        }finally {
-            Bubbles.stopRobot();
         }
     }
 
@@ -77,15 +79,6 @@ public class MainAutonomous extends LinearOpMode {
         Bubbles.stopMotor(PowerUp);
         Bubbles.moveServo(Holder, 1.0);
     }
-    private void dropOffMarker(){
-        Bubbles.moveServo(WeightLifter, 0.25);
-        Tools.wait(400);
-        Bubbles.moveServo(Grabby, 1.0);
-        Tools.wait(400);
-        Bubbles.moveServo(WeightLifter, 0.7);
-        Tools.wait(50);
-        Bubbles.moveServo(Grabby, 0.6);
-    }
     private void unhookFromTheLander()throws InterruptedException{
         Bubbles.moveRobot(NORTH, 2.5, 0.5, 0.1, 2);
         Bubbles.moveRobot(EAST, 2.5, 0.5, 0.1, 2);
@@ -95,7 +88,16 @@ public class MainAutonomous extends LinearOpMode {
         Bubbles.stopMotor(PowerDown);
         Bubbles.stopMotor(PowerUp);
     }
-    private void turnAndSample() {
-        //move away from hook
+    private void positionForSampling() throws InterruptedException{
+        Bubbles.gyroTurn(90, Bubbles.getIMU(Gyro), UPSIDE_DOWN);
+    }
+    private void dropOffMarker() {
+        Bubbles.moveServo(WeightLifter, 0.25);
+        Tools.wait(400);
+        Bubbles.moveServo(Grabby, 1.0);
+        Tools.wait(400);
+        Bubbles.moveServo(WeightLifter, 0.7);
+        Tools.wait(50);
+        Bubbles.moveServo(Grabby, 0.6);
     }
 }

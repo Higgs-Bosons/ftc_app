@@ -79,13 +79,16 @@ public class Constants {
     public static final String LEFT_SIDE_OF_THE_LANDER = "  LEFT";
     public static final String RIGHT_SIDE_OF_THE_LANDER = "  RIGHT";
 
-//-------{CAMERA ORIENTATIONS}----------------------------------------------------------------------
+//-------{ORIENTATIONS}-----------------------------------------------------------------------------
     public static final int UPRIGHT = 0;
     public static final int UPSIDE_DOWN = 1;
     public static final int LANDSCAPE_LEFT = 2;
     public static final int LANDSCAPE_RIGHT = 3;
 
-//-------{@IntDef}----------------------------------------------------------------------------------
+
+
+
+    //-------{@IntDef}------------------------------------------------------------------------------
     @IntDef({FORWARDS, REVERSE})
     @Retention(RetentionPolicy.CLASS)
     public @interface MotorDirections{}
@@ -112,6 +115,10 @@ public class Constants {
     @IntDef({UPRIGHT,UPSIDE_DOWN,LANDSCAPE_LEFT, LANDSCAPE_RIGHT})
     @Retention(RetentionPolicy.CLASS)
     public @interface CameraOrientations{}
+
+    @IntDef({UPRIGHT,UPSIDE_DOWN})
+    @Retention(RetentionPolicy.CLASS)
+    public @interface IMUOrientations{}
 //-------{@StringDef}-------------------------------------------------------------------------------
     @StringDef({FIRST_LETTER_NO_SPACE_UPPERCASE, FIRST_LETTER_WITH_SPACE_UPPERCASE, FIRST_LETTER_WITH_UNDERSCORE_UPPERCASE,
                 FIRST_LETTER_NO_SPACE_LOWERCASE, FIRST_LETTER_WITH_SPACE_LOWERCASE, FIRST_LETTER_WITH_UNDERSCORE_LOWERCASE,

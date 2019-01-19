@@ -4,6 +4,7 @@ package org.firstinspires.ftc.teamcode.Galaxy.TeleOp;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.configuration.annotations.MotorType;
 
 import org.firstinspires.ftc.teamcode.Galaxy.MecanumWheelRobot.MecanumWheelRobot;
 import org.firstinspires.ftc.teamcode.Galaxy.Tools;
@@ -15,15 +16,17 @@ import static org.firstinspires.ftc.teamcode.Galaxy.Names.*;
 @TeleOp(name = "TeleOp", group = "TeleOp")
 public class MainTeleOp extends LinearOpMode{
 
-    private boolean grabberToggle = true;
     private boolean isArmUp = true;
     private boolean tanked = false;
     private MecanumWheelRobot BubbleTheRobo;
+    private boolean aiControls = true;
     private int speed = 80;
+    private int rampPosition = 2;
+    private int bucketPosition = 1;
     private int counterOfLiftingRobot = 0;
     private String mode = "JOYSTICK DRIVE";
     
-    @Override
+
     public void runOpMode(){
         initializeTheRobot();
 
@@ -36,15 +39,11 @@ public class MainTeleOp extends LinearOpMode{
         while (opModeIsActive()) {
             checkDriveMotors();
             checkLifter();
-            checkSlides();
+            checkDumper();
             checkSettings();
-            checkGrabby();
-            telemetry.addData("Movement Mode : ", mode);
-            telemetry.addData("Speed : ", speed + "/100");
-            telemetry.addData("Lifter Tick Count : ", BubbleTheRobo.getMotorTickCount(PowerUp));
-            telemetry.addData("VSlide Tick Count : ", BubbleTheRobo.getMotorTickCount(VSlide));
-            telemetry.addData("HSlide Tick Count : ", BubbleTheRobo.getMotorTickCount(HSlide));
-            telemetry.update();
+            checkGatherer();
+
+            updateTelemetry();
         }
 
         BubbleTheRobo.stopRobot();
@@ -59,6 +58,10 @@ public class MainTeleOp extends LinearOpMode{
         BubbleTheRobo.addServo(Holder);
         BubbleTheRobo.addServo(Grabby);
         BubbleTheRobo.addServo(WeightLifter);
+        BubbleTheRobo.addServo(Spinny);
+        BubbleTheRobo.addServo(ArmY);
+        BubbleTheRobo.addServo(Rampy);
+        BubbleTheRobo.addServo(BucketDumper);
 
         BubbleTheRobo.setMotorZeroPowerMode(PowerUp, DcMotor.ZeroPowerBehavior.BRAKE);
         BubbleTheRobo.setMotorZeroPowerMode(PowerDown, DcMotor.ZeroPowerBehavior.BRAKE);
@@ -71,8 +74,16 @@ public class MainTeleOp extends LinearOpMode{
 
         BubbleTheRobo.moveServo(Grabby, 0.6);
         BubbleTheRobo.moveServo(WeightLifter, 0.7);
+        BubbleTheRobo.moveServo(BucketDumper, 0);
+        BubbleTheRobo.getMotorByName(PowerDown).setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        BubbleTheRobo.getMotorByName(PowerUp).setMode(DcMotor.RunMode.RUN_USING_ENCODER);
     }
 
+    private void updateTelemetry(){
+        telemetry.addData("Movement Mode : ", mode);
+        telemetry.addData("Speed : ", speed + "/100");
+        telemetry.update();
+    }
 
     private void checkDriveMotors(){
         if (!tanked) 
@@ -106,25 +117,63 @@ public class MainTeleOp extends LinearOpMode{
     }
     private void checkSettings(){
         if(gamepad1.a){
+
             if(gamepad1.dpad_up){
-                while (gamepad1.dpad_up);
+                long startTime = System.currentTimeMillis(), currentTime;
                 speed += 5;
+                while (gamepad1.dpad_up){
+                    updateTelemetry();
+                    currentTime = System.currentTimeMillis();
+                    if(startTime < currentTime - 1000){
+                        speed += 5;
+                        speed = (speed > 100) ? 100 : speed;
+                        startTime += 250L;
+                    }
+                }
+
             }else if(gamepad1.dpad_down){
-                while (gamepad1.dpad_down);
+                long startTime = System.currentTimeMillis(), currentTime;
                 speed -= 5;
+                while (gamepad1.dpad_up){
+                    updateTelemetry();
+                    currentTime = System.currentTimeMillis();
+                    if(startTime < currentTime - 1000){
+                        speed -= 5;
+                        speed = (speed > 100) ? 100 : speed;
+                        startTime += 250L;
+                    }
+                }
             }
-            speed = (speed > 100) ? 100 : speed;
-            speed = (speed < 0)   ? 0   : speed;
+
         }
         if(gamepad1.b){
-            while (gamepad1.b);
             mode = (mode.equals("JOYSTICK DRIVE")) ? "TANK DRIVE" : "JOYSTICK DRIVE";
             tanked = !tanked;
+            updateTelemetry();
+            while (gamepad1.b);
+        }
 
+        if(gamepad1.y || gamepad2.y){
+            aiControls = !aiControls;
+            updateTelemetry();
+            while(gamepad1.y || gamepad2.y);
         }
 
     }
-    private void checkSlides(){
+
+    private void checkAIControls(){
+        if(aiControls){
+            if(!gamepad1.a){
+                counterOfLiftingRobot ++;
+                if(counterOfLiftingRobot == 20){
+                    BubbleTheRobo.moveServo(Holder, 0);
+                }
+            }else counterOfLiftingRobot = 0;
+
+            
+        }
+    }
+    private void checkDumper(){
         if(gamepad2.dpad_up){
             if (BubbleTheRobo.getMotorTickCount(VSlide) >= -1400)
                 BubbleTheRobo.moveMotor(VSlide, -0.7);
@@ -135,33 +184,57 @@ public class MainTeleOp extends LinearOpMode{
         }else{
             BubbleTheRobo.stopMotor(VSlide);
         }
-        if(gamepad2.dpad_left){
-            if (BubbleTheRobo.getMotorTickCount(HSlide) <= 1402)
-                BubbleTheRobo.moveMotor(HSlide, 0.7);
-            else
-                BubbleTheRobo.stopMotor(HSlide);
-        }else if(gamepad2.dpad_right){
-            BubbleTheRobo.moveMotor(HSlide, -0.7);
-        }else{
-            BubbleTheRobo.stopMotor(HSlide);
+
+        if (gamepad2.x) {
+            bucketPosition = (bucketPosition == 3) ? 1 : ++bucketPosition;
+            switch (bucketPosition) {
+                case 1: BubbleTheRobo.moveServo(BucketDumper, 0); break;
+                case 2: BubbleTheRobo.moveServo(BucketDumper, 0.45); break;
+                case 3: BubbleTheRobo.moveServo(BucketDumper, 1); break;
+            }
+
+            while (gamepad2.x);
         }
     }
-    private void checkGrabby(){
-        if (gamepad1.y) {
-            // Grab - 0.6 Lift - 0.7
-            //        1          0.25
-            //        0.65       0.4
+    private void checkGatherer(){
+        BubbleTheRobo.moveServo(Spinny, ((-gamepad2.left_stick_y + 1) / 2.0));
+
+        if(gamepad2.right_stick_y > 0.1){
+            BubbleTheRobo.moveServo(ArmY, 0.26);
+        }else if(gamepad2.right_stick_y < -0.1){
+            BubbleTheRobo.moveServo(ArmY, 0.745);
+        }else {
+            BubbleTheRobo.moveServo(ArmY, 0.5);
+        }
 
 
-            BubbleTheRobo.moveServo(WeightLifter, 0.25);
-            Tools.wait(400);
-            BubbleTheRobo.moveServo(Grabby, 1.0);
-            Tools.wait(400);
-            BubbleTheRobo.moveServo(WeightLifter, 0.7);
-            Tools.wait(50);
-            BubbleTheRobo.moveServo(Grabby, 0.6);
+        if(gamepad2.dpad_up){
+            if (BubbleTheRobo.getMotorTickCount(VSlide) >= -1400)
+                BubbleTheRobo.moveMotor(VSlide, -0.7);
+            else
+                BubbleTheRobo.stopMotor(VSlide);
+        }else if(gamepad2.dpad_down){
+            BubbleTheRobo.moveMotor(VSlide, 0.7);
+        }else{
+            BubbleTheRobo.stopMotor(VSlide);
+        }
 
-            while (gamepad1.y);
+        BubbleTheRobo.moveMotor(HSlide, -gamepad2.left_stick_x);
+
+
+        if(gamepad2.a){
+            rampPosition++;
+            rampPosition = (rampPosition == 4) ? 1 : rampPosition;
+
+            if(rampPosition == 1){
+                BubbleTheRobo.moveServo(Rampy, .425);
+            }else if(rampPosition == 2){
+                BubbleTheRobo.moveServo(Rampy, .495);
+            }else{
+                BubbleTheRobo.moveServo(Rampy, .51);
+            }
+
+            while (gamepad2.a);
         }
     }
 }
