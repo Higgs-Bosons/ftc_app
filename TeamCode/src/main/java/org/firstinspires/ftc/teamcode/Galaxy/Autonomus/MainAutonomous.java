@@ -25,12 +25,11 @@ public class MainAutonomous extends LinearOpMode {
 
         try{
             initializeRobot();
-            //getMenuChoices();
 
             waitForStart();
 
-            dropFromLander();
-            unhookFromTheLander();
+           //dropFromLander();
+           // unhookFromTheLander();
             positionForSampling();
 
         }finally{
@@ -53,15 +52,20 @@ public class MainAutonomous extends LinearOpMode {
 
         Bubbles.setBreakOrCoast(DcMotor.ZeroPowerBehavior.BRAKE);
         Bubbles.setMotorDirection(FORWARDS,REVERSE,REVERSE,FORWARDS);
-        Bubbles.resetEncoders();
 
         canOfPineapple = new CanOfPineapple(UPSIDE_DOWN);
         pineappleStrainer = new PineappleStrainer(canOfPineapple);
 
         Bubbles.resetIMUGyro(Gyro);
 
+        Bubbles.moveServo(XThing, .45);
+        Bubbles.moveServo(YThing, .6);
         Bubbles.moveServo(Grabby, 0.6);
         Bubbles.moveServo(WeightLifter, 0.7);
+        Bubbles.stopMotor(PowerUp);
+        Bubbles.stopMotor(PowerDown);
+
+        Bubbles.resetEncoders();
     }
 
     private void dropFromLander() throws InterruptedException{

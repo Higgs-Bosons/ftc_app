@@ -85,10 +85,12 @@ public class Constants {
     public static final int LANDSCAPE_LEFT = 2;
     public static final int LANDSCAPE_RIGHT = 3;
 
+//-------{AI CONTROL MODES}-------------------------------------------------------------------------
+    public static final String ON = "ON";
+    public static final String OFF = "OFF";
+    public static final String LIMITED = "LIMITED";
 
-
-
-    //-------{@IntDef}------------------------------------------------------------------------------
+//-------{@IntDef}----------------------------------------------------------------------------------
     @IntDef({FORWARDS, REVERSE})
     @Retention(RetentionPolicy.CLASS)
     public @interface MotorDirections{}
@@ -97,6 +99,7 @@ public class Constants {
     @IntDef({LEFT_FRONT,RIGHT_FRONT, RIGHT_BACK, LEFT_BACK, NO_TAG})
     @Retention(RetentionPolicy.CLASS)
     public @interface MotorTag{}
+
 
     @IntDef({COLOR_SENSOR, GYRO_SENSOR, TOUCH_SENSOR, ULTRASONIC_SENSOR,
     OPTICAL_DISTANCE_SENSOR, LIGHT_SENSOR, IR_SEEKER_SENSOR, IMU,
@@ -112,13 +115,16 @@ public class Constants {
     @Retention(RetentionPolicy.CLASS)
     public @interface ReadingTags{}
 
+
     @IntDef({UPRIGHT,UPSIDE_DOWN,LANDSCAPE_LEFT, LANDSCAPE_RIGHT})
     @Retention(RetentionPolicy.CLASS)
     public @interface CameraOrientations{}
 
+
     @IntDef({UPRIGHT,UPSIDE_DOWN})
     @Retention(RetentionPolicy.CLASS)
     public @interface IMUOrientations{}
+
 //-------{@StringDef}-------------------------------------------------------------------------------
     @StringDef({FIRST_LETTER_NO_SPACE_UPPERCASE, FIRST_LETTER_WITH_SPACE_UPPERCASE, FIRST_LETTER_WITH_UNDERSCORE_UPPERCASE,
                 FIRST_LETTER_NO_SPACE_LOWERCASE, FIRST_LETTER_WITH_SPACE_LOWERCASE, FIRST_LETTER_WITH_UNDERSCORE_LOWERCASE,

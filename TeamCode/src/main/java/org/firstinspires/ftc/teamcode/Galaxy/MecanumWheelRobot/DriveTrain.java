@@ -232,6 +232,7 @@ public class DriveTrain {
             stopRobot();
         }
     }
+
     public void gyroTurn(int toDegree, BNO055IMU IMU, @IMUOrientations int imuOrientation) throws InterruptedException{
         if(imuOrientation == UPRIGHT) gyroTurn(toDegree, IMU);
         else  invertedGyroTurn(toDegree, IMU);
@@ -239,7 +240,7 @@ public class DriveTrain {
     }
     private void invertedGyroTurn(int toDegree, BNO055IMU IMU) throws InterruptedException{
         double power;
-        boolean WhichWay = WhichWayToTurn(toDegree, (int) getGyroReading(IMU));
+        boolean WhichWay = !WhichWayToTurn(toDegree, (int) getGyroReading(IMU));
 
         while (HowFar(toDegree, (int) getGyroReading(IMU)) >= 2) {
             power = (HowFar(toDegree, (int) getGyroReading(IMU))) / 60.0;
@@ -247,11 +248,11 @@ public class DriveTrain {
             power = (power > 1.0) ? 1.0 : power;
 
             if (WhichWay) {
-                spinRobot(power);
-            } else {
                 spinRobot(-power);
+            } else {
+                spinRobot(power);
             }
-            WhichWay = WhichWayToTurn(toDegree, (int) getGyroReading(IMU));
+            WhichWay = !WhichWayToTurn(toDegree, (int) getGyroReading(IMU));
 
             Thread.sleep(0,50);
         }
