@@ -175,9 +175,9 @@ public class Motors extends Sensors{
     public int getMotorTickCount(String motorName){
         return (motorsByName.get(motorName).getCurrentPosition());
     }
-    public void resetMotorTickCount(String motorName){
+    public void resetMotorTickCount(String motorName, boolean useEncoder){
         motorsByName.get(motorName).setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        motorsByName.get(motorName).setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        motorsByName.get(motorName).setMode((useEncoder) ? DcMotor.RunMode.RUN_USING_ENCODER : DcMotor.RunMode.RUN_WITHOUT_ENCODER);
     }
 
 }

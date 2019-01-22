@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.Galaxy.TeleOp;
 
+import android.util.Log;
+
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -12,10 +14,10 @@ import static org.firstinspires.ftc.teamcode.Galaxy.Names.*;
 @TeleOp(name = "TeleOp", group = "TeleOp")
 public class MainTeleOp extends LinearOpMode{
 
-    private boolean isArmUp = true;
+    private boolean isArmUp = false;
     private boolean tanked = false;
     private MecanumWheelRobot BubbleTheRobo;
-    private String aiControls = "ON";
+    private String aiControls = ON;
     private int speed = 80;
     private int rampPosition = 2;
     private int bucketPosition = 1;
@@ -25,8 +27,12 @@ public class MainTeleOp extends LinearOpMode{
     private String mode = "JOYSTICK DRIVE";
     private int screenPos = 1;
 
+    private Thread driveControlThread, lifterThread, gatherAndDumpThread, telemetryThread;
+
+
     public void runOpMode(){
         initializeTheRobot();
+        setUpThreads();
 
         telemetry.setCaptionValueSeparator("");
         telemetry.addData("Ready to Rumble!", "");
@@ -34,24 +40,55 @@ public class MainTeleOp extends LinearOpMode{
 
         waitForStart();
 
-        BubbleTheRobo.moveServo(Rampy, .44);
+        telemetryThread.start();
+        lifterThread.start();
+        driveControlThread.start();
+        gatherAndDumpThread.start();
 
         while (opModeIsActive()) {
-            checkDriveMotors();
-            checkLifter();
-
-            checkDumper();
-            checkGatherer();
-
             checkAIControls();
             checkSettings();
             checkForReset();
-
-            updateTelemetry();
         }
 
         BubbleTheRobo.stopRobot();
     }
+    private void setUpThreads(){
+
+        driveControlThread = new Thread(new Runnable() {
+            public void run(){
+                while(opModeIsActive()){
+                    checkDriveMotors();
+                }
+                BubbleTheRobo.stopRobot();
+            }
+        });
+        lifterThread = new Thread(new Runnable() {
+            public void run() {
+                while(opModeIsActive()){
+                    checkLifter();
+                }
+            }
+        });
+        telemetryThread = new Thread(new Runnable() {
+            public void run() {
+                while(opModeIsActive()){
+                    updateTelemetry();
+                    try{Thread.sleep(10);}catch (InterruptedException ignore){}
+                }
+            }
+        });
+        gatherAndDumpThread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                while(opModeIsActive()){
+                    checkDumper();
+                    checkGatherer();
+                }
+            }
+        });
+    }
+
     private void initializeTheRobot(){
         BubbleTheRobo = new MecanumWheelRobot(hardwareMap, FIRST_LETTER_NO_SPACE_UPPERCASE);
         BubbleTheRobo.addAMotor(PowerUp, NO_TAG);
@@ -86,8 +123,8 @@ public class MainTeleOp extends LinearOpMode{
         BubbleTheRobo.moveServo(Grabby, 0.6);
         BubbleTheRobo.moveServo(WeightLifter, 0.7);
         BubbleTheRobo.moveServo(BucketDumper, 0);
-        BubbleTheRobo.getMotorByName(PowerDown).setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        BubbleTheRobo.getMotorByName(PowerUp).setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        BubbleTheRobo.moveServo(Rampy, .44);
+        BubbleTheRobo.moveServo(Holder, 1.0);
     }
 
     private void updateTelemetry(){
@@ -166,10 +203,6 @@ public class MainTeleOp extends LinearOpMode{
             }else if(gamepad1.dpad_up){
                 BubbleTheRobo.moveMotor(PowerUp, 1.0);
                 BubbleTheRobo.moveMotor(PowerDown, 1.0);
-                counterOfLiftingRobot ++;
-                if(counterOfLiftingRobot == 20){
-                    BubbleTheRobo.moveServo(Holder, 0);
-                }
             }else{
                 counterOfLiftingRobot = 0;
                 BubbleTheRobo.stopMotor(PowerUp);
@@ -178,9 +211,11 @@ public class MainTeleOp extends LinearOpMode{
         }
         if (gamepad1.x) {
             isArmUp = !isArmUp;
-            BubbleTheRobo.moveServo(Holder, (isArmUp) ? 1 : 0);
+            BubbleTheRobo.moveServo(Holder, (isArmUp) ? 0.99 : 0.4);
             while (gamepad1.x);
+
         }
+
     }
 
     private void checkDumper(){
@@ -255,7 +290,7 @@ public class MainTeleOp extends LinearOpMode{
 
     private void checkAIControls(){
         if(aiControls.equals(ON) || aiControls.equals(LIMITED)){
-            if(!gamepad1.a){
+            if(!gamepad1.a && gamepad1.dpad_up){
                 counterOfLiftingRobot ++;
                 if(counterOfLiftingRobot == 20)
                     BubbleTheRobo.moveServo(Holder, 0);
@@ -265,6 +300,8 @@ public class MainTeleOp extends LinearOpMode{
                 counterOfLiftingVSlide++;
                 if(counterOfLiftingVSlide == 10)
                     bucketPosition = 2;
+                if(BubbleTheRobo.getMotorTickCount(VSlide) < -1400 && counterOfLiftingVSlide > 20 && aiControls.equals(ON))
+                    bucketPosition = 3;
             }else counterOfLiftingVSlide = 0;
 
             if(gamepad2.dpad_down){
@@ -273,10 +310,8 @@ public class MainTeleOp extends LinearOpMode{
                     bucketPosition = 1;
             }else counterOfLoweringVSlide = 0;
 
-            if(aiControls.equals(ON))
-                if(BubbleTheRobo.getMotorTickCount(VSlide) < -1430)
-                    bucketPosition = 3;
-
+            if(gamepad2.left_stick_x > 0.1 && !aiControls.equals(ON) && BubbleTheRobo.getMotorTickCount(HSlide) < 5)
+                rampPosition = 1;
         }
     }
     private void checkSettings(){
@@ -286,7 +321,6 @@ public class MainTeleOp extends LinearOpMode{
                 long startTime = System.currentTimeMillis(), currentTime;
                 speed += 5;
                 while (gamepad1.dpad_up){
-                    updateTelemetry();
                     currentTime = System.currentTimeMillis();
                     if(startTime < currentTime - 1000){
                         speed += 5;
@@ -299,7 +333,6 @@ public class MainTeleOp extends LinearOpMode{
                 long startTime = System.currentTimeMillis(), currentTime;
                 speed -= 5;
                 while (gamepad1.dpad_up){
-                    updateTelemetry();
                     currentTime = System.currentTimeMillis();
                     if(startTime < currentTime - 1000){
                         speed -= 5;
@@ -313,13 +346,11 @@ public class MainTeleOp extends LinearOpMode{
         if(gamepad1.b){
             mode = (mode.equals("JOYSTICK DRIVE")) ? "TANK DRIVE" : "JOYSTICK DRIVE";
             tanked = !tanked;
-            updateTelemetry();
             while (gamepad1.b);
         }
 
         if(gamepad1.y || gamepad2.y){
             aiControls = (aiControls.equals(OFF)) ? LIMITED : ((aiControls.equals(LIMITED)) ? ON : OFF);
-            updateTelemetry();
             while(gamepad1.y || gamepad2.y);
         }
 
@@ -328,8 +359,8 @@ public class MainTeleOp extends LinearOpMode{
         if((gamepad1.left_trigger > 0.1 && gamepad1.right_trigger > 0.1)
                 || (gamepad2.left_trigger > 0.1 && gamepad2.right_trigger > 0.1)){
             BubbleTheRobo.resetEncoders();
-            BubbleTheRobo.resetMotorTickCount(VSlide);
-            BubbleTheRobo.resetMotorTickCount(HSlide);
+            BubbleTheRobo.resetMotorTickCount(VSlide, false);
+            BubbleTheRobo.resetMotorTickCount(HSlide, false);
             BubbleTheRobo.resetIMUGyro(Gyro);
         }
     }

@@ -19,7 +19,7 @@ public class CameraTester extends LinearOpMode {
         while (opModeIsActive()){
             picture = thePineappleCan.getBitmap();
             pineappleChunks = pineappleStrainer
-                    .findShadedObject(85,80, picture, Color.rgb(250,200, 0), 130);
+                    .findShadedObject(90,95, picture, Color.rgb(250,200, 0), 130);
             telemetry.addData("Num of chunks", pineappleChunks.getNumberOfChunks());
             if (pineappleChunks.doesChunkExist()) {
                 telemetry.addData("X ",pineappleChunks.getChunk(0)[PineappleChunks.X]);

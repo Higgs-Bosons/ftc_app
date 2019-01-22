@@ -154,10 +154,23 @@ public class DriveTrain {
         LFPower = (Y - X)*power;
         LBPower = (Y + X)*power;
 
-        RFPower = (spinPower + RFPower) / 2;
-        RBPower = (spinPower + RBPower) / 2;
-        LFPower = (spinPower + LFPower) / 2;
-        LBPower = (spinPower + LBPower) / 2;
+        RFPower = (RFPower + spinPower);
+        RBPower = (RBPower + spinPower);
+        LFPower = (LFPower - spinPower);
+        LBPower = (LBPower - spinPower);
+
+
+        if(RFPower > 1.0)  LFPower = (LFPower - (1.0 - RFPower));
+        if(RFPower < -1.0) LFPower = (LFPower + (-1.0 - RFPower));
+        if(RBPower > 1.0)  LBPower = (LBPower - (1.0 - RBPower));
+        if(RBPower < -1.0) LBPower = (LBPower + (-1.0 - RBPower));
+        
+        if(LFPower > 1.0)  RFPower = (RFPower - (1.0 - LFPower));
+        if(LFPower < -1.0) RFPower = (RFPower + (-1.0 - LFPower));
+        if(LBPower > 1.0)  RBPower = (RBPower - (1.0 - LBPower));
+        if(LBPower < -1.0) RBPower = (RBPower + (-1.0 - LBPower));
+            
+        
 
         RightFront.setPower(RFPower);
         RightBack.setPower(RBPower);
@@ -171,10 +184,10 @@ public class DriveTrain {
         LeftBack.setPower(spinPower);
     }
 
-    public void moveRobot(double direction, double inches, double spin, double maxPower, double minPower, double precision, Telemetry telemetry) throws InterruptedException{
+    public void moveRobot(double direction, double inches, double spin, double maxPower, double minPower, double precision) throws InterruptedException{
         int numberOfTicksMoved;
-        double power = maxPower;
-        double spinPower = spin;
+        double power;
+        double spinPower;
         int ticksToMove = (int) (inches * (1120 / (Math.PI * 4)));
         resetEncoders();
         numberOfTicksMoved = (Math.abs(LeftFront.getCurrentPosition()) + Math.abs(RightFront.getCurrentPosition())
@@ -186,14 +199,10 @@ public class DriveTrain {
                         + Math.abs(RightBack.getCurrentPosition()) + Math.abs(LeftBack.getCurrentPosition())) / 4;
 
                 power = Math.abs(Math.abs(numberOfTicksMoved) - Math.abs(ticksToMove) / POWER_DECAY_RATIO);
-                telemetry.addData("Ticks Left " , Math.abs(Math.abs(numberOfTicksMoved) - Math.abs(ticksToMove)));
-                telemetry.addData("Power Before " , power);
 
                 power = (power > maxPower) ? maxPower : power;
                 power = (power < minPower) ? minPower : power;
                 if (Math.abs(numberOfTicksMoved) > Math.abs(ticksToMove)) power = -power;
-                telemetry.addData("Power After " , power);
-                telemetry.update();
 
                 spinPower = (spin * (power / maxPower));
 
@@ -232,33 +241,27 @@ public class DriveTrain {
             stopRobot();
         }
     }
+    public void moveRobot(double direction, double inches, double power, double precision) throws InterruptedException{
+        int numberOfTicksMoved;
+        int ticksToMove = (int) (inches * (1120 / (Math.PI * 4)));
+
+        resetEncoders();
+
+        numberOfTicksMoved = (Math.abs(LeftFront.getCurrentPosition()) + Math.abs(RightFront.getCurrentPosition())
+                + Math.abs(RightBack.getCurrentPosition()) + Math.abs(LeftBack.getCurrentPosition()))/4;
+        try {
+            while (Math.abs(Math.abs(numberOfTicksMoved) - Math.abs(ticksToMove)) > precision) {
+                if (Math.abs(numberOfTicksMoved) > Math.abs(ticksToMove)) power = -power;
+                driveAtHeader(direction, power);
+                Thread.sleep(0,50);
+            }
+        }catch (InterruptedException e){
+            stopRobot();
+            throw e;
+        }
+    }
 
     public void gyroTurn(int toDegree, BNO055IMU IMU, @IMUOrientations int imuOrientation) throws InterruptedException{
-        if(imuOrientation == UPRIGHT) gyroTurn(toDegree, IMU);
-        else  invertedGyroTurn(toDegree, IMU);
-
-    }
-    private void invertedGyroTurn(int toDegree, BNO055IMU IMU) throws InterruptedException{
-        double power;
-        boolean WhichWay = !WhichWayToTurn(toDegree, (int) getGyroReading(IMU));
-
-        while (HowFar(toDegree, (int) getGyroReading(IMU)) >= 2) {
-            power = (HowFar(toDegree, (int) getGyroReading(IMU))) / 60.0;
-            power = (power < 0.1) ? 0.1 : power;
-            power = (power > 1.0) ? 1.0 : power;
-
-            if (WhichWay) {
-                spinRobot(-power);
-            } else {
-                spinRobot(power);
-            }
-            WhichWay = !WhichWayToTurn(toDegree, (int) getGyroReading(IMU));
-
-            Thread.sleep(0,50);
-        }
-
-    }
-    public void gyroTurn(int toDegree, BNO055IMU IMU) throws InterruptedException{
         double power;
         boolean WhichWay = WhichWayToTurn(toDegree, (int) getGyroReading(IMU));
 
@@ -276,6 +279,27 @@ public class DriveTrain {
 
             Thread.sleep(0,50);
         }
+        stopRobot();
+
+    }
+    private void invertedGyroTurn(int toDegree, BNO055IMU IMU) throws InterruptedException{
+        double power;
+        boolean WhichWay = !WhichWayToTurn(toDegree, (int) getGyroReading(IMU));
+
+        while (HowFar(toDegree, (int) getGyroReading(IMU)) >= 2) {
+            power = (HowFar(toDegree, (int) getGyroReading(IMU))) / 60.0;
+            power = (power < 0.1) ? 0.1 : power;
+            power = (power > 1.0) ? 1.0 : power;
+
+            if (WhichWay) spinRobot(power);
+            else          spinRobot(-power);
+
+            WhichWay = !WhichWayToTurn(toDegree, (int) getGyroReading(IMU));
+
+            Thread.sleep(0,50);
+        }
+        stopRobot();
+
     }
 
     //--{TOOLS}------------------------------------------------------
