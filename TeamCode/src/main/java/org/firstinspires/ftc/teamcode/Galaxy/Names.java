@@ -5,6 +5,7 @@ public class Names {
     public static final String Gyro = "Gyro";
     public static final String TouchyL = "TouchyL";
     public static final String TouchyR = "TouchyR";
+    public static final String TopTouchy = "TopTouchy";
     public static final String DistanceL = "DistanceL";
     public static final String DistanceR = "DistanceR";
 

@@ -1,7 +1,4 @@
 package org.firstinspires.ftc.teamcode.Galaxy.TeleOp;
-
-import android.util.Log;
-
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -108,6 +105,7 @@ public class MainTeleOp extends LinearOpMode{
         BubbleTheRobo.addSensor(DistanceR, DISTANCE_SENSOR);
         BubbleTheRobo.addSensor(TouchyL, TOUCH_SENSOR);
         BubbleTheRobo.addSensor(TouchyR, TOUCH_SENSOR);
+        BubbleTheRobo.addSensor(TopTouchy, TOUCH_SENSOR);
         BubbleTheRobo.addSensor(Gyro, IMU);
 
 
@@ -168,13 +166,14 @@ public class MainTeleOp extends LinearOpMode{
         }else if(screenPos == 2){
             telemetry.addData(" [controls]    [SENSORS]     [data] ", "");
             telemetry.addLine();
-            telemetry.addData("DistanceR (CM): ", BubbleTheRobo.readSensor(DistanceL, DISTANCE_IN_CENTIMETERS));
-            telemetry.addData("DistanceL (CM): ", BubbleTheRobo.readSensor(DistanceR, DISTANCE_IN_CENTIMETERS));
-            telemetry.addData("TouchyL: ", (BubbleTheRobo.readSensor(TouchyL, TOUCH_VALUE)== 1) ? "PRESSED" : ". . ." );
-            telemetry.addData("TouchyR: ", (BubbleTheRobo.readSensor(TouchyR, TOUCH_VALUE) == 1) ? "PRESSED" : ". . .");
-            telemetry.addData("IMU Axis 0: ", BubbleTheRobo.readIMUGyro(Gyro)[0]);
-            telemetry.addData("IMU Axis 1: ", BubbleTheRobo.readIMUGyro(Gyro)[1]);
-            telemetry.addData("IMU Axis 2: ", BubbleTheRobo.readIMUGyro(Gyro)[2]);
+            telemetry.addData("DistanceR CM: ", BubbleTheRobo.readSensor(DistanceL, DISTANCE_IN_CENTIMETERS));
+            telemetry.addData("DistanceL CM: ", BubbleTheRobo.readSensor(DistanceR, DISTANCE_IN_CENTIMETERS));
+            telemetry.addData("TouchyL:      ", (BubbleTheRobo.readSensor(TouchyL, TOUCH_VALUE)== 1) ? "PRESSED" : ". . ." );
+            telemetry.addData("TouchyR:      ", (BubbleTheRobo.readSensor(TouchyR, TOUCH_VALUE) == 1) ? "PRESSED" : ". . .");
+            telemetry.addData("TopTouchy:    ", (BubbleTheRobo.readSensor(TopTouchy, TOUCH_VALUE) == 1) ? "PRESSED" : ". . .");
+            telemetry.addData("IMU Axis 0:   ", BubbleTheRobo.readIMUGyro(Gyro)[0]);
+            telemetry.addData("IMU Axis 1:   ", BubbleTheRobo.readIMUGyro(Gyro)[1]);
+            telemetry.addData("IMU Axis 2:   ", BubbleTheRobo.readIMUGyro(Gyro)[2]);
         }else if(screenPos == 3){
             telemetry.addData("  [sensors]      [DATA]   [controls]", "");
             telemetry.addLine();
