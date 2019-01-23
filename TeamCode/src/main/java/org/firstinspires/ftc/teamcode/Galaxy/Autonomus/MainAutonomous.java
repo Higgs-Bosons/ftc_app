@@ -2,12 +2,10 @@ package org.firstinspires.ftc.teamcode.Galaxy.Autonomus;
 
 import android.graphics.Bitmap;
 import android.graphics.Color;
-import android.util.Log;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DistanceSensor;
 
 import org.firstinspires.ftc.teamcode.Galaxy.ImageCapturing.CanOfPineapple;
 import org.firstinspires.ftc.teamcode.Galaxy.ImageCapturing.PineappleChunks;
@@ -20,6 +18,8 @@ import static org.firstinspires.ftc.teamcode.Galaxy.Names.*;
 
 @Autonomous(name = "Autonomous", group = "Autonomous")
 public class MainAutonomous extends LinearOpMode {
+    // TODO Add in driving to crater, also, test the parkOnCrater() method. The values were just guesses.
+
     private MecanumWheelRobot Bubbles;
     private CanOfPineapple canOfPineapple;
     private PineappleStrainer pineappleStrainer;
@@ -43,6 +43,7 @@ public class MainAutonomous extends LinearOpMode {
             sample();
             driveToDepo();
             dropOffMarker();
+            parkOnCrater();
 
             while(opModeIsActive());
             requestOpModeStop();
@@ -81,6 +82,8 @@ public class MainAutonomous extends LinearOpMode {
         Bubbles.addSensor(Gyro, IMU);
         Bubbles.addSensor(DistanceL, DISTANCE_SENSOR);
         Bubbles.addSensor(DistanceR, DISTANCE_SENSOR);
+        Bubbles.addSensor(TouchyL, TOUCH_SENSOR);
+        Bubbles.addSensor(TouchyR, TOUCH_SENSOR);
         Bubbles.resetIMUGyro(Gyro);
 
         telemetry.addData("INITIALIZING SERVOS","");
@@ -183,6 +186,7 @@ public class MainAutonomous extends LinearOpMode {
             power = (gyroReading) / 100.0;
             power = (power > 0.7) ? 0.7 : (power < 0.1) ? 0.1 : power;
             Bubbles.driveAtHeader(NORTH, power, 0.32);
+            Thread.sleep(0, 50);
         } while(gyroReading > 231);
 
         Bubbles.stopRobot();
@@ -216,9 +220,10 @@ public class MainAutonomous extends LinearOpMode {
     }
     private void driveToDepo()         throws InterruptedException{
          while(Bubbles.readSensor(DistanceL, DISTANCE_IN_CENTIMETERS) > 7.0
-                 && Bubbles.readSensor(DistanceR, DISTANCE_IN_CENTIMETERS) > 7.0)
+                 && Bubbles.readSensor(DistanceR, DISTANCE_IN_CENTIMETERS) > 7.0) {
              Bubbles.driveAtHeader(NORTH, 0.4);
-
+             Thread.sleep(0,50);
+         }
          if(cubePosition != 1)
              Bubbles.moveRobot(WEST, (cubePosition == 2) ? 10 : 20, 0.6, 0.1, 5);
 
@@ -233,6 +238,24 @@ public class MainAutonomous extends LinearOpMode {
         Bubbles.moveServo(Grabby, 0.6);
     }
     private void parkOnCrater()        throws InterruptedException{
-        // TODO    Next motions: pivot and turn 90 degrees, back into wall, turn, drive to right crater.
+        float gyroReading;
+        double power;
+        do{
+            gyroReading = Bubbles.readIMUGyro(Gyro)[0];
+            power = (gyroReading) / 100.0;
+            power = (power > 0.7) ? 0.7 : (power < 0.1) ? 0.1 : power;
+            Bubbles.driveAtHeader(NORTH, power, 0.5);
+            Thread.sleep(0, 50);
+        } while(gyroReading > 321);
+
+
+        Bubbles.driveAtHeader(SOUTH, 0.5);
+        while(Bubbles.readSensor(TouchyL, TOUCH_VALUE) == 0 || Bubbles.readSensor(TouchyR, TOUCH_VALUE) == 0)Thread.sleep(0,50);
+
+        Bubbles.moveRobot(NORTH, 2, 0.4, 0.05, 4);
+        Bubbles.gyroTurn(51, Bubbles.getIMU(Gyro));
+
+
+        // TODO Add in driving to crater, also, test the parkOnCrater() method. The values were just guesses.
     }
 }
