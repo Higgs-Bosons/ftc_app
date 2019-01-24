@@ -2,13 +2,12 @@ package org.firstinspires.ftc.teamcode.Galaxy.ImageCapturing;
 
 import android.graphics.Bitmap;
 import android.graphics.Color;
-import android.util.Log;
 
 import org.firstinspires.ftc.robotcontroller.internal.FtcRobotControllerActivity;
 import org.firstinspires.ftc.robotcore.internal.system.AppUtil;
 import org.firstinspires.ftc.teamcode.Galaxy.Constants;
 
-public class PineappleStrainer {
+public class PineappleStrainer extends ConstantsForPineappleStrainer{
     private int PictureWidth, PictureHeight,  precision;
     private double contrast;
     private Bitmap picture;
@@ -28,7 +27,7 @@ public class PineappleStrainer {
         this.PictureHeight = picture.getHeight();
         this.PictureWidth = picture.getWidth();
         this.precision = (precision >= 100) ?  1 : 100 - precision;
-        this.contrast = ((-7.65*contrast)+765);
+        this.contrast = (((CONTRAST_RATIO_VALUE_FOR_COLORED_OBJECT / -100.0) * contrast) + CONTRAST_RATIO_VALUE_FOR_COLORED_OBJECT);
         this.picture = picture;
 
         PineappleChunks pineappleChunks;
@@ -38,7 +37,6 @@ public class PineappleStrainer {
 
         if(!didIFindACloseEnoughColor){
             showCordsArray(cords);
-            Log.d("Results:", "NO COLOR");
             return null;
         }
 
@@ -58,7 +56,7 @@ public class PineappleStrainer {
         this.PictureHeight = picture.getHeight();
         this.PictureWidth = picture.getWidth();
         this.precision = (precision >= 100) ?  1 : 100 - precision;
-        this.contrast = (-0.015 * contrast) + 1.5;
+        this.contrast = ((CONTRAST_RATIO_VALUE_FOR_SHADED_OBJECT / -100.0) * contrast) + CONTRAST_RATIO_VALUE_FOR_SHADED_OBJECT;
         this.picture = picture;
         
         PineappleChunks pineappleChunks;
@@ -85,28 +83,29 @@ public class PineappleStrainer {
     //---{USED BY BOTH}--------------------------------------------------------
     private PineappleChunks getChunks(boolean[][] cords, int sizeFrom15cm){
         boolean[][] alreadyFound = getFilledArray((PictureWidth / precision)+1, (PictureHeight / precision)+1);
-        final int NUMBER_OF_WHITE_SPOTS = 3;
+        int width, height, x, y, z, size, leftX, rightX, downY, filledAmount, reliability;
+
         PineappleChunks pineappleChunks = new PineappleChunks();
 
         int numOfWhiteSpots;
         for(int Y = 0; Y < cords[0].length; Y ++) {
             for(int X = 0; X < cords.length; X++){
                 if(cords[X][Y] && !alreadyFound[X][Y]){
-                    int size = 0;
-                    int LeftX  = X;
-                    int RightX = X;
-                    int DownY  = Y;
-                    int filledAmount = 0;
+                    leftX = 0;
+                    rightX= 0;
+                    filledAmount = 0;
+                    size = 0;
+                    downY = 0;
                     boolean stillFoundSome = false;
                     for(int counterY = Y; counterY < cords[0].length; counterY++){
                         numOfWhiteSpots = 0;
-                        for(int counterX = X; counterX >= 0  && numOfWhiteSpots <= NUMBER_OF_WHITE_SPOTS; counterX--){
+                        for(int counterX = X; counterX >= 0  && numOfWhiteSpots <= NUMBER_OF_WHITE_SPOTS_ALLOWED; counterX--){
                             if(cords[counterX][counterY] && !alreadyFound[counterX][counterY]){
                                 size++;
-                                LeftX = (counterX > LeftX) ?  LeftX : counterX;
+                                leftX = (counterX > leftX) ?  leftX : counterX;
                                 stillFoundSome = true;
                                 alreadyFound[counterX][counterY] = true;
-                                DownY = counterY;
+                                downY = counterY;
                                 filledAmount = (numOfWhiteSpots > 0) ? filledAmount + 1 : filledAmount;
                             }else{
                                 numOfWhiteSpots ++;
@@ -115,13 +114,13 @@ public class PineappleStrainer {
                         }
 
                         numOfWhiteSpots = 0;
-                        for(int counterX = X; counterX < cords.length && numOfWhiteSpots <= NUMBER_OF_WHITE_SPOTS; counterX++){
+                        for(int counterX = X; counterX < cords.length && numOfWhiteSpots <= NUMBER_OF_WHITE_SPOTS_ALLOWED; counterX++){
                             if(cords[counterX][counterY] && !alreadyFound[counterX][counterY]){
                                 size++;
-                                RightX = (counterX < RightX) ?  RightX : counterX;
+                                rightX = (counterX < rightX) ?  rightX : counterX;
                                 stillFoundSome = true;
                                 alreadyFound[counterX][counterY] = true;
-                                DownY = counterY;
+                                downY = counterY;
                                 filledAmount = (numOfWhiteSpots > 0) ? filledAmount + 1 : filledAmount;
                             }else{
                                 numOfWhiteSpots ++;
@@ -131,17 +130,17 @@ public class PineappleStrainer {
                     }
                     if(size > 3){
 
-                        int width = (RightX-LeftX)+1;
-                        int height = (DownY-Y)+1;
-                        int x = (X + (width/2));
-                        int y = (Y + (height/2));
-                        int z = ((sizeFrom15cm-size)/sizeFrom15cm)*-100;
+                        width = (rightX-leftX)+1;
+                        height = (downY-Y)+1;
+                        x = (X + (width/2));
+                        y = (Y + (height/2));
+                        z = ((sizeFrom15cm-size)/sizeFrom15cm)*-100;
                         // Less than Expected: negative percent, Equal = 0,  More than Expected: positive percent
 
                         x = (int) ((x/(double) cords.length) * 100);
                         y = (int) ((y/(double) cords[0].length) * 100);
 
-                        int reliability = (100 - Math.abs(sizeFrom15cm - size));
+                        reliability = (100 - Math.abs(sizeFrom15cm - size));
 
                         filledAmount = (filledAmount < 0) ? 0 : filledAmount;
                         filledAmount = (filledAmount > 100) ? 0 : filledAmount;
@@ -194,13 +193,10 @@ public class PineappleStrainer {
 
             }
         });
-
-
     }
 
     //---{USED BY findColoredObject}-------------------------------------------
     private boolean isTheColorCloser(int colorInQuestion, int currentClosest, int colorToFind){
-
         int offRed =   Math.abs(Color.red(colorInQuestion) - Color.red(colorToFind));
         int offGreen = Math.abs(Color.green(colorInQuestion) - Color.green(colorToFind));
         int offBlue =  Math.abs(Color.blue(colorInQuestion) - Color.blue(colorToFind));
@@ -294,7 +290,7 @@ public class PineappleStrainer {
         return (offTotal < contrast);
     }
     private double getOffTotalForShade(int colorInQuestion, int colorToFind, double tolerance){
-        tolerance /= 4;
+        tolerance /= TOLERANCE_RATIO;
 
         double R2GColorF = Color.red(colorToFind)/((double) Color.green(colorToFind)+1);
         double G2BColorF = Color.green(colorToFind)/((double) Color.red(colorToFind)+1);
@@ -304,12 +300,12 @@ public class PineappleStrainer {
         double G2BColorQ = Color.green(colorInQuestion)/((double) Color.red(colorInQuestion)+1);
         double B2RColorQ = Color.blue(colorInQuestion)/((double) Color.red(colorInQuestion)+1);
 
-        if(R2GColorQ <= R2GColorF - tolerance){R2GColorQ+=tolerance;}
-        if(R2GColorQ >= R2GColorF+ tolerance){R2GColorQ-=tolerance;}
-        if(G2BColorQ <= G2BColorF - tolerance){G2BColorQ+=tolerance;}
-        if(G2BColorQ >= G2BColorF+ tolerance){G2BColorQ-=tolerance;}
-        if(B2RColorQ <= B2RColorF - tolerance){B2RColorQ+=tolerance;}
-        if(B2RColorQ >= B2RColorF+ tolerance){B2RColorQ-=tolerance;}
+        if(R2GColorQ <= R2GColorF - tolerance){R2GColorQ += tolerance;}
+        if(R2GColorQ >= R2GColorF + tolerance){R2GColorQ -= tolerance;}
+        if(G2BColorQ <= G2BColorF - tolerance){G2BColorQ += tolerance;}
+        if(G2BColorQ >= G2BColorF + tolerance){G2BColorQ -= tolerance;}
+        if(B2RColorQ <= B2RColorF - tolerance){B2RColorQ += tolerance;}
+        if(B2RColorQ >= B2RColorF + tolerance){B2RColorQ -= tolerance;}
 
         return (Math.abs(R2GColorQ-R2GColorF) + Math.abs(G2BColorQ-G2BColorF) +  Math.abs(B2RColorQ-B2RColorF));
     }

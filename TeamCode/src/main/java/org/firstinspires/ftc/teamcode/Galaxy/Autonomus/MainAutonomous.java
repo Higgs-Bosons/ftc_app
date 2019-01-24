@@ -13,15 +13,11 @@ import org.firstinspires.ftc.teamcode.Galaxy.ImageCapturing.PineappleStrainer;
 import org.firstinspires.ftc.teamcode.Galaxy.MecanumWheelRobot.MecanumWheelRobot;
 import org.firstinspires.ftc.teamcode.Galaxy.Tools;
 
-import javax.tools.Tool;
-
 import static org.firstinspires.ftc.teamcode.Galaxy.Constants.*;
 import static org.firstinspires.ftc.teamcode.Galaxy.Names.*;
 
 @Autonomous(name = "Autonomous", group = "Autonomous")
 public class MainAutonomous extends LinearOpMode {
-
-    // TODO  Distance Sensors not read, slide into wall touch values inverted,  Make outer curves wider, inner smaller, thread interruptable, finish to crater
 
     private MecanumWheelRobot Bubbles;
     private CanOfPineapple canOfPineapple;
@@ -29,7 +25,6 @@ public class MainAutonomous extends LinearOpMode {
     private PineappleChunks pineappleChunks;
     private boolean foundACube = false;
     private Thread telemetryThread;
-    private int cubePosition;
 
     public void runOpMode() throws InterruptedException {
         try{
@@ -145,35 +140,52 @@ public class MainAutonomous extends LinearOpMode {
     private void startSetupForDumper(){
         new Thread(new Runnable() {
             public void run() {
-                while(Bubbles.getMotorTickCount(VSlide)> -174)
-                    Bubbles.moveMotor(VSlide, -0.4);
-                Bubbles.stopMotor(VSlide);
+                try{
+                    while(Bubbles.getMotorTickCount(VSlide)> -174) {
+                        Bubbles.moveMotor(VSlide, -0.4);
+                        Thread.sleep(0, 50);
+                    }
+                    Bubbles.stopMotor(VSlide);
 
-                Bubbles.moveServo(BucketDumper, 0.565);
-                Tools.wait(2000);
+                    Bubbles.moveServo(BucketDumper, 0.565);
+                    Thread.sleep(2000);
 
-                while(Bubbles.getMotorTickCount(VSlide) < -100)
-                    Bubbles.moveMotor(VSlide, 0.3);
-                Bubbles.stopMotor(VSlide);
+                    while(Bubbles.getMotorTickCount(VSlide) < -100) {
+                        Bubbles.moveMotor(VSlide, 0.3);
+                        Thread.sleep(0, 50);
+                    }
+                    Bubbles.stopMotor(VSlide);
+                }catch (InterruptedException ignore){
+                    Bubbles.stopMotor(VSlide);
+                }
             }
         }).start();
     }
     private void startReturnForDumper(){
         new Thread(new Runnable() {
             public void run() {
-                Bubbles.moveServo(BucketDumper, 0.565);
-                Tools.wait(2000);
+                try{
+                    Bubbles.moveServo(BucketDumper, 0.565);
+                    Thread.sleep(2000);
 
-                while(Bubbles.getMotorTickCount(VSlide)> -174)
-                    Bubbles.moveMotor(VSlide, -0.4);
-                Bubbles.stopMotor(VSlide);
+                    while(Bubbles.getMotorTickCount(VSlide)> -174) {
+                        Bubbles.moveMotor(VSlide, -0.4);
+                        Thread.sleep(0, 50);
+                    }
+                    Bubbles.stopMotor(VSlide);
 
-                Bubbles.moveServo(BucketDumper, 0.395);
-                Tools.wait(2000);
+                    Bubbles.moveServo(BucketDumper, 0.395);
+                    Thread.sleep(2000);
 
-                while(Bubbles.getMotorTickCount(VSlide) <= 0)
-                    Bubbles.moveMotor(VSlide, 0.3);
-                Bubbles.stopMotor(VSlide);
+                    while(Bubbles.getMotorTickCount(VSlide) <= 0) {
+                        Bubbles.moveMotor(VSlide, 0.3);
+                        Thread.sleep(0, 50);
+                    }
+
+                    Bubbles.stopMotor(VSlide);
+                }catch (InterruptedException ignore){
+                    Bubbles.stopMotor(VSlide);
+                }
             }
         }).start();
     }
@@ -221,7 +233,7 @@ public class MainAutonomous extends LinearOpMode {
     private void sample()              throws InterruptedException{
         double power;
         float gyroReading;
-        cubePosition = findCubePosition();
+        int cubePosition = findCubePosition();
 
         Tools.showToast("cubePosition = " + cubePosition);
         if(cubePosition == 3) Bubbles.moveRobot(EAST, 17, 0.6, 0.05, 4);
@@ -230,7 +242,7 @@ public class MainAutonomous extends LinearOpMode {
             gyroReading = Bubbles.readIMUGyro(Gyro)[0];
             power = (gyroReading) / 100.0;
             power = (power > 0.7) ? 0.7 : (power < 0.1) ? 0.1 : power;
-            Bubbles.driveAtHeader(NORTH, power, 0.32);
+            Bubbles.driveAtHeader(NORTH, power, (cubePosition == 1) ? 0.45 : 0.3);
             Thread.sleep(0, 50);
         } while(gyroReading > 231);
 
@@ -264,15 +276,41 @@ public class MainAutonomous extends LinearOpMode {
         return 3;
     }
     private void driveToDepo()         throws InterruptedException{
-         while(Bubbles.readSensor(DistanceL, DISTANCE_IN_CENTIMETERS) > 7.0
-                 && Bubbles.readSensor(DistanceR, DISTANCE_IN_CENTIMETERS) > 7.0) {
+        int hittingAWall = 0;
+        long startTime, currentTime;
+        boolean keepGoing = true;
+        startTime = System.currentTimeMillis();
+
+         while(keepGoing) {
+             currentTime = System.currentTimeMillis();
+             keepGoing = (currentTime - startTime >= 5000) || keepGoing;
+             keepGoing = (Bubbles.readSensor(DistanceL, DISTANCE_IN_CENTIMETERS) > 7.0
+                     || Bubbles.readSensor(DistanceR, DISTANCE_IN_CENTIMETERS) > 7.0) || keepGoing;
              Bubbles.driveAtHeader(NORTH, 0.4);
              Thread.sleep(0,50);
          }
 
-         Bubbles.driveAtHeader(WEST, 0.6);
-         while(Bubbles.readSensor(TouchyL, TOUCH_VALUE) == 1 || Bubbles.readSensor(TouchyR, TOUCH_VALUE) == 1);
-         Bubbles.moveRobot(EAST, 6, 0.6, 0.01, 4);
+
+        Bubbles.stopRobot();
+        Bubbles.resetIMUGyro(Gyro);
+        Bubbles.driveAtHeader(WEST, 0.6);
+
+        startTime = System.currentTimeMillis();
+        while (hittingAWall < 25 && opModeIsActive()){
+            Thread.sleep(20);
+
+            if ((Bubbles.readSensor(TouchyL, TOUCH_VALUE) == 1) ^ (Bubbles.readSensor(TouchyR, TOUCH_VALUE) == 1))
+                hittingAWall++;
+            else
+                hittingAWall = 0;
+            if (Bubbles.readSensor(TouchyL, TOUCH_VALUE) == 1 && Bubbles.readSensor(TouchyR, TOUCH_VALUE) == 1)
+                hittingAWall = 999999999;
+
+            currentTime = System.currentTimeMillis();
+            if(currentTime - startTime >= 5000){hittingAWall = 9999999;}
+        }
+
+        Bubbles.moveRobot(EAST, 6, 0.6, 0.01, 4);
     }
     private void dropOffMarker()       throws InterruptedException{
         Bubbles.moveServo(BucketDumper, 1.0);
@@ -282,6 +320,16 @@ public class MainAutonomous extends LinearOpMode {
 
     }
     private void parkOnCrater()        throws InterruptedException{
+        Bubbles.gyroTurn(180, Bubbles.getIMU(Gyro));
+
+        Bubbles.moveRobot(NORTH, 20, 0.8, 0.1, 5);
+
+        Bubbles.moveMotor(HSlide, 0.5);
+        while(Bubbles.getMotorTickCount(HSlide) > 500){
+            Thread.sleep(0,50);
+        }
+        Bubbles.stopMotor(HSlide);
+
         /*
         float gyroReading;
         double power;
