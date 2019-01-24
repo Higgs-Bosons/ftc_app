@@ -13,12 +13,15 @@ import org.firstinspires.ftc.teamcode.Galaxy.ImageCapturing.PineappleStrainer;
 import org.firstinspires.ftc.teamcode.Galaxy.MecanumWheelRobot.MecanumWheelRobot;
 import org.firstinspires.ftc.teamcode.Galaxy.Tools;
 
+import javax.tools.Tool;
+
 import static org.firstinspires.ftc.teamcode.Galaxy.Constants.*;
 import static org.firstinspires.ftc.teamcode.Galaxy.Names.*;
 
 @Autonomous(name = "Autonomous", group = "Autonomous")
 public class MainAutonomous extends LinearOpMode {
-    // TODO Add in driving to crater, also, test the parkOnCrater() method. The values were just guesses.
+
+    // TODO  Distance Sensors not read, slide into wall touch values inverted,  Make outer curves wider, inner smaller, thread interruptable, finish to crater
 
     private MecanumWheelRobot Bubbles;
     private CanOfPineapple canOfPineapple;
@@ -63,6 +66,7 @@ public class MainAutonomous extends LinearOpMode {
         Bubbles = new MecanumWheelRobot(hardwareMap, FIRST_LETTER_NO_SPACE_UPPERCASE);
         Bubbles.addAMotor(PowerUp, NO_TAG);
         Bubbles.addAMotor(PowerDown, NO_TAG);
+        Bubbles.addAMotor(VSlide, NO_TAG);
 
         telemetry.addData("SETTING UP MOTORS","");
         telemetry.addData("--|-------"," 20%");
@@ -95,6 +99,8 @@ public class MainAutonomous extends LinearOpMode {
         Bubbles.addServo(Grabby);
         Bubbles.addServo(WeightLifter);
         Bubbles.addServo(ArmY);
+        Bubbles.addServo(BucketDumper);
+        Bubbles.addServo(Rampy);
 
         telemetry.addData("SETTING UP SERVOS","");
         telemetry.addData("----------|-"," 80%");
@@ -103,6 +109,7 @@ public class MainAutonomous extends LinearOpMode {
         Bubbles.moveServo(YThing, 0.685);
         Bubbles.moveServo(Grabby, 0.6);
         Bubbles.moveServo(WeightLifter, 0.7);
+        Bubbles.moveServo(Rampy, 0.6);
 
         telemetry.addData("READY :-)","");
         telemetry.addData("-----------|"," 100%");
@@ -135,6 +142,42 @@ public class MainAutonomous extends LinearOpMode {
 
     }
 
+    private void startSetupForDumper(){
+        new Thread(new Runnable() {
+            public void run() {
+                while(Bubbles.getMotorTickCount(VSlide)> -174)
+                    Bubbles.moveMotor(VSlide, -0.4);
+                Bubbles.stopMotor(VSlide);
+
+                Bubbles.moveServo(BucketDumper, 0.565);
+                Tools.wait(2000);
+
+                while(Bubbles.getMotorTickCount(VSlide) < -100)
+                    Bubbles.moveMotor(VSlide, 0.3);
+                Bubbles.stopMotor(VSlide);
+            }
+        }).start();
+    }
+    private void startReturnForDumper(){
+        new Thread(new Runnable() {
+            public void run() {
+                Bubbles.moveServo(BucketDumper, 0.565);
+                Tools.wait(2000);
+
+                while(Bubbles.getMotorTickCount(VSlide)> -174)
+                    Bubbles.moveMotor(VSlide, -0.4);
+                Bubbles.stopMotor(VSlide);
+
+                Bubbles.moveServo(BucketDumper, 0.395);
+                Tools.wait(2000);
+
+                while(Bubbles.getMotorTickCount(VSlide) <= 0)
+                    Bubbles.moveMotor(VSlide, 0.3);
+                Bubbles.stopMotor(VSlide);
+            }
+        }).start();
+    }
+
     private void dropFromLander()      throws InterruptedException{
         Bubbles.resetMotorTickCount(PowerDown, false);
         Bubbles.resetMotorTickCount(PowerUp, false);
@@ -158,19 +201,21 @@ public class MainAutonomous extends LinearOpMode {
     private void unhookFromTheLander() throws InterruptedException{
         Bubbles.moveRobot(NORTH, 3, 0.3, 0.05, 4);
         Bubbles.moveRobot(EAST, 3, 0.3, 0.05, 4);
-
-        Bubbles.moveMotor(PowerDown, 0.4);
-        Bubbles.moveMotor(PowerUp, 0.4);
     }
     private void positionForSampling() throws InterruptedException{
+        startSetupForDumper();
+
         Bubbles.resetIMUGyro(Gyro);
         Bubbles.gyroTurn(0, Bubbles.getIMU(Gyro));
         Bubbles.moveRobot(45, 10, 0.5, 0.05, 4);
 
-        Bubbles.stopMotor(PowerDown);
-        Bubbles.stopMotor(PowerUp);
+        Bubbles.moveMotor(PowerDown, 0.4);
+        Bubbles.moveMotor(PowerUp, 0.4);
 
         Bubbles.gyroTurn(277, Bubbles.getIMU(Gyro));
+
+        Bubbles.stopMotor(PowerDown);
+        Bubbles.stopMotor(PowerUp);
         Bubbles.moveServo(ArmY, 0.0);
     }
     private void sample()              throws InterruptedException{
@@ -224,20 +269,20 @@ public class MainAutonomous extends LinearOpMode {
              Bubbles.driveAtHeader(NORTH, 0.4);
              Thread.sleep(0,50);
          }
-         if(cubePosition != 1)
-             Bubbles.moveRobot(WEST, (cubePosition == 2) ? 10 : 20, 0.6, 0.1, 5);
 
+         Bubbles.driveAtHeader(WEST, 0.6);
+         while(Bubbles.readSensor(TouchyL, TOUCH_VALUE) == 1 || Bubbles.readSensor(TouchyR, TOUCH_VALUE) == 1);
+         Bubbles.moveRobot(EAST, 6, 0.6, 0.01, 4);
     }
     private void dropOffMarker()       throws InterruptedException{
-        Bubbles.moveServo(WeightLifter, 0.25);
-        Thread.sleep(400);
-        Bubbles.moveServo(Grabby, 1.0);
-        Thread.sleep(400);
-        Bubbles.moveServo(WeightLifter, 0.7);
-        Thread.sleep(50);
-        Bubbles.moveServo(Grabby, 0.6);
+        Bubbles.moveServo(BucketDumper, 1.0);
+        Thread.sleep(2000);
+
+        startReturnForDumper();
+
     }
     private void parkOnCrater()        throws InterruptedException{
+        /*
         float gyroReading;
         double power;
         do{
@@ -246,7 +291,7 @@ public class MainAutonomous extends LinearOpMode {
             power = (power > 0.7) ? 0.7 : (power < 0.1) ? 0.1 : power;
             Bubbles.driveAtHeader(NORTH, power, 0.5);
             Thread.sleep(0, 50);
-        } while(gyroReading > 321);
+        } while(gyroReading < 321);
 
 
         Bubbles.driveAtHeader(SOUTH, 0.5);
@@ -254,8 +299,6 @@ public class MainAutonomous extends LinearOpMode {
 
         Bubbles.moveRobot(NORTH, 2, 0.4, 0.05, 4);
         Bubbles.gyroTurn(51, Bubbles.getIMU(Gyro));
-
-
-        // TODO Add in driving to crater, also, test the parkOnCrater() method. The values were just guesses.
+        */
     }
 }
