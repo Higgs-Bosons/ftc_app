@@ -210,7 +210,7 @@ public class MainTeleOp extends LinearOpMode{
         }
         if (gamepad1.x) {
             isArmUp = !isArmUp;
-            BubbleTheRobo.moveServo(Holder, (isArmUp) ? 0.99 : 0.4);
+            BubbleTheRobo.moveServo(Holder, (isArmUp) ? 1.0 : 0.0);
             while (gamepad1.x);
 
         }
@@ -315,27 +315,23 @@ public class MainTeleOp extends LinearOpMode{
     }
     private void checkSettings(){
         if(gamepad1.a){
-
             if(gamepad1.dpad_up){
                 long startTime = System.currentTimeMillis(), currentTime;
-                speed += 5;
+                speed += (speed > 100) ? (100 - speed) : 5;
                 while (gamepad1.dpad_up){
                     currentTime = System.currentTimeMillis();
-                    if(startTime < currentTime - 1000){
-                        speed += 5;
-                        speed = (speed > 100) ? 100 : speed;
+                    if(startTime < currentTime - 750){
+                        speed += (speed > 100) ? (100 - speed) : 5;
                         startTime += 250L;
                     }
                 }
-
             }else if(gamepad1.dpad_down){
                 long startTime = System.currentTimeMillis(), currentTime;
-                speed -= 5;
+                speed -= (speed < 0) ? speed : 5;
                 while (gamepad1.dpad_up){
                     currentTime = System.currentTimeMillis();
-                    if(startTime < currentTime - 1000){
-                        speed -= 5;
-                        speed = (speed < 0) ? 0 : speed;
+                    if(startTime < currentTime - 750){
+                        speed -= (speed < 0) ? speed : 5;
                         startTime += 250L;
                     }
                 }

@@ -74,10 +74,10 @@ public class Constants {
     public static final double WEST = 270;
 
 //-------{MENU OPTIONS}-----------------------------------------------------------------------------
-    public static final String CRATER_ON_THE_LEFT = "  LEFT";
-    public static final String CRATER_ON_THE_RIGHT = "  RIGHT";
-    public static final String LEFT_SIDE_OF_THE_LANDER = "  LEFT";
-    public static final String RIGHT_SIDE_OF_THE_LANDER = "  RIGHT";
+    public static final String CRATER_ON_THE_LEFT = "LEFT";
+    public static final String CRATER_ON_THE_RIGHT = "RIGHT";
+    public static final String LEFT_SIDE_OF_THE_LANDER = "LEFT";
+    public static final String RIGHT_SIDE_OF_THE_LANDER = "RIGHT";
 
 //-------{ORIENTATIONS}-----------------------------------------------------------------------------
     public static final int UPRIGHT = 0;

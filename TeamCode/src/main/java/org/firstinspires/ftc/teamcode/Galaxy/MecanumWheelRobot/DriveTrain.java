@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.Galaxy.MecanumWheelRobot;
 
+import android.util.Log;
+
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.robotcore.hardware.*;
 
@@ -13,7 +15,7 @@ import static org.firstinspires.ftc.teamcode.Galaxy.Constants.*;
 
 public class DriveTrain {
     private DcMotor LeftFront, LeftBack, RightFront, RightBack;
-    private final int POWER_DECAY_RATIO = 600;
+    private final double POWER_DECAY_RATIO = 600;
 //-------{INITIALIZATION}---------------------------------------------------------------------------
     public DriveTrain(){}
     public DriveTrain(DcMotor[] driveMotors){
@@ -186,7 +188,7 @@ public class DriveTrain {
 
     public void moveRobot(double direction, double inches, double spin, double maxPower, double minPower, double precision) throws InterruptedException{
         int numberOfTicksMoved;
-        double power;
+        double power = maxPower;
         double spinPower;
         int ticksToMove = (int) (inches * (1120 / (Math.PI * 4)));
         resetEncoders();
@@ -198,10 +200,8 @@ public class DriveTrain {
                 numberOfTicksMoved = (Math.abs(LeftFront.getCurrentPosition()) + Math.abs(RightFront.getCurrentPosition())
                         + Math.abs(RightBack.getCurrentPosition()) + Math.abs(LeftBack.getCurrentPosition())) / 4;
 
-                power = Math.abs(Math.abs(numberOfTicksMoved) - Math.abs(ticksToMove) / POWER_DECAY_RATIO);
-
-                power = (power > maxPower) ? maxPower : power;
-                power = (power < minPower) ? minPower : power;
+                power = Math.abs(Math.abs(ticksToMove) - Math.abs(numberOfTicksMoved)) / POWER_DECAY_RATIO;
+                power = (power > maxPower) ? maxPower : (power < minPower) ? minPower : power;
                 if (Math.abs(numberOfTicksMoved) > Math.abs(ticksToMove)) power = -power;
 
                 spinPower = (spin * (power / maxPower));
@@ -230,9 +230,8 @@ public class DriveTrain {
                 numberOfTicksMoved = (Math.abs(LeftFront.getCurrentPosition()) + Math.abs(RightFront.getCurrentPosition())
                         + Math.abs(RightBack.getCurrentPosition()) + Math.abs(LeftBack.getCurrentPosition())) / 4;
 
-                power = Math.abs(Math.abs(numberOfTicksMoved) - Math.abs(ticksToMove) / POWER_DECAY_RATIO);
-                power = (power > maxPower) ? maxPower : power;
-                power = (power < minPower) ? minPower : power;
+                power = Math.abs(Math.abs(ticksToMove) - Math.abs(numberOfTicksMoved)) / POWER_DECAY_RATIO;
+                power = (power > maxPower) ? maxPower : (power < minPower) ? minPower : power;
                 if (Math.abs(numberOfTicksMoved) > Math.abs(ticksToMove)) power = -power;
 
                 Thread.sleep(0,50);

@@ -9,34 +9,30 @@ import com.qualcomm.robotcore.hardware.TouchSensor;
 import static org.firstinspires.ftc.teamcode.Galaxy.Names.*;
 
 
-@Autonomous(name = "Reset Lifter", group = "Tool")
+@Autonomous(name = "Auto Reset Lifter", group = "Tool")
 public class ResetLifter extends LinearOpMode {
 
-    public void runOpMode(){
-        Servo holder = hardwareMap.servo.get(Holder);
-        TouchSensor topTouchy = hardwareMap.touchSensor.get(TopTouchy);
+    public void runOpMode() throws InterruptedException{
         DcMotor powerUp = hardwareMap.dcMotor.get(PowerUp), powerDown = hardwareMap.dcMotor.get(PowerDown);
+        try{
+            Servo holder = hardwareMap.servo.get(Holder);
+            TouchSensor topTouchy = hardwareMap.touchSensor.get(TopTouchy);
 
-        waitForStart();
-        holder.setPosition(0);
+            waitForStart();
+            holder.setPosition(0);
 
-        powerUp.setPower(0.7);
-        powerDown.setPower(0.7);
-        while (opModeIsActive()){
-            telemetry.addData("TopTouchy ", (topTouchy.isPressed()) ? " PRESSED!" : " . . .");
-            telemetry.update();
-            if(gamepad1.dpad_down){
-                powerDown.setPower(-1.0);
-                powerUp.setPower(-1.0);
-            }else if(gamepad1.dpad_up){
-                powerDown.setPower(1.0);
-                powerUp.setPower(1.0);
-            }else{
-                powerDown.setPower(0);
-                powerUp.setPower(0);
-            }
+            Thread.sleep(1000);
+
+            powerUp.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+            powerDown.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+
+            powerDown.setPower(0.7);
+            powerUp.setPower(0.7);
+
+            while(!topTouchy.isPressed());
+        }finally {
+            powerUp.setPower(0);
+            powerDown.setPower(0);
         }
-        powerUp.setPower(0);
-        powerDown.setPower(0);
     }
 }
