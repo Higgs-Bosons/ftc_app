@@ -99,7 +99,6 @@ public class CanOfPineapple extends CanOfPineappleObjects {
         }
 
         if (cameraDevice != null) {
-
             cameraDevice.close();
             cameraDevice = null;
         }
