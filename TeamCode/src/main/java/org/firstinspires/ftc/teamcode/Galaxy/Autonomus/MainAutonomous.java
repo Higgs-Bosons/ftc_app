@@ -451,7 +451,7 @@ public class MainAutonomous extends LinearOpMode {
 
         float[] gyroReadings = Bubbles.readIMUGyro(Gyro);
 
-        while((gyroReadings[1] > 280 || gyroReadings[1] < 90) && (Bubbles.getMotorTickCount(PowerDown) > -12000)){
+        while((gyroReadings[1] > 280 || gyroReadings[1] < 90) && (Bubbles.getMotorTickCount(PowerDown) > -11000)){
             gyroReadings = Bubbles.readIMUGyro(Gyro);
             Thread.sleep(0,50);
         }
