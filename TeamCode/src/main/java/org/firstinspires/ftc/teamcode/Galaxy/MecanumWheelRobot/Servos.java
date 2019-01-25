@@ -32,16 +32,13 @@ public class Servos extends  Motors{
         double[] array = {minRange,maxRange};
         servoBounds.put(name, array);
     }
-    public void moveServo(String name, double toMoveTo){
-        if(toMoveTo < servoBounds.get(name)[0])
+    public void moveServo(String name, double toMoveTo) {
+        if (toMoveTo < servoBounds.get(name)[0])
             toMoveTo = servoBounds.get(name)[0];
 
-        if(toMoveTo > servoBounds.get(name)[1])
+        if (toMoveTo > servoBounds.get(name)[1])
             toMoveTo = servoBounds.get(name)[1];
 
         this.servos.get(name).setPosition(toMoveTo);
-    }
-    public Servo getServo(String name) {
-        return this.servos.get(name);
     }
 }

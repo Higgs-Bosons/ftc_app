@@ -20,7 +20,6 @@ import static org.firstinspires.ftc.teamcode.Galaxy.Names.*;
 
 @Autonomous(name = "Autonomous", group = "Autonomous")
 public class MainAutonomous extends LinearOpMode {
-    private String craterToGoTo = "NOT YET INPUTTED";
     private String landerSide =   "NOT YET INPUTTED";
     private MecanumWheelRobot Bubbles;
     private CanOfPineapple canOfPineapple;
@@ -158,19 +157,13 @@ public class MainAutonomous extends LinearOpMode {
         boolean allInfoPutIn = false;
         while(!gamepad1.y || !allInfoPutIn){
             if(gamepad1.dpad_left)
-                craterToGoTo = CRATER_ON_THE_LEFT;
-            else if(gamepad1.dpad_right)
-                craterToGoTo = CRATER_ON_THE_RIGHT;
-
-            if(gamepad1.x)
                 landerSide = LEFT_SIDE_OF_THE_LANDER;
-            else if(gamepad1.b)
+            else if(gamepad1.dpad_right)
                 landerSide = RIGHT_SIDE_OF_THE_LANDER;
 
-            allInfoPutIn = (!landerSide.equals("NOT YET INPUTTED") && !craterToGoTo.equals("NOT YET INPUTTED"));
+            allInfoPutIn = (!landerSide.equals("NOT YET INPUTTED"));
 
-            telemetry.addData(" Side of the Lander: (X/B) ", landerSide);
-            telemetry.addData(" Crater to go to: (D-PAD)  ", craterToGoTo);
+            telemetry.addData(" Side of the Lander: (D-PAD) ", landerSide);
             telemetry.addData("        Press 'Y' to Continue!", "");
             telemetry.update();
 
